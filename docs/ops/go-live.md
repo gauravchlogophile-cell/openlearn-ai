@@ -40,7 +40,8 @@ Everything below uses free tiers. Total unavoidable cost: **$0**
    - Framework preset: **Astro**
    - Build command: `npm run build`
    - Build output directory: `dist`
-   - Environment variables → add `NODE_VERSION` = `20`
+   - Environment variables → add `NODE_VERSION` = `22` (Wrangler, used for
+     deploy, requires Node 22+)
 4. Click **Save and Deploy**. First build takes ~2–3 minutes.
 5. You now have `https://<project>.pages.dev` — open it. Every push to
    `main` redeploys automatically from now on.
@@ -119,7 +120,9 @@ is safe to expose by design (that's what RLS is for). Never put the
 
 ## If something breaks
 - Build fails on Pages → check the build log; 95% of cases are the
-  `NODE_VERSION=20` variable missing.
+  `NODE_VERSION=22` variable missing (Wrangler's deploy step needs Node 22+;
+  the build step itself works fine on Node 20, so this can pass "Build" and
+  only fail at "Deploy" if missed).
 - Blank page but build succeeded → check browser console; if CSP-related,
   see `scripts/generate-headers.mjs` — the CSP is generated at build with
   hashes for Astro's inline bootstrap; a mismatch means the generator
