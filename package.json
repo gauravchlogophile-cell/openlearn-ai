@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "astro dev",
-    "build": "node -e \"console.log('DIAG keys:', Object.keys(process.env).filter(k => /SUPABASE|Environment|NODE_VERSION/i.test(k)).join(', '))\" && node scripts/validate-content.mjs && astro build && node scripts/generate-manifest.mjs && node scripts/generate-headers.mjs",
+    "build": "node scripts/validate-content.mjs && astro build && node scripts/generate-manifest.mjs && node scripts/generate-headers.mjs",
     "preview": "npm run build && wrangler dev",
     "validate": "node scripts/validate-content.mjs",
     "test": "node scripts/validate-content.mjs && node scripts/test-progress.mjs",
