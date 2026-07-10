@@ -1,0 +1,93 @@
+---
+title: "ChatGPT — orientation"
+description: "The assistant that started the wave: what ChatGPT is, what it's genuinely good at, its limits, and a ten-minute hands-on tour using your E1 skills."
+track: explorer
+module: e2
+order: 2
+minutes: 9
+objectives:
+  - "Describe what ChatGPT is and its typical strengths"
+  - "Run a first structured task and evaluate the output with E1 habits"
+concepts: ["assistant", "model tier", "conversation"]
+tools: ["chatgpt"]
+flashcards:
+  - front: "What is ChatGPT, in one line?"
+    back: "OpenAI's general-purpose AI assistant — an LLM in a chat interface with attached tools."
+  - front: "Does a new ChatGPT conversation remember your last one?"
+    back: "Not by default — each chat starts fresh unless a memory feature re-inserts saved notes."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+import RegistryCard from '../../../src/components/RegistryCard.astro';
+
+In late 2022, a research preview called ChatGPT reached a hundred million
+users faster than any consumer product before it — and made "talking to an
+AI" an ordinary thing to do. Whatever assistant you end up preferring,
+you'll meet ChatGPT everywhere, so let's take the tour.
+
+## The fact sheet (community-verified)
+
+<RegistryCard id="chatgpt" />
+
+## What it's typically good at
+
+ChatGPT is a strong all-rounder across the whole **strong zone** you mapped
+in E1·L8: drafting and rewriting, explaining, brainstorming, summarising,
+and working with material you paste in. Its ecosystem is broad — voice
+conversation, image understanding and generation, file reading, and web
+search, depending on tier. For many people it's the default because it's
+capable at *most* things, not because it's best at *everything*.
+
+## What to keep in mind
+
+- **Everything from E1 applies at full strength.** It hallucinates exactly
+  as L7 described — fluently. Specifics, citations, and recent facts get the
+  three-question habit, every time.
+- **Conversations are windows, not memories.** A new chat starts fresh;
+  long chats can slide early details out of view (E1·L6). Assistant
+  "memory" features save notes between chats — useful, and worth reviewing
+  what's been saved.
+- **Tiers move.** Which models and tools the free tier includes changes
+  often. The card above links to the official docs — trust those over any
+  screenshot you find online, including ours if the card goes stale.
+
+## Try it now (5 minutes)
+
+Open ChatGPT (free tier is fine) and run this structured request:
+*"Rewrite the following note as a short, friendly email to a colleague.
+Keep it under 120 words and end with a clear question."* — then paste any
+rough note of yours. Evaluate the result like an E1 graduate: Is it
+faithful to your meaning? Anything invented? What would you tweak in a
+follow-up message? Make that tweak — iteration is tomorrow's lesson topic.
+
+<Quiz client:visible items={[
+  {
+    q: "You ask ChatGPT about your previous conversation from last week. What should you expect?",
+    options: [
+      "Full recall — everything is always remembered",
+      "A fresh start unless a memory feature has saved and re-inserted notes",
+      "An error message"
+    ],
+    answer: 1,
+    explain: "Chats are context windows. Cross-chat 'memory' exists only where a feature explicitly saves notes and re-inserts them."
+  },
+  {
+    q: "ChatGPT gives you a statistic with a confident source. Per this course, you should:",
+    options: [
+      "Use it — sources are auto-verified",
+      "Verify the source exists and says that, before relying on it",
+      "Ask the model if it is sure, and accept its answer"
+    ],
+    answer: 1,
+    explain: "Confidence is not a truth signal (E1·L7), and 'are you sure?' just generates more plausibility. Check the primary source."
+  }
+]} />
+
+## Recap
+
+A capable all-rounder with a broad ecosystem; windows not memories; every
+E1 habit applies unchanged. Next: Claude — and your first real taste of how
+assistants differ in character and strengths.

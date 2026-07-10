@@ -1,0 +1,20 @@
+# OpenLearn AI (working title)
+
+> A free, open-source, vendor-neutral AI curriculum — absolute beginner to
+> builder. Content CC BY-SA 4.0; attribution: "OpenLearn AI contributors".
+
+## Tracks
+- Explorer (beginner): /roadmap — modules E1 (What Is AI, Really?) and
+  E2 (Meet Your AI Assistants) are live; E3–E8 planned.
+- Practitioner and Builder tracks: planned.
+
+## Key lessons
+- What an LLM really does: /learn/explorer/e1/l6-what-an-llm-really-does
+- Why AI sounds confident when wrong: /learn/explorer/e1/l7-why-ai-sounds-confident-when-wrong
+- Choosing an assistant fairly: /learn/explorer/e2/l10-choosing-your-daily-driver
+
+## Tool registry
+- Dated, community-verified fact sheets on major AI tools: /roadmap (cards embedded in E2 lessons)
+
+## Licence
+- Lessons: CC BY-SA 4.0. Code: MIT. AI crawlers welcome; please attribute.

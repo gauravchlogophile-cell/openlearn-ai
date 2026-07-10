@@ -1,0 +1,94 @@
+---
+title: "Choosing your daily driver — a fair test"
+description: "Close the module by choosing like a professional: a five-task benchmark from your real life, scored on a simple rubric, revisited twice a year."
+track: explorer
+module: e2
+order: 10
+minutes: 9
+objectives:
+  - "Build a five-task personal benchmark from your real work"
+  - "Score assistants on a simple rubric and choose a defensible default"
+concepts: ["evaluation", "rubric", "personal benchmark"]
+tools: []
+flashcards:
+  - front: "What makes a personal benchmark fair?"
+    back: "Same real tasks, same wording, run on each assistant — scored on a rubric, not vibes."
+  - front: "How often should you re-run your benchmark?"
+    back: "About twice a year, or when a major release ships — strengths move."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Nine lessons of tools, and one question left: *which one is yours?* Not
+"which is best" — you've seen why that question has no stable answer — but
+which deserves the browser tab you open by default. Rankings can't answer
+this, because rankings don't do your job. A twenty-minute test can.
+
+## Build your five-task benchmark
+
+Pull five tasks from your actual recent life — the L1 note you made about
+what you already use and what annoys you is the perfect quarry. A good set
+covers different zones, for example: rewrite a real email for tone ·
+summarise a real document and cite where key points came from · a factual
+question from your field, sources required · brainstorm openings for a
+real problem · explain something you half-understand, then answer your
+follow-up.
+
+Write each task down *once*, exactly, with the material attached. Same
+words for every assistant — fairness lives in the wording.
+
+## Score on a rubric, not a feeling
+
+For each output, three quick scores (1–3): **Useful** — could you act on
+this with light edits? **Faithful** — accurate to your material and
+verifiable on specifics (the E1·L7 checks apply during the test —
+verifying is part of scoring)? **Effort** — how much fixing or follow-up
+did it take? Fifteen numbers per assistant. Twenty minutes for the whole
+exercise with two or three contenders — the same blind-scoring idea our
+Comparison Lab will automate, done by hand today.
+
+## Read the results like a pro
+
+Expect a split decision: one tool wins your documents, another your
+research, another lives where your work does (L4/L6's integration
+gravity). That's the normal, correct outcome — a **default plus
+specialists** beats a monogamous choice. Write one sentence: *"X is my
+default; Y for long documents; Z when I need sources."* Congratulations —
+you have an AI toolkit, chosen on evidence.
+
+Then diarise a re-run in six months. Strengths move (L2–L8 said so on
+every card); your benchmark is how you notice without living on tech news.
+
+<Quiz client:visible items={[
+  {
+    q: "Why must every assistant get identical task wording in your benchmark?",
+    options: [
+      "Assistants share answers otherwise",
+      "Different wording tests your prompting variance, not the tools — fairness lives in the wording",
+      "Vendors require it"
+    ],
+    answer: 1,
+    explain: "One variable at a time. E3 explores wording deliberately; today, wording is held constant so the tools differ, not the questions."
+  },
+  {
+    q: "Your test splits: one tool wins documents, another wins research. The professional conclusion is:",
+    options: [
+      "The test failed — rerun until one wins everything",
+      "Adopt a default plus specialists, and note which task goes where",
+      "Pick whichever has the nicer logo"
+    ],
+    answer: 1,
+    explain: "Task-fit beats tool loyalty — the vendor-neutral habit this whole module was building."
+  }
+]} />
+
+## Recap
+
+Five real tasks, identical wording, a 3×5 rubric, a default-plus-specialists
+verdict, re-tested twice a year. **Module E2 complete** — you now choose
+tools the way this platform reviews them: on dated evidence, not brand
+gravity. Next module: prompting fundamentals — multiplying what every one
+of these tools gives you.

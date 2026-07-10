@@ -1,0 +1,38 @@
+---
+/** Renders a tool's registry card inside lessons. Lessons never hard-code
+ *  tool facts (CUR-3); they embed this. Staleness banner is automatic (CUR-7). */
+interface Props { id: string; }
+const { id } = Astro.props;
+
+const files = import.meta.glob('../../registry/*.json', { eager: true });
+const card: any = Object.values(files)
+  .map((m: any) => m.default)
+  .find((c: any) => c?.id === id);
+if (!card) throw new Error(`RegistryCard: unknown tool id "${id}"`);
+
+const ageDays = Math.floor((Date.now() - new Date(card.lastVerified).getTime()) / 86400000);
+const stale = ageDays > 120;
+const caps: [string, string][] = [
+  ['chat', 'Chat'], ['vision', 'Understands images'], ['files', 'Reads files'],
+  ['voice', 'Voice'], ['webSearch', 'Web search'], ['api', 'Developer API'],
+];
+---
+<aside aria-label={`Tool card: ${card.vendor} — ${id}`}
+  style="border:1px solid var(--c-border);border-radius:var(--r-m);padding:var(--sp-4) var(--sp-6);margin-block:var(--sp-6);background:var(--c-surface);">
+  {stale && (
+    <p style="color:var(--c-alert);font-weight:600;margin-top:0;">
+      ⚠ This tool card was last verified {ageDays} days ago and may be outdated.
+      Check the official docs below — or help us update it.
+    </p>
+  )}
+  <p style="margin-top:0;"><strong>{card.vendor}</strong> · {card.category}
+    <span style="color:var(--c-ink-soft);"> · verified {card.lastVerified}</span></p>
+  <p>{card.summary}</p>
+  <ul style="padding-inline-start:var(--sp-6);columns:2;column-gap:var(--sp-8);">
+    {caps.map(([k, label]) => (
+      <li style="break-inside:avoid;">{card.capabilities?.[k] ? '✓' : '—'} {label}</li>
+    ))}
+  </ul>
+  {card.freeTierNotes && <p style="color:var(--c-ink-soft);font-size:var(--fs-100);">{card.freeTierNotes}</p>}
+  <p style="margin-bottom:0;"><a href={card.docsUrl} rel="noopener">Official documentation ↗</a></p>
+</aside>

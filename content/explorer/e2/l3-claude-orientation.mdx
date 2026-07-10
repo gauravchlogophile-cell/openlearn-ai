@@ -1,0 +1,93 @@
+---
+title: "Claude — orientation"
+description: "Anthropic's assistant, known for long-document work and careful writing: what Claude is good at, its limits, and a hands-on task to feel the difference."
+track: explorer
+module: e2
+order: 3
+minutes: 8
+objectives:
+  - "Describe Claude's typical strengths and limits"
+  - "Use a long-document task to compare assistant behaviour first-hand"
+concepts: ["assistant", "long context", "style"]
+tools: ["claude"]
+flashcards:
+  - front: "What is Claude known for handling well?"
+    back: "Long documents and careful, natural writing — large context work."
+  - front: "Does knowing one assistant transfer to Claude?"
+    back: "Yes — same LLM machinery, same E1 habits; differences are in strengths, tools, and limits."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+import RegistryCard from '../../../src/components/RegistryCard.astro';
+
+Hand three colleagues the same fifty-page report and you'll get three
+different summaries — one crisp, one thorough, one oddly fixated on section
+four. Assistants differ the same way, and Claude is where many people first
+*feel* that difference.
+
+## The fact sheet (community-verified)
+
+<RegistryCard id="claude" />
+
+## What it's typically good at
+
+Claude, built by Anthropic, has a reputation for **long-document work** —
+reading, summarising, comparing, and answering questions across large
+files or several documents at once — and for **writing that reads
+naturally**, with a style many find less template-like. It's a common
+choice for contracts, reports, research digests, and drafting where tone
+matters. Coding assistance is another frequently cited strength.
+
+## What to keep in mind
+
+- **Reputation ≠ guarantee.** "Known for" reflects common experience at the
+  time this card was verified; model tiers on all sides move quarterly.
+  Test on *your* tasks — E2's closing lesson gives you a fair method.
+- **Long context is not infinite context.** Bigger windows still have
+  edges, and material can still be skimmed unevenly. For a critical
+  document, ask section-by-section questions rather than one giant
+  "summarise everything".
+- **Same machinery, same failure modes.** Long-document strength does not
+  suspend E1·L7 — a fabricated detail inside an otherwise faithful summary
+  is precisely the failure to watch for. Spot-check quotes against the
+  page they claim.
+
+## Try it now (5 minutes)
+
+Take the longest document you have handy (a policy, a report, a lease).
+Ask Claude: *"Summarise this in five bullet points, then list three things
+a careful reader should double-check, citing the section each comes
+from."* Verify one citation yourself. That verification step — not the
+summary — is the professional skill.
+
+<Quiz client:visible items={[
+  {
+    q: "Claude summarises a 60-page report and quotes a sentence 'from section 7'. Best practice?",
+    options: [
+      "Trust it — long-context tools don't misquote",
+      "Spot-check the quote against section 7 before using it",
+      "Re-ask until the quote changes"
+    ],
+    answer: 1,
+    explain: "Long-document strength doesn't disable hallucination. Quotes and locations are exactly the specifics E1·L7 says to verify."
+  },
+  {
+    q: "The best way to know whether Claude beats your current assistant for your work is:",
+    options: [
+      "Reading ranking articles from last year",
+      "Running your own real tasks on both and comparing outputs",
+      "Trusting whichever sounds more confident"
+    ],
+    answer: 1,
+    explain: "Strengths are task-specific and shift with releases. Your tasks are the only benchmark that matters — L10 makes this a method."
+  }
+]} />
+
+## Recap
+
+Strong with long documents and natural writing; big windows still have
+edges; verification habits unchanged. Next: Gemini, and what "integrated
+into an ecosystem" really means for daily work.

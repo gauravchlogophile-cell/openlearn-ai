@@ -1,0 +1,99 @@
+---
+title: "Perplexity and the answer engines"
+description: "A different species of assistant: search-first tools that answer with citations. When answer engines beat chat assistants — and how to read their sources."
+track: explorer
+module: e2
+order: 5
+minutes: 8
+objectives:
+  - "Explain how an answer engine differs from a chat assistant"
+  - "Decide when a search-first tool is the right choice for a task"
+concepts: ["answer engine", "citation", "retrieval"]
+tools: ["perplexity"]
+flashcards:
+  - front: "What makes an answer engine different from a chat assistant?"
+    back: "It searches first and composes the answer from retrieved sources, with citations by default."
+  - front: "Does a citation guarantee the claim?"
+    back: "No — it guarantees a source exists. You still confirm the source says what the answer claims."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+import RegistryCard from '../../../src/components/RegistryCard.astro';
+
+Ask a librarian a question and they don't recite from memory — they walk
+to the shelves, pull three books, and answer with the pages open in front
+of you. That's the answer-engine idea, and Perplexity made it a product
+category.
+
+## The fact sheet (community-verified)
+
+<RegistryCard id="perplexity" />
+
+## Search-first, cite-always
+
+A chat assistant *defaults* to pattern memory and reaches for search as a
+tool. An **answer engine** inverts this: every question triggers retrieval
+first, and the model composes its answer *from* the retrieved pages, citing
+them inline. Two practical consequences:
+
+1. **Recency by default.** Questions about current events, prices,
+   releases, and "what's the latest on X" play to its core design rather
+   than an added feature.
+2. **Verifiability by default.** Citations arrive without asking — which
+   moves you instantly to the strong position from L4: checking sources
+   rather than bare claims.
+
+## Where it fits — and where it doesn't
+
+Reach for an answer engine when the task is *finding out*: research,
+comparisons grounded in current information, "is this still true?" checks —
+including checking claims *other* assistants made. Reach for a chat
+assistant when the task is *making*: drafting, rewriting, brainstorming,
+transforming your own material — work where retrieval adds little and
+conversation depth matters.
+
+Reading the citations well is the skill: notice *which* sources were
+retrieved (a vendor's press release and an independent review support
+claims differently), notice when several citations trace back to one
+original, and remember the composed summary can still stitch sources
+together imperfectly — the sentence-to-source link is yours to confirm for
+anything that matters.
+
+## Try it now (4 minutes)
+
+Take one factual claim an assistant gave you earlier in this module and
+put it to an answer engine: *"Is it accurate that …? Cite sources."* Open
+the two strongest citations. Confirmed, corrected, or complicated? All
+three outcomes are wins — you now know something with sources attached.
+
+<Quiz client:visible items={[
+  {
+    q: "Which task most favours an answer engine over a chat assistant?",
+    options: [
+      "Rewriting your notes into a friendly email",
+      "Finding what changed in visa rules this year, with sources",
+      "Brainstorming names for a bakery"
+    ],
+    answer: 1,
+    explain: "Current, factual, source-dependent questions are the answer engine's home turf; making and transforming text is chat-assistant territory."
+  },
+  {
+    q: "An answer arrives with five citations. The remaining verification step is:",
+    options: [
+      "None — five citations settle it",
+      "Confirm the key sources actually say what the answer claims",
+      "Count whether other tools give more citations"
+    ],
+    answer: 1,
+    explain: "Citations prove sources exist and were retrieved — the stitch between sentence and source is still worth confirming when stakes are real."
+  }
+]} />
+
+## Recap
+
+Answer engines search first and cite always — strongest for finding out,
+not for making; citations move verification to sources, not remove it.
+Next lesson: Copilot and assistants living inside your working documents.

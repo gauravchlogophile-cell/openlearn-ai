@@ -1,0 +1,92 @@
+---
+title: "Gemini — orientation"
+description: "Google's assistant and what ecosystem integration means in practice: strengths, limits, and a hands-on task inside the tools you may already use."
+track: explorer
+module: e2
+order: 4
+minutes: 8
+objectives:
+  - "Describe Gemini's typical strengths, especially ecosystem integration"
+  - "Weigh integration convenience against tool-choice flexibility"
+concepts: ["assistant", "ecosystem integration", "multimodal"]
+tools: ["gemini"]
+flashcards:
+  - front: "Gemini's most distinctive practical strength?"
+    back: "Integration with Google's ecosystem — search, mail, docs, and Android surfaces."
+  - front: "What's the trade-off of a deeply integrated assistant?"
+    back: "Convenience inside one ecosystem versus flexibility to choose the best tool per task."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+import RegistryCard from '../../../src/components/RegistryCard.astro';
+
+The most useful assistant is sometimes the one already standing next to
+your work. Gemini's defining bet is exactly that: an AI woven into the
+search box, the inbox, the document, and the phone many people already use
+all day.
+
+## The fact sheet (community-verified)
+
+<RegistryCard id="gemini" />
+
+## What it's typically good at
+
+Gemini, built by Google, is a capable general assistant with two
+frequently cited strengths. First, **ecosystem integration**: appearing
+inside Google surfaces — mail, docs, spreadsheets, Android — so help
+arrives where the work already lives. Second, **multimodal and
+search-adjacent tasks**: image understanding and questions that benefit
+from fresh web information, given the obvious home-field advantage in
+search.
+
+## What to keep in mind
+
+- **Integration is a trade, not a free win.** Inside one ecosystem,
+  friction drops; but the best tool for a given task may live outside it.
+  Vendor-neutral habit: let the *task* choose the tool (E2·L10's method),
+  and let convenience be one factor, not the referee.
+- **"It searched" still needs the habit.** When Gemini cites web sources,
+  verify the *sources* (E1·L7 question 3) — retrieval reduces invention
+  but doesn't abolish misreading or stale pages.
+- **Workspace features vary by account type.** What's available on a
+  personal account, a work account, and a free tier differs and shifts;
+  the card's docs link is the source of truth.
+
+## Try it now (5 minutes)
+
+Ask Gemini a question about something that changed recently in your field,
+and ask it to cite sources. Open one citation. Did the source say what the
+answer claimed? You're practising the exact skill that separates
+AI-assisted research from AI-flavoured guessing.
+
+<Quiz client:visible items={[
+  {
+    q: "An assistant integrated into your email drafts a reply instantly. The vendor-neutral question to still ask is:",
+    options: [
+      "Is this the most convenient option?",
+      "Is this the right tool for this task, or just the nearest one?",
+      "Does it have the newest model?"
+    ],
+    answer: 1,
+    explain: "Convenience is real value — and also gravity. Deliberate tool choice per task is the habit that keeps you in charge."
+  },
+  {
+    q: "Gemini answers with web citations. What does that change about verification?",
+    options: [
+      "Nothing needs checking anymore",
+      "You now verify the cited sources instead of bare claims — easier, but still your job",
+      "Citations mean the answer is official"
+    ],
+    answer: 1,
+    explain: "Search grounding shifts verification from 'does a source exist?' to 'does the source actually say this?' — a better position, same responsibility."
+  }
+]} />
+
+## Recap
+
+Strong integration and multimodal work; integration is a trade-off to
+weigh, not a default to accept; cited sources still get checked. Next: a
+different species — Perplexity and the answer engines.

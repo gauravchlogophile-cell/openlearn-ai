@@ -1,0 +1,92 @@
+---
+title: "A short, honest history of AI"
+description: "From 1950s rule-books to today's generative models: the booms, the winters, and why this wave is different. Context that makes everything else click."
+track: explorer
+module: e1
+order: 2
+minutes: 9
+objectives:
+  - "Place rule-based AI, machine learning, and generative AI on a timeline"
+  - "Explain why AI progress came in waves ('AI winters')"
+concepts: ["rule-based systems", "machine learning", "deep learning", "generative AI", "AI winter"]
+tools: []
+flashcards:
+  - front: "What was 'good old-fashioned AI' built from?"
+    back: "Hand-written rules and logic — powerful in narrow domains, brittle everywhere else."
+  - front: "What changed around 2012 to spark the deep-learning boom?"
+    back: "Big datasets + faster chips (GPUs) + better neural-network training finally worked together."
+  - front: "What does 'generative' AI generate?"
+    back: "New content — text, images, audio, video — rather than just labels or scores."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+In 1956, a small summer workshop at Dartmouth College gave "artificial
+intelligence" its name and a bold prediction: significant progress within a
+generation. The researchers were right about the destination and very wrong
+about the schedule — a pattern AI would repeat for seventy years.
+
+## Wave one: rules (1950s–1980s)
+
+The first approach was to write intelligence down: **if** the patient has a
+fever **and** a stiff neck, **then** consider meningitis. These "expert
+systems" genuinely worked in narrow domains — but the real world kept
+producing situations nobody had written a rule for. Funding and enthusiasm
+collapsed twice into what the field calls **AI winters**.
+
+## Wave two: learning from data (1990s–2000s)
+
+The next idea flipped the approach: stop writing rules, start showing
+examples. This is **machine learning** — the spam-filter idea from lesson 1.
+It quietly powered credit scoring, search ranking, and product
+recommendations for two decades without most people calling it "AI" at all.
+
+## Wave three: deep learning (2012–)
+
+Around 2012, three things matured together: much bigger datasets, much
+faster chips, and better ways to train **neural networks** (we'll build a
+friendly picture of those in lesson 4). Suddenly computers could recognise
+images, transcribe speech, and translate language at useful accuracy.
+
+## Wave four: generative AI (2020s)
+
+The current wave doesn't just *recognise* content — it **generates** it.
+Models trained on enormous amounts of text and images learned to produce
+new text, images, code, and audio. That's the technology behind the chat
+assistants this course will teach you to use well.
+
+One honest note: every previous wave brought real progress *and* inflated
+promises. Expect the same now. This course will keep showing you what today's
+AI genuinely does well, and where it still fails.
+
+<Quiz client:visible items={[
+  {
+    q: "What caused the 'AI winters'?",
+    options: [
+      "Computers were banned in the 1970s",
+      "Expectations ran far ahead of what the technology could deliver",
+      "Researchers lost interest in intelligence"
+    ],
+    answer: 1,
+    explain: "Twice, bold promises met brittle systems; funding froze. It's a useful lesson in calibrating today's headlines too."
+  },
+  {
+    q: "What separates generative AI from earlier machine learning?",
+    options: [
+      "It creates new content instead of only labelling or scoring existing content",
+      "It follows more rules",
+      "It never makes mistakes"
+    ],
+    answer: 0,
+    explain: "Earlier ML classified and predicted; generative models produce new text, images, code and more — mistakes very much included."
+  }
+]} />
+
+## Recap
+
+Rules, then learning, then deep learning, then generation — each wave solved
+the last wave's bottleneck. Next: what "machine learning" actually means,
+with no maths required.

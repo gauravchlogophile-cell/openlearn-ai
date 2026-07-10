@@ -1,0 +1,98 @@
+---
+title: "What a large language model really does"
+description: "An LLM is a next-word predictor of extraordinary scale — and that one idea explains its fluency, its memory limits, and its strange mistakes."
+track: explorer
+module: e1
+order: 6
+minutes: 8
+objectives:
+  - "Explain an LLM as a next-word predictor trained on vast text"
+  - "Use the 'context window' idea to explain what the model can and cannot remember"
+concepts: ["large language model", "token", "context window", "next-word prediction"]
+tools: ["chatgpt", "claude", "gemini"]
+flashcards:
+  - front: "What is an LLM doing when it answers you?"
+    back: "Repeatedly predicting the next token (word piece) given the conversation so far."
+  - front: "What is a context window?"
+    back: "The amount of recent text the model can consider at once — its working memory."
+  - front: "Does an LLM look up facts in a database while answering?"
+    back: "Not by default — answers come from patterns in training, unless a tool like web search is attached."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Play this game: "The capital of France is ___." You said *Paris* without
+thinking. Now: "Sorry I'm late, the traffic was ___." *Terrible*, probably.
+You've just done, twice, the only thing a large language model ever does.
+
+## Scale changes everything
+
+A **large language model (LLM)** — the technology inside assistants like
+ChatGPT, Claude, and Gemini — is a neural network (lesson 4) trained on a
+staggering amount of text to do next-word prediction supremely well.
+Actually next-**token** prediction: tokens are word pieces, so "unbelievable"
+might be *un·believ·able*.
+
+Here's the surprise that created the current AI wave: predict the next token
+well enough, at large enough scale, and abilities *emerge* that look like
+much more than autocomplete — answering questions, summarising, translating,
+drafting, coding. To continue text plausibly, the patterns had to absorb
+grammar, facts, styles, and reasoning-shaped structures from the training
+text.
+
+## The context window: its working memory
+
+The model doesn't remember your conversation the way you do. It re-reads a
+window of recent text — the **context window** — every single time it
+predicts the next token. Everything inside the window can influence the
+answer; everything outside it does not exist for the model.
+
+Practical consequences you'll use daily:
+
+- Paste the document *into* the conversation and the model can work with it.
+- Very long conversations can slide early details out of the window — the
+  model isn't being forgetful or rude; the text simply isn't in view.
+- "Memory" features some assistants offer work by *saving notes and
+  re-inserting them* into the window later — a useful trick, not a change
+  in how the model works.
+
+## No database behind the curtain
+
+By default, an LLM answering "What's the tallest building in your city?"
+is not looking anything up. It's continuing text from patterns — which may
+be current, outdated, or confidently invented. Assistants increasingly
+attach tools (web search, calculators, file readers) to patch this, and
+you'll learn to tell when a tool was actually used.
+
+<Quiz client:visible items={[
+  {
+    q: "Which best describes an LLM's core operation?",
+    options: [
+      "Searching a fact database for the right answer",
+      "Predicting the next token repeatedly, given the text so far",
+      "Running the grammar rules of each language"
+    ],
+    answer: 1,
+    explain: "Everything an LLM produces is next-token prediction at scale — fluency, drafting, even code."
+  },
+  {
+    q: "Your two-hour chat no longer reflects something you said at the start. Most likely cause?",
+    options: [
+      "The model deleted it out of spite",
+      "That text has slid outside the context window",
+      "Long chats are forbidden"
+    ],
+    answer: 1,
+    explain: "The window is finite. Re-state or re-paste important details and the model 'remembers' again."
+  }
+]} />
+
+## Recap
+
+An LLM is next-token prediction at extraordinary scale, working from a
+finite context window, with no built-in fact lookup. Keep those three ideas
+and lesson 7 — why it sounds so confident when it's wrong — will feel
+obvious rather than mysterious.

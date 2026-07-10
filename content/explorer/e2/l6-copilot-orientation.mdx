@@ -1,0 +1,92 @@
+---
+title: "Copilot — AI inside your Microsoft workday"
+description: "Where Office is the workday, Copilot is the built-in assistant: what it does in Windows and Microsoft 365, its strengths, and the work-account caveats."
+track: explorer
+module: e2
+order: 6
+minutes: 8
+objectives:
+  - "Describe where Copilot lives and what it adds inside Microsoft tools"
+  - "Explain why work accounts change the data-handling questions to ask"
+concepts: ["assistant", "ecosystem integration", "workplace data"]
+tools: ["copilot"]
+flashcards:
+  - front: "What is Microsoft Copilot, practically?"
+    back: "Microsoft's assistant across Windows, Edge, and the 365 apps — chat plus in-document help."
+  - front: "Why do work accounts change the Copilot conversation?"
+    back: "Enterprise data-handling, permissions, and admin policies differ from consumer use — ask IT what's enabled."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+import RegistryCard from '../../../src/components/RegistryCard.astro';
+
+For hundreds of millions of people, "the computer" means Windows, Outlook,
+Word, and Excel. Microsoft's bet is the same one you saw with Gemini
+(E2·L4), aimed at the office instead of the search box: put the assistant
+inside the tools where the work already lives.
+
+## The fact sheet (community-verified)
+
+<RegistryCard id="copilot" />
+
+## What it's typically good at
+
+Copilot's value is *placement*. Drafting a reply inside the inbox that has
+the thread; summarising the document that's already open; turning a
+spreadsheet question into a formula without leaving the sheet; catching you
+up on a meeting inside the calendar that scheduled it. As a standalone chat
+it's a capable general assistant; inside Microsoft 365 (on eligible plans),
+it becomes a colleague who has read the file.
+
+## What to keep in mind
+
+- **Consumer and work Copilot are different animals.** What it can access,
+  what's logged, and what your employer's admins have enabled differ
+  sharply between a personal account and a work one. At work, the right
+  first question isn't "what can Copilot do?" but "what has IT enabled,
+  and what's our usage policy?" (E8 builds this into a habit.)
+- **In-document ≠ infallible.** Having the file open reduces invention
+  about the file — it doesn't abolish E1·L7. Summaries of *your* documents
+  still deserve the spot-check you practised with Claude (E2·L3).
+- **Plan-dependence is the norm.** Which apps get which features on which
+  plan changes often; the card's docs link outranks any month-old article.
+
+## Try it now (4 minutes)
+
+If you use Microsoft tools: open a real document and ask Copilot (or the
+free chat at minimum) to *"summarise this and list two questions a
+reviewer would ask."* Then answer honestly: did it read the document, or
+pattern-guess around it? If you don't use Microsoft tools — skip guilt-free;
+L9's tier logic covers what you need.
+
+<Quiz client:visible items={[
+  {
+    q: "At work, the most important Copilot question to settle first is:",
+    options: [
+      "Which model version it runs",
+      "What your organisation has enabled and what its usage policy allows",
+      "Whether it beats other assistants at poetry"
+    ],
+    answer: 1,
+    explain: "Workplace AI is governed use. Capability questions come second to permission and policy questions — a theme E8 completes."
+  },
+  {
+    q: "Copilot summarises the open document. The E1-consistent view is:",
+    options: [
+      "Reading the file makes errors impossible",
+      "Grounding in the file reduces invention; verification of specifics is still yours",
+      "Summaries are only reliable in Word, not Excel"
+    ],
+    answer: 1,
+    explain: "Grounding shrinks the hallucination surface without removing it — the same lesson as cited web sources (E2·L4/L5)."
+  }
+]} />
+
+## Recap
+
+Placement is the product: real value inside the apps, with work-account
+governance as the first question and verification habits unchanged. Next:
+the assistants that live where you already scroll and chat.

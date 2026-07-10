@@ -1,0 +1,14 @@
+{
+  "id": "meta-ai",
+  "vendor": "Meta",
+  "category": "assistant",
+  "summary": "Meta's assistant inside WhatsApp, Instagram, Messenger, and a standalone app — AI where billions already chat, built on Meta's Llama models.",
+  "capabilities": { "chat": true, "vision": true, "files": false, "voice": true, "webSearch": true, "api": false },
+  "freeTierNotes": "Free within Meta's apps; feature availability varies by region and changes over time.",
+  "docsUrl": "https://www.meta.ai/",
+  "tosNotes": "Educational interactive use; note in-app data-handling terms differ from standalone assistants.",
+  "lastVerified": "2026-07-07",
+  "verifier": "core-team",
+  "tier": "B",
+  "status": "active"
+}

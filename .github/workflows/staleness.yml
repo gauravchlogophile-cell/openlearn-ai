@@ -1,0 +1,35 @@
+name: Registry staleness check
+on:
+  schedule:
+    - cron: '0 6 * * 1'   # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  staleness:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+      - id: check
+        run: |
+          node scripts/validate-content.mjs > report.txt 2>&1 || echo "failed=true" >> "$GITHUB_OUTPUT"
+          cat report.txt
+      - if: steps.check.outputs.failed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const body = ['Weekly staleness/lint check failed. Registry cards past their',
+              'verification SLA (Phase 3 §9) or content lint errors:', '',
+              '```', fs.readFileSync('report.txt','utf8').slice(0, 6000), '```', '',
+              'Verifying a card is a great first contribution — see CONTRIBUTING.md.'].join('\n');
+            await github.rest.issues.create({
+              owner: context.repo.owner, repo: context.repo.repo,
+              title: '🕰 Registry verification due (' + new Date().toISOString().slice(0,10) + ')',
+              body, labels: ['content', 'verification', 'good first issue'],
+            });

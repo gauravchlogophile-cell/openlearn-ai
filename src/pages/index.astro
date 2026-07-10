@@ -1,0 +1,74 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+const lessons = (await getCollection('lessons')).sort((a, b) => a.data.order - b.data.order);
+---
+<Base title="OpenLearn AI — Learn AI. Free. Forever."
+  description="An open-source, vendor-neutral AI curriculum from absolute beginner to builder. No paywalls, no ads, no tricks — free forever, for everyone.">
+  <section class="container" style="padding-block:var(--sp-16) var(--sp-12);">
+    <h1 style="font-size:var(--fs-600);line-height:1.15;max-width:22ch;margin:0 0 var(--sp-4);">
+      Learn AI. Free. Forever.
+    </h1>
+    <p class="prose" style="font-size:var(--fs-300);color:var(--c-ink-soft);margin:0 0 var(--sp-8);">
+      From zero to builder — an open-source curriculum with hands-on practice,
+      honest guidance, and free certificates. No paywalls. No tricks.
+    </p>
+    <a class="btn" href={'/learn/' + lessons[0].id}>Start learning — no signup</a>
+    <a class="btn btn--ghost" href="/roadmap" style="margin-inline-start:var(--sp-3);">See the full roadmap</a>
+
+    <!-- Signature: the skill tree, real and inline (pure SVG, zero JS) -->
+    <figure style="margin:var(--sp-12) 0 0;">
+      <svg viewBox="0 0 640 200" role="img" aria-labelledby="tree-title tree-desc" style="width:100%;height:auto;">
+        <title id="tree-title">The learning roadmap</title>
+        <desc id="tree-desc">Three connected tracks: Explorer, then Practitioner, then Builder. Explorer module one is available now.</desc>
+        <line x1="80" y1="100" x2="560" y2="100" stroke="var(--c-border)" stroke-width="3"/>
+        <g>
+          <circle cx="80" cy="100" r="26" fill="var(--c-progress)"/>
+          <text x="80" y="150" text-anchor="middle" fill="var(--c-ink)" font-size="14">E1 · Start</text>
+        </g>
+        {[160,240,320].map((x, i) => (
+          <g>
+            <circle cx={x} cy="100" r="20" fill="var(--c-bg)" stroke="var(--c-primary)" stroke-width="3"/>
+            <text x={x} y="150" text-anchor="middle" fill="var(--c-ink-soft)" font-size="13">{'E' + (i + 2)}</text>
+          </g>
+        ))}
+        <g>
+          <circle cx="440" cy="100" r="22" fill="var(--c-bg)" stroke="var(--c-reward)" stroke-width="3"/>
+          <text x="440" y="150" text-anchor="middle" fill="var(--c-ink-soft)" font-size="13">Practitioner</text>
+        </g>
+        <g>
+          <circle cx="560" cy="100" r="22" fill="var(--c-bg)" stroke="var(--c-alert)" stroke-width="3"/>
+          <text x="560" y="150" text-anchor="middle" fill="var(--c-ink-soft)" font-size="13">Builder</text>
+        </g>
+      </svg>
+      <figcaption style="color:var(--c-ink-soft);font-size:var(--fs-100);">
+        The full roadmap: Explorer → Practitioner → Builder. Every step free.
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8);">
+    <h2 style="font-size:var(--fs-400);">Why is this free?</h2>
+    <p class="prose">
+      Because knowledge about AI shouldn't depend on the size of your wallet.
+      We're grant- and donation-funded, fully open source, and we publish our
+      finances. Nothing you need is ever behind money — not lessons, not
+      practice, not certificates.
+    </p>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8) var(--sp-12);">
+    <h2 style="font-size:var(--fs-400);">Live now</h2>
+    <ul style="list-style:none;padding:0;">
+      <li style="margin-block:var(--sp-3);">
+        <strong>E1 · What Is AI, Really?</strong> — 8 lessons ·
+        <a href="/learn/explorer/e1/l1-ai-in-your-daily-life">start</a>
+      </li>
+      <li style="margin-block:var(--sp-3);">
+        <strong>E2 · Meet Your AI Assistants</strong> — first 5 lessons ·
+        <a href="/learn/explorer/e2/l1-the-assistant-landscape">start</a>
+      </li>
+    </ul>
+    <p><a href="/roadmap">Every planned module, on one page →</a></p>
+  </section>
+</Base>

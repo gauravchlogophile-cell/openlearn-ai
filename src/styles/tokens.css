@@ -1,0 +1,68 @@
+/* Design tokens — Phase 5 §5.1. Token-first, two themes, AA-verified pairings. */
+:root {
+  --c-primary: #3d3d8f;        /* Deep Indigo — brand, links, primary actions */
+  --c-primary-ink: #ffffff;
+  --c-progress: #0e8a7b;       /* Teal — progress, success */
+  --c-reward: #b45309;         /* Amber — streaks, XP */
+  --c-alert: #c2410c;          /* Coral — alerts */
+  --c-bg: #ffffff;
+  --c-surface: #f5f6f8;
+  --c-border: #d8dbe2;
+  --c-ink: #1c2130;
+  --c-ink-soft: #4b5265;
+
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
+  --fs-100: 0.875rem; --fs-200: 1rem; --fs-300: 1.125rem;
+  --fs-400: 1.375rem; --fs-500: 1.75rem; --fs-600: 2.125rem;
+  --lh-body: 1.6;
+  --measure: 68ch;
+
+  --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
+  --sp-6: 24px; --sp-8: 32px; --sp-12: 48px; --sp-16: 64px;
+  --r-s: 8px; --r-m: 12px; --r-l: 16px;
+
+  --t-fast: 150ms ease-out; --t-med: 250ms ease-out;
+  --focus-ring: 2px solid var(--c-primary);
+  --focus-offset: 2px;
+}
+
+[data-theme="dark"] {
+  --c-bg: #0f1117;
+  --c-surface: #171a23;
+  --c-border: #2a2f3d;
+  --c-ink: #e8eaf1;
+  --c-ink-soft: #a3aabd;
+  --c-primary: #8c8ce0;
+  --c-progress: #35b3a2;
+  --c-reward: #e0913a;
+  --c-alert: #f0713d;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}
+
+* { box-sizing: border-box; }
+html { color-scheme: light dark; }
+body {
+  margin: 0; background: var(--c-bg); color: var(--c-ink);
+  font-family: var(--font-body); font-size: var(--fs-200);
+  line-height: var(--lh-body);
+}
+a { color: var(--c-primary); }
+:focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-offset); }
+.skip-link {
+  position: absolute; left: -999px; top: 0; background: var(--c-primary);
+  color: var(--c-primary-ink); padding: var(--sp-2) var(--sp-4); border-radius: var(--r-s);
+}
+.skip-link:focus { left: var(--sp-4); z-index: 10; }
+.container { max-width: 960px; margin: 0 auto; padding: 0 var(--sp-4); }
+.prose { max-width: var(--measure); }
+.btn {
+  display: inline-block; background: var(--c-primary); color: var(--c-primary-ink);
+  padding: var(--sp-3) var(--sp-6); border-radius: var(--r-m); border: 0;
+  font-size: var(--fs-200); font-weight: 600; text-decoration: none;
+  min-height: 44px; min-width: 44px; cursor: pointer; transition: filter var(--t-fast);
+}
+.btn:hover { filter: brightness(1.1); }
+.btn--ghost { background: transparent; color: var(--c-primary); border: 1px solid var(--c-border); }
