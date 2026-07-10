@@ -1,0 +1,14 @@
+{
+  "id": "gemini",
+  "vendor": "Google",
+  "category": "assistant",
+  "summary": "Google's AI assistant integrated across its ecosystem, handling conversation, writing, coding, and multimodal input, with free access and paid tiers.",
+  "capabilities": { "chat": true, "vision": true, "files": true, "voice": true, "webSearch": true, "api": true },
+  "freeTierNotes": "Free tier available; API has a developer free tier with limits that change over time — verify current terms.",
+  "docsUrl": "https://ai.google.dev/",
+  "tosNotes": "Educational interactive use by end learners; no resale of access. Review current usage policies before enabling lab adapters.",
+  "lastVerified": "2026-07-07",
+  "verifier": "core-team",
+  "tier": "A",
+  "status": "active"
+}

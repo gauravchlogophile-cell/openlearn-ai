@@ -1,0 +1,97 @@
+---
+title: "What 'machine learning' actually means"
+description: "Learning from examples, not rules: train a mental model of how machines learn — with a fruit stall, not formulas. No maths, genuinely."
+track: explorer
+module: e1
+order: 3
+minutes: 8
+objectives:
+  - "Describe training, patterns, and prediction in plain words"
+  - "Explain why more (good) examples usually make AI better"
+  - "Spot why biased examples produce biased AI"
+concepts: ["training data", "pattern", "prediction", "bias"]
+tools: []
+flashcards:
+  - front: "What is 'training data'?"
+    back: "The examples a model learns patterns from."
+  - front: "Complete: rules are written, patterns are ___"
+    back: "Learned — from examples in the training data."
+  - front: "If training examples are skewed, what happens?"
+    back: "The model learns the skew: biased data in, biased predictions out."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Imagine teaching a new helper at a fruit stall to spot ripe mangoes. You
+don't hand them a rulebook. You hand them mangoes: "ripe… ripe… not this
+one… this one, smell it — ripe." After a few hundred mangoes, they've
+developed a feel — colour, softness, smell — that no rulebook fully captures.
+
+That's machine learning. The mangoes are **training data**. The "feel" is a
+set of **patterns**. Judging a new mango is a **prediction**.
+
+## Three words that unlock everything
+
+- **Training:** showing the system many labelled examples.
+- **Patterns:** the internal shortcuts it builds ("this combination of
+  colour and softness usually means ripe").
+- **Prediction:** applying those patterns to something new — always with
+  some chance of being wrong.
+
+Notice what's missing: understanding. Your helper doesn't know *why* mangoes
+ripen. The patterns work anyway — until they meet a mango unlike anything in
+training. A green-skinned ripe variety they've never seen? Confidently
+rejected. Remember that: **confidence comes from pattern-match strength, not
+from being right.**
+
+## The examples decide everything
+
+Two consequences follow directly, and they explain half of the AI news
+you'll ever read:
+
+1. **More good examples → better predictions.** This is why AI companies are
+   obsessed with data.
+2. **Skewed examples → skewed predictions.** If your helper only ever saw
+   one mango variety, they'll misjudge every other variety. When AI systems
+   trained mostly on one group of people perform worse for everyone else,
+   this is the mechanism. It's not the machine being malicious — it's the
+   examples being incomplete.
+
+## Try it now (2 minutes)
+
+Think of something *you* judge by feel — a cricket shot's timing, when a
+chapati is done, whether a customer email sounds annoyed. Could you write
+complete rules for it? Probably not — you learned it from examples. You're
+carrying the intuition for machine learning already.
+
+<Quiz client:visible items={[
+  {
+    q: "A model trained only on photos of golden retrievers is shown a husky. What's most likely?",
+    options: [
+      "It understands huskies are also dogs",
+      "It struggles, because huskies don't match its learned patterns",
+      "It refuses to answer"
+    ],
+    answer: 1,
+    explain: "Patterns only cover what training data covered. Unfamiliar inputs get unreliable, sometimes confidently wrong, predictions."
+  },
+  {
+    q: "Why can AI systems end up biased?",
+    options: [
+      "The computer develops opinions",
+      "The training examples were incomplete or skewed, and the model learned that skew",
+      "Bias is added deliberately in all systems"
+    ],
+    answer: 1,
+    explain: "Models mirror their examples. Skewed data produces skewed patterns — which is why 'what was it trained on?' is always a fair question."
+  }
+]} />
+
+## Recap
+
+Machine learning = patterns learned from examples, applied as predictions —
+with confidence that reflects pattern-match strength, not truth. Next lesson:
+the machinery behind the patterns, neural networks, explained by analogy.

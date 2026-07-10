@@ -1,0 +1,93 @@
+---
+title: "Grok, Meta AI — assistants where you already are"
+description: "Two assistants that come to you: Grok inside X, Meta AI inside WhatsApp and Instagram. What each offers, and how to judge convenience-first AI."
+track: explorer
+module: e2
+order: 7
+minutes: 8
+objectives:
+  - "Describe what Grok and Meta AI are and where they live"
+  - "Apply the convenience-versus-fit judgement to embedded assistants"
+concepts: ["assistant", "platform integration", "real-time information"]
+tools: ["grok", "meta-ai"]
+flashcards:
+  - front: "What is Grok's distinctive strength?"
+    back: "Integration with X — real-time access to platform content, plus a standalone assistant."
+  - front: "Where does Meta AI live?"
+    back: "Inside WhatsApp, Instagram, and Messenger (plus a standalone app), built on Meta's Llama models."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+import RegistryCard from '../../../src/components/RegistryCard.astro';
+
+Some assistants you go to; some come to you. This lesson covers two of the
+second kind — and completes a pattern you've now seen three times, so
+you'll recognise it in every future launch: *the assistant embedded where
+the attention already is.*
+
+## Grok — the assistant on X
+
+<RegistryCard id="grok" />
+
+Built by xAI, Grok's calling card is its connection to X: it can draw on
+what's being posted right now, which suits "what are people saying about
+—?" questions the way answer engines (E2·L5) suit sourced research. Its
+default tone runs more informal than most. Two cautions follow directly
+from your training: *what people are posting* is a signal about
+conversation, not a verified account of events — treat trending claims as
+leads to verify, not facts to repeat; and an informal, funny register can
+make hallucinations *more* persuasive, not less (E1·L7's tone warning,
+doubled).
+
+## Meta AI — the assistant in your chat apps
+
+<RegistryCard id="meta-ai" />
+
+Meta AI sits inside WhatsApp, Instagram, and Messenger — for many people
+in many countries, the first AI they'll ever use, because it arrived in
+the app they already open fifty times a day. It handles the everyday
+strong-zone tasks (drafting, explaining, ideas, image generation) with
+zero setup. The judgement to carry: a group chat is a *social* space —
+think before pulling an AI into conversations containing other people's
+messages, and know your region's feature set varies.
+
+## The embedded-assistant checklist
+
+For any assistant that lives inside a platform — these two, Gemini in
+Google, Copilot in Office, and whatever ships next year — ask the same
+four questions: What can it *see* in this app? What does the platform *do*
+with these chats? Is convenience choosing the tool, or am I (E2·L4)? And
+does my use involve *other people's* content?
+
+<Quiz client:visible items={[
+  {
+    q: "Grok reports 'what's trending' about a breaking story. The right treatment is:",
+    options: [
+      "Trending equals confirmed",
+      "A lead about the conversation — verify events through sources before repeating",
+      "Ignore it entirely; platform data is useless"
+    ],
+    answer: 1,
+    explain: "Real-time platform access is a genuine strength for sensing conversation — and exactly where verification habits earn their keep."
+  },
+  {
+    q: "Before using an assistant inside a group chat, the distinctive extra question is:",
+    options: [
+      "Which model tier is it running?",
+      "Does my use involve other people's messages, and is that appropriate here?",
+      "Is the assistant's tone formal enough?"
+    ],
+    answer: 1,
+    explain: "Embedded assistants meet other people's content. That's a consent and judgement question no capability list answers for you."
+  }
+]} />
+
+## Recap
+
+Grok: real-time platform sensing, informal tone, verify before repeating.
+Meta AI: zero-setup AI inside chat apps, with a social-space judgement to
+apply. Next: a genuinely different tool — the assistant that answers ONLY
+from your documents.

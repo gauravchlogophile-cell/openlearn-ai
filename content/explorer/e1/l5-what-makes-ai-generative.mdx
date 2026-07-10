@@ -1,0 +1,90 @@
+---
+title: "What makes AI 'generative'?"
+description: "Recognisers label the world; generators produce new pieces of it. Understand the shift behind chat assistants, image tools, and everything in this course."
+track: explorer
+module: e1
+order: 5
+minutes: 7
+objectives:
+  - "Distinguish recognising AI from generative AI with examples of each"
+  - "Explain generation as prediction, one small piece at a time"
+concepts: ["generative AI", "recognition", "prediction"]
+tools: []
+flashcards:
+  - front: "Recognising AI vs generative AI — the one-line difference?"
+    back: "Recognisers output labels or scores; generators output new content."
+  - front: "How does a generative model produce a long answer?"
+    back: "One small piece at a time, each piece predicted from everything so far."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Your photo app looks at a picture and says "beach". That's impressive — but
+notice its answer is one word chosen from a fixed list. It **recognises**.
+Now compare an image tool that, given the words "quiet beach at dawn,
+watercolour", paints a picture that has never existed. It **generates**.
+
+## From labelling to producing
+
+Everything you met in lessons 1–4 was recognition: spam or not spam, ripe or
+not ripe, cat or dog. The model's output is a label or a score.
+
+Generative AI turns the machinery around. Instead of asking "which label
+fits this input?", it asks, over and over: **"given everything so far, what
+small piece most plausibly comes next?"** A next word. A next patch of
+pixels. A next slice of audio. String thousands of those small predictions
+together and you get a paragraph, an image, a voice.
+
+## Why "plausible" is the key word
+
+The model was trained on enormous amounts of existing text and images
+(lesson 3: patterns from examples). So each small prediction is really:
+"what would typically follow here, in material like my training data?"
+
+That single sentence explains most of what you'll experience with these
+tools:
+
+- Why outputs feel fluent and human-like — human material is what the
+  patterns came from.
+- Why outputs can be generic — "typical" is the default.
+- Why outputs can be wrong while sounding right — plausible and true are
+  different properties. Lesson 7 is entirely about this.
+
+## Try it now (2 minutes)
+
+Sort these into *recognise* or *generate*: unlocking your phone with your
+face · a chat assistant writing a birthday message · translating a menu
+photo · an app inventing a recipe from your leftovers · flagging a
+fraudulent card payment.
+
+<Quiz client:visible items={[
+  {
+    q: "Which of these is generative AI?",
+    options: [
+      "Marking an email as spam",
+      "Writing a new cover letter from your notes",
+      "Detecting a face to unlock a phone"
+    ],
+    answer: 1,
+    explain: "Spam-marking and face-unlock output labels; the cover letter is newly produced content — generation."
+  },
+  {
+    q: "A generative model chooses each next piece by asking:",
+    options: [
+      "What is objectively true here?",
+      "What most plausibly comes next, given patterns from training?",
+      "What did the user secretly want?"
+    ],
+    answer: 1,
+    explain: "Plausibility from patterns — which is why fluency is guaranteed but truth is not."
+  }
+]} />
+
+## Recap
+
+Recognisers label; generators produce, one predicted piece at a time, guided
+by plausibility rather than truth. Next: the specific generator you'll use
+most — the large language model — and what it's really doing when it "talks".

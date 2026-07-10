@@ -1,0 +1,106 @@
+---
+title: "What AI can and cannot do — an honest map"
+description: "Close the module with a working capability map: where today's AI is strong, where it's shaky, where it fails — and the four E1 ideas that explain all of it."
+track: explorer
+module: e1
+order: 8
+minutes: 9
+objectives:
+  - "Sort common tasks into strong, shaky, and weak zones for today's AI"
+  - "Predict AI strengths and failures using the four E1 core ideas"
+concepts: ["capability map", "judgement", "human in the loop"]
+tools: []
+flashcards:
+  - front: "AI's strong zone, in one phrase?"
+    back: "Language and pattern work you can check: drafting, summarising, rewriting, explaining, brainstorming."
+  - front: "AI's weak zone, in one phrase?"
+    back: "Unverifiable specifics and accountable judgement: facts without sources, decisions with real stakes."
+  - front: "The golden rule for using AI at work?"
+    back: "Use it where you can verify the output; keep a human in the loop where errors cost."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+You now hold four ideas: AI learns **patterns from examples** (L3), stored
+as **tuned dials** (L4), used to **generate plausible continuations** (L5–6),
+with **no built-in truth check** (L7). Those four ideas are a prediction
+machine of your own — point them at any task and they'll tell you whether AI
+will shine or stumble. Let's draw the map.
+
+## Strong zone — pattern work you can check
+
+Tasks that are language-shaped, pattern-rich in training data, and easy for
+*you* to verify:
+
+- Drafting and rewriting: emails, summaries, outlines, translations, tone
+  changes ("make this friendlier")
+- Explaining: "explain this contract clause / error message / concept
+  simply"
+- Brainstorming and structuring: options, plans, counter-arguments, names
+- Transforming what you provide: notes → minutes, table → prose, long → short
+
+Why strong? Oceans of training examples, and the output sits in front of
+you where wrongness is visible.
+
+## Shaky zone — usable with verification
+
+- Factual questions: often right, invisibly wrong (L7) — verify specifics
+- Maths and step-by-step logic: improving, still slips; check the steps
+- Anything recent: pattern memory has a horizon; needs an attached search
+  tool
+- Long tasks with many constraints: constraints quietly drop; re-check
+  against your list
+
+## Weak zone — keep humans firmly in charge
+
+- Unverifiable specifics: citations, statistics, quotes produced from
+  pattern memory
+- Accountable judgement: hiring, diagnosis, legal strategy, grading people —
+  wherever an error lands on a human being and someone must answer for it
+- Knowing its own limits: the model can't reliably tell you when it's out
+  of its depth — that assessment is your job, permanently
+
+## The golden rule
+
+**Use AI where you can verify; keep a human in the loop where errors cost.**
+Every workflow in the rest of this course is built on that sentence.
+
+## Try it now (3 minutes)
+
+Take three real tasks from your week. Place each on the map. For anything
+outside the strong zone, name the verification step you'd add. You've just
+done your first piece of AI workflow design — the skill the whole Explorer
+track builds.
+
+<Quiz client:visible items={[
+  {
+    q: "Which task sits most safely in AI's strong zone?",
+    options: [
+      "Producing exact market-size statistics from memory",
+      "Rewriting your rough notes into a clear email you'll read before sending",
+      "Deciding which job applicant to reject"
+    ],
+    answer: 1,
+    explain: "Language transformation of material you supplied, with your review at the end — pattern work you can check."
+  },
+  {
+    q: "Why does 'keep a human in the loop where errors cost' follow from this module?",
+    options: [
+      "Because regulations require it everywhere",
+      "Because the model generates plausibility without a truth check, so stakes determine how much human verification is needed",
+      "Because AI refuses high-stakes tasks"
+    ],
+    answer: 1,
+    explain: "L5–L7 in one line: plausibility is guaranteed, truth is not — so human checking must scale with consequences."
+  }
+]} />
+
+## Recap
+
+Strong: verifiable language and pattern work. Shaky: facts, logic, recency —
+verify. Weak: unverifiable specifics and accountable judgement — human in
+charge. **Module E1 complete.** Next module: meeting the assistants
+themselves, and putting this judgement to work.

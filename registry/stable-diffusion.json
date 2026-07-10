@@ -1,0 +1,14 @@
+{
+  "id": "stable-diffusion",
+  "vendor": "Stability AI / open community",
+  "category": "image",
+  "summary": "The open-model family for image generation — runnable locally or via many hosted services, with a large ecosystem of fine-tunes and tools.",
+  "capabilities": { "chat": false, "vision": false, "files": false, "voice": false, "webSearch": false, "api": true },
+  "freeTierNotes": "Open weights are free to run locally (hardware required); hosted services vary — check each host's terms.",
+  "docsUrl": "https://stability.ai/",
+  "tosNotes": "Model licences vary by version; check the specific model licence before commercial use.",
+  "lastVerified": "2026-07-07",
+  "verifier": "core-team",
+  "tier": "C",
+  "status": "active"
+}

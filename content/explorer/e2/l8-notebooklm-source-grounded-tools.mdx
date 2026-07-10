@@ -1,0 +1,100 @@
+---
+title: "NotebookLM and source-grounded assistants"
+description: "A tool that answers only from documents you give it, with citations into your own sources — the closest thing yet to hallucination-resistant AI work."
+track: explorer
+module: e2
+order: 8
+minutes: 8
+objectives:
+  - "Explain what 'source-grounded' means and why it changes reliability"
+  - "Pick tasks where a grounded tool beats a general assistant"
+concepts: ["source grounding", "citation", "knowledge base"]
+tools: ["notebooklm"]
+flashcards:
+  - front: "What makes NotebookLM different from a chat assistant?"
+    back: "It answers only from sources you upload, citing into them — refusing rather than inventing beyond them."
+  - front: "Does source-grounding remove all verification work?"
+    back: "No — misreading and imperfect stitching remain possible; but citations point into YOUR documents, making checks fast."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+import RegistryCard from '../../../src/components/RegistryCard.astro';
+
+Everything so far answers from the whole internet's patterns. This lesson's
+tool does the opposite — and the opposite turns out to be exactly what
+students, researchers, and professionals often need: an assistant that
+knows *only* what you handed it.
+
+## The fact sheet (community-verified)
+
+<RegistryCard id="notebooklm" />
+
+## Grounded means bounded
+
+Give NotebookLM your sources — reports, papers, notes, transcripts — and
+ask questions. Answers come **only from those sources, with citations that
+click through to the exact passages.** Ask something the sources don't
+cover and the well-behaved response is "your sources don't say" — the
+sentence E1·L7 taught you that general assistants struggle to produce.
+
+Why this matters: the hallucination problem (plausibility without a truth
+check) shrinks dramatically when the model is confined to a small, known
+pile of text *and* every claim carries a pointer you can check in seconds.
+It doesn't vanish — passages can still be misread or stitched imperfectly —
+but verification collapses from "search the world" to "click the citation".
+
+This idea has a name you'll meet properly in the Practitioner track:
+**retrieval** — and NotebookLM is its friendliest on-ramp. The audio
+overview feature (two AI voices discussing your sources like a podcast) is
+a genuinely useful review tool; treat it as a *tour* of your documents,
+not a replacement for them.
+
+## Where grounded tools win
+
+Study packs (your lecture notes + the textbook chapter), synthesising a
+pile of reports, onboarding into a project's documents, "what does the
+contract actually say" questions. Where they don't: anything requiring
+knowledge beyond your sources, general drafting, and creative work — the
+general assistants' home turf. One privacy habit before uploading anything
+sensitive: check the tool's data-handling terms (the card links them), and
+your workplace's policy (E2·L6 echo).
+
+## Try it now (5 minutes)
+
+Upload two related documents you actually have (or any two public PDFs on
+one topic). Ask: *"Where do these two sources disagree, and what does each
+say? Cite passages."* Click one citation. That loop — question, cited
+answer, one-click check — is grounded AI at its best.
+
+<Quiz client:visible items={[
+  {
+    q: "You ask a grounded notebook something its sources don't cover. The well-designed behaviour is:",
+    options: [
+      "Answer from general knowledge without mentioning it",
+      "Say the sources don't cover it",
+      "Invent a plausible citation"
+    ],
+    answer: 1,
+    explain: "Bounded knowledge is the feature. 'Your sources don't say' is the honest output general-purpose assistants find hardest."
+  },
+  {
+    q: "Grounding changes verification because:",
+    options: [
+      "No checking is ever needed again",
+      "Citations point into your own documents, so checking a claim takes seconds",
+      "The model becomes incapable of misreading"
+    ],
+    answer: 1,
+    explain: "The failure surface shrinks and the checking loop gets fast — that combination, not perfection, is the win."
+  }
+]} />
+
+## Recap
+
+Source-grounded tools answer only from what you provide, cite into it, and
+say so when sources are silent — retrieval's friendliest introduction.
+Next: the lesson that saves you money — what free and paid tiers actually
+buy, and when upgrading is worth it.

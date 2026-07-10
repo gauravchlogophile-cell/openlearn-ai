@@ -1,0 +1,14 @@
+{
+  "id": "grok",
+  "vendor": "xAI",
+  "category": "assistant",
+  "summary": "xAI's assistant, integrated with the X platform and available standalone — known for real-time X content access and a more informal default tone.",
+  "capabilities": { "chat": true, "vision": true, "files": true, "voice": true, "webSearch": true, "api": true },
+  "freeTierNotes": "Free access with limits; tiers and platform bundling change over time — check official docs.",
+  "docsUrl": "https://docs.x.ai/",
+  "tosNotes": "Educational interactive use by end learners; no resale of access.",
+  "lastVerified": "2026-07-07",
+  "verifier": "core-team",
+  "tier": "B",
+  "status": "active"
+}

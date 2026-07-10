@@ -1,0 +1,14 @@
+{
+  "id": "notion-ai",
+  "vendor": "Notion",
+  "category": "workspace",
+  "summary": "AI built into the Notion workspace: writing help, Q&A across your pages and connected docs, meeting notes, and databases with AI-filled fields.",
+  "capabilities": { "chat": true, "vision": false, "files": true, "voice": false, "webSearch": true, "api": false },
+  "freeTierNotes": "AI features are largely tied to paid plans with trial allowances — specifics change over time.",
+  "docsUrl": "https://www.notion.com/help",
+  "tosNotes": "Workspace Q&A reads what it's connected to — review sharing/permission settings first.",
+  "lastVerified": "2026-07-07",
+  "verifier": "core-team",
+  "tier": "C",
+  "status": "active"
+}

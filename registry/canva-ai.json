@@ -1,0 +1,14 @@
+{
+  "id": "canva-ai",
+  "vendor": "Canva",
+  "category": "image",
+  "summary": "AI features inside the Canva design platform — text-to-image, magic editing, copy help, and presentation generation for non-designers.",
+  "capabilities": { "chat": false, "vision": true, "files": true, "voice": false, "webSearch": false, "api": false },
+  "freeTierNotes": "Free tier includes limited AI credits; limits and features change over time — check official docs.",
+  "docsUrl": "https://www.canva.com/help/",
+  "tosNotes": "Review content and commercial-use terms for AI-generated assets before publishing.",
+  "lastVerified": "2026-07-07",
+  "verifier": "core-team",
+  "tier": "C",
+  "status": "active"
+}

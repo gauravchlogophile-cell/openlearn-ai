@@ -1,0 +1,25 @@
+---
+import Base from '../layouts/Base.astro';
+import ReviewSession from '../components/ReviewSession.tsx';
+import { getCollection } from 'astro:content';
+
+const lessons = await getCollection('lessons');
+const allCards = lessons.flatMap((l) =>
+  (l.data.flashcards ?? []).map((c, i) => ({
+    key: l.id + '#' + i,
+    front: c.front, back: c.back,
+    lessonSlug: l.id, lessonTitle: l.data.title,
+  }))
+);
+---
+<Base title="Daily review — OpenLearn AI"
+  description="Your spaced-repetition session: flashcards from completed lessons, scheduled so the hard ones return sooner and the easy ones stay away longer.">
+  <section class="container prose" style="padding-block:var(--sp-8) var(--sp-12);">
+    <h1 style="font-size:var(--fs-500);">Daily review</h1>
+    <p style="color:var(--c-ink-soft);">
+      {allCards.length} cards live in this course so far. Yours unlock as you
+      complete lessons — then memory science does the scheduling.
+    </p>
+    <ReviewSession client:load allCards={allCards} />
+  </section>
+</Base>

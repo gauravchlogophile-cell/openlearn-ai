@@ -1,0 +1,87 @@
+---
+title: "Neural networks, explained by analogy"
+description: "How millions of tiny adjustable dials turn examples into ability. A picture of neural networks you can actually keep — layers, weights, and training."
+track: explorer
+module: e1
+order: 4
+minutes: 8
+objectives:
+  - "Describe a neural network as layers of small decision units"
+  - "Explain 'training' as gradually adjusting many small dials"
+concepts: ["neural network", "weights", "layers", "training"]
+tools: []
+flashcards:
+  - front: "What is a 'weight' in a neural network?"
+    back: "A tiny adjustable dial controlling how much one signal influences the next unit."
+  - front: "What does training actually change in a network?"
+    back: "The weights — nudged slightly after each example until predictions improve."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Picture an enormous room of clerks arranged in rows. The first row looks at
+tiny fragments of a photo — just dots of light and dark. Each clerk shouts a
+small opinion to the next row: "I see an edge here." The second row combines
+those shouts: "edges curving — might be an ear." Row by row, opinions
+combine into bigger ones, until the final row announces: "cat."
+
+That is a **neural network**: layers of very simple units, each combining
+signals from the previous layer and passing its own signal forward.
+
+## The dials
+
+Here's the important part. Between every pair of clerks there's a volume
+dial — how loudly should *this* clerk's opinion reach *that* one? Those
+dials are called **weights**, and a large network has millions or billions
+of them.
+
+**Training is turning the dials.** Show the network a photo of a cat. If it
+answers "dog", an automatic procedure works backwards through the rows,
+nudging every dial a tiny amount in the direction that would have made "cat"
+slightly more likely. One example changes almost nothing. Millions of
+examples, millions of nudges — and the room of clerks becomes eerily good at
+cats, and dogs, and everything else it was shown.
+
+## What this picture buys you
+
+- **Nobody programs the middle rows.** The useful internal opinions
+  ("ear-like curve") *emerge* from dial-turning. Even experts can't always
+  say what a given clerk learned — this is why you'll hear AI called a
+  "black box".
+- **Ability is stored as numbers.** A trained model is, literally, a giant
+  list of dial settings. Copy the numbers, copy the ability.
+- **It's still pattern-matching.** Bigger rooms with more clerks capture
+  subtler patterns — but lesson 3's warning stands: patterns, not
+  understanding.
+
+<Quiz client:visible items={[
+  {
+    q: "During training, what changes inside a neural network?",
+    options: [
+      "The number of layers grows with each example",
+      "The weights are nudged slightly after each example",
+      "Nothing — networks are fixed at creation"
+    ],
+    answer: 1,
+    explain: "Training adjusts the millions of small dials (weights) so that correct answers become gradually more likely."
+  },
+  {
+    q: "Why are neural networks sometimes called 'black boxes'?",
+    options: [
+      "They are stored in sealed hardware",
+      "Their useful internal patterns emerge from training and can be hard for anyone to interpret",
+      "Their code is always secret"
+    ],
+    answer: 1,
+    explain: "The middle layers teach themselves. What a particular unit responds to isn't designed and often isn't obvious — an active research area."
+  }
+]} />
+
+## Recap
+
+Layers of simple units, connected by millions of adjustable dials, tuned by
+examples. That's the engine. Next in E1: what makes an AI "generative", and
+what a large language model really does when it talks to you.

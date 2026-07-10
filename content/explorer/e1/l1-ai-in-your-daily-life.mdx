@@ -1,0 +1,91 @@
+---
+title: "AI in your daily life — you already use it"
+description: "You have probably used AI a dozen times today without noticing. Spot where it already works for you, and build an accurate starting picture of what AI is."
+track: explorer
+module: e1
+order: 1
+minutes: 7
+objectives:
+  - "Name at least five places AI already works in your daily life"
+  - "Explain the difference between 'AI decides' and 'AI suggests'"
+concepts: ["artificial intelligence", "recommendation system", "prediction"]
+tools: []
+flashcards:
+  - front: "Is AI new to your daily life?"
+    back: "No — spam filters, maps, autocomplete, and photo search have used AI for years."
+  - front: "What do most everyday AI systems actually do?"
+    back: "They make predictions or suggestions from patterns in data — a person or app still decides."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+This morning, before your first coffee, you probably used artificial
+intelligence five times. Your phone unlocked by recognising your face. Your
+email quietly deleted twelve spam messages. Your map app rerouted you around
+traffic. Your keyboard guessed your next word. None of it felt like "AI" —
+it just felt like things working.
+
+## AI is a helper that learned from examples
+
+Here is the most useful starting definition you can carry: **AI is software
+that learned to do a task from examples, instead of being given exact rules.**
+
+A traffic light runs on rules a person wrote: green for 40 seconds, then
+amber, then red. Your spam filter is different. Nobody wrote a rule for every
+possible junk email — instead, the software studied millions of examples of
+"spam" and "not spam" and learned the patterns itself.
+
+That is the whole trick, and it explains both the magic and the mistakes.
+Learned patterns can handle situations no programmer predicted. They can also
+be confidently wrong when a new situation only *resembles* the old examples.
+
+## Suggesting is not the same as deciding
+
+Look closely and you'll notice most everyday AI **suggests** rather than
+**decides**:
+
+- Your streaming app *suggests* a show — you pick.
+- Your keyboard *suggests* a word — you accept or keep typing.
+- Your bank's AI *flags* a payment as unusual — a person reviews it.
+
+Keeping "suggest vs decide" in mind is your first piece of AI judgement.
+Through this whole course, we'll keep asking: who checks the AI's work?
+
+## Try it now (2 minutes)
+
+Pick up your phone and find three AI helpers you used this week. Good places
+to look: photo search ("beach", "dog"), map ETAs, email spam folder, voice
+assistant, translation, autocorrect. For each one, ask: did it *suggest* or
+*decide*?
+
+<Quiz client:visible items={[
+  {
+    q: "Your map app says the fastest route will take 24 minutes. What is the AI doing?",
+    options: [
+      "Following a fixed rule written by a programmer",
+      "Making a prediction from patterns in traffic data",
+      "Deciding where you must drive"
+    ],
+    answer: 1,
+    explain: "The ETA is a prediction learned from huge amounts of traffic history and live data. You still choose the route."
+  },
+  {
+    q: "Which statement best describes most everyday AI?",
+    options: [
+      "It replaces human decisions entirely",
+      "It suggests or flags, and a person or app still decides",
+      "It only exists in chatbots"
+    ],
+    answer: 1,
+    explain: "From spam flags to show recommendations, everyday AI mostly assists. The 'suggest vs decide' lens will serve you all course long."
+  }
+]} />
+
+## Recap
+
+AI already surrounds your day, it learns from examples rather than following
+hand-written rules, and most of it suggests rather than decides. Next lesson:
+where all this came from — a short, honest history of AI's booms and winters.

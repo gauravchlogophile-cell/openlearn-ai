@@ -1,0 +1,100 @@
+---
+title: "Why AI sounds confident when it's wrong"
+description: "Hallucination isn't a glitch — it's plausibility doing its job without a truth check. Learn the failure pattern and the three-question habit that catches it."
+track: explorer
+module: e1
+order: 7
+minutes: 8
+objectives:
+  - "Explain hallucination as plausible generation without a truth check"
+  - "Apply a three-question verification habit to any AI answer"
+concepts: ["hallucination", "verification", "plausibility"]
+tools: []
+flashcards:
+  - front: "What is an AI 'hallucination'?"
+    back: "Output that is fluent and plausible but false — invented facts, sources, or details."
+  - front: "Why does the model sound equally confident when wrong?"
+    back: "Its fluency reflects pattern strength, not truth — it has no built-in fact checker."
+  - front: "The three-question habit?"
+    back: "Would a wrong answer cost me? Can I verify it? Did it come from patterns or a real source?"
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Ask an assistant for a biography of a moderately famous person and you may
+get real achievements neatly mixed with a prize they never won and a book
+they never wrote — delivered in the same smooth, assured tone as the true
+parts. The tone never wavers, because the tone was never connected to truth
+in the first place.
+
+## Hallucination is plausibility without a referee
+
+Recall lessons 5–6: the model produces whatever most plausibly continues the
+text. Usually the most plausible continuation *is* true — that's why these
+tools are useful. But when the model's patterns are thin (an obscure person,
+a niche statistic, a very recent event), the machinery doesn't stop and say
+"I don't know". It does the only thing it can do: it produces something
+*shaped like* an answer. A plausible-looking date. A realistic citation. A
+convincing legal case name. This failure mode is called **hallucination**.
+
+The crucial insight: **fluency is constant, accuracy is variable.** Human
+confidence usually correlates with knowledge; the model's confident tone
+correlates with nothing. You must break the lifelong habit of using
+confidence as a truth signal — for AI, it isn't one.
+
+## Where hallucinations cluster
+
+Risk is not evenly spread. Be extra sceptical with: specific numbers and
+dates · names, quotes, and citations · anything recent · niche topics ·
+legal, medical, and financial specifics · and follow-up answers after
+you've pushed back ("apologies, you're right —" followed by a *new*
+invention is a classic pattern).
+
+## The three-question habit
+
+Before acting on any AI answer, ask:
+
+1. **What does it cost me if this is wrong?** Drafting a birthday poem:
+   nothing. Citing a case in court: everything. Match your checking to the
+   stakes.
+2. **Can I verify it independently?** Numbers, names, quotes, links — check
+   the primary source. If a citation can't be found, treat it as invented.
+3. **Did this come from patterns or from a source?** If the assistant used
+   web search or read your file, verify the *source*. If not, it's pattern
+   memory — treat specifics as unconfirmed.
+
+This habit is the single highest-value skill in this entire course. Module
+E7 turns it into a full toolkit; today, start the reflex.
+
+<Quiz client:visible items={[
+  {
+    q: "An assistant gives you a tidy citation: author, year, journal. What's the safe assumption?",
+    options: [
+      "Citations are always checked before display",
+      "It may be real or invented — confirm it exists before using it",
+      "It's real if the formatting looks professional"
+    ],
+    answer: 1,
+    explain: "Invented citations are a signature hallucination. Realistic formatting is exactly what plausible generation produces."
+  },
+  {
+    q: "Why doesn't the model just say 'I don't know' when its patterns are thin?",
+    options: [
+      "It's programmed to deceive",
+      "Producing a plausible continuation is its only operation; uncertainty doesn't stop generation by default",
+      "It does — every time"
+    ],
+    answer: 1,
+    explain: "Assistants are increasingly tuned to express uncertainty, but the underlying machinery generates plausibility, so the habit of verifying stays yours."
+  }
+]} />
+
+## Recap
+
+Hallucination = plausible generation with no truth check; confidence is not
+a signal; risk clusters around specifics and recency; the three-question
+habit is your everyday defence. Next, the final E1 lesson: an honest map of
+what today's AI does well and where it fails.

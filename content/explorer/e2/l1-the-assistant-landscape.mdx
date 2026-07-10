@@ -1,0 +1,92 @@
+---
+title: "The assistant landscape — one map, no favourites"
+description: "Meet the field before the players: what all major AI assistants share, where they differ, and why this course will never pick a favourite for you."
+track: explorer
+module: e2
+order: 1
+minutes: 7
+objectives:
+  - "Name what every major assistant shares under the hood"
+  - "List the four axes on which assistants genuinely differ"
+concepts: ["assistant", "vendor neutrality", "model tier"]
+tools: []
+flashcards:
+  - front: "What do all major AI assistants share?"
+    back: "An LLM core doing next-token prediction, a chat interface, and attached tools like web search."
+  - front: "The four axes where assistants genuinely differ?"
+    back: "Model quality per task, attached tools and integrations, limits and pricing, and data handling."
+lastVerified: "2026-07-07"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Walk into any phone shop and every handset looks different until you notice
+they all make calls, all run apps, all take photos — and then the *real*
+differences start to matter. AI assistants are the same. Module E1 gave you
+the engine; this module walks the showroom.
+
+## What they all share
+
+Every major assistant — ChatGPT, Claude, Gemini, Copilot, Perplexity, Grok,
+Meta AI, and the rest — is the same machine you already understand: a large
+language model (E1·L6) wrapped in a chat interface, increasingly with tools
+attached (web search, file reading, code running, image generation). Your
+E1 skills — the three-question habit, the capability map — transfer to
+*all* of them, and to every assistant launched after this lesson was
+written. That's why we taught concepts first.
+
+## Where they genuinely differ
+
+1. **Model quality per task.** Vendors ship different model tiers; strengths
+   shift with every release. Today's best writer may not be next quarter's.
+2. **Attached tools and integrations.** Which assistant can search the web,
+   read your files, sit inside your email or documents?
+3. **Limits and pricing.** Free tiers differ in daily usage, model access,
+   and features — and change often, which is why our tool cards carry a
+   "verified" date instead of pretending permanence.
+4. **Data handling.** What is stored, used for training, or excludable
+   varies — and matters at work (E8 covers policy).
+
+## How this course stays neutral
+
+No vendor pays us; no tool is "ours". Each assistant lesson wraps a
+**registry card** — a dated, community-verified fact sheet — plus guidance
+on what tasks each tool suits. When a card ages past 120 days unverified,
+you'll see a warning banner rather than stale confidence. Where a tool is
+weak, the lesson says so.
+
+## Try it now (2 minutes)
+
+Write down which assistant(s) you already use, and one thing that annoys you
+about each. Keep the note — by the end of E2 you'll know whether the fix is
+a technique (usually) or a different tool (sometimes).
+
+<Quiz client:visible items={[
+  {
+    q: "Why do your E1 skills transfer to every assistant in this module?",
+    options: [
+      "All assistants share the same LLM machinery underneath",
+      "The assistants copy each other's interfaces",
+      "They don't — each tool needs relearning from zero"
+    ],
+    answer: 0,
+    explain: "Different wrappers, same engine: next-token prediction, context windows, plausibility without a truth check."
+  },
+  {
+    q: "An assistant comparison you read is eight months old. Best attitude?",
+    options: [
+      "Treat it as current — these tools rarely change",
+      "Treat specifics as expired: model tiers, limits, and features shift fast",
+      "Assume the opposite is now true"
+    ],
+    answer: 1,
+    explain: "Concepts age slowly; tool specifics age in months. Check dates — ours included."
+  }
+]} />
+
+## Recap
+
+Same engine everywhere; real differences on four axes; dated facts over
+brand loyalty. Next: the assistant most people meet first — ChatGPT.

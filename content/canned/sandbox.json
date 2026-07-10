@@ -1,0 +1,57 @@
+{
+  "note": "Curated example runs authored by maintainers for teaching. Live model calls arrive with the backend (Modes 2/3, Phase 4 §3).",
+  "cases": [
+    {
+      "id": "email-rewrite",
+      "title": "Rewrite a rough note as a friendly email",
+      "task": "Turn a blunt note into a warm, clear email under 120 words.",
+      "promptWeak": "make this an email: budget mtg moved to thu 3pm, need slides from priya before, room changed too",
+      "prompt": "Rewrite the following note as a short, friendly email to my team. Keep it under 120 words, keep all facts, and end with one clear request.\n\nNote: budget mtg moved to thu 3pm, need slides from priya before, room changed too (now 4B).",
+      "outputWeak": "Subject: Meeting\n\nHi,\n\nThe budget meeting has been moved to Thursday at 3pm. We need slides from Priya before. The room changed too.\n\nThanks",
+      "output": "Subject: Budget meeting — now Thursday 3pm, Room 4B\n\nHi team,\n\nQuick update: our budget meeting has moved to **Thursday at 3pm**, and we'll now be in **Room 4B**.\n\nPriya — could you share your slides with the group before we meet, so everyone arrives up to speed?\n\nThanks all — see you Thursday.\n",
+      "notes": [
+        "The strong prompt names the audience (my team), a length cap, 'keep all facts', and one clear request — four levers from the E3 anatomy.",
+        "Notice the weak output silently dropped Room 4B's number and buried the request. Vague prompts don't fail loudly; they fail quietly.",
+        "'End with one clear request' is doing heavy lifting: it turns a broadcast into an actionable message."
+      ]
+    },
+    {
+      "id": "summary-with-doubts",
+      "title": "Summarise AND surface what to double-check",
+      "task": "Get a summary that flags its own weak points instead of hiding them.",
+      "prompt": "Summarise the text below in 4 bullet points. Then add a section 'Worth double-checking' listing any specific numbers, names, or claims a careful reader should verify, and why.\n\nText: The Northfield community solar project, launched in 2023, now supplies power to roughly 1,800 households. Organisers say participation cut average household bills by 18%, and a second phase — adding 2.4 MW of capacity — is planned for late next year pending council approval.",
+      "output": "**Summary**\n- Northfield's community solar project launched in 2023 and now supplies roughly 1,800 households.\n- Organisers report an average household bill reduction of 18%.\n- A second phase would add 2.4 MW of capacity.\n- Phase two is planned for late next year and still requires council approval.\n\n**Worth double-checking**\n- *\"roughly 1,800 households\"* — a specific figure attributed to no source; confirm with project reports.\n- *\"cut bills by 18%\"* — claimed by organisers, an interested party; look for independent verification.\n- *\"pending council approval\"* — status may have changed since this text was written; check current records.\n",
+      "notes": [
+        "Asking the model to list what to verify converts E1·L7's three-question habit into part of the output itself.",
+        "Note the flag on WHO makes each claim ('organisers say') — attribution-awareness is promptable.",
+        "This pattern works on any document: summary + 'worth double-checking' beats summary alone at almost no extra cost."
+      ]
+    },
+    {
+      "id": "explain-then-quiz-me",
+      "title": "Learn a concept, then get tested on it",
+      "task": "Turn an assistant into a tutor that checks your understanding.",
+      "prompt": "Explain what a 'context window' is to a complete beginner, using one everyday analogy, in under 150 words. Then ask me two short questions to check I understood — and wait for my answers before revealing yours.",
+      "output": "Imagine talking to someone who can only see the last few pages of your conversation written on a whiteboard. They're brilliant with everything on the board — but anything erased to make room for new writing is simply gone for them.\n\nThat whiteboard is a **context window**: the amount of recent text an AI model can consider when it replies. Everything inside it can shape the answer; everything that's slid off it no longer exists for the model. It's why pasting a document into the chat works, and why very long conversations can 'forget' early details — the writing got erased, not the friendship.\n\n**Check your understanding:**\n1. Why might an AI 'forget' something from the start of a very long chat?\n2. If you want the model to use a document, what's the simplest way to make sure it can?\n\nI'll wait for your answers before sharing mine.\n",
+      "notes": [
+        "'Wait for my answers' turns passive reading into active recall — the highest-value study technique there is.",
+        "Constraints (one analogy, under 150 words, complete beginner) shape quality more than politeness ever does.",
+        "Swap the concept and reuse this prompt for anything you're learning — including the rest of this course."
+      ]
+    },
+    {
+      "id": "brainstorm-diverge",
+      "title": "Brainstorm that actually diverges",
+      "task": "Escape the first-idea rut with structured variety.",
+      "promptWeak": "give me names for a community tool-lending library",
+      "prompt": "Suggest 9 names for a community tool-lending library: 3 warm and neighbourly, 3 playful, 3 plain and descriptive. One line each on the feeling it gives. Avoid puns on 'tool time'.",
+      "outputWeak": "1. The Tool Shed\n2. Tool Time\n3. ToolShare\n4. The Tool Library\n5. Community Tools\n6. Tools4All\n7. ToolBox\n8. Handy Hub\n9. The Tool Depot",
+      "output": "**Warm & neighbourly**\n1. *The Borrowed Barn* — evokes lending between neighbours over a fence.\n2. *Many Hands* — cooperative, communal, gently proverbial.\n3. *The Share Shed* — friendly alliteration, instantly clear purpose.\n\n**Playful**\n4. *Spanner in the Works* — cheeky, memorable, mechanically on-theme.\n5. *The Lending Bench* — a pun that works twice (workbench / park bench).\n6. *Drill Seekers* — light joke, young energy.\n\n**Plain & descriptive**\n7. *Northside Tool Library* — findable, official, grant-application-ready.\n8. *Community Tool Share* — says exactly what it is.\n9. *The Equipment Commons* — descriptive with a civic, shared-resource note.\n",
+      "notes": [
+        "Buckets force variety: 3×3 with different tones beats 'give me 9' every time — compare the weak run's near-duplicates.",
+        "The exclusion ('avoid puns on tool time') removed the cliché the weak version fell straight into.",
+        "'One line on the feeling' makes the list decidable, not just long — you're prompting for your NEXT step, not just output."
+      ]
+    }
+  ]
+}

@@ -1,0 +1,21 @@
+---
+import Base from '../layouts/Base.astro';
+import Roadmap from '../components/Roadmap.tsx';
+import { getCollection } from 'astro:content';
+import meta from '../../content/modules.json';
+
+const lessons = (await getCollection('lessons'))
+  .sort((a, b) => a.data.module.localeCompare(b.data.module) || a.data.order - b.data.order)
+  .map((l) => ({ slug: l.id, title: l.data.title, minutes: l.data.minutes, module: l.data.module }));
+---
+<Base title="Roadmap — OpenLearn AI"
+  description="The whole journey on one screen: Explorer, Practitioner, and Builder tracks, every module, and your live progress. Free from start to finish.">
+  <section class="container" style="padding-block:var(--sp-8) var(--sp-12);">
+    <h1 style="font-size:var(--fs-500);">The roadmap</h1>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      Everything this platform will teach, on one page. Modules unlock nothing
+      and cost nothing — start anywhere that's live, in any order that serves you.
+    </p>
+    <Roadmap client:load tracks={meta.tracks} modules={meta.modules} lessons={lessons} />
+  </section>
+</Base>

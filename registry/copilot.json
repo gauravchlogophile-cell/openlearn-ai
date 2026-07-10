@@ -1,0 +1,14 @@
+{
+  "id": "copilot",
+  "vendor": "Microsoft",
+  "category": "assistant",
+  "summary": "Microsoft's AI assistant woven through Windows, Edge, and the Microsoft 365 apps — chat plus in-document help where Office work already happens.",
+  "capabilities": { "chat": true, "vision": true, "files": true, "voice": true, "webSearch": true, "api": false },
+  "freeTierNotes": "Free tier available; deeper Microsoft 365 integration is tied to paid plans that change over time — check official docs.",
+  "docsUrl": "https://support.microsoft.com/copilot",
+  "tosNotes": "Educational interactive use by end learners; work-account data handling differs from consumer — see official terms.",
+  "lastVerified": "2026-07-07",
+  "verifier": "core-team",
+  "tier": "B",
+  "status": "active"
+}
