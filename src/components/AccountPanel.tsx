@@ -15,7 +15,15 @@ export default function AccountPanel() {
 
   useEffect(() => {
     if (!isConfigured) return;
-    supabase().auth.getUser().then(({ data }) => setUser(data.user ?? null));
+    supabase().auth.getUser().then(({ data }) => {
+      setUser(data.user ?? null);
+      if (data.user) void doSync();   // auto pull+push on load if already signed in
+    });
+    const { data: sub } = supabase().auth.onAuthStateChange((_event, session) => {
+      setUser(session?.user ?? null);
+      if (session?.user) void doSync();   // auto pull+push right after sign-in
+    });
+    return () => sub.subscription.unsubscribe();
   }, []);
 
   if (!isConfigured) {
@@ -39,7 +47,7 @@ export default function AccountPanel() {
   }
   async function doSync() {
     const r = await syncNow();
-    setMsg('pushed' in r ? `Synced ${r.pushed} events.` : `Sync skipped: ${r.skipped}`);
+    setMsg('pushed' in r ? `Synced: ${r.pulled} pulled, ${r.pushed} pushed.` : `Sync skipped: ${r.skipped}`);
   }
   async function signOut() {
     await supabase().auth.signOut(); setUser(null);

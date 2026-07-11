@@ -33,6 +33,36 @@ export function isComplete(slug: string): boolean {
   return Boolean(load().completions[slug]);
 }
 
+/** Merge server-pulled events/completions into local state. Idempotent:
+ *  existing local event ids and completed slugs are never duplicated or
+ *  overwritten. Used by sync.ts on sign-in / manual sync so a fresh device
+ *  catches up with previously-synced progress (FR-AUTH-3, other half of the
+ *  push path in sync.ts). */
+export function mergeFromServer(
+  pulledEvents: { id: string; kind: 'xp'; amount: number; reason: string; ref: string; at: string }[],
+  pulledCompletions: Record<string, { hash: string; at: string }>,
+): number {
+  const state = load();
+  const localIds = new Set(state.events.map((e: { id: string }) => e.id));
+  const newEvents = pulledEvents.filter((e) => !localIds.has(e.id));
+
+  const mergedCompletions = { ...state.completions };
+  for (const [slug, c] of Object.entries(pulledCompletions)) {
+    if (!mergedCompletions[slug]) mergedCompletions[slug] = c;
+  }
+
+  if (newEvents.length === 0 && Object.keys(mergedCompletions).length === Object.keys(state.completions).length) {
+    return 0;
+  }
+
+  save({
+    ...state,
+    events: [...state.events, ...newEvents],
+    completions: mergedCompletions,
+  });
+  return newEvents.length;
+}
+
 export type GoalMode = 'daily' | 'weekly';
 
 export function goalMode(): GoalMode {
