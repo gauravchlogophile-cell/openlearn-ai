@@ -1,0 +1,132 @@
+---
+title: "Say what good looks like"
+description: "Show one example of the output you want and most formatting arguments disappear. Specimens work better than adjectives."
+track: explorer
+module: e3
+order: 4
+minutes: 8
+objectives:
+  - "Specify output shape with a specimen rather than adjectives"
+  - "Choose constraints that are checkable instead of vague"
+concepts: ["format", "specimen", "constraints"]
+flashcards:
+  - front: "Adjectives or a specimen — which specifies output better?"
+    back: "A specimen. 'Professional' is ambiguous; one sample line is not."
+  - front: "What makes a constraint useful?"
+    back: "That you can check whether it was met. 'Under 200 words' beats 'concise'."
+  - front: "Why ask for a shape you can verify at a glance?"
+    back: "It makes a wrong answer visibly wrong instead of plausibly wrong."
+lastVerified: "2026-08-22"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+"Make it more professional" is one of those phrases that feels like an
+instruction and behaves like a mood. Ask three colleagues to apply it to the
+same paragraph and you'll get three different paragraphs, all defensible.
+
+The model has the same problem, with less recourse — it can't ask you what you
+meant, so it picks the most common reading of "professional" and hands it
+back. If that isn't yours, you go around again.
+
+## Adjectives are ambiguous; specimens are not
+
+The fix is unglamorous: show one line of what you want.
+
+> *Rewrite these six product descriptions to match this style:*
+> *"**Kettle, 1.7L.** Boils in three minutes. Stainless steel. £34."*
+> *Short, factual, price last, no adjectives about how lovely it is.*
+
+That specimen settles length, tone, punctuation, ordering and vocabulary in a
+single stroke — and it settles them the way *you* meant, not the way the word
+"professional" is usually meant. You will spend fewer words writing the
+specimen than you would spend arguing toward it.
+
+This works because of what L1 established. You're not describing a target; you
+are beginning a document whose pattern the model continues.
+
+## Make constraints checkable
+
+A constraint you can't verify is a wish. Compare:
+
+| Wish | Constraint |
+|---|---|
+| "Keep it concise" | "Under 200 words" |
+| "Make it scannable" | "Six bullets, one line each" |
+| "Sound friendly" | "Second person, no exclamation marks" |
+| "Be thorough" | "Cover all five sections; say so if a section has no data" |
+
+The right-hand column has a property the left-hand column lacks: you can look
+at the output and know whether it complied. That turns a vague dissatisfaction
+into a specific correction, which is what makes the next round fast.
+
+## Shape as an error detector
+
+There's a second reason to specify format, and it's the one people miss.
+
+Ask for prose and a fabricated detail hides comfortably inside a fluent
+paragraph. Ask for *a table with a column headed "where this came from"* and a
+fabrication has nowhere to sit — the cell is either filled with something you
+can check, or conspicuously empty.
+
+You are not making the model more truthful. You are making its output easier
+to audit, which is the part you control.
+
+## The limit worth knowing
+
+Format compliance is good, not perfect. Long outputs drift: a model asked for
+exactly ten items sometimes returns nine or eleven, and word counts are
+approximate because it is predicting text, not counting it.
+
+Treat counts as targets rather than guarantees, and check anything that
+matters.
+
+## Try it now (6 minutes)
+
+Take something you rewrite often — a status update, a meeting note. Write one
+specimen of the version you actually want. Then ask for five more in that
+shape.
+
+Save the specimen. That's the seed of the reusable prompt library you'll build
+in L8.
+
+<Quiz client:visible items={[
+  {
+    q: "'Make it more professional' underperforms because:",
+    options: [
+      "The model ignores adjectives",
+      "It's ambiguous, so the model applies the most common reading rather than yours",
+      "Tone can only be set in paid tiers"
+    ],
+    answer: 1,
+    explain: "Adjectives compress a lot of unstated preference. A one-line specimen makes your reading explicit."
+  },
+  {
+    q: "Which is a checkable constraint rather than a wish?",
+    options: [
+      "Keep it punchy",
+      "Six bullets, one line each",
+      "Make it feel modern"
+    ],
+    answer: 1,
+    explain: "You can glance at the output and see compliance, which turns vague dissatisfaction into a specific next instruction."
+  },
+  {
+    q: "Asking for a 'where this came from' column mainly helps because:",
+    options: [
+      "It makes the model incapable of inventing",
+      "It gives fabrications nowhere to hide, making output easier to audit",
+      "It forces a web search"
+    ],
+    answer: 1,
+    explain: "Structure doesn't improve truthfulness; it improves your ability to spot untruth. That part is under your control."
+  }
+]} />
+
+## Recap
+
+Show a specimen instead of stacking adjectives, prefer constraints you can
+check, and choose shapes that make errors visible. Counts are targets, not
+guarantees. Next: the follow-up, where most of the real quality comes from.

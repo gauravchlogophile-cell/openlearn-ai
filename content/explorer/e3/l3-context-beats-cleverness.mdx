@@ -1,0 +1,138 @@
+---
+title: "Context beats cleverness"
+description: "Pasting the actual document outperforms any phrasing trick. How to supply material well — and what to leave out on purpose."
+track: explorer
+module: e3
+order: 3
+minutes: 9
+objectives:
+  - "Supply source material instead of describing it"
+  - "Decide what is unsafe or unhelpful to paste"
+concepts: ["context", "grounding", "privacy"]
+tools: ["notebooklm"]
+flashcards:
+  - front: "Describing a document vs pasting it — which wins?"
+    back: "Pasting. Describing forces the model to invent the details you left out."
+  - front: "What should you not paste into a general assistant?"
+    back: "Anything you would not email to a stranger: secrets, other people's personal data, credentials."
+  - front: "Does supplying the source guarantee accuracy?"
+    back: "No. It sharply reduces invention but quotes and figures still need spot-checking."
+lastVerified: "2026-08-22"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+import RegistryCard from '../../../src/components/RegistryCard.astro';
+
+There is a persistent belief that skilled prompting means knowing special
+words. It mostly means being bothered to paste the thing.
+
+Compare these two requests. *"I've got a client email that's a bit passive
+aggressive about a delay, help me reply."* Versus the same sentence with the
+actual email underneath it. The first makes the model invent a plausible
+email and answer that. The second lets it answer yours.
+
+## Describing is inventing by proxy
+
+When you describe material instead of supplying it, every detail you omit gets
+filled in by whatever is statistically typical. You said "a bit passive
+aggressive" — the model imagines a passive-aggressive email. It is now
+drafting a reply to a message that does not exist.
+
+The reply will read well. It will be subtly wrong about the specifics, and the
+specifics are the entire reason you asked.
+
+This is the single biggest gap between people who find these tools useful and
+people who find them disappointing, and it has nothing to do with wording.
+
+## What counts as context
+
+More than documents:
+
+- **The source material** — the email, the draft, the spec, the transcript.
+- **The constraint** — "under 400 words", "must not promise a refund",
+  "our legal team won't approve the word *guarantee*".
+- **What you already rejected** — "not another apology-first opening, I've
+  tried that and they escalated". This is enormously useful and almost nobody
+  supplies it.
+- **The goal behind the goal** — "I'm trying to keep this account, not win
+  the argument."
+
+That third one is worth dwelling on. Without it, iteration walks in circles:
+you reject an answer, ask again, and get a variation on the thing you rejected
+because you never said why.
+
+## What to leave out, deliberately
+
+Context is powerful, which is exactly why it needs a boundary. Before you
+paste, ask: *would I email this to a stranger?*
+
+- **Other people's personal data.** Your colleague's medical note is not
+  yours to paste, whatever the privacy policy says.
+- **Credentials and keys.** Never. Not to summarise, not to debug.
+- **Anything under confidentiality** you haven't checked the tool against —
+  many workplaces have an approved tool and a forbidden one, and the
+  difference is contractual, not technical.
+
+Redacting works better than people expect. Replace names with *Client A*,
+figures with *£X*, and the structural advice you get back is unaffected.
+
+## When the material is big
+
+For long or numerous sources, source-grounded tools are built for exactly this
+job — you load documents and answers stay tied to them, with citations back to
+the passage.
+
+<RegistryCard id="notebooklm" />
+
+Even there, E1·L7 stands: grounding reduces invention, it does not abolish it.
+Check the citation actually says what the summary claims.
+
+## Try it now (6 minutes)
+
+Take a real document you need something done with. First, ask your assistant
+for help while only *describing* it. Then paste the document and ask again.
+
+Read both. The first answer is about a document that never existed. Notice how
+confident it was anyway — that's E1·L7 demonstrated on material where you
+happen to know the truth.
+
+<Quiz client:visible items={[
+  {
+    q: "You describe an email rather than pasting it. The reply you get is:",
+    options: [
+      "Tailored to your actual email",
+      "A reply to an invented email that matches your description",
+      "Refused until you attach the file"
+    ],
+    answer: 1,
+    explain: "Omitted details get filled with what is typical. The answer addresses the imagined email, fluently and wrongly."
+  },
+  {
+    q: "Which piece of context do people most often forget to supply?",
+    options: [
+      "The document itself",
+      "What they already tried and rejected, and why",
+      "The word count"
+    ],
+    answer: 1,
+    explain: "Without it, iteration circles back to variations of the rejected answer — the model has no idea it was rejected."
+  },
+  {
+    q: "A colleague's medical note would help the model draft an HR letter. You should:",
+    options: [
+      "Paste it — the privacy policy covers it",
+      "Not paste it; it is not your data to share, and redaction usually suffices",
+      "Paste it but ask the model to forget afterwards"
+    ],
+    answer: 1,
+    explain: "Someone else's personal data isn't yours to disclose, and 'forgetting' is not something you can verify or rely on."
+  }
+]} />
+
+## Recap
+
+Supply the material rather than describing it, include your constraints and
+your rejected attempts, and draw a firm line at other people's data and
+credentials. Next: telling it what "good" looks like before it guesses.
