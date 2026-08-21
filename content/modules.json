@@ -7,7 +7,7 @@
   "modules": [
     { "id": "e1", "track": "explorer", "title": "What Is AI, Really?", "tagline": "Patterns, predictions, and an honest capability map.", "status": "live" },
     { "id": "e2", "track": "explorer", "title": "Meet Your AI Assistants", "tagline": "The major assistants, vendor-neutrally — and how to choose.", "status": "live" },
-    { "id": "e3", "track": "explorer", "title": "Prompting Fundamentals", "tagline": "Clear requests, iteration, and reusable patterns.", "status": "planned" },
+    { "id": "e3", "track": "explorer", "title": "Prompting Fundamentals", "tagline": "Clear requests, iteration, and reusable patterns.", "status": "live" },
     { "id": "e4", "track": "explorer", "title": "Everyday Productivity", "tagline": "Email, research, notes, planning — your daily AI routine.", "status": "planned" },
     { "id": "e5", "track": "explorer", "title": "Documents, Spreadsheets & Presentations", "tagline": "From blank page to finished draft, responsibly.", "status": "planned" },
     { "id": "e6", "track": "explorer", "title": "Creative AI: Image, Video & Voice", "tagline": "Making media — and the ethics of it.", "status": "planned" },

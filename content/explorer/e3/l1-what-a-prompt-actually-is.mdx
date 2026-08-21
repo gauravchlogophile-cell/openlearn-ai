@@ -1,0 +1,121 @@
+---
+title: "What a prompt actually is"
+description: "A prompt is not a magic phrase — it is the context the model reasons from. Why the same question, worded differently, gets a different answer."
+track: explorer
+module: e3
+order: 1
+minutes: 7
+objectives:
+  - "Explain a prompt as context rather than as a command"
+  - "Predict why two phrasings of one question produce different answers"
+concepts: ["prompt", "context window", "prediction"]
+flashcards:
+  - front: "What is a prompt, mechanically?"
+    back: "Everything in the context window the model continues from — not a command it obeys."
+  - front: "Why does rewording a question change the answer?"
+    back: "Different words make different continuations likely. You are steering probability, not issuing orders."
+  - front: "Is there one secret 'best prompt' phrasing?"
+    back: "No. There are clearer and less clear requests, and clarity is learnable."
+lastVerified: "2026-08-22"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Ask a librarian "got anything on Rome?" and you'll get a shrug and a shelf
+number. Ask "I'm writing 800 words on why the Roman Republic collapsed, for
+readers who know nothing about it — where should I start?" and you'll get a
+conversation. Nothing about the librarian changed. The request did.
+
+## The word "prompt" is doing you a disservice
+
+It sounds like a command — something you issue, which the machine obeys. That
+picture will mislead you for as long as you hold it, because it predicts the
+wrong failures. If prompts were commands, a clear command would always work,
+and a refused command would mean the machine was broken.
+
+Go back to E1·L6. A language model continues text. Everything you type — plus
+the conversation so far, plus any files and any hidden instructions the tool
+adds — becomes the context it continues *from*. Your prompt is not an
+instruction sitting outside the system. It is the raw material inside it.
+
+So the real question is never "what is the magic wording?" It is: **what has
+this model got to work with?**
+
+## Why phrasing moves the answer
+
+If your prompt is the beginning of a document, then the model is finishing a
+document that starts that way. "Explain inflation" begins something
+encyclopedia-shaped, so you get encyclopedia prose. "My rent went up 12% and
+my salary didn't — explain what's happening to me" begins something else
+entirely, and the continuation follows.
+
+Neither is a trick. You changed what document you were asking to be finished.
+
+This is also why prompts that sound forceful — ALL CAPS, "you MUST", threats
+about it being important — do so little. Emphasis is not a lever on the
+machinery. Specifics are.
+
+## What this predicts
+
+Three things follow, and each one saves you time later:
+
+- **Vague in, generic out.** A thin prompt has nothing to make the answer
+  specific to you, so it produces the average of everything similar. That is
+  not laziness on the model's part; there is genuinely nothing else to go on.
+- **Context beats cleverness.** Adding the actual document, the actual
+  constraint, the actual audience does more than any phrasing trick. L3 is
+  entirely about this.
+- **The failure modes from E1 don't switch off.** A beautifully worded prompt
+  still gets confident, wrong specifics. Better prompting narrows the odds; it
+  never converts a plausible-sounding machine into a reliable one.
+
+## Try it now (5 minutes)
+
+Pick something you actually need this week. Write the laziest version of the
+request — five words, no context. Send it. Now write it again with who it's
+for, what it's for, and one real constraint. Send that in a fresh chat.
+
+Read both answers side by side. The gap between them is the entire skill this
+module teaches, and you just produced it yourself in two minutes.
+
+<Quiz client:visible items={[
+  {
+    q: "Mechanically, a prompt is best described as:",
+    options: [
+      "A command the model is obliged to follow",
+      "The context the model continues from",
+      "A password that unlocks better model behaviour"
+    ],
+    answer: 1,
+    explain: "Your text joins the context window and the model continues it. That is why context matters more than phrasing force."
+  },
+  {
+    q: "Writing 'THIS IS VERY IMPORTANT, YOU MUST BE ACCURATE' typically:",
+    options: [
+      "Meaningfully increases accuracy",
+      "Does little — emphasis is not a lever, specifics are",
+      "Switches the model into a verified mode"
+    ],
+    answer: 1,
+    explain: "There is no accuracy dial to shout at. Supplying the real source or constraint changes the answer; insisting does not."
+  },
+  {
+    q: "You ask a thin, five-word question and get a bland, generic answer. Why?",
+    options: [
+      "The model is being lazy",
+      "There was nothing in the context to make the answer specific",
+      "You used the free tier"
+    ],
+    answer: 1,
+    explain: "With no audience, purpose or constraint supplied, the most likely continuation is the average of everything similar."
+  }
+]} />
+
+## Recap
+
+A prompt is context, not a command; rewording changes which continuation is
+likely, which is why specifics beat emphasis; and clearer prompting narrows
+error without abolishing it. Next: the four parts that turn a vague request
+into a clear one.

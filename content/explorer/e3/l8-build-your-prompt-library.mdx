@@ -1,0 +1,130 @@
+---
+title: "Build your prompt library"
+description: "Stop rewriting the same request. Turn the prompts that worked into a small, personal, plain-text library you actually reuse."
+track: explorer
+module: e3
+order: 8
+minutes: 8
+objectives:
+  - "Turn a working prompt into a reusable template with slots"
+  - "Keep a library portable rather than locked to one tool"
+concepts: ["templates", "reuse", "portability"]
+flashcards:
+  - front: "What turns a good prompt into a template?"
+    back: "Replacing the specifics with clearly marked slots you fill in each time."
+  - front: "Where should a prompt library live?"
+    back: "In plain text you own — notes, a doc, a repo — not only inside one vendor's feature."
+  - front: "When should a template be retired?"
+    back: "When it stops producing what you want — templates age as tools and your needs change."
+lastVerified: "2026-08-22"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Here is the pattern almost everyone falls into. You write a genuinely good
+prompt. It works. You close the tab. Next Tuesday you need the same thing and
+reconstruct it from memory, slightly worse.
+
+The fix takes about thirty seconds per prompt and compounds for years.
+
+## Templates are prompts with slots
+
+Take the request that worked and replace the specifics with labelled blanks:
+
+> **Meeting notes → actions**
+> *Turn the notes below into action items. One line each:
+> owner — action — deadline. Flag anything with no clear owner.
+> If a deadline was discussed but not agreed, write "proposed".*
+>
+> *Audience: [WHO READS THIS]*
+> *Notes: [PASTE]*
+
+Everything you learned in this module is baked in — task verb, format
+specimen, audience slot, an explicit rule for the ambiguous case. You never
+have to think it through again. You just fill the slots.
+
+Six of these will cover most of what you do repeatedly.
+
+## Keep it portable
+
+Assistants offer built-in saved prompts, custom instructions, project
+memories. Use them — they're convenient. But keep the **master copy in plain
+text you own**: a note, a document, a file in a repo.
+
+Two reasons, and both will eventually apply to you. Tools change: features get
+renamed, restructured or withdrawn, and pricing moves. And you will want to
+compare — E2·L10's method only works if you can run the identical prompt
+against two assistants, which means it has to live somewhere neither of them
+controls.
+
+A plain text file survives all of that. A saved prompt inside one product does
+not.
+
+## What earns a place
+
+Not everything deserves saving. A prompt qualifies when it is **repeated**,
+**non-obvious**, and **verified** — you've used it more than twice, it took
+some working out, and you've checked its output is actually good.
+
+That last one matters. A template that reliably produces confident, unchecked
+output is worse than no template, because it makes an error routine.
+
+## Let them age out
+
+Templates are not permanent. Models change, your work changes, and a prompt
+that was carefully tuned around a limitation may be solving a problem that no
+longer exists.
+
+Date them. When one starts underperforming, rewrite or delete it. A small
+library you trust beats a large one you've stopped reading.
+
+## Try it now (6 minutes)
+
+Scroll back through this module and find the prompt that produced your best
+result. Rewrite it with slots, give it a name, and paste it somewhere you'll
+find it — today, not later.
+
+That's one. You need about five more, and you'll collect them by noticing when
+you type something for the second time.
+
+<Quiz client:visible items={[
+  {
+    q: "A prompt becomes a template when you:",
+    options: [
+      "Save it in the assistant's favourites",
+      "Replace the specifics with clearly marked slots",
+      "Make it longer and more detailed"
+    ],
+    answer: 1,
+    explain: "Slots are what make it reusable — the reasoning stays fixed while the particulars change each time."
+  },
+  {
+    q: "Why keep the master copy in plain text you own?",
+    options: [
+      "Plain text produces better answers",
+      "Tools change, and comparing assistants needs a prompt neither controls",
+      "Assistants cannot store long prompts"
+    ],
+    answer: 1,
+    explain: "Portability protects against feature and pricing changes, and it is a precondition for fair side-by-side comparison."
+  },
+  {
+    q: "A template that reliably produces confident, unchecked output is:",
+    options: [
+      "Fine, since it saves time",
+      "Worse than no template — it makes an error routine",
+      "Acceptable if it is fast"
+    ],
+    answer: 1,
+    explain: "Automating an unverified step repeats the same mistake efficiently. Saved prompts should have verified output."
+  }
+]} />
+
+## Recap
+
+Turn what worked into slotted templates, keep the master copy portable, save
+only what is repeated, non-obvious and verified, and retire templates as they
+age. That completes E3 — you now brief clearly, iterate deliberately, correct
+with substance, and know which requests to refuse yourself.

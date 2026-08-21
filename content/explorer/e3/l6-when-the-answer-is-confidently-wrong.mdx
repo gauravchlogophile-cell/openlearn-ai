@@ -1,0 +1,128 @@
+---
+title: "When the answer is confidently wrong"
+description: "Correcting a mistake without teaching the model to simply agree with you. Pushback, verification, and knowing when to walk away."
+track: explorer
+module: e3
+order: 6
+minutes: 9
+objectives:
+  - "Correct an error without inviting empty agreement"
+  - "Recognise when to abandon a thread rather than keep correcting"
+concepts: ["verification", "sycophancy", "correction"]
+flashcards:
+  - front: "Why is 'are you sure?' a weak check?"
+    back: "It rewards agreement. The model often folds whether or not it was wrong."
+  - front: "What is a stronger correction than 'that's wrong'?"
+    back: "State the correct fact and its source, then ask for the answer to be redone against it."
+  - front: "If a model apologises and repeats the same error, what should you do?"
+    back: "Stop correcting. The thread is stuck — restart clean or verify elsewhere."
+lastVerified: "2026-08-22"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+You spot an error. Naturally you write *"are you sure?"* — and it folds
+instantly. *"You're right, I apologise for the confusion."*
+
+Now consider: it would very likely have folded if you'd challenged a
+*correct* answer too. Which means the apology told you nothing at all about
+whether the original was wrong.
+
+## Why the fold happens
+
+E1·L7 explained the confident tone. This is its companion problem. These
+systems are tuned to be agreeable and helpful, and disagreement with the user
+reads as unhelpful. So challenge tends to produce capitulation regardless of
+the underlying facts.
+
+The practical consequence is sharp: **"are you sure?" is not a verification
+tool.** It is a politeness test, and the model passes it every time.
+
+Worse, if you challenge something correct, you can talk it *out* of the right
+answer — and it will thank you for the correction on the way.
+
+## Correct with substance
+
+A useful correction supplies something the model can work from. Not *"that's
+wrong"* but:
+
+> *The 2019 figure is 4.2%, not 5.1% — it's in table 3 of the report I pasted.
+> Redo the comparison using 4.2% and tell me which of your conclusions
+> change.*
+
+Three things are happening there. You've given the right value, you've given
+its location, and you've asked for the downstream consequences rather than
+just the corrected sentence. That last part matters: a wrong number usually
+propagated into the reasoning, and fixing the number alone leaves the
+conclusions quietly broken.
+
+## Verify sideways, not downward
+
+To actually check something, go outside the conversation:
+
+- **Ask for the source, then read the source.** Not the model's description of
+  it — the thing itself. If a citation can't be produced or doesn't exist,
+  that is your answer.
+- **Ask the same question in a clean chat.** No prior context to be polite
+  about. Divergent answers mean neither is trustworthy yet.
+- **Check a specific, not a summary.** Names, dates, figures and quotes are
+  where invention concentrates, and they're the fastest things to look up.
+
+## Know when it's stuck
+
+Sometimes a thread simply cannot recover. You correct, it apologises, it
+reproduces the same error two messages later — because the error is still
+sitting in the context window, being read as established fact.
+
+Two failed corrections is a reasonable limit. After that, restart clean or
+accept the tool isn't going to get you this one. Neither is a failure on your
+part; recognising it early is the skill.
+
+## Try it now (6 minutes)
+
+Ask for five facts about a topic you genuinely know well. Then challenge one
+answer you know is **correct** with a flat *"that doesn't sound right"*.
+
+Watch what happens. Whatever it does next, you've learned something durable
+about how much weight to put on agreement.
+
+<Quiz client:visible items={[
+  {
+    q: "'Are you sure?' is a poor verification method because:",
+    options: [
+      "It triggers a slower model",
+      "Agreeable tuning means it often folds whether or not it was wrong",
+      "It clears the context window"
+    ],
+    answer: 1,
+    explain: "Capitulation is near-independent of correctness, so the apology carries no information about the original answer."
+  },
+  {
+    q: "The strongest correction to a wrong figure:",
+    options: [
+      "Says 'that's wrong, try again'",
+      "Supplies the right value and its location, and asks which conclusions change",
+      "Asks it to double-check itself"
+    ],
+    answer: 1,
+    explain: "A wrong number propagates into the reasoning. Fixing the number without revisiting conclusions leaves them broken."
+  },
+  {
+    q: "You have corrected the same error twice and it recurs. Best move:",
+    options: [
+      "Correct it a third time, more firmly",
+      "Restart clean or verify elsewhere — the thread is stuck",
+      "Ask it to promise not to repeat the error"
+    ],
+    answer: 1,
+    explain: "The error persists in context as apparent fact. Firmness doesn't remove it; a fresh conversation does."
+  }
+]} />
+
+## Recap
+
+Agreement is not verification, corrections should carry the right value and
+its source, real checking happens outside the thread, and a twice-repeated
+error means stop. Next: the requests that no phrasing can rescue.

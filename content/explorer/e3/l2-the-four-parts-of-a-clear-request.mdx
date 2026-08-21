@@ -1,0 +1,127 @@
+---
+title: "The four parts of a clear request"
+description: "Task, context, format, audience. A checklist you can run in fifteen seconds that fixes most weak prompts before you ever send them."
+track: explorer
+module: e3
+order: 2
+minutes: 8
+objectives:
+  - "Name the four parts of a well-formed request"
+  - "Rewrite a vague prompt using the checklist"
+concepts: ["task", "context", "format", "audience"]
+flashcards:
+  - front: "What are the four parts of a clear request?"
+    back: "Task (what to do), context (what to use), format (what shape), audience (who reads it)."
+  - front: "Which part do people most often leave out?"
+    back: "Audience — and it silently sets the vocabulary, depth and tone of everything you get back."
+  - front: "Do you need all four parts every time?"
+    back: "No. Use it as a checklist for weak answers; short asks stay short."
+lastVerified: "2026-08-22"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Most disappointing answers are not a model problem. They are a briefing
+problem. Hand a competent freelancer the sentence "write something about our
+new pricing" and you'd get something unusable too — not because they're bad at
+their job, but because you didn't brief them.
+
+Here is the briefing checklist. Four parts, fifteen seconds.
+
+## 1. Task — what do you actually want done?
+
+Use a verb. *Summarise. Compare. Draft. Critique. Rewrite. List.* "Something
+about our pricing" has no verb, so the model picks one for you, and it usually
+picks "explain" — which is rarely what anyone wanted.
+
+Be wary of stacking five verbs into one request. "Summarise this, then
+critique it, then rewrite it, then make it shorter" gets you four things done
+at medium quality. Ask for one thing well, then continue.
+
+## 2. Context — what should it work from?
+
+The single highest-value thing you can add, and the subject of the next
+lesson. Paste the actual email. Attach the actual policy. Name the real
+constraint: the budget, the deadline, the word count, the thing you've already
+tried and rejected.
+
+Without this, the model has only its general knowledge — which is exactly how
+you get advice that is true in general and useless to you in particular.
+
+## 3. Format — what shape should the answer be?
+
+Bullets or prose. Two hundred words or two thousand. A table with these three
+columns. An email ready to send. A list of questions, not answers.
+
+Unstated format is the most common cause of "it gave me an essay when I wanted
+a list". The model isn't guessing badly; you left the field blank and it
+filled it with the most common shape.
+
+## 4. Audience — who is going to read this?
+
+The quietly powerful one. "Explain our refund policy" and "explain our refund
+policy to a frustrated customer who has already waited three weeks" are
+different jobs, and only one of them produces something you can send.
+
+Audience sets vocabulary, assumed knowledge, tone and length all at once. It's
+one clause and it does four jobs.
+
+## Watch it work
+
+**Before:** *"Help me with my presentation."*
+
+**After:** *"Turn these five bullet points into speaker notes for a
+ten-minute talk (task + format). The audience is our regional sales team,
+who know the product but not the new pricing model (audience). Keep it under
+900 words, conversational, and flag anywhere I'm making a claim I should have
+data for (context + constraint)."*
+
+Same person, same tool, same five bullets. The second one comes back usable.
+
+## Try it now (5 minutes)
+
+Take the weakest prompt you wrote in L1. Run the checklist over it and mark
+which of the four parts is missing — usually it's two of them. Add only the
+missing parts, send it again, and notice that you didn't need any clever
+phrasing at all.
+
+<Quiz client:visible items={[
+  {
+    q: "The four parts of a clear request are:",
+    options: [
+      "Task, context, format, audience",
+      "Role, tone, length, deadline",
+      "Question, answer, check, repeat"
+    ],
+    answer: 0,
+    explain: "Task says what to do, context supplies the material, format sets the shape, audience sets vocabulary and depth."
+  },
+  {
+    q: "You keep getting long essays when you wanted a short list. The missing part is most likely:",
+    options: [
+      "Task",
+      "Format",
+      "Audience"
+    ],
+    answer: 1,
+    explain: "Unstated format gets filled with the most common shape. Naming 'six bullets, one line each' fixes it immediately."
+  },
+  {
+    q: "Why is naming the audience unusually efficient?",
+    options: [
+      "It makes the model try harder",
+      "One clause sets vocabulary, assumed knowledge, tone and length at once",
+      "It unlocks a specialised model"
+    ],
+    answer: 1,
+    explain: "Audience constrains four dimensions simultaneously, which is why it is the highest-leverage clause per word."
+  }
+]} />
+
+## Recap
+
+Task, context, format, audience — a fifteen-second checklist that fixes most
+weak prompts before sending. Audience does the most work per word. Next: why
+context is the part worth the most, and how to supply it well.

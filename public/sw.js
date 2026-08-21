@@ -1,9 +1,9 @@
-/* OpenLearn AI service worker — Sprint 4.
+/* Learn On service worker — Sprint 4.
  * Strategy (Phase 4 §5): app-shell precache · cache-first for hashed assets ·
  * network-first for pages with cache fallback · /offline as last resort.
  * Module packs live in caches named ol-pack-<module> (written by the page,
  * served here). Bump SHELL_V to invalidate the shell. */
-const SHELL_V = 'ol-shell-v1';
+const SHELL_V = 'ol-shell-v2';
 const ASSETS = 'ol-assets-v1';
 const SHELL_URLS = ['/', '/home', '/roadmap', '/achievements', '/account', '/offline'];
 

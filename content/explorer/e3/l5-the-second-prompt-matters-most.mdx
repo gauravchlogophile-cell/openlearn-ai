@@ -1,0 +1,125 @@
+---
+title: "The second prompt matters most"
+description: "Treat the first answer as a draft to react to, not a verdict to accept. Iteration is where the quality actually comes from."
+track: explorer
+module: e3
+order: 5
+minutes: 8
+objectives:
+  - "Use the first answer as information about your own request"
+  - "Write follow-ups that say why, not just what"
+concepts: ["iteration", "feedback", "conversation"]
+flashcards:
+  - front: "What is the first answer best treated as?"
+    back: "A draft that reveals how your request was read — not a verdict on whether the tool works."
+  - front: "What makes a follow-up effective?"
+    back: "Saying what is wrong and why, so the next attempt isn't a variation on the rejected one."
+  - front: "When should you restart instead of continuing?"
+    back: "When the conversation has drifted or filled with rejected attempts — start clean with what you learned."
+lastVerified: "2026-08-22"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Watch someone who finds these tools useless and someone who finds them
+valuable, and the visible difference is short: the first person reads the
+answer and closes the tab. The second person replies.
+
+## The first answer is diagnostic
+
+You cannot see your own prompt from outside your head. You know what you
+meant, so you can't tell what you actually said. The first answer solves this
+— it shows you how your request read to something with no access to your
+intentions.
+
+If it came back too formal, you didn't specify tone. Too long, you didn't
+specify length. About the wrong thing entirely, your task verb was ambiguous
+or your context was missing. That is not a wasted round; that's the checklist
+from L2 telling you which box was empty.
+
+## Say why, not just what
+
+The instinct is to reject and re-ask: *"no, try again."* That reliably
+produces a variation on the thing you just rejected, because nothing told it
+what was wrong.
+
+Compare:
+
+- *"Shorter."* → shorter, still wrong in the same way.
+- *"Cut it to 150 words. The problem is the opening — it apologises before
+  saying what we're doing about it, and that's what made the customer escalate
+  last time."*
+
+The second one hands over the reasoning. Now the next attempt can be different
+in kind rather than merely in length.
+
+This is the same principle as L3's "what you already rejected", applied in
+real time.
+
+## Three follow-ups worth having ready
+
+- **"What did you assume?"** Surfaces the invented specifics before you build
+  on them. Frequently the most valuable question in the whole conversation.
+- **"Give me three versions that differ in approach, not wording."** Stops you
+  converging on your first idea. Genuinely different options, not synonyms.
+- **"What's the strongest objection to this?"** Useful precisely because the
+  default register is agreeable. You have to ask for the pushback.
+
+## Know when to restart
+
+Iteration has a failure mode. A long thread accumulates every rejected draft,
+and all of it is still in the context window shaping what comes next. Past a
+certain point you're not steering, you're dragging.
+
+When a conversation has drifted, open a fresh one and write a single clean
+prompt containing everything you learned. Faster than a dozen more nudges, and
+usually better.
+
+## Try it now (6 minutes)
+
+Take any answer you got in an earlier lesson and run three follow-ups: *what
+did you assume*, then a why-grounded correction, then *what's the strongest
+objection to this*.
+
+Notice that you learned more in three replies than in three fresh prompts.
+
+<Quiz client:visible items={[
+  {
+    q: "The first answer is most usefully read as:",
+    options: [
+      "A verdict on whether the tool is any good",
+      "Evidence of how your request was actually read",
+      "The best it can do without a paid plan"
+    ],
+    answer: 1,
+    explain: "It shows how your words landed on something with no access to your intent — which tells you which part of the brief was empty."
+  },
+  {
+    q: "Replying only 'no, try again' usually produces:",
+    options: [
+      "A meaningfully different approach",
+      "A variation on the thing you just rejected",
+      "A request for clarification"
+    ],
+    answer: 1,
+    explain: "Nothing communicated what was wrong, so the next attempt is drawn from the same region as the last."
+  },
+  {
+    q: "A long thread full of rejected drafts is worth abandoning because:",
+    options: [
+      "Threads expire after a set length",
+      "Every rejected attempt is still in context, shaping what comes next",
+      "Restarting resets you to a better model"
+    ],
+    answer: 1,
+    explain: "The context window carries the whole conversation. A clean start with what you learned beats another nudge."
+  }
+]} />
+
+## Recap
+
+The first answer diagnoses your request; follow-ups should carry the reasoning,
+not just the correction; and a drifted thread is worth abandoning for a clean
+one. Next: what to do when the answer is confidently wrong.

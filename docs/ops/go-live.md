@@ -16,16 +16,17 @@ Everything below uses free tiers. Total unavoidable cost: **$0**
 
 ### A1. Put the code on GitHub (≈10 min)
 1. Create a GitHub account if needed → github.com.
-2. Create a new repository: name it `openlearn-ai` (or your cleared name),
-   **Public**, no README (we have one). 
+2. Create a new repository: name it after your project (check the name is
+   not already an education brand — see the naming note in the README),
+   **Public**, no README (we have one).
 3. On your computer, unzip the latest sprint zip, then in that folder:
    ```bash
-   cd openlearn
+   cd <your-project-folder>
    git init
    git add .
    git commit -s -m "chore: initial public release (Sprints 1-8)"
    git branch -M main
-   git remote add origin https://github.com/<YOUR-USERNAME>/openlearn-ai.git
+   git remote add origin https://github.com/<YOUR-USERNAME>/<YOUR-REPO>.git
    git push -u origin main
    ```
    (`-s` is the DCO sign-off our CONTRIBUTING.md asks for.)
@@ -35,7 +36,7 @@ Everything below uses free tiers. Total unavoidable cost: **$0**
 ### A2. Deploy on Cloudflare Pages (≈10 min)
 1. Create a free account → dash.cloudflare.com.
 2. **Workers & Pages → Create → Pages → Connect to Git** → authorize GitHub
-   → pick your `openlearn-ai` repo.
+   → pick your repo.
 3. Build settings:
    - Framework preset: **Astro**
    - Build command: `npm run build`
@@ -131,3 +132,90 @@ is safe to expose by design (that's what RLS is for). Never put the
   Instant, free, and why static-first was the right call.
 
 *Runbook version 1.0 · matches the Sprint 8 go-live build.*
+
+---
+
+# APPENDIX — What is actually running in production
+
+Recorded 2026-08-22 after a full audit of the GitHub / Cloudflare / Supabase
+chain. **This supersedes the Pages-based instructions above**, which describe
+the originally-planned path rather than the one that was built.
+
+## The brand is "Learn On"; the infrastructure still says "openlearn-ai"
+
+This is intentional, not drift. The project was renamed from OpenLearn AI to
+**Learn On** (see the README for why — The Open University has owned the
+OpenLearn brand in this exact sector since 2006). The rename covered every
+string a learner can see: page titles, the wordmark, the PWA manifest,
+`llms.txt`, the licences.
+
+It deliberately did **not** cover the Worker name, the repository name or the
+Supabase project name. Those are identifiers, not branding, and nobody using
+the site ever sees them. Renaming the Worker in particular is not a rename at
+all — Cloudflare would create a *second* Worker on the next deploy while the
+original kept serving `lrnon.org`, and you would then have to move the custom
+domain and re-bind the `SESSION` KV namespace by hand. Downtime, for nothing.
+
+So: if you see `openlearn-ai` below, it is correct. Leave it.
+
+## Topology
+
+| Layer | Reality |
+|---|---|
+| Brand | **Learn On** |
+| Repo | `gauravchlogophile-cell/openlearn-ai`, branch `main` |
+| Host | Cloudflare **Workers** (not Pages) — Worker `openlearn-ai` |
+| Account | `eeaebb2534d7be74d9dedee10aa8b751` |
+| Live URL | **https://lrnon.org** |
+| Also routes | `openlearn-ai.gaurav-ch-logophile.workers.dev` |
+| Database | Supabase `ertmoznjrjrveidnhonj` (region ap-southeast-2) |
+
+Because this is a Worker, `wrangler.jsonc` is authoritative: `main` points at
+`dist/_worker.js/index.js`, assets are served from `dist`, and the `SESSION` KV
+namespace must stay bound or sign-in breaks at runtime.
+
+## `openlearn-ai.pages.dev` is NOT ours
+
+That hostname serves an unrelated React SPA owned by someone else. It was the
+old fallback value of `site` in `astro.config.mjs`, which meant any build
+without `PUBLIC_SITE_URL` stamped a stranger's domain into our canonical tags
+and sitemap. The fallback is now `https://lrnon.org`. Do not "restore" it.
+
+## Build variables (Workers Builds → Settings → Build)
+
+    NODE_VERSION            22
+    PUBLIC_SITE_URL         https://lrnon.org
+    PUBLIC_SUPABASE_URL     https://ertmoznjrjrveidnhonj.supabase.co
+    PUBLIC_SUPABASE_ANON_KEY  <anon key — publishable, safe in the bundle>
+
+Build command `npm run build`, deploy command `npx wrangler deploy`, root `/`.
+
+## www
+
+`www.lrnon.org` is a proxied DNS record plus a **Redirect Rule** issuing a
+301 to the apex, preserving path and query string. Registering the domain did
+*not* create `www` — it had to be added, and while the DNS record existed
+without the redirect rule the hostname returned **522** (proxied, no origin).
+Do not add `www` as a Worker custom domain; that would serve the site on both
+hostnames and split SEO signals.
+
+## Verifying a deploy matches git
+
+Astro content-hashes its bundles, so this is exact:
+
+    PUBLIC_SITE_URL=https://lrnon.org \
+    PUBLIC_SUPABASE_URL=https://ertmoznjrjrveidnhonj.supabase.co \
+    PUBLIC_SUPABASE_ANON_KEY=<key> npm run build
+    curl -s https://lrnon.org/ | grep -oE '/_astro/[A-Za-z0-9._-]+' | sort -u
+
+Every hash should exist in `dist/_astro/`. Comparing whole HTML files will
+always show one difference — Astro's `astro-island uid` is random per build.
+That single attribute differing is expected; anything else is real drift.
+
+## Auth reality check
+
+The app uses **only** `signInWithOAuth` (Google) and `signInWithOtp` (email
+magic link) — see `src/components/AccountPanel.tsx`. There is no password
+path anywhere. The Supabase advisor warning about leaked-password protection
+is therefore not applicable, and it is a Pro-plan feature while the org is on
+`free`. Do not upgrade for it.

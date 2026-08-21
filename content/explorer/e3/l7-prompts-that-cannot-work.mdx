@@ -1,0 +1,125 @@
+---
+title: "Prompts that cannot work"
+description: "Some requests fail no matter how well you word them. Knowing which ones saves hours and prevents the worst mistakes."
+track: explorer
+module: e3
+order: 7
+minutes: 8
+objectives:
+  - "Identify requests that phrasing cannot rescue"
+  - "Convert an impossible request into a possible one"
+concepts: ["limits", "capability", "judgement"]
+flashcards:
+  - front: "Name a request no phrasing can fix."
+    back: "Anything needing information the model has no access to — private data, unpublished facts, the future."
+  - front: "Why is 'is this legal in my country?' a bad ask?"
+    back: "It needs current jurisdiction-specific law and personal facts; you get confident generalities instead."
+  - front: "How do you convert an impossible ask into a possible one?"
+    back: "Ask for structure, options or questions to research — not the verdict itself."
+lastVerified: "2026-08-22"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Everything so far has been about writing better requests. This lesson is the
+counterweight: a category of request where better wording changes nothing,
+because the problem isn't the prompt.
+
+Recognising these is worth more than any technique in this module. It stops
+you burning an afternoon on something that was never going to work, and it
+stops you trusting an answer you shouldn't have asked for.
+
+## Four kinds that cannot work
+
+**1. Information it has no access to.** Your company's Q3 numbers, what your
+manager thinks, whether your flight is delayed, anything after its training
+data ends. Unless the tool is genuinely connected to that source — and you
+have checked that it is — you will get invention shaped like an answer.
+
+**2. Anything requiring accountability.** "Is this contract safe to sign?"
+"Should I take this medication with that one?" The failure here isn't only
+accuracy. It's that when it's wrong, nobody is responsible, nothing is
+insured, and you cannot appeal. Professionals carry liability; that is a
+substantial part of what you're paying them for.
+
+**3. Precise counting and arithmetic over long text.** "How many times does
+this 40-page document say *risk*?" It predicts text; it doesn't tally. You may
+get a confident, wrong number. Use search or a spreadsheet.
+
+**4. Claims about its own workings.** "Why did you say that?" produces a
+plausible-sounding rationalisation, not an audit trail. It has no privileged
+view of its own processing. Treat such explanations as narration.
+
+## The tell
+
+Ask yourself: **what would this need to know, and could it possibly know it?**
+
+If the answer requires today's price, your private file, someone's intentions,
+or a fact nobody has published, then a fluent answer is a warning sign rather
+than a success. The confident tone from E1·L7 is fully available for things it
+cannot know.
+
+## Convert, don't abandon
+
+Most impossible requests contain a possible one. Move from *the verdict* to
+*the structure around it*:
+
+| Cannot work | Works |
+|---|---|
+| "Is this contract safe to sign?" | "List the clauses a solicitor would look at first, and what makes each risky." |
+| "What are our Q3 numbers?" | "Here are our Q3 numbers — what patterns stand out?" |
+| "Is this legal here?" | "What questions should I ask a local lawyer, and what facts will they need?" |
+| "Count the risks in this report" | "Here are the 14 risk mentions I found — group them by theme." |
+
+The pattern: keep the judgement, delegate the preparation. You end up better
+prepared for the professional, and you didn't substitute for one.
+
+## Try it now (5 minutes)
+
+Write down the last question you asked an assistant that left you uneasy. Run
+the tell over it: what would it have needed to know?
+
+If it couldn't have known, rewrite it using the conversion table. Notice the
+rewritten version is often more useful than the original.
+
+<Quiz client:visible items={[
+  {
+    q: "You ask an unconnected assistant for your company's Q3 revenue. You get a specific figure. That figure is:",
+    options: [
+      "Probably right — it sounds specific",
+      "Invention shaped like an answer; it has no access to your data",
+      "Retrieved from a cached copy"
+    ],
+    answer: 1,
+    explain: "Specificity is not evidence of access. Without a genuine connection to the source, a confident number is the warning sign."
+  },
+  {
+    q: "The main problem with 'is this contract safe to sign?' is:",
+    options: [
+      "It's too long a document",
+      "Nobody is accountable when it's wrong, and you cannot appeal",
+      "Contracts are always refused"
+    ],
+    answer: 1,
+    explain: "Accuracy aside, professional advice carries liability and recourse. That is much of what you are actually buying."
+  },
+  {
+    q: "The best conversion of an impossible request keeps:",
+    options: [
+      "The judgement with you, delegating the preparation",
+      "The judgement with the model, delegating the facts",
+      "Both with the model, then verifying"
+    ],
+    answer: 0,
+    explain: "Asking for clauses to examine or questions to bring a lawyer leaves the decision where accountability lives."
+  }
+]} />
+
+## Recap
+
+Four categories no wording rescues — inaccessible information, accountable
+judgement, exact counting, and self-explanation — and one tell: could it
+possibly know this? Convert to structure and keep the decision. Next: making
+what works reusable.
