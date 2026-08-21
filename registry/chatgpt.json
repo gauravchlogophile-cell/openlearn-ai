@@ -1,5 +1,6 @@
 {
   "id": "chatgpt",
+  "name": "ChatGPT",
   "vendor": "OpenAI",
   "category": "assistant",
   "summary": "General-purpose AI assistant by OpenAI for conversation, writing, analysis, coding, and image understanding, available on web and mobile with free and paid tiers.",
@@ -7,7 +8,7 @@
   "freeTierNotes": "Free tier available with usage limits that change over time — check the official site for current limits.",
   "docsUrl": "https://help.openai.com/",
   "tosNotes": "Educational interactive use by end learners; no resale of access. Review current usage policies before enabling lab adapters.",
-  "lastVerified": "2026-07-07",
+  "lastVerified": "2026-08-22",
   "verifier": "core-team",
   "tier": "A",
   "status": "active"

@@ -1,5 +1,6 @@
 {
   "id": "elevenlabs",
+  "name": "ElevenLabs",
   "vendor": "ElevenLabs",
   "category": "voice",
   "summary": "A leading voice-AI service: natural text-to-speech, voice cloning, and dubbing across many languages, via web app and API.",
@@ -7,7 +8,7 @@
   "freeTierNotes": "Free tier with monthly character limits; cloning and commercial rights sit in paid tiers — specifics change over time.",
   "docsUrl": "https://elevenlabs.io/docs",
   "tosNotes": "Voice cloning has strict consent rules — review official policy; E6 covers the ethics.",
-  "lastVerified": "2026-07-07",
+  "lastVerified": "2026-08-22",
   "verifier": "core-team",
   "tier": "C",
   "status": "active"

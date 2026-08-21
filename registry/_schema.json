@@ -2,9 +2,16 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "AI Tool Registry Entry (Phase 3 §9)",
   "type": "object",
-  "required": ["id", "vendor", "category", "summary", "capabilities", "docsUrl", "lastVerified", "verifier", "tier"],
+  "required": ["id", "name", "vendor", "category", "summary", "capabilities", "docsUrl", "lastVerified", "verifier", "tier"],
   "properties": {
-    "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "id": {
+      "type": "string", "pattern": "^[a-z0-9-]+$",
+      "description": "Stable key. Referenced by lesson `tools:` frontmatter and <RegistryCard id>. NEVER change it when a product is renamed — change `name` instead."
+    },
+    "name": {
+      "type": "string",
+      "description": "Current product name, as shown to learners. This is the field a rebrand changes (e.g. NotebookLM -> Gemini Notebook, July 2026)."
+    },
     "vendor": { "type": "string" },
     "category": { "enum": ["assistant", "image", "video", "voice", "coding", "automation", "framework", "open-model", "workspace"] },
     "summary": { "type": "string", "minLength": 40, "maxLength": 240 },

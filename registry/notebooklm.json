@@ -1,13 +1,14 @@
 {
   "id": "notebooklm",
+  "name": "Gemini Notebook",
   "vendor": "Google",
   "category": "workspace",
-  "summary": "A source-grounded research tool: upload your documents and it answers ONLY from them, with citations into your sources — plus audio overview generation.",
+  "summary": "Google's source-grounded research tool, renamed from NotebookLM in July 2026: upload documents and it answers only from them, citing your sources, plus audio overviews.",
   "capabilities": { "chat": true, "vision": false, "files": true, "voice": true, "webSearch": false, "api": false },
   "freeTierNotes": "Free tier with source and notebook limits; paid tier raises limits — specifics change over time.",
-  "docsUrl": "https://support.google.com/notebooklm",
+  "docsUrl": "https://notebooklm.google/",
   "tosNotes": "Educational interactive use; check data-handling terms before uploading sensitive documents.",
-  "lastVerified": "2026-07-07",
+  "lastVerified": "2026-08-22",
   "verifier": "core-team",
   "tier": "B",
   "status": "active"
