@@ -3,9 +3,10 @@
  *  CI publishes this to the content_manifest table on deploy (release-blocking). */
 import { readFileSync, readdirSync, statSync, writeFileSync, mkdirSync } from 'node:fs';
 import { createHash } from 'node:crypto';
-import { join, relative } from 'node:path';
+import { join, relative, sep } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const ROOT = new URL('..', import.meta.url).pathname;
+const ROOT = fileURLToPath(new URL('..', import.meta.url));
 function walk(dir) {
   const out = [];
   for (const name of readdirSync(dir)) {
@@ -17,10 +18,11 @@ function walk(dir) {
 }
 const modules = {};
 for (const f of walk(join(ROOT, 'content'))) {
-  const rel = relative(join(ROOT, 'content'), f);           // explorer/e1/l1-....mdx
+  const rel = relative(join(ROOT, 'content'), f).split(sep).join('/'); // explorer/e1/l1-....mdx
   const [track, mod] = rel.split('/');
   const slug = rel.replace(/\.mdx$/, '');
-  const hash = createHash('sha256').update(readFileSync(f)).digest('hex').slice(0, 12);
+  const text = readFileSync(f, 'utf8').replace(/\r\n/g, '\n');
+  const hash = createHash('sha256').update(text).digest('hex').slice(0, 12);
   (modules[`${track}/${mod}`] ??= { track, module: mod, lessons: [] })
     .lessons.push({ slug, hash });
 }
