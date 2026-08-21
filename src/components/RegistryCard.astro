@@ -17,7 +17,7 @@ const caps: [string, string][] = [
   ['voice', 'Voice'], ['webSearch', 'Web search'], ['api', 'Developer API'],
 ];
 ---
-<aside aria-label={`Tool card: ${card.vendor} — ${id}`}
+<aside aria-label={`Tool card: ${card.name ?? id} by ${card.vendor}`}
   style="border:1px solid var(--c-border);border-radius:var(--r-m);padding:var(--sp-4) var(--sp-6);margin-block:var(--sp-6);background:var(--c-surface);">
   {stale && (
     <p style="color:var(--c-alert);font-weight:600;margin-top:0;">
@@ -25,8 +25,8 @@ const caps: [string, string][] = [
       Check the official docs below — or help us update it.
     </p>
   )}
-  <p style="margin-top:0;"><strong>{card.vendor}</strong> · {card.category}
-    <span style="color:var(--c-ink-soft);"> · verified {card.lastVerified}</span></p>
+  <p style="margin-top:0;"><strong>{card.name ?? id}</strong>
+    <span style="color:var(--c-ink-soft);"> by {card.vendor} · {card.category} · verified {card.lastVerified}</span></p>
   <p>{card.summary}</p>
   <ul style="padding-inline-start:var(--sp-6);columns:2;column-gap:var(--sp-8);">
     {caps.map(([k, label]) => (

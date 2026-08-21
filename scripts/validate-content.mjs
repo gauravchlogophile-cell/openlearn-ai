@@ -111,7 +111,7 @@ for (const p of walk(join(ROOT, 'registry'), '.json')) {
   let card;
   try { card = JSON.parse(readFileSync(p, 'utf8')); }
   catch { errors.push(`${rel}: invalid JSON`); continue; }
-  for (const k of ['id','vendor','category','summary','docsUrl','lastVerified','verifier','tier'])
+  for (const k of ['id','name','vendor','category','summary','docsUrl','lastVerified','verifier','tier'])
     if (!(k in card)) errors.push(`${rel}: missing "${k}"`);
   if (card.summary && (card.summary.length < 40 || card.summary.length > 240))
     errors.push(`${rel}: summary must be 40–240 chars`);

@@ -1,5 +1,6 @@
 {
   "id": "github-copilot",
+  "name": "GitHub Copilot",
   "vendor": "GitHub (Microsoft)",
   "category": "coding",
   "summary": "The most widely used AI coding assistant — inline suggestions, chat, and agentic edits inside editors like VS Code and on GitHub itself.",
@@ -7,7 +8,7 @@
   "freeTierNotes": "Free tier with monthly limits exists; student/educator free access programs available — specifics change over time.",
   "docsUrl": "https://docs.github.com/copilot",
   "tosNotes": "Check employer policy before use on work code; suggestion-matching settings matter for licensing.",
-  "lastVerified": "2026-07-07",
+  "lastVerified": "2026-08-22",
   "verifier": "core-team",
   "tier": "B",
   "status": "active"

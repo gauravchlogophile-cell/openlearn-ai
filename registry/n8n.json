@@ -1,5 +1,6 @@
 {
   "id": "n8n",
+  "name": "n8n",
   "vendor": "n8n",
   "category": "automation",
   "summary": "An open-source workflow-automation platform: visual node canvas connecting hundreds of apps and AI models — self-hostable for free, with a hosted cloud option.",
@@ -7,7 +8,7 @@
   "freeTierNotes": "Self-hosting the community edition is free; cloud plans are paid — licence and plan details change over time.",
   "docsUrl": "https://docs.n8n.io/",
   "tosNotes": "Fair-code licence — review it for commercial hosting scenarios; fine for learning and internal automation.",
-  "lastVerified": "2026-07-07",
+  "lastVerified": "2026-08-22",
   "verifier": "core-team",
   "tier": "B",
   "status": "active"

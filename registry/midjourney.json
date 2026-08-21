@@ -1,5 +1,6 @@
 {
   "id": "midjourney",
+  "name": "Midjourney",
   "vendor": "Midjourney",
   "category": "image",
   "summary": "A leading image-generation service known for strong aesthetic quality, used via its web app and Discord — prompt in, images out, with editing tools.",
@@ -7,7 +8,7 @@
   "freeTierNotes": "Generally paid-only; trial availability changes over time — check official docs.",
   "docsUrl": "https://docs.midjourney.com/",
   "tosNotes": "Review commercial-use and content rules in official terms before publishing generated images.",
-  "lastVerified": "2026-07-07",
+  "lastVerified": "2026-08-22",
   "verifier": "core-team",
   "tier": "C",
   "status": "active"
