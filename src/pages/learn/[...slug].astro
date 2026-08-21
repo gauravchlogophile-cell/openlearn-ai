@@ -21,7 +21,7 @@ const quizBanks = import.meta.glob('../../../content/quizzes/*.json', { eager: t
 const hasQuiz = Object.values(quizBanks).some((b: any) => b.default.module === lesson.data.module);
 const quizHref = hasQuiz ? '/quiz/' + lesson.data.module : undefined;
 ---
-<Base title={lesson.data.title + ' — OpenLearn AI'} description={lesson.data.description}>
+<Base title={lesson.data.title + ' — Learn On'} description={lesson.data.description}>
   <article class="container" style="padding-block:var(--sp-8) var(--sp-12);">
     <p style="color:var(--c-ink-soft);font-size:var(--fs-100);margin:0;">
       {lesson.data.module.toUpperCase()} · Lesson {lesson.data.order} of {all.length}

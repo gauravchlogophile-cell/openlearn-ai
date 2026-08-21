@@ -16,16 +16,17 @@ Everything below uses free tiers. Total unavoidable cost: **$0**
 
 ### A1. Put the code on GitHub (≈10 min)
 1. Create a GitHub account if needed → github.com.
-2. Create a new repository: name it `openlearn-ai` (or your cleared name),
-   **Public**, no README (we have one). 
+2. Create a new repository: name it after your project (check the name is
+   not already an education brand — see the naming note in the README),
+   **Public**, no README (we have one).
 3. On your computer, unzip the latest sprint zip, then in that folder:
    ```bash
-   cd openlearn
+   cd <your-project-folder>
    git init
    git add .
    git commit -s -m "chore: initial public release (Sprints 1-8)"
    git branch -M main
-   git remote add origin https://github.com/<YOUR-USERNAME>/openlearn-ai.git
+   git remote add origin https://github.com/<YOUR-USERNAME>/<YOUR-REPO>.git
    git push -u origin main
    ```
    (`-s` is the DCO sign-off our CONTRIBUTING.md asks for.)
@@ -35,7 +36,7 @@ Everything below uses free tiers. Total unavoidable cost: **$0**
 ### A2. Deploy on Cloudflare Pages (≈10 min)
 1. Create a free account → dash.cloudflare.com.
 2. **Workers & Pages → Create → Pages → Connect to Git** → authorize GitHub
-   → pick your `openlearn-ai` repo.
+   → pick your repo.
 3. Build settings:
    - Framework preset: **Astro**
    - Build command: `npm run build`
@@ -140,10 +141,28 @@ Recorded 2026-08-22 after a full audit of the GitHub / Cloudflare / Supabase
 chain. **This supersedes the Pages-based instructions above**, which describe
 the originally-planned path rather than the one that was built.
 
+## The brand is "Learn On"; the infrastructure still says "openlearn-ai"
+
+This is intentional, not drift. The project was renamed from OpenLearn AI to
+**Learn On** (see the README for why — The Open University has owned the
+OpenLearn brand in this exact sector since 2006). The rename covered every
+string a learner can see: page titles, the wordmark, the PWA manifest,
+`llms.txt`, the licences.
+
+It deliberately did **not** cover the Worker name, the repository name or the
+Supabase project name. Those are identifiers, not branding, and nobody using
+the site ever sees them. Renaming the Worker in particular is not a rename at
+all — Cloudflare would create a *second* Worker on the next deploy while the
+original kept serving `lrnon.org`, and you would then have to move the custom
+domain and re-bind the `SESSION` KV namespace by hand. Downtime, for nothing.
+
+So: if you see `openlearn-ai` below, it is correct. Leave it.
+
 ## Topology
 
 | Layer | Reality |
 |---|---|
+| Brand | **Learn On** |
 | Repo | `gauravchlogophile-cell/openlearn-ai`, branch `main` |
 | Host | Cloudflare **Workers** (not Pages) — Worker `openlearn-ai` |
 | Account | `eeaebb2534d7be74d9dedee10aa8b751` |

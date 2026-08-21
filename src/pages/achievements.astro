@@ -7,7 +7,7 @@ const lessons = await getCollection('lessons');
 const moduleTotals: Record<string, number> = {};
 for (const l of lessons) moduleTotals[l.data.module] = (moduleTotals[l.data.module] ?? 0) + 1;
 ---
-<Base title="Achievements — OpenLearn AI"
+<Base title="Achievements — Learn On"
   description="Your badges — every criterion public, nothing hidden. Earned through learning, never through spending, because coins can't buy credentials here.">
   <section class="container" style="padding-block:var(--sp-8) var(--sp-12);">
     <h1 style="font-size:var(--fs-500);">Achievements</h1>

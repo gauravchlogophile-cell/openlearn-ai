@@ -1,15 +1,32 @@
-# OpenLearn AI (working title — pending trademark clearance)
+# Learn On
 
 **Learn AI. Free. Forever.** An open-source, vendor-neutral, gamified AI learning
 platform — from absolute beginner to builder. No paywalls, no ads, no dark patterns.
 
-> Status: **Sprint 8 — GO-LIVE READY** — daily spaced-repetition review (/review): SM-2
-> scheduler, cards unlock with completed lessons, interval previews on every
-> grade, +5 XP once per day feeding streaks; 17 badges; module quizzes
-> (E1+E2 banks, 80% pass); Prompt Sandbox (canned mode); E1+E2 complete
-> (18 lessons, 36 flashcards); 15-card registry with staleness CI; PWA +
-> offline packs; skill-tree map; dashboard; anonymous progress; auth foundation.
-> See `/docs` and the planning suite (Phases 1–11) for the full blueprint.
+> Status: **live at [lrnon.org](https://lrnon.org)** — daily spaced-repetition review
+> (/review): SM-2 scheduler, cards unlock with completed lessons, interval
+> previews on every grade, +5 XP once per day feeding streaks; 17 badges;
+> module quizzes (E1–E3 banks, 80% pass); Prompt Sandbox (canned mode);
+> **E1–E3 complete (26 lessons, 65 flashcards)**; 15-card registry with
+> staleness CI; PWA + offline packs; skill-tree map; dashboard; anonymous
+> progress; accounts and cross-device sync.
+> See `/docs` for ADRs, the content handbook and the ops runbook.
+
+### A note on the name
+
+This project was drafted as "OpenLearn AI" and renamed to **Learn On**.
+[OpenLearn](https://www.open.edu/openlearn/) is The Open University's
+free-courses platform, running since 2006 — the same sector, the same
+Creative Commons licensing, the same promise. That is a collision, not a
+coincidence, and the original README carried "pending trademark clearance"
+for exactly this reason. Renaming at 26 lessons was cheap; renaming later
+would not have been.
+
+Some infrastructure still carries the old identifier — the Cloudflare Worker,
+the GitHub repository and the Supabase project. That is deliberate: those
+names are never shown to a learner, and renaming the Worker would mean
+migrating the custom domain and KV binding, with real downtime for no
+user-visible gain.
 
 ## Deploy it (30 minutes, $0)
 
