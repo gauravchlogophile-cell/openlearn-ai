@@ -15,21 +15,58 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: { node-version: 20 }
+
+      # The linter warns at >90 days and fails at >120 (CUR-7). Previously this
+      # job only reacted to the failure, which meant the 30-day grace period was
+      # silent: the first anyone heard of it was CI breaking on every PR. Treat
+      # warnings as reportable too, so a due card is raised while it is still
+      # only due — not once it is blocking.
       - id: check
         run: |
-          node scripts/validate-content.mjs > report.txt 2>&1 || echo "failed=true" >> "$GITHUB_OUTPUT"
+          set +e
+          node scripts/validate-content.mjs > report.txt 2>&1
+          echo "failed=$([ $? -eq 0 ] && echo false || echo true)" >> "$GITHUB_OUTPUT"
+          grep -q 'verification due' report.txt && echo "due=true" >> "$GITHUB_OUTPUT"
           cat report.txt
-      - if: steps.check.outputs.failed == 'true'
+
+      - if: steps.check.outputs.failed == 'true' || steps.check.outputs.due == 'true'
         uses: actions/github-script@v7
+        env:
+          BLOCKING: ${{ steps.check.outputs.failed }}
         with:
           script: |
             const fs = require('fs');
-            const body = ['Weekly staleness/lint check failed. Registry cards past their',
-              'verification SLA (Phase 3 §9) or content lint errors:', '',
-              '```', fs.readFileSync('report.txt','utf8').slice(0, 6000), '```', '',
-              'Verifying a card is a great first contribution — see CONTRIBUTING.md.'].join('\n');
+            const blocking = process.env.BLOCKING === 'true';
+            const today = new Date().toISOString().slice(0, 10);
+
+            // Don't stack a new issue every Monday on top of an open one.
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: 'open', labels: 'verification',
+            });
+            if (existing.data.length) {
+              core.info(`Open verification issue already exists (#${existing.data[0].number}); not filing another.`);
+              return;
+            }
+
+            const body = [
+              blocking
+                ? '**Cards are past the 120-day SLA — the content lint is now failing, so this blocks every PR.**'
+                : 'Cards are past 90 days and due for verification. Nothing is broken yet; there are roughly 30 days before the lint starts failing.',
+              '',
+              'To verify a card: confirm the product still exists under that name,',
+              'check `docsUrl` still resolves, re-check the `capabilities` flags,',
+              'then set `lastVerified` to today. See `docs/handbook/verifying-registry-cards.md`.',
+              '',
+              '```',
+              fs.readFileSync('report.txt', 'utf8').slice(0, 6000),
+              '```',
+              '',
+              'Verifying a card is a great first contribution — see CONTRIBUTING.md.',
+            ].join('\n');
+
             await github.rest.issues.create({
               owner: context.repo.owner, repo: context.repo.repo,
-              title: '🕰 Registry verification due (' + new Date().toISOString().slice(0,10) + ')',
+              title: (blocking ? '🚨 Registry verification overdue (' : '🕰 Registry verification due (') + today + ')',
               body, labels: ['content', 'verification', 'good first issue'],
             });
