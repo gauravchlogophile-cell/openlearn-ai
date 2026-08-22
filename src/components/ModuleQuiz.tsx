@@ -1,18 +1,15 @@
 import { useMemo, useState } from 'react';
 import { passQuiz, hasPassedQuiz } from '../lib/progress-store';
 import { XP_MODULE_QUIZ } from '../lib/progress-core';
+import { drawAndShuffle } from '../lib/shuffle.js';
 
 interface Item { id: string; q: string; options: string[]; answer: number; explain: string; }
 interface Props { moduleId: string; title: string; items: Item[]; drawCount: number; passThreshold: number; }
 
-function draw(items: Item[], n: number): Item[] {
-  const pool = [...items];
-  for (let i = pool.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [pool[i], pool[j]] = [pool[j], pool[i]];
-  }
-  return pool.slice(0, n);
-}
+/* Draw order was already random; option order was not, and the banks put 96%
+   of correct answers at index 1. drawAndShuffle randomises both. Safe to do in
+   the useMemo below because the start screen renders first — no question is on
+   screen at hydration, so there is no SSR/client mismatch to worry about. */
 
 /** Module quiz: random draw, one question at a time, instant explanations
  *  (formative), 80% pass, unlimited retries with a fresh draw, XP awarded
@@ -20,7 +17,7 @@ function draw(items: Item[], n: number): Item[] {
  *  banks stay server-side (FR-CERT-1) and arrive with accounts. */
 export default function ModuleQuiz({ moduleId, title, items, drawCount, passThreshold }: Props) {
   const [round, setRound] = useState(0);
-  const drawn = useMemo(() => draw(items, drawCount), [round, items, drawCount]);
+  const drawn = useMemo(() => drawAndShuffle(items, drawCount), [round, items, drawCount]);
   const [idx, setIdx] = useState(-1);
   const [picked, setPicked] = useState<number | null>(null);
   const [revealed, setRevealed] = useState(false);
