@@ -3,7 +3,7 @@ import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
 const lessons = (await getCollection('lessons')).sort((a, b) => a.data.order - b.data.order);
 ---
-<Base title="Learn On — Learn AI. Free. Forever."
+<Base title="Lrnon — Learn AI. Free. Forever."
   description="An open-source, vendor-neutral AI curriculum from absolute beginner to builder. No paywalls, no ads, no tricks — free forever, for everyone.">
   <section class="container" style="padding-block:var(--sp-16) var(--sp-12);">
     <h1 style="font-size:var(--fs-600);line-height:1.15;max-width:22ch;margin:0 0 var(--sp-4);">

@@ -1,7 +1,7 @@
-# Learn On
+# Lrnon
 
 > A free, open-source, vendor-neutral AI curriculum — absolute beginner to
-> builder. Content CC BY-SA 4.0; attribution: "Learn On contributors".
+> builder. Content CC BY-SA 4.0; attribution: "Lrnon contributors".
 
 ## Tracks
 - Explorer (beginner): /roadmap — modules E1 (What Is AI, Really?) and

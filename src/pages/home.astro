@@ -15,7 +15,7 @@ const lessons = (await getCollection('lessons'))
   .sort((a, b) => a.data.module.localeCompare(b.data.module) || a.data.order - b.data.order)
   .map((l) => ({ slug: l.id, title: l.data.title, minutes: l.data.minutes, module: l.data.module }));
 ---
-<Base title="Home — Learn On"
+<Base title="Home — Lrnon"
   description="Your learning dashboard: continue where you left off, see module progress, and keep your streak going — all free, all yours.">
   <section class="container" style="padding-block:var(--sp-8) var(--sp-12);">
     <h1 style="font-size:var(--fs-500);">Welcome back</h1>
