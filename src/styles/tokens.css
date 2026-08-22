@@ -26,6 +26,15 @@
   --focus-offset: 2px;
 }
 
+/* The dark palette below was defined from the start but never activated: no
+   code set data-theme, and there was no prefers-color-scheme rule, so the site
+   was permanently light regardless of the visitor's system setting.
+   Three selectors, in order of increasing specificity:
+     1. [data-theme="dark"]        — explicit opt-in (a future toggle)
+     2. prefers-color-scheme: dark — follow the OS, unless the visitor has
+                                     explicitly chosen light
+     3. (:root defaults above)     — light
+   Keep the token list identical across 1 and 2; only the trigger differs. */
 [data-theme="dark"] {
   --c-bg: #0f1117;
   --c-surface: #171a23;
@@ -36,6 +45,20 @@
   --c-progress: #35b3a2;
   --c-reward: #e0913a;
   --c-alert: #f0713d;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --c-bg: #0f1117;
+    --c-surface: #171a23;
+    --c-border: #2a2f3d;
+    --c-ink: #e8eaf1;
+    --c-ink-soft: #a3aabd;
+    --c-primary: #8c8ce0;
+    --c-progress: #35b3a2;
+    --c-reward: #e0913a;
+    --c-alert: #f0713d;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

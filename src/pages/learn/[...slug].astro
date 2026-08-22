@@ -17,11 +17,12 @@ const all = (await getCollection('lessons'))
   .sort((a, b) => a.data.order - b.data.order);
 const idx = all.findIndex((l) => l.id === lesson.id);
 const next = all[idx + 1];
+const prev = all[idx - 1];
 const quizBanks = import.meta.glob('../../../content/quizzes/*.json', { eager: true });
 const hasQuiz = Object.values(quizBanks).some((b: any) => b.default.module === lesson.data.module);
 const quizHref = hasQuiz ? '/quiz/' + lesson.data.module : undefined;
 ---
-<Base title={lesson.data.title + ' — Learn On'} description={lesson.data.description}>
+<Base title={lesson.data.title + ' — Lrnon'} description={lesson.data.description}>
   <article class="container" style="padding-block:var(--sp-8) var(--sp-12);">
     <p style="color:var(--c-ink-soft);font-size:var(--fs-100);margin:0;">
       {lesson.data.module.toUpperCase()} · Lesson {lesson.data.order} of {all.length}
@@ -41,14 +42,32 @@ const quizHref = hasQuiz ? '/quiz/' + lesson.data.module : undefined;
     </div>
 
     <section aria-label="Flashcards added" style="margin-block:var(--sp-8);color:var(--c-ink-soft);">
-      <p>🗂 {lesson.data.flashcards.length} flashcards from this lesson join your daily review
-      (review sessions arrive in Sprint 7).</p>
+      <p>🗂 {lesson.data.flashcards.length} flashcards from this lesson join your
+      <a href="/review">daily review</a>.</p>
     </section>
 
-    <nav aria-label="Lesson navigation" style="display:flex;justify-content:space-between;gap:var(--sp-4);align-items:center;">
-      <a class="btn btn--ghost" href="/">All lessons</a>
+    {/* Backwards navigation used to be missing entirely: the only routes out of
+        a lesson were "All lessons" and the forward button, so a learner who
+        wanted to re-read the previous lesson had to go back to the module list
+        and find it. Previous/next are now symmetrical. */}
+    <nav aria-label="Lesson navigation" style="display:flex;justify-content:space-between;gap:var(--sp-4);align-items:center;flex-wrap:wrap;">
+      <span style="display:flex;gap:var(--sp-2);align-items:center;flex-wrap:wrap;">
+        {prev
+          ? <a class="btn btn--ghost" href={'/learn/' + prev.id}
+              rel="prev" title={prev.data.title}>← Previous lesson</a>
+          : <a class="btn btn--ghost" href="/roadmap">← All modules</a>}
+        <a class="btn btn--ghost" href="/home">Dashboard</a>
+      </span>
       <CompleteButton client:load slug={lesson.id} hash={hash}
         nextHref={next ? '/learn/' + next.id : null} quizHref={quizHref} />
     </nav>
+
+    {prev || next ? (
+      <p style="margin-top:var(--sp-4);color:var(--c-ink-soft);font-size:var(--fs-100);">
+        {prev && <span>Previous: <a href={'/learn/' + prev.id}>{prev.data.title}</a></span>}
+        {prev && next && <span> · </span>}
+        {next && <span>Next: <a href={'/learn/' + next.id}>{next.data.title}</a></span>}
+      </p>
+    ) : null}
   </article>
 </Base>

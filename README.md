@@ -1,4 +1,4 @@
-# Learn On
+# Lrnon
 
 **Learn AI. Free. Forever.** An open-source, vendor-neutral, gamified AI learning
 platform — from absolute beginner to builder. No paywalls, no ads, no dark patterns.
@@ -14,13 +14,27 @@ platform — from absolute beginner to builder. No paywalls, no ads, no dark pat
 
 ### A note on the name
 
-This project was drafted as "OpenLearn AI" and renamed to **Learn On**.
+This project was drafted as "OpenLearn AI" and is now **Lrnon**.
+
 [OpenLearn](https://www.open.edu/openlearn/) is The Open University's
 free-courses platform, running since 2006 — the same sector, the same
 Creative Commons licensing, the same promise. That is a collision, not a
 coincidence, and the original README carried "pending trademark clearance"
-for exactly this reason. Renaming at 26 lessons was cheap; renaming later
-would not have been.
+for exactly this reason.
+
+The first replacement, "Learn On", turned out to be no better on inspection:
+[learnON by Jacaranda](https://www.jacaranda.com.au/learnon/), LearnOn
+Technology Solutions and LearnOn Southern Africa all use it, all in
+education. Spacing and hyphenation do not distinguish trademarks, so
+"Learn On", "LearnOn" and "Learn-On" are one mark — and a *descriptive* one,
+which is both hard to protect and likely already taken. That is the general
+lesson: descriptive names collide, coined names do not.
+
+**Lrnon** is coined. No existing brand uses it, it matches the domain
+exactly, and — usefully — machine translation leaves it alone because it is
+not a word. The hyphenated "LRN-ON" was rejected deliberately: it foregrounds
+"LRN", which is both [LRN Corporation](https://lrn.com/about) (compliance
+learning) and Stride, Inc.'s NYSE ticker.
 
 Some infrastructure still carries the old identifier — the Cloudflare Worker,
 the GitHub repository and the Supabase project. That is deliberate: those

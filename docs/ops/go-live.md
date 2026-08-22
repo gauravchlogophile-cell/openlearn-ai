@@ -141,10 +141,10 @@ Recorded 2026-08-22 after a full audit of the GitHub / Cloudflare / Supabase
 chain. **This supersedes the Pages-based instructions above**, which describe
 the originally-planned path rather than the one that was built.
 
-## The brand is "Learn On"; the infrastructure still says "openlearn-ai"
+## The brand is "Lrnon"; the infrastructure still says "openlearn-ai"
 
 This is intentional, not drift. The project was renamed from OpenLearn AI to
-**Learn On** (see the README for why — The Open University has owned the
+**Lrnon** (see the README for why — The Open University has owned the
 OpenLearn brand in this exact sector since 2006). The rename covered every
 string a learner can see: page titles, the wordmark, the PWA manifest,
 `llms.txt`, the licences.
@@ -162,7 +162,7 @@ So: if you see `openlearn-ai` below, it is correct. Leave it.
 
 | Layer | Reality |
 |---|---|
-| Brand | **Learn On** |
+| Brand | **Lrnon** |
 | Repo | `gauravchlogophile-cell/openlearn-ai`, branch `main` |
 | Host | Cloudflare **Workers** (not Pages) — Worker `openlearn-ai` |
 | Account | `eeaebb2534d7be74d9dedee10aa8b751` |

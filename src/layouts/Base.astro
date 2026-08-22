@@ -11,7 +11,8 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
-    <meta name="theme-color" content="#3d3d8f" />
+    <meta name="theme-color" content="#3d3d8f" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
     <!-- GSC verification, redeploy check -->
     <meta name="google-site-verification" content="pwnYLQZJbNx6YeSW4EUSaZC4WiGsb15eQcPvjLVCITA" />
     <link rel="manifest" href="/manifest.webmanifest" />
@@ -21,7 +22,12 @@ const { title, description } = Astro.props;
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="container" style="display:flex;justify-content:space-between;align-items:center;gap:var(--sp-4);padding-block:var(--sp-4);flex-wrap:wrap;">
-      <a href="/" style="font-weight:700;text-decoration:none;color:var(--c-ink);">Learn&nbsp;On</a>
+      {/* translate="no" + .notranslate stop Google Translate rendering the
+          brand as a phrase. "Lrnon" is coined so it is unlikely to be
+          translated anyway, but the wordmark is where a logo will replace this
+          text later, and a brand should never be machine-translated. */}
+      <a href="/" translate="no" class="notranslate" aria-label="Lrnon — home"
+        style="font-weight:700;text-decoration:none;color:var(--c-ink);">Lrnon</a>
       <nav aria-label="Main" style="display:flex;gap:var(--sp-4);align-items:center;">
         <a href="/home" style="margin-inline-end:var(--sp-4);">Home</a>
         <a href="/review" style="margin-inline-end:var(--sp-4);">Review</a>
