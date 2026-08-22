@@ -19,7 +19,21 @@ grant  execute on function public.award(text,int,text,text,uuid) to authenticate
 revoke execute on function public.handle_new_user() from public, anon, authenticated;
 
 -- rls_auto_enable(): event-trigger helper. Same reasoning.
-revoke execute on function public.rls_auto_enable() from public, anon, authenticated;
+--
+-- Guarded, because this one is NOT created by our migrations: it is installed
+-- by Supabase's hosted platform, so it exists on the remote project but never
+-- in a local `supabase start` stack. An unguarded revoke therefore aborts the
+-- whole local migration replay with 42883, which is exactly what it did to CI.
+do $$
+begin
+  if exists (
+    select 1 from pg_proc p
+    join pg_namespace n on n.oid = p.pronamespace
+    where n.nspname = 'public' and p.proname = 'rls_auto_enable'
+  ) then
+    execute 'revoke execute on function public.rls_auto_enable() from public, anon, authenticated';
+  end if;
+end $$;
 
 -- has_role(): stays callable by both API roles on purpose — the RLS policies on
 -- profiles, user_roles, reward_events and reward_balances call it, and policy

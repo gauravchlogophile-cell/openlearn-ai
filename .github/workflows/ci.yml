@@ -34,7 +34,16 @@ jobs:
   db:
     name: Migrations + pgTAP (RLS matrix)
     runs-on: ubuntu-latest
-    if: contains(join(github.event.pull_request.changed_files || '', ' '), 'supabase') || github.ref == 'refs/heads/main'
+    # This used to be gated on:
+    #   contains(join(github.event.pull_request.changed_files || '', ' '), 'supabase')
+    # which never once evaluated true. In the webhook payload
+    # `pull_request.changed_files` is a COUNT, not a list of paths, so that
+    # expression asked whether a number like "21" contains "supabase".
+    # The job therefore only ever ran on pushes to main — i.e. after merge,
+    # when a broken migration is already on the default branch. That is how a
+    # migration that aborts a clean `supabase start` reached main green.
+    # Replaying migrations from scratch takes about a minute; correctness on
+    # the branch is worth more than the minute.
     steps:
       - uses: actions/checkout@v4
       - uses: supabase/setup-cli@v1
