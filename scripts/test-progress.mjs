@@ -118,3 +118,58 @@ const rbadges = earnedBadges(rs, new Date('2026-07-08T12:00:00'), {});
 assert.ok(rbadges.includes('reviewer'));
 assert.ok(!rbadges.includes('memory-keeper'));
 console.log('SM-2 + review: all assertions passed ✓');
+
+// --- option shuffling (guards against answer-position bias) ---
+import { shuffleOptions, drawAndShuffle } from '../src/lib/shuffle.js';
+import { readFileSync as _rf, readdirSync as _rd } from 'node:fs';
+
+{
+  // The correct option must survive the shuffle: same text, new index.
+  for (let t = 0; t < 500; t++) {
+    const opts = ['alpha', 'bravo', 'charlie', 'delta'];
+    const answer = t % opts.length;
+    const s = shuffleOptions(opts, answer);
+    assert.equal(s.options.length, opts.length, 'no options lost');
+    assert.deepEqual([...s.options].sort(), [...opts].sort(), 'same options, reordered');
+    assert.equal(s.options[s.answer], opts[answer], 'answer index still points at the correct option');
+  }
+
+  // Positions must actually vary — a no-op shuffle would pass the checks above.
+  const seen = new Set();
+  for (let t = 0; t < 300; t++) seen.add(shuffleOptions(['a', 'b', 'c'], 1).answer);
+  assert.equal(seen.size, 3, 'correct answer reaches every position across draws');
+
+  // The draw must not lose the answer either.
+  const items = Array.from({ length: 10 }, (_, i) => ({
+    id: 'i' + i, q: 'q', options: ['x', 'y', 'z'], answer: 1, explain: 'e',
+  }));
+  const drawn = drawAndShuffle(items, 5);
+  assert.equal(drawn.length, 5, 'draw respects count');
+  assert.equal(new Set(drawn.map((d) => d.id)).size, 5, 'draw has no duplicates');
+  for (const d of drawn) assert.equal(d.options[d.answer], 'y', 'drawn item keeps its correct option');
+
+  // Authored banks are position-biased on purpose-ish (94% at index 1 when this
+  // was written). That is tolerable ONLY because display order is randomised.
+  // This asserts the shuffle neutralises it: over many draws of a maximally
+  // biased bank, the correct answer should land in each slot roughly evenly.
+  const biased = Array.from({ length: 30 }, (_, i) => ({
+    id: 'b' + i, q: 'q', options: ['p', 'q', 'r'], answer: 1, explain: 'e',
+  }));
+  const hist = [0, 0, 0];
+  for (let t = 0; t < 400; t++) for (const d of drawAndShuffle(biased, 8)) hist[d.answer]++;
+  const total = hist.reduce((a, b) => a + b, 0);
+  for (const h of hist) {
+    const share = h / total;
+    assert.ok(share > 0.28 && share < 0.39,
+      `shuffled answer positions should be ~1/3 each, got ${(share * 100).toFixed(1)}%`);
+  }
+
+  // Explanations must never reference an option's position, since it moves.
+  for (const f of _rd('content/quizzes')) {
+    const bank = JSON.parse(_rf('content/quizzes/' + f, 'utf8'));
+    for (const it of bank.items)
+      assert.ok(!/\b(option|answer)\s+(a|b|c)\b|\bthe (first|second|third|middle|last) (option|choice)\b/i.test(it.explain),
+        `${bank.module}:${it.id} explanation refers to an option position, which shuffling invalidates`);
+  }
+}
+console.log('option shuffling: all assertions passed ✓');
