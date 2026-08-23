@@ -173,3 +173,51 @@ import { readFileSync as _rf, readdirSync as _rd } from 'node:fs';
   }
 }
 console.log('option shuffling: all assertions passed ✓');
+
+// --- reader preferences: the pre-paint script must match progress-store ---
+{
+  // Base.astro applies preferences before first paint, so it cannot import
+  // progress-store and duplicates the mapping instead. If the two drift, saved
+  // preferences silently stop applying on load — which looks like "the theme
+  // toggle forgets", and is miserable to debug. Assert they agree.
+  const base = _rf('src/layouts/Base.astro', 'utf8');
+
+  const inlineDefaults = base.match(/var D = \{([\s\S]*?)\};/);
+  const inlineAttrs = base.match(/var A = \{([\s\S]*?)\};/);
+  assert.ok(inlineDefaults && inlineAttrs, 'Base.astro still contains the pre-paint preference maps');
+
+  const parsePairs = (s) => Object.fromEntries(
+    [...s.matchAll(/([a-z]+)\s*:\s*'([^']+)'/g)].map((m) => [m[1], m[2]])
+  );
+  const D = parsePairs(inlineDefaults[1]);
+  const A = parsePairs(inlineAttrs[1]);
+
+  const store = _rf('src/lib/progress-store.ts', 'utf8');
+  const specBlock = store.match(/export const READER_PREFS = \{([\s\S]*?)\n\} as const;/);
+  assert.ok(specBlock, 'progress-store still exports READER_PREFS');
+  const spec = {};
+  for (const m of specBlock[1].matchAll(/([a-z]+):\s*\{\s*attr:\s*'([^']+)',\s*values:\s*\[([^\]]+)\]/g)) {
+    spec[m[1]] = { attr: m[2], first: m[3].split(',')[0].trim().replace(/'/g, '') };
+  }
+
+  assert.deepEqual(Object.keys(D).sort(), Object.keys(spec).sort(),
+    'pre-paint script covers exactly the preferences progress-store defines');
+  for (const k of Object.keys(spec)) {
+    assert.equal(A[k], spec[k].attr, `pre-paint attribute for "${k}" matches progress-store`);
+    assert.equal(D[k], spec[k].first, `pre-paint default for "${k}" matches progress-store`);
+  }
+
+  // The storage key must match too, or preferences save to one place and load
+  // from another.
+  assert.ok(base.includes("'ol.settings.v1'"), 'pre-paint script reads the settings key progress-store writes');
+  assert.ok(store.includes("SETTINGS_KEY = 'ol.settings.v1'"), 'settings key unchanged');
+
+  // Every data-* attribute the script can set must actually be styled.
+  const css = _rf('src/styles/tokens.css', 'utf8');
+  for (const k of Object.keys(spec)) {
+    if (k === 'theme') continue; // handled by [data-theme] + the media query
+    assert.ok(css.includes(`[${spec[k].attr}=`),
+      `tokens.css styles ${spec[k].attr}, otherwise the control does nothing`);
+  }
+}
+console.log('reader preferences: all assertions passed ✓');

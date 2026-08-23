@@ -82,6 +82,76 @@ export function setGoalMode(mode: GoalMode) {
   window.dispatchEvent(new CustomEvent('ol:progress'));
 }
 
+/* ---------- reader preferences ----------
+ * Each preference is one data-* attribute on <html>; tokens.css does the rest.
+ * They live in the existing settings object rather than a second storage key,
+ * so a learner's preferences travel with the rest of their local state.
+ *
+ * The DEFAULT value of every preference means "set no attribute at all", which
+ * is what keeps the markup clean for the majority who never open the panel and
+ * lets the OS decide the theme.
+ *
+ * IMPORTANT: the inline pre-paint script in src/layouts/Base.astro duplicates
+ * this mapping deliberately — it must run before first paint, so it cannot
+ * import this module. If you change a key, an attribute name or a default
+ * here, change it there too. The test suite asserts the two agree. */
+export const READER_PREFS = {
+  theme:    { attr: 'data-theme',    values: ['system', 'light', 'dark'] },
+  textsize: { attr: 'data-textsize', values: ['normal', 'large', 'xlarge'] },
+  leading:  { attr: 'data-leading',  values: ['normal', 'tight', 'loose'] },
+  width:    { attr: 'data-width',    values: ['normal', 'wide'] },
+  contrast: { attr: 'data-contrast', values: ['normal', 'high'] },
+  font:     { attr: 'data-font',     values: ['default', 'readable'] },
+  saver:    { attr: 'data-saver',    values: ['off', 'on'] },
+} as const;
+
+export type ReaderPrefName = keyof typeof READER_PREFS;
+export type ReaderPrefs = Record<ReaderPrefName, string>;
+
+/** The first value of each list is the default, i.e. "no attribute". */
+export function defaultReaderPrefs(): ReaderPrefs {
+  const out = {} as ReaderPrefs;
+  for (const k of Object.keys(READER_PREFS) as ReaderPrefName[]) {
+    out[k] = READER_PREFS[k].values[0];
+  }
+  return out;
+}
+
+export function readerPrefs(): ReaderPrefs {
+  const prefs = defaultReaderPrefs();
+  if (typeof localStorage === 'undefined') return prefs;
+  try {
+    const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? '{}').reader ?? {};
+    for (const k of Object.keys(READER_PREFS) as ReaderPrefName[]) {
+      // Ignore anything not in the allowed list, so a hand-edited or
+      // corrupted value can never write junk into the DOM.
+      if ((READER_PREFS[k].values as readonly string[]).includes(saved[k])) prefs[k] = saved[k];
+    }
+  } catch { /* fall back to defaults */ }
+  return prefs;
+}
+
+/** Writes the attributes onto <html>. Defaults remove the attribute. */
+export function applyReaderPrefs(prefs: ReaderPrefs, root?: HTMLElement) {
+  const el = root ?? document.documentElement;
+  for (const k of Object.keys(READER_PREFS) as ReaderPrefName[]) {
+    const { attr, values } = READER_PREFS[k];
+    if (prefs[k] === values[0]) el.removeAttribute(attr);
+    else el.setAttribute(attr, prefs[k]);
+  }
+}
+
+export function setReaderPref(name: ReaderPrefName, value: string) {
+  if (!(READER_PREFS[name].values as readonly string[]).includes(value)) return;
+  const raw = localStorage.getItem(SETTINGS_KEY);
+  let s: Record<string, any> = {};
+  try { s = raw ? JSON.parse(raw) : {}; } catch { /* reset */ }
+  s.reader = { ...(s.reader ?? {}), [name]: value };
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+  applyReaderPrefs(readerPrefs());
+  window.dispatchEvent(new CustomEvent('ol:progress'));
+}
+
 export function passQuiz(moduleId: string, score: number) {
   save(recordQuizPass(load(), moduleId, score, crypto.randomUUID(), new Date()));
 }

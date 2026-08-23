@@ -118,6 +118,34 @@
   }
 }
 
+/* Dark + high contrast.
+   Without this pair, high contrast wins on specificity — :root[data-contrast]
+   scores higher than [data-theme] — and forces a white page on someone who
+   explicitly asked for dark. People who need high contrast are exactly the
+   people least well served by being flashbanged, and light sensitivity and low
+   vision often occur together. These selectors carry an extra attribute, so
+   they outrank the light high-contrast block above. */
+:root[data-theme="dark"][data-contrast="high"] {
+  --c-ink: #ffffff; --c-ink-soft: #e6e6e6; --c-ink-faint: #c9c9c9;
+  --c-bg: #000000; --c-surface: #000000; --c-surface-2: #0d0d0d;
+  --c-border: #9a9a9a; --c-border-strong: #ffffff;
+  --c-primary: #b9b9ff; --c-primary-soft: #000000; --c-primary-line: #b9b9ff;
+  --c-progress: #5ee0cd; --c-progress-soft: #000000;
+  --c-reward: #ffb454; --c-reward-soft: #000000;
+  --c-alert: #ff8a5c;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"])[data-contrast="high"] {
+    --c-ink: #ffffff; --c-ink-soft: #e6e6e6; --c-ink-faint: #c9c9c9;
+    --c-bg: #000000; --c-surface: #000000; --c-surface-2: #0d0d0d;
+    --c-border: #9a9a9a; --c-border-strong: #ffffff;
+    --c-primary: #b9b9ff; --c-primary-soft: #000000; --c-primary-line: #b9b9ff;
+    --c-progress: #5ee0cd; --c-progress-soft: #000000;
+    --c-reward: #ffb454; --c-reward-soft: #000000;
+    --c-alert: #ff8a5c;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }

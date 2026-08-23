@@ -21,6 +21,35 @@ const { title, description } = Astro.props;
     <link rel="icon" href="/icons/lrnon-icon.svg" type="image/svg+xml" />
     <link rel="icon" href="/icons/icon-192.png" type="image/png" />
     <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    {/* Reader preferences, applied BEFORE first paint. This has to be inline
+        and synchronous: a React island or a deferred script would run after
+        the browser has already painted the default theme, so every reload
+        would flash white before going dark.
+
+        The mapping is duplicated from src/lib/progress-store.ts on purpose —
+        pre-paint code cannot import a module. scripts/test-progress.mjs
+        asserts the two stay in step, and scripts/generate-headers.mjs hashes
+        this script into the CSP at build time, so no policy change is needed.
+
+        Wrapped in try/catch because localStorage throws outright in some
+        privacy modes, and a throw here would block the page from rendering. */}
+    <script is:inline>
+      (function () {
+        try {
+          var D = { theme: 'system', textsize: 'normal', leading: 'normal',
+                    width: 'normal', contrast: 'normal', font: 'default', saver: 'off' };
+          var A = { theme: 'data-theme', textsize: 'data-textsize', leading: 'data-leading',
+                    width: 'data-width', contrast: 'data-contrast', font: 'data-font',
+                    saver: 'data-saver' };
+          var r = (JSON.parse(localStorage.getItem('ol.settings.v1') || '{}').reader) || {};
+          var el = document.documentElement;
+          for (var k in D) {
+            var v = r[k];
+            if (typeof v === 'string' && v !== D[k]) el.setAttribute(A[k], v);
+          }
+        } catch (e) { /* defaults are fine */ }
+      })();
+    </script>
     <script is:inline src="/register-sw.js"></script>
   </head>
   <body>
@@ -49,6 +78,7 @@ const { title, description } = Astro.props;
     <footer class="container" style="padding-block:var(--sp-12);color:var(--c-ink-soft);font-size:var(--fs-100);">
       <p>Free forever. Open source. Content CC BY-SA 4.0 · Code MIT.
       No ads, no paywalls, no dark patterns.
+      · <a href="/reading">Reading preferences</a>
       · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
     </footer>
   </body>
