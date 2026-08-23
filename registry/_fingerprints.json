@@ -1,0 +1,60 @@
+{
+  "generatedAt": "2026-08-23T22:14:22.435Z",
+  "sources": {
+    "claude": {
+      "hash": "62f302f2d5ca1d99",
+      "words": 612,
+      "finalUrl": "https://docs.claude.com/"
+    },
+    "copilot": {
+      "hash": "a196c62a5508e6ad",
+      "words": 862,
+      "finalUrl": "https://support.microsoft.com/copilot"
+    },
+    "elevenlabs": {
+      "hash": "f49d920fad9a72bc",
+      "words": 824,
+      "finalUrl": "https://elevenlabs.io/docs"
+    },
+    "gemini": {
+      "hash": "b20b99c4a61b87fe",
+      "words": 891,
+      "finalUrl": "https://ai.google.dev/"
+    },
+    "github-copilot": {
+      "hash": "e4607c1acdade853",
+      "words": 1958,
+      "finalUrl": "https://docs.github.com/copilot"
+    },
+    "grok": {
+      "hash": "a630bf6ce6fc73f0",
+      "words": 899,
+      "finalUrl": "https://docs.x.ai/"
+    },
+    "n8n": {
+      "hash": "cdc7690a8f9a1a42",
+      "words": 220,
+      "finalUrl": "https://docs.n8n.io/"
+    },
+    "notebooklm": {
+      "hash": "4c1187a8a8f9c184",
+      "words": 9,
+      "finalUrl": "https://notebooklm.google/"
+    },
+    "notion-ai": {
+      "hash": "f3494ddcfa8924f4",
+      "words": 526,
+      "finalUrl": "https://www.notion.com/help"
+    },
+    "perplexity": {
+      "hash": "b578a76dc785ac7f",
+      "words": 268,
+      "finalUrl": "https://docs.perplexity.ai/"
+    },
+    "stable-diffusion": {
+      "hash": "fe0895c2f496dc8c",
+      "words": 929,
+      "finalUrl": "https://stability.ai/"
+    }
+  }
+}

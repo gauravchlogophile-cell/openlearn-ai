@@ -59,7 +59,8 @@ const TRACKS = ['explorer','practitioner','builder'];
 
 const registryIds = new Set(
   walk(join(ROOT, 'registry'), '.json')
-    .filter(p => !p.endsWith('_schema.json'))
+    // Underscore-prefixed files are machinery (_schema, _fingerprints), not cards.
+    .filter(p => !/[\/\\]_/.test(p))
     .map(p => JSON.parse(readFileSync(p, 'utf8')).id)
 );
 
@@ -106,7 +107,7 @@ for (const file of lessonFiles) {
 // ---------- registry checks ----------
 const today = process.env.OL_TODAY ? new Date(process.env.OL_TODAY) : new Date();
 for (const p of walk(join(ROOT, 'registry'), '.json')) {
-  if (p.endsWith('_schema.json')) continue;
+  if (/[\/\\]_/.test(p)) continue;   // machinery, not a card
   const rel = relative(ROOT, p);
   let card;
   try { card = JSON.parse(readFileSync(p, 'utf8')); }
