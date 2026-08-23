@@ -11,3 +11,4 @@ supabase/.temp/
 .dev.vars*
 !.dev.vars.example
 source-report.md
+src/generated/

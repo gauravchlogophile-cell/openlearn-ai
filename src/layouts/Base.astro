@@ -2,11 +2,17 @@
 import '../styles/tokens.css';
 import ProgressChip from '../components/ProgressChip.tsx';
 import { CONTACT_EMAIL, CONTACT_PHONE, FUNDING_MODE } from '../lib/site-config';
+import Sky from '../components/Sky.tsx';
+import { SKY_MODE, SKY_COPY } from '../lib/sky-config';
 interface Props { title: string; description: string; }
 const { title, description } = Astro.props;
 /* The design's founder switch: when funding is hidden, the Support link is not
    rendered anywhere, not merely hidden with CSS. */
 const showSupport = FUNDING_MODE !== 'hidden';
+/* The server decides whether Sky exists at all. When it is off the dock button
+   is never rendered, and /api/sky independently returns 503 — so flipping a
+   flag in devtools gets a refusal, not an answer. */
+const showSky = SKY_MODE !== 'off';
 ---
 <!doctype html>
 <html lang="en">
@@ -138,5 +144,10 @@ const showSupport = FUNDING_MODE !== 'hidden';
         </p>
       </div>
     </footer>
+
+    {showSky && (
+      <Sky client:idle intro={SKY_COPY.intro} disclaimer={SKY_COPY.disclaimer}
+        suggestions={['Explain this lesson more simply', 'How is Lrnon funded?', 'How do I volunteer?']} />
+    )}
   </body>
 </html>
