@@ -1,20 +1,35 @@
-/* Design tokens — Phase 5 §5.1. Token-first, two themes, AA-verified pairings. */
+/* Lrnon design tokens — warm-paper redesign.
+   Drop-in replacement for the original Phase 5 §5.1 token file.
+   Only the neutrals change; --c-primary keeps your Deep Indigo, and the
+   dark palette is untouched. No new dependencies, no webfont required. */
 :root {
   --c-primary: #3d3d8f;        /* Deep Indigo — brand, links, primary actions */
   --c-primary-ink: #ffffff;
-  --c-progress: #0e8a7b;       /* Teal — progress, success */
+  --c-primary-soft: #eceaf6;   /* NEW — indigo wash for callouts */
+  --c-primary-line: #d9d5ee;   /* NEW — border for indigo wash */
+  --c-progress: #0e7d70;       /* Teal — progress, correct answers */
+  --c-progress-soft: #eaf6f4;  /* NEW */
   --c-reward: #b45309;         /* Amber — streaks, XP */
-  --c-alert: #c2410c;          /* Coral — alerts */
-  --c-bg: #ffffff;
-  --c-surface: #f5f6f8;
-  --c-border: #d8dbe2;
-  --c-ink: #1c2130;
-  --c-ink-soft: #4b5265;
+  --c-reward-soft: #fdf3e6;    /* NEW */
+  --c-alert: #c2410c;
+
+  --c-bg: #fbf9f5;             /* warm paper (was #ffffff) */
+  --c-surface: #ffffff;        /* cards sit above the paper */
+  --c-surface-2: #f4f1ea;      /* NEW — sidebars, quiet bands */
+  --c-border: #e3ded2;         /* warm hairline (was #d8dbe2) */
+  --c-border-strong: #cfcabb;  /* NEW — ghost-button borders */
+  --c-ink: #1b1a17;            /* warm near-black (was #1c2130) */
+  --c-ink-soft: #5f594e;
+  --c-ink-faint: #8a8377;      /* NEW — metadata, eyebrows */
 
   --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", sans-serif;
-  --fs-100: 0.875rem; --fs-200: 1rem; --fs-300: 1.125rem;
-  --fs-400: 1.375rem; --fs-500: 1.75rem; --fs-600: 2.125rem;
-  --lh-body: 1.6;
+  /* Optional display face for headings. Falls back to Georgia everywhere it
+     is not loaded, so the page never blocks on a font download. */
+  --font-display: Literata, Georgia, "Times New Roman", serif;
+
+  --fs-100: 0.875rem; --fs-200: 1rem; --fs-300: 1.1875rem;
+  --fs-400: 1.6875rem; --fs-500: 2rem; --fs-600: 2.75rem;
+  --lh-body: 1.75;
   --measure: 68ch;
 
   --sp-1: 4px; --sp-2: 8px; --sp-3: 12px; --sp-4: 16px;
@@ -26,24 +41,59 @@
   --focus-offset: 2px;
 }
 
-/* The dark palette below was defined from the start but never activated: no
-   code set data-theme, and there was no prefers-color-scheme rule, so the site
-   was permanently light regardless of the visitor's system setting.
-   Three selectors, in order of increasing specificity:
-     1. [data-theme="dark"]        — explicit opt-in (a future toggle)
-     2. prefers-color-scheme: dark — follow the OS, unless the visitor has
-                                     explicitly chosen light
-     3. (:root defaults above)     — light
-   Keep the token list identical across 1 and 2; only the trigger differs. */
+/* Reader preferences. Each is one attribute on <html>, saved in localStorage.
+   Every size in the design is in rem, so text size scales the whole page.
+   The CSS lands here first; the controls that set these attributes arrive in
+   the next phase. Setting them by hand in devtools already works. */
+:root[data-textsize="large"]  { font-size: 112.5%; }
+:root[data-textsize="xlarge"] { font-size: 125%; }
+
+:root[data-leading="tight"] { --lh-body: 1.5; }
+:root[data-leading="loose"] { --lh-body: 2; }
+
+:root[data-width="wide"] { --measure: 84ch; }
+
+/* High contrast: darker ink, harder borders, no soft washes. */
+:root[data-contrast="high"] {
+  --c-ink: #000000; --c-ink-soft: #2b2b2b; --c-ink-faint: #444444;
+  --c-bg: #ffffff; --c-surface: #ffffff; --c-surface-2: #f2f2f2;
+  --c-border: #6b6b6b; --c-border-strong: #000000;
+  --c-primary: #23236b; --c-primary-soft: #ffffff; --c-primary-line: #23236b;
+  --c-progress: #04564c; --c-progress-soft: #ffffff;
+  --c-reward: #7a3706; --c-reward-soft: #ffffff;
+}
+
+/* Dyslexia-friendly: wider letter shapes and looser tracking. Uses fonts the
+   device already has, so it costs no download. */
+:root[data-font="readable"] {
+  --font-body: Verdana, "DejaVu Sans", Tahoma, sans-serif;
+  --font-display: Verdana, "DejaVu Sans", Tahoma, sans-serif;
+  letter-spacing: 0.01em;
+  word-spacing: 0.08em;
+}
+
+/* Data-saver: hide decorative figures rather than downloading them. */
+:root[data-saver="on"] figure[data-decorative] { display: none; }
+
+/* Dark theme — light is the default in :root above; dark applies only on
+   explicit opt-in or an OS dark preference. Keep the two token lists
+   identical; only the trigger differs. */
 [data-theme="dark"] {
   --c-bg: #0f1117;
   --c-surface: #171a23;
+  --c-surface-2: #12151d;
   --c-border: #2a2f3d;
+  --c-border-strong: #3a4150;
   --c-ink: #e8eaf1;
   --c-ink-soft: #a3aabd;
+  --c-ink-faint: #7b8296;
   --c-primary: #8c8ce0;
+  --c-primary-soft: #1d2036;
+  --c-primary-line: #333a5c;
   --c-progress: #35b3a2;
+  --c-progress-soft: #10241f;
   --c-reward: #e0913a;
+  --c-reward-soft: #2a1f11;
   --c-alert: #f0713d;
 }
 
@@ -51,12 +101,19 @@
   :root:not([data-theme="light"]) {
     --c-bg: #0f1117;
     --c-surface: #171a23;
+    --c-surface-2: #12151d;
     --c-border: #2a2f3d;
+    --c-border-strong: #3a4150;
     --c-ink: #e8eaf1;
     --c-ink-soft: #a3aabd;
+    --c-ink-faint: #7b8296;
     --c-primary: #8c8ce0;
+    --c-primary-soft: #1d2036;
+    --c-primary-line: #333a5c;
     --c-progress: #35b3a2;
+    --c-progress-soft: #10241f;
     --c-reward: #e0913a;
+    --c-reward-soft: #2a1f11;
     --c-alert: #f0713d;
   }
 }
@@ -71,7 +128,13 @@ body {
   margin: 0; background: var(--c-bg); color: var(--c-ink);
   font-family: var(--font-body); font-size: var(--fs-200);
   line-height: var(--lh-body);
+  -webkit-text-size-adjust: 100%;
 }
+h1, h2, h3, h4 {
+  font-family: var(--font-display); font-weight: 600;
+  line-height: 1.15; letter-spacing: -0.025em; text-wrap: pretty;
+}
+p { text-wrap: pretty; }
 a { color: var(--c-primary); }
 :focus-visible { outline: var(--focus-ring); outline-offset: var(--focus-offset); }
 .skip-link {
@@ -79,13 +142,32 @@ a { color: var(--c-primary); }
   color: var(--c-primary-ink); padding: var(--sp-2) var(--sp-4); border-radius: var(--r-s);
 }
 .skip-link:focus { left: var(--sp-4); z-index: 10; }
-.container { max-width: 960px; margin: 0 auto; padding: 0 var(--sp-4); }
-.prose { max-width: var(--measure); }
+.container { max-width: 1180px; margin: 0 auto; padding: 0 var(--sp-4); }
+.prose { max-width: var(--measure); font-size: var(--fs-300); }
 .btn {
-  display: inline-block; background: var(--c-primary); color: var(--c-primary-ink);
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--c-primary); color: var(--c-primary-ink);
   padding: var(--sp-3) var(--sp-6); border-radius: var(--r-m); border: 0;
-  font-size: var(--fs-200); font-weight: 600; text-decoration: none;
+  font: inherit; font-weight: 600; text-decoration: none;
   min-height: 44px; min-width: 44px; cursor: pointer; transition: filter var(--t-fast);
 }
-.btn:hover { filter: brightness(1.1); }
-.btn--ghost { background: transparent; color: var(--c-primary); border: 1px solid var(--c-border); }
+.btn:hover { filter: brightness(1.08); }
+.btn--ghost {
+  background: transparent; color: var(--c-primary);
+  border: 1px solid var(--c-border-strong);
+}
+.card {
+  background: var(--c-surface); border: 1px solid var(--c-border);
+  border-radius: var(--r-m); padding: var(--sp-6);
+}
+/* Callouts: <div class="note note--aim|note--try|note--ok"> */
+.note { border-radius: var(--r-m); padding: var(--sp-6); }
+.note--aim { background: var(--c-primary-soft); border: 1px solid var(--c-primary-line); }
+.note--try { background: var(--c-reward-soft); border-left: 4px solid var(--c-reward); border-radius: 0 var(--r-m) var(--r-m) 0; }
+.note--ok  { background: var(--c-progress-soft); border: 1px solid var(--c-progress); }
+
+/* The brand lockup: mark beside the wordmark. The <a> keeps translate="no"
+   and its aria-label in Base.astro — a brand must never be machine-translated,
+   and the mark carries alt="" because the adjacent word is the accessible name. */
+.brand { display: inline-flex; align-items: center; gap: var(--sp-2); text-decoration: none; }
+.brand span { font-family: var(--font-display); font-weight: 700; color: var(--c-ink); }

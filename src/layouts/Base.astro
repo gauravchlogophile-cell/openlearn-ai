@@ -16,18 +16,24 @@ const { title, description } = Astro.props;
     <!-- GSC verification, redeploy check -->
     <meta name="google-site-verification" content="pwnYLQZJbNx6YeSW4EUSaZC4WiGsb15eQcPvjLVCITA" />
     <link rel="manifest" href="/manifest.webmanifest" />
+    {/* SVG first — ~300 bytes, sharp at every size. The PNG stays as a
+        fallback for browsers that do not take SVG favicons. */}
+    <link rel="icon" href="/icons/lrnon-icon.svg" type="image/svg+xml" />
     <link rel="icon" href="/icons/icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
     <script is:inline src="/register-sw.js"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="container" style="display:flex;justify-content:space-between;align-items:center;gap:var(--sp-4);padding-block:var(--sp-4);flex-wrap:wrap;">
       {/* translate="no" + .notranslate stop Google Translate rendering the
-          brand as a phrase. "Lrnon" is coined so it is unlikely to be
-          translated anyway, but the wordmark is where a logo will replace this
-          text later, and a brand should never be machine-translated. */}
-      <a href="/" translate="no" class="notranslate" aria-label="Lrnon — home"
-        style="font-weight:700;text-decoration:none;color:var(--c-ink);">Lrnon</a>
+          brand as a phrase — a brand should never be machine-translated.
+          The mark takes alt="" because the adjacent word is already the
+          accessible name; announcing both would read "Lrnon Lrnon". */}
+      <a href="/" translate="no" class="brand notranslate" aria-label="Lrnon — home">
+        <img src="/icons/lrnon-mark.svg" width="26" height="26" alt="" />
+        <span>Lrnon</span>
+      </a>
       <nav aria-label="Main" style="display:flex;gap:var(--sp-4);align-items:center;">
         <a href="/home" style="margin-inline-end:var(--sp-4);">Home</a>
         <a href="/review" style="margin-inline-end:var(--sp-4);">Review</a>
