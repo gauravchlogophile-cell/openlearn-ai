@@ -1,0 +1,72 @@
+---
+import Base from '../layouts/Base.astro';
+import ShareTools from '../components/ShareTools.tsx';
+import { CONTACT_EMAIL, SHARE_PARAM } from '../lib/site-config';
+
+const siteUrl = (import.meta.env.PUBLIC_SITE_URL ?? 'https://lrnon.org').replace(/\/$/, '');
+
+const thanksMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('A note about Lrnon')}` +
+  `&body=${encodeURIComponent(
+    'What Lrnon helped me do:\n\n\n' +
+    'Your name (optional, or leave blank to stay anonymous):\n\n' +
+    'Where you are (city or country, if you like):\n\n' +
+    'Tick one:\n' +
+    '[ ] You may publish this on the site with my first name.\n' +
+    '[ ] Please keep this private.\n'
+  )}`;
+---
+<Base title="Spread the word — Lrnon"
+  description="Lrnon has no marketing budget and buys no ads. Every new learner arrives because someone told them. Share a lesson, or send a note about what you learned.">
+
+  <section class="container" style="padding-block:var(--sp-12) var(--sp-8);max-width:900px;">
+    <p style="letter-spacing:0.14em;text-transform:uppercase;font-size:var(--fs-100);color:var(--c-ink-faint);margin:0 0 var(--sp-3);">
+      No cost, no catch
+    </p>
+    <h1 style="font-size:var(--fs-600);max-width:16ch;margin:0 0 var(--sp-4);">
+      Learning AI cost you nothing. Pass it on.
+    </h1>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      Lrnon has no marketing budget and buys no ads. Every new learner arrives because
+      someone told them. If a lesson here helped you, the most useful thing you can do is
+      name it to one person who would use it.
+    </p>
+  </section>
+
+  <section class="container" style="padding-block:0 var(--sp-8);max-width:900px;">
+    <div class="card">
+      <ShareTools client:load siteUrl={siteUrl} param={SHARE_PARAM} />
+    </div>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8);max-width:900px;">
+    <div class="note note--ok">
+      <h2 style="font-size:var(--fs-400);margin-top:0;">Say thanks, publicly</h2>
+      <p style="color:var(--c-ink-soft);">
+        Published only with your permission. A sentence about what you learned here, and
+        what it let you do, is worth more to a stranger deciding whether to start than
+        anything we could write ourselves.
+      </p>
+      <p style="margin-bottom:0;">
+        <a class="btn" href={thanksMailto}>Write a thank-you note</a>
+      </p>
+    </div>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8);max-width:900px;">
+    <h2 style="font-size:var(--fs-400);">Other ways to help it grow</h2>
+    <ul class="prose" style="padding-inline-start:var(--sp-6);display:grid;gap:var(--sp-2);">
+      <li>Post a lesson you found useful, not the homepage — a specific link helps more than a general one.</li>
+      <li>Mention Lrnon where people are already asking how to start with AI.</li>
+      <li>If you teach or manage a team, send the <a href="/roadmap">roadmap</a> rather than a single lesson.</li>
+      <li>Correct us in public if we get something wrong. That builds more trust than praise.</li>
+    </ul>
+
+    <div class="note note--try" style="margin-top:var(--sp-6);">
+      <h3 style="font-size:var(--fs-300);margin-top:0;">Please don't spam for us</h3>
+      <p style="margin-bottom:0;">
+        No mass DMs, no comment drops on unrelated posts, no fake reviews. A free learning
+        project lives on trust, and that kind of reach costs more than it earns.
+      </p>
+    </div>
+  </section>
+</Base>

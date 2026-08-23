@@ -1,8 +1,12 @@
 ---
 import '../styles/tokens.css';
 import ProgressChip from '../components/ProgressChip.tsx';
+import { CONTACT_EMAIL, CONTACT_PHONE, FUNDING_MODE } from '../lib/site-config';
 interface Props { title: string; description: string; }
 const { title, description } = Astro.props;
+/* The design's founder switch: when funding is hidden, the Support link is not
+   rendered anywhere, not merely hidden with CSS. */
+const showSupport = FUNDING_MODE !== 'hidden';
 ---
 <!doctype html>
 <html lang="en">
@@ -75,11 +79,62 @@ const { title, description } = Astro.props;
     <main id="main">
       <slot />
     </main>
-    <footer class="container" style="padding-block:var(--sp-12);color:var(--c-ink-soft);font-size:var(--fs-100);">
-      <p>Free forever. Open source. Content CC BY-SA 4.0 · Code MIT.
-      No ads, no paywalls, no dark patterns.
-      · <a href="/reading">Reading preferences</a>
-      · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+    {/* The site had no contact detail anywhere before this: no footer address,
+        no help route, no way to report a broken lesson. That is a real gap on
+        a learning site, so the details now sit on every page. */}
+    <footer style="background:var(--c-surface-2);border-top:1px solid var(--c-border);margin-top:var(--sp-16);">
+      <div class="container" style="padding-block:var(--sp-12);font-size:var(--fs-100);">
+        <div style="display:grid;gap:var(--sp-8);grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+          <div>
+            <p translate="no" class="brand notranslate" style="margin:0 0 var(--sp-2);">
+              <img src="/icons/lrnon-mark.svg" width="22" height="22" alt="" />
+              <span>Lrnon</span>
+            </p>
+            <p style="margin:0;color:var(--c-ink-soft);max-width:30ch;">
+              Learn AI at no cost. Free to use, free of ads, and funded in the open.
+            </p>
+          </div>
+
+          <nav aria-label="Learn">
+            <h2 style="font-size:var(--fs-100);font-family:var(--font-body);text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-2);">Learn</h2>
+            <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
+              <li><a href="/roadmap">Roadmap</a></li>
+              <li><a href="/review">Daily review</a></li>
+              <li><a href="/achievements">Badges</a></li>
+              <li><a href="/account">Your account</a></li>
+            </ul>
+          </nav>
+
+          <nav aria-label="Project">
+            <h2 style="font-size:var(--fs-100);font-family:var(--font-body);text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-2);">Project</h2>
+            <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
+              {showSupport && <li><a href="/support">Support Lrnon</a></li>}
+              <li><a href="/volunteer">Volunteer</a></li>
+              <li><a href="/feedback">Feedback</a></li>
+              <li><a href="/share">Spread the word</a></li>
+            </ul>
+          </nav>
+
+          <div>
+            <h2 style="font-size:var(--fs-100);font-family:var(--font-body);text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-2);">Reach us</h2>
+            <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
+              <li><a href={'mailto:' + CONTACT_EMAIL}>{CONTACT_EMAIL}</a></li>
+              {CONTACT_PHONE && <li><a href={'tel:' + CONTACT_PHONE.replace(/\s/g, '')}>{CONTACT_PHONE}</a></li>}
+            </ul>
+            <p style="margin:var(--sp-2) 0 0;color:var(--c-ink-soft);">
+              One person answers both. Expect a reply within two working days.
+            </p>
+          </div>
+        </div>
+
+        <p style="margin:var(--sp-8) 0 0;padding-top:var(--sp-4);border-top:1px solid var(--c-border);color:var(--c-ink-soft);">
+          © 2026 Lrnon · An independently built initiative, not yet a registered charity.
+          Content CC BY-SA 4.0 · Code MIT. No ads, no paywalls, no dark patterns.
+          · <a href="/reading">Reading preferences</a>
+          · <a href="/privacy">Privacy</a>
+          · <a href="/terms">Terms</a>
+        </p>
+      </div>
     </footer>
   </body>
 </html>
