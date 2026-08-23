@@ -1,74 +1,121 @@
 ---
 import Base from '../layouts/Base.astro';
 import { getCollection } from 'astro:content';
-const lessons = (await getCollection('lessons')).sort((a, b) => a.data.order - b.data.order);
+import meta from '../../content/modules.json';
+
+const all = await getCollection('lessons');
+
+/* Everything below is derived from content, never hand-written. The previous
+   version hard-coded "E2 — first 5 lessons" and omitted E3 entirely, which is
+   what happens to a hand-maintained list: it silently under-sells the course.
+   Now a module going live and its lesson count are read from the same source
+   the lessons themselves come from. */
+const countByModule = all.reduce<Record<string, number>>((acc, l) => {
+  acc[l.data.module] = (acc[l.data.module] ?? 0) + 1;
+  return acc;
+}, {});
+
+const firstLessonOf = (moduleId: string) =>
+  all.filter((l) => l.data.module === moduleId)
+     .sort((a, b) => a.data.order - b.data.order)[0];
+
+const liveModules = meta.modules
+  .filter((m) => m.status === 'live' && countByModule[m.id])
+  .map((m) => ({ ...m, lessons: countByModule[m.id], first: firstLessonOf(m.id) }));
+
+const totalLessons = all.length;
+const totalCards = all.reduce((n, l) => n + (l.data.flashcards?.length ?? 0), 0);
+const startHref = '/learn/' + liveModules[0].first.id;
+
+const explorer = meta.modules.filter((m) => m.track === 'explorer');
+const trackDots = [
+  ...explorer.map((m) => ({
+    id: m.id.toUpperCase(),
+    live: m.status === 'live' && !!countByModule[m.id],
+  })),
+  { id: 'P', live: false },
+  { id: 'B', live: false },
+];
 ---
 <Base title="Lrnon — Learn AI. Free. Forever."
   description="An open-source, vendor-neutral AI curriculum from absolute beginner to builder. No paywalls, no ads, no tricks — free forever, for everyone.">
+
   <section class="container" style="padding-block:var(--sp-16) var(--sp-12);">
-    <h1 style="font-size:var(--fs-600);line-height:1.15;max-width:22ch;margin:0 0 var(--sp-4);">
+    <p style="font-family:var(--font-body);letter-spacing:0.14em;text-transform:uppercase;font-size:var(--fs-100);color:var(--c-ink-faint);margin:0 0 var(--sp-3);">
+      Open source · vendor neutral
+    </p>
+    <h1 style="font-size:var(--fs-600);max-width:20ch;margin:0 0 var(--sp-4);">
       Learn AI. Free. Forever.
     </h1>
-    <p class="prose" style="font-size:var(--fs-300);color:var(--c-ink-soft);margin:0 0 var(--sp-8);">
+    <p class="prose" style="color:var(--c-ink-soft);margin:0 0 var(--sp-8);">
       From zero to builder — an open-source curriculum with hands-on practice,
       honest guidance, and free certificates. No paywalls. No tricks.
     </p>
-    <a class="btn" href={'/learn/' + lessons[0].id}>Start learning — no signup</a>
-    <a class="btn btn--ghost" href="/roadmap" style="margin-inline-start:var(--sp-3);">See the full roadmap</a>
 
-    <!-- Signature: the skill tree, real and inline (pure SVG, zero JS) -->
+    <div style="display:flex;flex-wrap:wrap;gap:var(--sp-3);">
+      <a class="btn" href={startHref}>Start learning — no signup</a>
+      <a class="btn btn--ghost" href="/roadmap">See the full roadmap</a>
+    </div>
+
+    <p style="margin:var(--sp-6) 0 0;color:var(--c-ink-faint);font-size:var(--fs-100);">
+      {totalLessons} lessons live · {totalCards} review cards · nothing to pay, ever
+    </p>
+
+    <!-- The skill tree, inline SVG: zero JS, and it reads live/planned straight
+         from modules.json so it cannot drift from the curriculum. -->
     <figure style="margin:var(--sp-12) 0 0;">
-      <svg viewBox="0 0 640 200" role="img" aria-labelledby="tree-title tree-desc" style="width:100%;height:auto;">
+      <svg viewBox="0 0 680 170" role="img" aria-labelledby="tree-title tree-desc" style="width:100%;height:auto;">
         <title id="tree-title">The learning roadmap</title>
-        <desc id="tree-desc">Three connected tracks: Explorer, then Practitioner, then Builder. Explorer module one is available now.</desc>
-        <line x1="80" y1="100" x2="560" y2="100" stroke="var(--c-border)" stroke-width="3"/>
-        <g>
-          <circle cx="80" cy="100" r="26" fill="var(--c-progress)"/>
-          <text x="80" y="150" text-anchor="middle" fill="var(--c-ink)" font-size="14">E1 · Start</text>
-        </g>
-        {[160,240,320].map((x, i) => (
-          <g>
-            <circle cx={x} cy="100" r="20" fill="var(--c-bg)" stroke="var(--c-primary)" stroke-width="3"/>
-            <text x={x} y="150" text-anchor="middle" fill="var(--c-ink-soft)" font-size="13">{'E' + (i + 2)}</text>
-          </g>
-        ))}
-        <g>
-          <circle cx="440" cy="100" r="22" fill="var(--c-bg)" stroke="var(--c-reward)" stroke-width="3"/>
-          <text x="440" y="150" text-anchor="middle" fill="var(--c-ink-soft)" font-size="13">Practitioner</text>
-        </g>
-        <g>
-          <circle cx="560" cy="100" r="22" fill="var(--c-bg)" stroke="var(--c-alert)" stroke-width="3"/>
-          <text x="560" y="150" text-anchor="middle" fill="var(--c-ink-soft)" font-size="13">Builder</text>
-        </g>
+        <desc id="tree-desc">
+          Three tracks in order — Explorer, Practitioner, Builder.
+          {liveModules.length} Explorer modules are live now; the rest are planned.
+        </desc>
+        <line x1="40" y1="70" x2="640" y2="70" stroke="var(--c-border)" stroke-width="3"/>
+        {trackDots.map((d, i) => {
+          const x = 40 + i * (600 / (trackDots.length - 1));
+          return (
+            <g>
+              <circle cx={x} cy="70" r={d.live ? 20 : 15}
+                fill={d.live ? 'var(--c-progress)' : 'var(--c-bg)'}
+                stroke={d.live ? 'var(--c-progress)' : 'var(--c-border-strong)'} stroke-width="3"/>
+              <text x={x} y="112" text-anchor="middle" font-size="13"
+                fill={d.live ? 'var(--c-ink)' : 'var(--c-ink-faint)'}>{d.id}</text>
+            </g>
+          );
+        })}
       </svg>
-      <figcaption style="color:var(--c-ink-soft);font-size:var(--fs-100);">
-        The full roadmap: Explorer → Practitioner → Builder. Every step free.
+      <figcaption style="color:var(--c-ink-faint);font-size:var(--fs-100);">
+        Explorer → Practitioner → Builder. Filled circles are live today.
       </figcaption>
     </figure>
   </section>
 
   <section class="container" style="padding-block:var(--sp-8);">
-    <h2 style="font-size:var(--fs-400);">Why is this free?</h2>
-    <p class="prose">
-      Because knowledge about AI shouldn't depend on the size of your wallet.
-      We're grant- and donation-funded, fully open source, and we publish our
-      finances. Nothing you need is ever behind money — not lessons, not
-      practice, not certificates.
-    </p>
+    <div class="note note--aim prose" style="max-width:none;">
+      <h2 style="font-size:var(--fs-400);margin-top:0;">Why is this free?</h2>
+      <p style="margin-bottom:0;">
+        Because knowledge about AI shouldn't depend on the size of your wallet.
+        We're grant- and donation-funded, fully open source, and we publish our
+        finances. Nothing you need is ever behind money — not lessons, not
+        practice, not certificates.
+      </p>
+    </div>
   </section>
 
   <section class="container" style="padding-block:var(--sp-8) var(--sp-12);">
     <h2 style="font-size:var(--fs-400);">Live now</h2>
-    <ul style="list-style:none;padding:0;">
-      <li style="margin-block:var(--sp-3);">
-        <strong>E1 · What Is AI, Really?</strong> — 8 lessons ·
-        <a href="/learn/explorer/e1/l1-ai-in-your-daily-life">start</a>
-      </li>
-      <li style="margin-block:var(--sp-3);">
-        <strong>E2 · Meet Your AI Assistants</strong> — first 5 lessons ·
-        <a href="/learn/explorer/e2/l1-the-assistant-landscape">start</a>
-      </li>
-    </ul>
-    <p><a href="/roadmap">Every planned module, on one page →</a></p>
+    <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
+      {liveModules.map((m) => (
+        <article class="card">
+          <p style="margin:0 0 var(--sp-2);color:var(--c-ink-faint);font-size:var(--fs-100);letter-spacing:0.08em;text-transform:uppercase;">
+            {m.id.toUpperCase()} · {m.lessons} lessons
+          </p>
+          <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">{m.title}</h3>
+          <p style="color:var(--c-ink-soft);margin:0 0 var(--sp-4);">{m.tagline}</p>
+          <a class="btn btn--ghost" href={'/learn/' + m.first.id}>Start {m.id.toUpperCase()}</a>
+        </article>
+      ))}
+    </div>
+    <p style="margin-top:var(--sp-6);"><a href="/roadmap">Every planned module, on one page →</a></p>
   </section>
 </Base>

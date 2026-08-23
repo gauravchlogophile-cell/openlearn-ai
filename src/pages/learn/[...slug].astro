@@ -24,14 +24,18 @@ const quizHref = hasQuiz ? '/quiz/' + lesson.data.module : undefined;
 ---
 <Base title={lesson.data.title + ' — Lrnon'} description={lesson.data.description}>
   <article class="container" style="padding-block:var(--sp-8) var(--sp-12);">
-    <p style="color:var(--c-ink-soft);font-size:var(--fs-100);margin:0;">
+    <p style="color:var(--c-ink-faint);font-size:var(--fs-100);margin:0;letter-spacing:0.06em;text-transform:uppercase;">
       {lesson.data.module.toUpperCase()} · Lesson {lesson.data.order} of {all.length}
       · {lesson.data.minutes} min · last verified {lesson.data.lastVerified}
     </p>
     <h1 style="font-size:var(--fs-500);margin-block:var(--sp-2) var(--sp-6);">{lesson.data.title}</h1>
 
-    <section aria-label="What you will learn" style="background:var(--c-surface);border-radius:var(--r-m);padding:var(--sp-4) var(--sp-6);margin-block-end:var(--sp-8);">
-      <h2 style="font-size:var(--fs-200);margin:0 0 var(--sp-2);">In this lesson you will:</h2>
+    {/* Objectives use the indigo "aim" callout from the design system rather
+        than a bare surface panel, so the three callout roles stay consistent
+        across the site: aim = what you are about to do, try = do it now,
+        ok = you got it right. */}
+    <section class="note note--aim" aria-label="What you will learn" style="margin-block-end:var(--sp-8);">
+      <h2 style="font-size:var(--fs-200);margin:0 0 var(--sp-2);font-family:var(--font-body);">In this lesson you will:</h2>
       <ul style="margin:0;padding-inline-start:var(--sp-6);">
         {lesson.data.objectives.map((o) => <li>{o}</li>)}
       </ul>
@@ -41,8 +45,8 @@ const quizHref = hasQuiz ? '/quiz/' + lesson.data.module : undefined;
       <Content />
     </div>
 
-    <section aria-label="Flashcards added" style="margin-block:var(--sp-8);color:var(--c-ink-soft);">
-      <p>🗂 {lesson.data.flashcards.length} flashcards from this lesson join your
+    <section class="card" aria-label="Flashcards added" style="margin-block:var(--sp-8);color:var(--c-ink-soft);">
+      <p style="margin:0;">🗂 {lesson.data.flashcards.length} flashcards from this lesson join your
       <a href="/review">daily review</a>.</p>
     </section>
 
