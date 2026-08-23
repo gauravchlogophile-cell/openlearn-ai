@@ -7,6 +7,7 @@
   "capabilities": { "chat": false, "vision": true, "files": false, "voice": false, "webSearch": false, "api": false },
   "freeTierNotes": "Generally paid-only; trial availability changes over time — check official docs.",
   "docsUrl": "https://docs.midjourney.com/",
+  "watchUrl": "https://updates.midjourney.com/",
   "tosNotes": "Review commercial-use and content rules in official terms before publishing generated images.",
   "lastVerified": "2026-08-22",
   "verifier": "core-team",

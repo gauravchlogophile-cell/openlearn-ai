@@ -7,6 +7,7 @@
   "capabilities": { "chat": true, "vision": true, "files": true, "voice": true, "webSearch": true, "api": true },
   "freeTierNotes": "Free tier available with usage limits that change over time — check the official site for current limits.",
   "docsUrl": "https://help.openai.com/",
+  "watchUrl": "https://platform.openai.com/docs/changelog",
   "tosNotes": "Educational interactive use by end learners; no resale of access. Review current usage policies before enabling lab adapters.",
   "lastVerified": "2026-08-22",
   "verifier": "core-team",

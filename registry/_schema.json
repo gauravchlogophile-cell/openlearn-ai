@@ -24,7 +24,8 @@
       }
     },
     "freeTierNotes": { "type": "string" },
-    "docsUrl": { "type": "string", "format": "uri" },
+    "docsUrl": { "type": "string", "format": "uri", "description": "The documentation link shown to learners." },
+    "watchUrl": { "type": "string", "format": "uri", "description": "Optional. What scripts/check-sources.mjs reads instead of docsUrl, for vendors whose docs block scripted fetches or who publish a changelog that is a better change signal. Never shown to learners." },
     "tosNotes": { "type": "string" },
     "lastVerified": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
     "verifier": { "type": "string" },

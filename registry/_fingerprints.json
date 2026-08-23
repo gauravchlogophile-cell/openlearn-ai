@@ -1,6 +1,16 @@
 {
-  "generatedAt": "2026-08-23T22:14:22.435Z",
+  "generatedAt": "2026-08-23T22:54:15.048Z",
   "sources": {
+    "canva-ai": {
+      "hash": "3dd5530772608dbf",
+      "words": 606,
+      "finalUrl": "https://www.canva.com/help/"
+    },
+    "chatgpt": {
+      "hash": "b6234b7dd52304b3",
+      "words": 6974,
+      "finalUrl": "https://platform.openai.com/docs/changelog"
+    },
     "claude": {
       "hash": "62f302f2d5ca1d99",
       "words": 612,
@@ -17,9 +27,9 @@
       "finalUrl": "https://elevenlabs.io/docs"
     },
     "gemini": {
-      "hash": "b20b99c4a61b87fe",
-      "words": 891,
-      "finalUrl": "https://ai.google.dev/"
+      "hash": "e1caca53780e751a",
+      "words": 575,
+      "finalUrl": "https://blog.google/products/gemini/"
     },
     "github-copilot": {
       "hash": "e4607c1acdade853",
@@ -30,6 +40,16 @@
       "hash": "a630bf6ce6fc73f0",
       "words": 899,
       "finalUrl": "https://docs.x.ai/"
+    },
+    "meta-ai": {
+      "hash": "8dbdfad728c596b3",
+      "words": 1250,
+      "finalUrl": "https://about.fb.com/news/"
+    },
+    "midjourney": {
+      "hash": "94326d74e6393232",
+      "words": 59,
+      "finalUrl": "https://updates.midjourney.com/"
     },
     "n8n": {
       "hash": "cdc7690a8f9a1a42",

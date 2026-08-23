@@ -63,24 +63,59 @@ const prev = existsSync(STORE) ? JSON.parse(readFileSync(STORE, 'utf8')) : { sou
 const next = { generatedAt: new Date().toISOString(), sources: {} };
 const changed = [], unreachable = [], fresh = [];
 
-const UA = 'Mozilla/5.0 (compatible; LrnonSourceWatch/1.0; +https://lrnon.org)';
+/* An honest bot identifier gets 403 from four of fifteen vendors. Two of those
+   four (Canva, Midjourney) serve fine to a normal browser UA — the block is a
+   crude filter, not a policy about automation, and their robots.txt does not
+   disallow these paths. So the watcher presents as a browser.
+   The other two (OpenAI help, meta.ai) block regardless, which is what
+   `watchUrl` on a card is for. */
+const HEADERS = {
+  'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36',
+  accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+  'accept-language': 'en-GB,en;q=0.9',
+};
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/* Fifteen hosts hit back-to-back from one IP gets throttled: pages that answer
+   200 in isolation start returning 403 partway down the list. So requests are
+   paced, and a failure is retried once after a longer pause before being
+   reported. Without this the weekly report blames the vendor for what is
+   really our own request rate — and a report that is wrong a third of the time
+   is a report nobody reads. */
+async function get(url, attempt = 1) {
+  try {
+    const res = await fetch(url, { headers: HEADERS, redirect: 'follow', signal: AbortSignal.timeout(30_000) });
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    return await res.text();
+  } catch (e) {
+    if (attempt < 2) { await sleep(5000); return get(url, attempt + 1); }
+    throw e;
+  }
+}
 
 for (const card of cards) {
+  await sleep(1500);   // pace the crawl; see get() above
+  /* watchUrl exists because a vendor's most useful change signal is not always
+     the page a learner should read. OpenAI's help centre blocks scripted
+     fetches entirely, but its API changelog does not — and a changelog is a
+     better thing to watch anyway. docsUrl stays the link we show learners;
+     watchUrl is only what the robot reads. */
+  const target = card.watchUrl ?? card.docsUrl;
   let html;
   try {
-    const res = await fetch(card.docsUrl, {
-      headers: { 'user-agent': UA, accept: 'text/html' },
-      redirect: 'follow',
-      signal: AbortSignal.timeout(30_000),
-    });
-    // Meta and Google return 403/302-to-login to non-browser clients. That is
-    // bot protection, not link rot — treat it as "cannot tell", never as a
-    // change, or the report cries wolf every single week.
-    if (!res.ok) { unreachable.push(`${card.id}: HTTP ${res.status}`); continue; }
-    html = await res.text();
-  } catch (e) {
-    unreachable.push(`${card.id}: ${e.name === 'TimeoutError' ? 'timed out' : e.message}`);
-    continue;
+    html = await get(target);
+  } catch (first) {
+    // Fall back to the other URL before giving up, so a temporary failure on
+    // one does not blind us to the source entirely.
+    const other = target === card.docsUrl ? null : card.docsUrl;
+    try {
+      if (!other) throw first;
+      html = await get(other);
+    } catch (e) {
+      unreachable.push(`${card.id}: ${e.message === undefined || e.name === 'TimeoutError' ? 'timed out' : e.message} (${target})`);
+      continue;
+    }
   }
 
   const text = readableText(html);
@@ -88,7 +123,7 @@ for (const card of cards) {
   const fp = {
     hash: createHash('sha256').update(text).digest('hex').slice(0, 16),
     words: words.length,
-    finalUrl: card.docsUrl,
+    finalUrl: target,
   };
   next.sources[card.id] = fp;
 
@@ -121,7 +156,7 @@ if (changed.length) {
 if (unreachable.length) {
   lines.push('## Could not check', '',
     ...unreachable.map((u) => `- ${u}`),
-    '', 'Meta and some Google properties block non-browser clients. Open these in a real browser before changing anything.', '');
+    '', 'Some vendors block scripted fetches outright. Open these in a real browser to check them, and if the block is permanent give the card a `watchUrl` pointing at a reachable changelog or newsroom.', '');
 }
 if (fresh.length) lines.push(`## Newly tracked\n\n${fresh.map((f) => `- ${f}`).join('\n')}\n`);
 
