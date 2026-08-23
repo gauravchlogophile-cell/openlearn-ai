@@ -1,0 +1,106 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT_EMAIL } from '../lib/site-config';
+
+/* The design's rule for this page: nobody should ever click into an empty room.
+   So status here reflects what is actually built, not what is drawn. Learners
+   (topic rooms, members, Ask Doubts) is marked planned rather than live,
+   because it is not built — publishing it as "Live" would be the exact lie
+   this page exists to avoid. */
+const notify = (what: string) =>
+  `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Tell me when ' + what + ' opens')}`;
+
+const spaces = [
+  { name: 'Learners', status: 'Planned',
+    blurb: 'Topic rooms, a members list, and Ask Doubts — where most of Lrnon is meant to happen. Public rooms only, no private messages, and every unverified answer visibly flagged.' },
+  { name: 'Partners', status: 'Planned',
+    blurb: 'Schools, nonprofits and employers who want to use Lrnon with a group.' },
+  { name: 'Beta testers', status: 'Planned',
+    blurb: 'Try features before release and tell us what breaks. Will be capped at a small group.' },
+  { name: 'Blog', status: 'Planned',
+    blurb: 'What we are building and why, including the decisions that turned out wrong.' },
+  { name: 'The Lrnon Podcast', status: 'Planned',
+    blurb: 'Conversations with people using AI in ordinary jobs. Audio first, transcript always.' },
+  { name: 'Tech blog', status: 'Planned',
+    blurb: 'How the site is built — the stack, the accessibility work, the mistakes.' },
+];
+
+const more = [
+  { name: 'Terms of use', href: '/terms', live: true },
+  { name: 'Privacy', href: '/privacy', live: true },
+  { name: 'Reading preferences', href: '/reading', live: true },
+  { name: 'Feedback & complaints', href: '/feedback', live: true },
+  { name: 'Volunteer', href: '/volunteer', live: true },
+  { name: 'What\'s new', href: '/whats-new', live: true },
+  { name: 'Articles', href: null, live: false },
+  { name: 'Directory', href: null, live: false },
+  { name: 'Become a partner', href: null, live: false },
+  { name: 'Affiliates', href: null, live: false },
+];
+
+const liveCount = more.filter((m) => m.live).length;
+---
+<Base title="Community — Lrnon"
+  description="What is open, what is planned, and what is deliberately not open yet — marked honestly so you are never clicking into an empty room.">
+
+  <section class="container" style="padding-block:var(--sp-12) var(--sp-8);">
+    <h1 style="font-size:var(--fs-600);margin:0 0 var(--sp-4);">Community</h1>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      None of these is open yet. They are named here so you know what is planned, and
+      marked so you are never clicking into an empty room.
+    </p>
+  </section>
+
+  <section class="container" style="padding-block:0 var(--sp-8);">
+    <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(300px,1fr));">
+      {spaces.map((s) => (
+        <article class="card">
+          <p style="margin:0 0 var(--sp-2);">
+            <span style="font-size:var(--fs-100);letter-spacing:0.08em;text-transform:uppercase;color:var(--c-ink-faint);border:1px solid var(--c-border-strong);border-radius:999px;padding:2px 10px;">
+              {s.status}
+            </span>
+          </p>
+          <h2 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">{s.name}</h2>
+          <p style="color:var(--c-ink-soft);margin:0 0 var(--sp-4);">{s.blurb}</p>
+          <a class="btn btn--ghost" href={notify(s.name)}>Tell me when it opens</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8);">
+    <h2 style="font-size:var(--fs-400);">
+      More
+      <span style="font-family:var(--font-body);font-size:var(--fs-100);color:var(--c-ink-faint);font-weight:400;letter-spacing:0;">
+        {' · '}{liveCount} live, {more.length - liveCount} planned
+      </span>
+    </h2>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      The pages nobody reads until they need them. Privacy is worth reading before rooms open.
+    </p>
+    <ul style="list-style:none;padding:0;margin:var(--sp-4) 0 0;display:grid;gap:var(--sp-2);grid-template-columns:repeat(auto-fit,minmax(240px,1fr));">
+      {more.map((m) => (
+        <li style="display:flex;justify-content:space-between;gap:var(--sp-3);padding:var(--sp-3);border:1px solid var(--c-border);border-radius:var(--r-s);background:var(--c-surface);">
+          {m.live
+            ? <a href={m.href}>{m.name}</a>
+            : <span style="color:var(--c-ink-faint);">{m.name}</span>}
+          <span style="color:var(--c-ink-faint);font-size:var(--fs-100);">{m.live ? 'Open →' : 'Soon'}</span>
+        </li>
+      ))}
+    </ul>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8) var(--sp-12);">
+    <div class="note note--try">
+      <h2 style="font-size:var(--fs-300);margin-top:0;">Why rooms are not open yet</h2>
+      <p style="color:var(--c-ink-soft);">
+        Public rooms and a questions board need someone to read them. That means moderation,
+        a written safety policy, and particular care because some learners here are under 18.
+        Opening a room nobody is watching would be worse than not opening one.
+      </p>
+      <p style="margin-bottom:0;">
+        It opens once there is a second pair of hands. <a href="/volunteer">See volunteer roles →</a>
+      </p>
+    </div>
+  </section>
+</Base>

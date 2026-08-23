@@ -155,6 +155,34 @@ if (existsSync(quizDir)) {
   }
 }
 
+// ---------- changelog checks ----------
+// /whats-new is the public record of content corrections, so a malformed or
+// undated entry is a broken promise rather than a cosmetic bug.
+const CHANGE_KINDS = ['New module','New lesson','Lesson corrected','Content updated',
+  'Narration added','Withdrawn','Accessibility','Fixed'];
+const changelogPath = join(ROOT, 'content/changelog.json');
+if (existsSync(changelogPath)) {
+  let log;
+  try { log = JSON.parse(readFileSync(changelogPath, 'utf8')); }
+  catch { errors.push('content/changelog.json: invalid JSON'); log = null; }
+  if (log) {
+    if (!Array.isArray(log.entries)) errors.push('content/changelog.json: missing "entries" array');
+    else for (const e of log.entries) {
+      const at = 'content/changelog.json:' + (e.date ?? '?');
+      for (const k of ['date','kind','where','what'])
+        if (!e[k]) errors.push(at + ': missing "' + k + '"');
+      if (e.date && !/^\d{4}-\d{2}-\d{2}$/.test(e.date))
+        errors.push(at + ': date must be YYYY-MM-DD');
+      if (e.date && new Date(e.date) > today)
+        errors.push(at + ': dated in the future');
+      if (e.kind && !CHANGE_KINDS.includes(e.kind))
+        errors.push(at + ': unknown kind "' + e.kind + '" (allowed: ' + CHANGE_KINDS.join(', ') + ')');
+      if (e.what && e.what.length < 20)
+        errors.push(at + ': "what" must explain the change, not just label it');
+    }
+  }
+}
+
 // ---------- canned case checks ----------
 const cannedDir = join(ROOT, 'content/canned');
 if (existsSync(cannedDir)) {

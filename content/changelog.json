@@ -1,0 +1,35 @@
+{
+  "_comment": "Every change to the learning content, dated — including the ones that make us look bad. A lesson that was wrong is more useful to a learner as a published correction than as a quiet edit. Hand-maintained on purpose: git history records what changed, not why it mattered or who caught it. Newest first. 'kind' must be one of the values scripts/validate-content.mjs allows.",
+  "entries": [
+    {
+      "date": "2026-08-22",
+      "kind": "Accessibility",
+      "where": "Whole site",
+      "what": "Reading preferences added: text size, line spacing, line length, contrast, a reading typeface and data saver. Dark mode also now follows your device — it had been built but never switched on."
+    },
+    {
+      "date": "2026-08-22",
+      "kind": "Fixed",
+      "where": "All quizzes",
+      "what": "Answer options are now shuffled. 94% of correct answers had been sitting in the middle slot, so always picking the middle passed every module quiz without reading the question."
+    },
+    {
+      "date": "2026-08-22",
+      "kind": "New module",
+      "where": "Prompting Fundamentals · E3",
+      "what": "Eight lessons on briefing, iteration, correcting a wrong answer, and the requests no wording can rescue. Adds a 22-question quiz bank and 24 review cards."
+    },
+    {
+      "date": "2026-08-22",
+      "kind": "Content updated",
+      "where": "Meet Your AI Assistants · L8",
+      "what": "NotebookLM was renamed Gemini Notebook by Google in July. The lesson title and the tool card now say so, and the documentation link it pointed at had been dead for six weeks."
+    },
+    {
+      "date": "2026-08-22",
+      "kind": "Lesson corrected",
+      "where": "Meet Your AI Assistants · L3",
+      "what": "Claude's tool card claimed no voice support. Voice mode has shipped on every plan, so the capability grid was showing learners a wrong fact."
+    }
+  ]
+}
