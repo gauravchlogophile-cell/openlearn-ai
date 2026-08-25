@@ -8,7 +8,7 @@
     "build": "node scripts/validate-content.mjs && node scripts/build-sky-index.mjs && astro build && node scripts/generate-manifest.mjs && node scripts/generate-headers.mjs",
     "preview": "npm run build && wrangler dev",
     "validate": "node scripts/validate-content.mjs",
-    "test": "node scripts/validate-content.mjs && node scripts/build-sky-index.mjs && node scripts/test-progress.mjs",
+    "test": "node scripts/validate-content.mjs && node scripts/build-sky-index.mjs && node scripts/test-progress.mjs && node scripts/test-week.mjs",
     "deploy": "npm run build && wrangler deploy",
     "cf-typegen": "wrangler types"
   },

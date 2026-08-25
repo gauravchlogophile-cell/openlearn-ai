@@ -3,7 +3,7 @@
 import {
   emptyState, completeLesson, totalXp, streak, weeklyStreak, level,
   earnedBadges, recordQuizPass, quizPassed,
-  newCard, gradeCard, recordReviewSession,
+  newCard, gradeCard, recordReviewSession, activityDate,
 } from './progress-core';
 
 const KEY = 'ol.progress.v1';
@@ -270,11 +270,51 @@ export function dueCount(all: CardDef[]): number {
   return sessionCards(all, 1000).length;
 }
 
+/* ---------------------------------------------------------------- review log
+   "Your week" (design turn 7) shows review cards per day. That number is not
+   recoverable from anything already stored: the event ledger carries ONE
+   review_session event per day regardless of how many cards were graded, and
+   an SM-2 card records only its next due date, not the days it was seen. So a
+   card graded on Monday and again on Thursday would count once, on Thursday.
+
+   Rather than under-report, keep a tiny tally of its own. It lives outside
+   ol.progress.v1 deliberately: that blob is the XP ledger, it round-trips
+   through mergeFromServer(), and adding a key there risks either being
+   dropped by a merge or being mistaken for an XP source. This is display
+   data, it never affects XP, level or streak, and losing it costs a number
+   on a panel rather than a learner's progress.
+
+   Trimmed to the last 60 days on write, so it cannot grow without bound on a
+   device somebody uses for years. */
+const REVIEW_LOG_KEY = 'ol.reviewlog.v1';
+const REVIEW_LOG_DAYS = 60;
+
+export function reviewLog(): Record<string, number> {
+  if (typeof localStorage === 'undefined') return {};
+  try {
+    const parsed = JSON.parse(localStorage.getItem(REVIEW_LOG_KEY) ?? '{}');
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+  } catch { return {}; }
+}
+
+function noteCardReviewed(now: Date) {
+  if (typeof localStorage === 'undefined') return;
+  const day = activityDate(now);
+  const log = reviewLog();
+  log[day] = (log[day] ?? 0) + 1;
+
+  const cutoff = activityDate(new Date(now.getTime() - REVIEW_LOG_DAYS * 86400000));
+  // ISO dates sort lexicographically, so a string compare is a date compare.
+  const trimmed = Object.fromEntries(Object.entries(log).filter(([d]) => d >= cutoff));
+  try { localStorage.setItem(REVIEW_LOG_KEY, JSON.stringify(trimmed)); } catch { /* full or blocked */ }
+}
+
 export function gradeAndSave(key: string, grade: 'again' | 'hard' | 'good' | 'easy') {
   const map = srsLoad();
   const now = new Date();
   map[key] = gradeCard(map[key] ?? newCard(now), grade, now);
   srsSave(map);
+  noteCardReviewed(now);
 }
 
 /** Award the daily review XP (idempotent per activity day) — also marks
