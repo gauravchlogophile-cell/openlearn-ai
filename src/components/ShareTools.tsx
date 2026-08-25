@@ -48,7 +48,7 @@ export default function ShareTools({ siteUrl, param }: { siteUrl: string; param:
               background: 'var(--c-surface)', color: 'var(--c-ink)', font: 'inherit',
             }}
           />
-          <button type="button" class="btn" onClick={copy}>{copied ? 'Copied ✓' : 'Copy'}</button>
+          <button type="button" className="btn" onClick={copy}>{copied ? 'Copied ✓' : 'Copy'}</button>
         </div>
         <p aria-live="polite" style={{ margin: 'var(--sp-2) 0 0', color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>
           {copied ? 'Link copied to your clipboard.' :
@@ -60,7 +60,7 @@ export default function ShareTools({ siteUrl, param }: { siteUrl: string; param:
         <h3 style={{ fontSize: 'var(--fs-300)', margin: '0 0 var(--sp-3)' }}>Share it in one tap</h3>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--sp-2)' }}>
           {targets.map((t) => (
-            <a key={t.name} class="btn btn--ghost" href={t.href} target="_blank" rel="noopener noreferrer">
+            <a key={t.name} className="btn btn--ghost" href={t.href} target="_blank" rel="noopener noreferrer">
               {t.name}
             </a>
           ))}

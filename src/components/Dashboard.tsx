@@ -9,7 +9,13 @@ import Board, { BoardExplainer } from './Board';
 export interface LessonMeta {
   slug: string; title: string; minutes: number; module: string;
 }
-export interface ModuleMeta { id: string; title: string; tagline: string; status: string; }
+/* `track` was missing here while content/modules.json has carried it since the
+   beginning — every module is {id, track, title, tagline, status}. Roadmap.tsx
+   groups the whole roadmap by it, so the field was real and load-bearing; only
+   the type was wrong. */
+export interface ModuleMeta {
+  id: string; track: string; title: string; tagline: string; status: string;
+}
 
 /** /home — design turn 7, "Home — daily board & usage".
  *

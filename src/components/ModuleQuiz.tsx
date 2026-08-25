@@ -26,7 +26,11 @@ type Reward = { lessons: number; xp: number; newBadges: string[]; streak: number
  *  banks stay server-side (FR-CERT-1) and arrive with accounts. */
 export default function ModuleQuiz({ moduleId, title, items, drawCount, passThreshold, moduleLessons }: Props) {
   const [round, setRound] = useState(0);
-  const drawn = useMemo(() => drawAndShuffle(items, drawCount), [round, items, drawCount]);
+  /* drawAndShuffle lives in a plain .js module, so it hands back `any` and
+     every question below inherited it — which is why `opt` and `j` were
+     implicitly typed. It returns the same items it was given, in a new order
+     with their options shuffled, so Item[] is the honest annotation. */
+  const drawn: Item[] = useMemo(() => drawAndShuffle(items, drawCount), [round, items, drawCount]);
   const [idx, setIdx] = useState(-1);
   const [picked, setPicked] = useState<number | null>(null);
   const [revealed, setRevealed] = useState(false);

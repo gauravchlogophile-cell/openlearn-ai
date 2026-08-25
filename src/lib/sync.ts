@@ -46,7 +46,13 @@ export async function syncNow(): Promise<{ pulled: number; pushed: number } | { 
     });
     if (!error) pushed += 1;                    // duplicates no-op server-side
   }
-  for (const [slug, c] of Object.entries(state.completions)) {
+  /* load() returns the parsed localStorage blob, so its completions map is
+     untyped and `c` arrives as unknown. The shape is the one written by
+     completeLesson() in progress-core, and it is already spelled out on line
+     32 above for the pull direction — this is the same record going the other
+     way. */
+  const completions = state.completions as Record<string, { hash: string; at: string }>;
+  for (const [slug, c] of Object.entries(completions)) {
     await sb.from('lesson_progress').upsert({
       user_id: user.id, lesson_slug: slug, content_hash: c.hash,
       status: 'completed', completed_at: c.at,

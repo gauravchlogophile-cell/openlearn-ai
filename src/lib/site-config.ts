@@ -24,8 +24,15 @@ export const CONTACT_EMAIL = 'gaurav.ch.logophile@gmail.com';
 
 /** Shown as "Call or WhatsApp. Please keep to reasonable hours, IST."
  *  Set to an empty string to hide every phone row on the site — the layouts
- *  check for it, so removing it degrades cleanly rather than leaving a gap. */
-export const CONTACT_PHONE = '';
+ *  check for it, so removing it degrades cleanly rather than leaving a gap.
+ *
+ *  Annotated `string` rather than inferred. Without it the value has the
+ *  literal type '', so TypeScript proves `CONTACT_PHONE && …` can never be
+ *  true and narrows the guarded branch to `never` — which broke the phone
+ *  rows in Base.astro, /feedback and /volunteer the moment typechecking was
+ *  switched on, and would have kept them broken on the day a number was
+ *  finally filled in. */
+export const CONTACT_PHONE: string = '';
 
 /* ------------------------------------------------------------------ funding */
 

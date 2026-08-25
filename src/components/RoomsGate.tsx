@@ -32,9 +32,21 @@ export default function RoomsGate({ title, blurb, children }:
 
   useEffect(() => {
     if (!isConfigured) { setOpen(false); return; }
-    supabase().rpc('rooms_open')
-      .then(({ data }) => setOpen(data === true))
-      .catch(() => setOpen(false));
+    /* PostgrestFilterBuilder is a PromiseLike, not a Promise — it has .then
+       but no .catch, so the old chain would have thrown at runtime on a
+       network failure instead of closing the gate. Since this decides whether
+       a children's room is shown, failing shut is the only acceptable
+       behaviour, and an await inside try/catch is the way to actually get it. */
+    let alive = true;
+    (async () => {
+      try {
+        const { data } = await supabase().rpc('rooms_open');
+        if (alive) setOpen(data === true);
+      } catch {
+        if (alive) setOpen(false);
+      }
+    })();
+    return () => { alive = false; };
   }, []);
 
   if (open === null) {

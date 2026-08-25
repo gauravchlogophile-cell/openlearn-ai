@@ -62,7 +62,7 @@ export default function FeedbackForm({ email }: { email: string }) {
   const label: React.CSSProperties = { display: 'block', fontWeight: 600, marginBottom: 'var(--sp-2)' };
 
   return (
-    <form class="card" style={{ display: 'grid', gap: 'var(--sp-6)' }} onSubmit={(e) => e.preventDefault()}>
+    <form className="card" style={{ display: 'grid', gap: 'var(--sp-6)' }} onSubmit={(e) => e.preventDefault()}>
       <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
         <legend style={label}>What is this about?</legend>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--sp-2)' }}>
@@ -114,7 +114,7 @@ export default function FeedbackForm({ email }: { email: string }) {
       </label>
 
       <div>
-        <a class="btn" href={href} aria-disabled={what.trim() === ''}
+        <a className="btn" href={href} aria-disabled={what.trim() === ''}
           style={what.trim() === '' ? { pointerEvents: 'none', opacity: 0.5 } : undefined}>
           Send feedback
         </a>

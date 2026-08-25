@@ -13,6 +13,13 @@
 	"include": [
 		"src/**/*",
 		"content/**/*",
-		"./worker-configuration.d.ts"
+		"./worker-configuration.d.ts",
+		/* Astro writes the ambient types for `astro:content` and
+		   `import.meta.env` here during `astro sync` (which `astro build`
+		   runs for you). Without it in `include`, a bare `tsc` reports three
+		   errors that do not exist — "Cannot find module 'astro:content'"
+		   and two "Property 'env' does not exist on type 'ImportMeta'" —
+		   which is most of the reason typechecking was never wired up. */
+		".astro/types.d.ts"
 	]
 }
