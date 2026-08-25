@@ -1,7 +1,8 @@
 ---
 import '../styles/tokens.css';
-import ProgressChip from '../components/ProgressChip.tsx';
 import AccessibilityPanel from '../components/AccessibilityPanel.tsx';
+import AccountMenu from '../components/AccountMenu.tsx';
+import PageSearch from '../components/PageSearch.tsx';
 import { CONTACT_EMAIL, CONTACT_PHONE, FUNDING_MODE } from '../lib/site-config';
 import Sky from '../components/Sky.tsx';
 import { SKY_MODE, SKY_COPY } from '../lib/sky-config';
@@ -76,17 +77,29 @@ const showSky = SKY_MODE !== 'off';
         <img src="/icons/lrnon-mark.svg" width="26" height="26" alt="" />
         <span>Lrnon</span>
       </a>
-      <nav aria-label="Main" style="display:flex;gap:var(--sp-4);align-items:center;">
-        <a href="/home" style="margin-inline-end:var(--sp-4);">Home</a>
-        <a href="/review" style="margin-inline-end:var(--sp-4);">Review</a>
-        <a href="/roadmap" style="margin-inline-end:var(--sp-4);">Roadmap</a>
-        <a href="/achievements" style="margin-inline-end:var(--sp-4);">Badges</a>
-        <a href="/account">Account</a>
+      {/* The turn 7 header: seven destinations, then search, accessibility and
+          the avatar. flex-wrap is not cosmetic — without it the nav was 524px
+          wide inside a 422px viewport and every page scrolled sideways on a
+          phone. Links wrap onto a second line rather than collapsing into a
+          hamburger, because a wrapped nav needs no JavaScript, no focus trap
+          and no aria-expanded to get right. */}
+      <nav aria-label="Main" style="display:flex;gap:var(--sp-3) var(--sp-4);align-items:center;flex-wrap:wrap;">
+        <a href="/home">Home</a>
+        <a href="/roadmap">Learn</a>
+        <a href="/doubts">Doubts</a>
+        <a href="/community">Community</a>
+        <a href="/members">Members</a>
+        <a href="/whats-new">What's new</a>
+        <a href="/community#more">More</a>
+        <PageSearch client:idle />
         {/* One button, everything inside — design turn 3. The moment someone
             needs bigger text is the moment they are struggling with THIS page,
             so the fix must not require navigating away to a settings screen. */}
         <AccessibilityPanel client:load />
-        <ProgressChip client:load />
+        {/* Replaces ProgressChip in the header. The chip's numbers are not
+            lost: turn 7 moves level and streak onto /home's greeting line, and
+            the menu carries them on every other page. */}
+        <AccountMenu client:load />
       </nav>
     </header>
     <main id="main">

@@ -71,7 +71,10 @@ const liveCount = more.filter((m) => m.live).length;
     </div>
   </section>
 
-  <section class="container" style="padding-block:var(--sp-8);">
+  {/* The header's "More" link lands here. Turn 7 names Community and More as
+      two nav items but draws one frame — "Community & More · /community" — so
+      they are two doors into one page rather than two pages. */}
+  <section class="container" id="more" style="padding-block:var(--sp-8);scroll-margin-top:var(--sp-4);">
     <h2 style="font-size:var(--fs-400);">
       More
       <span style="font-family:var(--font-body);font-size:var(--fs-100);color:var(--c-ink-faint);font-weight:400;letter-spacing:0;">
