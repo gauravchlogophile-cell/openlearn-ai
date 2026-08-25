@@ -4,8 +4,8 @@ import ProgressChip from '../components/ProgressChip.tsx';
 import { CONTACT_EMAIL, CONTACT_PHONE, FUNDING_MODE } from '../lib/site-config';
 import Sky from '../components/Sky.tsx';
 import { SKY_MODE, SKY_COPY } from '../lib/sky-config';
-interface Props { title: string; description: string; }
-const { title, description } = Astro.props;
+interface Props { title: string; description: string; noindex?: boolean; }
+const { title, description, noindex = false } = Astro.props;
 /* The design's founder switch: when funding is hidden, the Support link is not
    rendered anywhere, not merely hidden with CSS. */
 const showSupport = FUNDING_MODE !== 'hidden';
@@ -21,6 +21,7 @@ const showSky = SKY_MODE !== 'off';
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta name="theme-color" content="#3d3d8f" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
     <!-- GSC verification, redeploy check -->

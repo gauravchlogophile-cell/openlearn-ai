@@ -1,0 +1,11 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import AdminGate from '../../components/AdminGate.tsx';
+import AdminOverview from '../../components/AdminOverview.tsx';
+---
+<Admin title="Admin — Lrnon" heading="Overview"
+  description="Maintainer console for Lrnon. Nothing here is visible to learners and no learner data is exposed by this page.">
+  <AdminGate client:load>
+    <AdminOverview client:load />
+  </AdminGate>
+</Admin>

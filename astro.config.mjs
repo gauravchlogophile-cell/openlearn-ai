@@ -16,7 +16,10 @@ export default defineConfig({
   output: 'static',
 
   integrations: [mdx(), react(), sitemap({
-    filter: (page) => !page.includes('/offline'),
+    // Neither of these should be advertised to search engines. /admin is not
+    // secret — the security is RLS, not obscurity — but there is no reason to
+    // invite crawlers into a maintainer console.
+    filter: (page) => !page.includes('/offline') && !page.includes('/admin'),
   })],
 
   build: { inlineStylesheets: 'auto' },

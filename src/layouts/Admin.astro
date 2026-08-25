@@ -1,0 +1,32 @@
+---
+import Base from './Base.astro';
+interface Props { title: string; heading: string; description: string; }
+const { title, heading, description } = Astro.props;
+const here = Astro.url.pathname.replace(/\/$/, '');
+const tabs = [
+  ['/admin', 'Overview'],
+  ['/admin/decisions', 'Decisions'],
+  ['/admin/people', 'People & roles'],
+  ['/admin/sky', 'Sky'],
+];
+---
+<Base title={title} description={description} noindex={true}>
+  <section class="container" style="padding-block:var(--sp-8) var(--sp-12);">
+    <p style="letter-spacing:0.14em;text-transform:uppercase;font-size:var(--fs-100);color:var(--c-ink-faint);margin:0 0 var(--sp-2);">
+      Lrnon admin
+    </p>
+    <h1 style="font-size:var(--fs-500);margin:0 0 var(--sp-6);">{heading}</h1>
+
+    <nav aria-label="Admin sections" style="display:flex;flex-wrap:wrap;gap:var(--sp-2);margin-bottom:var(--sp-8);border-bottom:1px solid var(--c-border);padding-bottom:var(--sp-4);">
+      {tabs.map(([href, label]) => (
+        <a href={href} aria-current={here === href ? 'page' : undefined}
+          style={`padding:var(--sp-2) var(--sp-4);border-radius:var(--r-s);text-decoration:none;${
+            here === href
+              ? 'background:var(--c-primary-soft);border:1px solid var(--c-primary-line);font-weight:600;'
+              : 'border:1px solid transparent;color:var(--c-ink-soft);'}`}>{label}</a>
+      ))}
+    </nav>
+
+    <slot />
+  </section>
+</Base>
