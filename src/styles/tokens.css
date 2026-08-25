@@ -188,6 +188,25 @@ a { color: var(--c-primary); }
   background: var(--c-surface); border: 1px solid var(--c-border);
   border-radius: var(--r-m); padding: var(--sp-6);
 }
+
+/* Visually hidden, still announced. Used where an icon carries meaning that a
+   screen reader would otherwise miss — a tick in the module rail, say. */
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
+/* Lesson page: prose beside the module rail (design turn 2).
+   The rail comes AFTER the article in the DOM so a screen reader and a
+   keyboard reach the lesson first rather than wading through a list of every
+   other lesson in the module; `order` puts it on the left visually. Single
+   column below the breakpoint, rail last, which is the right reading order on
+   a phone anyway. */
+.lesson-shell { display: grid; gap: var(--sp-8); }
+@media (min-width: 60rem) {
+  .lesson-shell { grid-template-columns: 17rem minmax(0, 1fr); align-items: start; }
+  .lesson-rail { order: -1; position: sticky; top: var(--sp-4); }
+}
 /* Callouts: <div class="note note--aim|note--try|note--ok"> */
 .note { border-radius: var(--r-m); padding: var(--sp-6); }
 .note--aim { background: var(--c-primary-soft); border: 1px solid var(--c-primary-line); }
