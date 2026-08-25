@@ -93,11 +93,35 @@ export function redactForProvider(s: string) {
     .replace(/\b\d{4}[\s-]?\d{4}[\s-]?\d{4}\b/g, '[number]');
 }
 
+/** APPROXIMATE, and the tolerance is accepted deliberately — see below.
+ *
+ *  This is a read-modify-write over Workers KV, which is neither atomic nor
+ *  strongly consistent, so `limit` is a soft ceiling rather than a hard one.
+ *  Two ways it is exceeded:
+ *
+ *    - Concurrency. Two requests can both read 5, both find 5 < limit, and
+ *      both write 6. Two calls happen, the counter advances by one.
+ *    - Propagation. KV reads are eventually consistent across edge locations,
+ *      so a client spraying requests through different PoPs reads a stale low
+ *      count for some seconds and can exceed the cap by a wide margin.
+ *
+ *  A hard cap needs a Durable Object (single-threaded, strongly consistent),
+ *  which is a new binding and class rather than a change to this function.
+ *  That is the right fix and it is NOT done here.
+ *
+ *  Accepted for now because SKY_MODE is 'off' and no provider is wired, so
+ *  nothing here is billable: the limiter currently bounds nothing because
+ *  there is nothing to bound. It must NOT stay this way once Sky can spend
+ *  money — treat a Durable Object as a prerequisite of enabling Sky, not a
+ *  follow-up, since this is the only control standing between an abusive
+ *  client and an unbounded provider bill.
+ *
+ *  Fails CLOSED when the namespace is missing: an assistant that cannot be
+ *  rate-limited at all should not be answering.
+ */
 async function rateLimit(env: any, key: string, limit: number): Promise<boolean> {
   // The SESSION KV namespace is already bound in wrangler.jsonc.
   const kv = env?.SESSION;
-  // Fail CLOSED. If the limiter is unavailable we cannot bound spend or abuse,
-  // and an assistant that cannot be rate-limited should not be answering.
   if (!kv) return false;
   const bucket = `sky:${key}:${new Date().toISOString().slice(0, 13)}`; // per hour
   const used = Number((await kv.get(bucket)) ?? '0');
