@@ -1,0 +1,211 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT_EMAIL, CONTACT_PHONE } from '../lib/site-config';
+
+/* Every role states what you actually do, how long one unit takes, who it
+   suits, and what credit you get. "Help out" attracts nobody and burns out the
+   few it does attract, so nothing here is open-ended and nothing needs a
+   meeting. */
+const roles = [
+  {
+    name: 'Lesson proofreader', group: 'Content',
+    does: 'Read one lesson end to end and mark typos, wrong facts, broken examples, and sentences you had to read twice.',
+    time: 'About 45 minutes per lesson',
+    suits: 'Careful reading. No AI expertise needed — confusion is the signal we want.',
+    credit: 'A named credit at the foot of the lesson, if you want it.',
+  },
+  {
+    name: 'Subject reviewer', group: 'Content',
+    does: 'Check a lesson is technically correct and current. AI moves fast and some of our examples will age badly.',
+    time: '1–2 hours per lesson, occasional',
+    suits: 'Working knowledge of the topic. Practitioners preferred over academics.',
+    credit: 'Named as reviewer, with the review date.',
+  },
+  {
+    name: 'Narrator', group: 'Accessibility',
+    does: 'Record the read-aloud track for a lesson so screen-reader users and slow readers get a real voice rather than a synthetic one.',
+    time: '2–3 hours per lesson',
+    suits: 'A quiet room and a decent microphone. We will send a pronunciation sheet.',
+    credit: 'Voice credit, and hours logged in the public ledger.',
+  },
+  {
+    name: 'Accessibility tester', group: 'Accessibility',
+    does: 'Use the site the way you actually use the web — screen reader, keyboard only, magnification, high contrast — and tell us where it fails.',
+    time: '1 hour, one page or flow',
+    suits: 'Lived experience of assistive technology. This is the role we most need and can least fake.',
+    credit: 'Findings published as dated fixes, credited to you.',
+  },
+  {
+    name: 'Translator', group: 'Content',
+    does: 'Translate a lesson into your first language. Human translation only; we are not shipping machine output as a language edition.',
+    time: '3–4 hours per lesson',
+    suits: 'Native fluency in the target language and comfortable technical English.',
+    credit: 'Named as translator on every page you touch.',
+  },
+  {
+    name: 'Front-end contributor', group: 'Build',
+    does: 'Pick up an open issue — a layout bug, a keyboard trap, a slow page. The stack is Astro, plain CSS variables, no framework churn.',
+    time: 'Whatever an issue takes',
+    suits: 'HTML and CSS. Astro helps but is learnable in an afternoon.',
+    credit: 'Commit history is yours, plus a credit on the contributors list.',
+  },
+  {
+    name: 'Exercise author', group: 'Build',
+    does: 'Write a practical AI exercise — a task a learner does with a real tool, with a way to tell whether they got it right.',
+    time: '3–5 hours per exercise',
+    suits: 'You have taught something before, or wish someone had set you this task.',
+    credit: 'Named as author on the exercise.',
+  },
+  {
+    name: 'Learner advocate', group: 'Community',
+    does: 'Answer questions from new learners, flag repeated confusion, and tell us which lesson keeps generating the same question.',
+    time: '2–3 hours a month, ongoing',
+    suits: 'Patience. Being one lesson ahead is enough to help someone.',
+    credit: 'Listed as an advocate, with as much or as little visibility as you want.',
+  },
+];
+
+const mailto = (role: string) =>
+  `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Volunteering: ' + role)}` +
+  `&body=${encodeURIComponent(`I'd like to take the "${role}" role.\n\nRoughly when I have time:\n`)}`;
+---
+<Base title="Volunteer — Lrnon"
+  description="Eight small, defined volunteer roles — proofreading, accessibility testing, narration, translation, code. Each states the time it takes and the credit you get.">
+
+  <section class="container" style="padding-block:var(--sp-12) var(--sp-8);">
+    <p style="letter-spacing:0.14em;text-transform:uppercase;font-size:var(--fs-100);color:var(--c-ink-faint);margin:0 0 var(--sp-3);">
+      One person builds this · help is welcome
+    </p>
+    <h1 style="font-size:var(--fs-600);max-width:16ch;margin:0 0 var(--sp-4);">Build it and keep it standing.</h1>
+    <div class="prose">
+      <p style="color:var(--c-ink-soft);">
+        Lrnon is written, coded and maintained by one person. That is fine for a start
+        and useless at scale — lessons go stale, bugs sit, and accessibility gets tested
+        by the person least able to test it honestly.
+      </p>
+      <p style="color:var(--c-ink-soft);">
+        So the roles below are small on purpose. Proofread one lesson. Test one page with
+        your screen reader. Fix one bug. Nothing here asks for an open-ended commitment,
+        and nothing needs a meeting.
+      </p>
+    </div>
+    <p style="display:flex;flex-wrap:wrap;gap:var(--sp-3);margin-top:var(--sp-6);">
+      <a class="btn" href={'mailto:' + CONTACT_EMAIL + '?subject=' + encodeURIComponent('Volunteering')}>Pick a role and email us</a>
+      <a class="btn btn--ghost" href="#roles">See the roles</a>
+    </p>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8);">
+    <div style="display:grid;gap:var(--sp-6);grid-template-columns:repeat(auto-fit,minmax(320px,1fr));">
+      <div class="note note--ok">
+        <h2 style="font-size:var(--fs-300);margin-top:0;">What we promise you</h2>
+        <ul style="margin:0;padding-inline-start:var(--sp-6);display:grid;gap:var(--sp-2);">
+          <li><strong>A defined task, not a vague ask.</strong> You get a specific lesson, page or issue, and you are done when it is done.</li>
+          <li><strong>A reply within two working days.</strong> If we go quiet, chase us — silence is a failure on our side.</li>
+          <li><strong>Your hours in the public ledger</strong>, tagged in-kind, exactly like a cash gift. Name only if you want it.</li>
+          <li><strong>You can stop at any time</strong>, mid-task, with no explanation. Just tell us so it can be picked up.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h2 style="font-size:var(--fs-300);margin-top:0;">What we can't offer</h2>
+        <ul style="margin:0;padding-inline-start:var(--sp-6);display:grid;gap:var(--sp-2);color:var(--c-ink-soft);">
+          <li>Payment. Nobody is paid from contributions, including the founder.</li>
+          <li>A reference on letterhead — Lrnon is not yet a registered organisation. We will happily confirm what you did, in writing, as an individual.</li>
+          <li>Fast decisions on big changes. One person reviews everything.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="container" id="roles" style="padding-block:var(--sp-8);">
+    <h2 style="font-size:var(--fs-400);">The roles</h2>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      Take one. Take a second only if the first went well. The time given is for one unit
+      of work — one lesson, one page, one issue. None of these is a rota and none of them
+      expects you next week.
+    </p>
+    <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(320px,1fr));margin-top:var(--sp-6);">
+      {roles.map((r) => (
+        <article class="card">
+          <p style="margin:0 0 var(--sp-2);color:var(--c-ink-faint);font-size:var(--fs-100);letter-spacing:0.08em;text-transform:uppercase;">{r.group}</p>
+          <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-3);">{r.name}</h3>
+          <p style="margin:0 0 var(--sp-4);color:var(--c-ink-soft);">{r.does}</p>
+          <dl style="margin:0 0 var(--sp-4);display:grid;gap:var(--sp-2);font-size:var(--fs-100);">
+            <div><dt style="display:inline;color:var(--c-ink-faint);">Time · </dt><dd style="display:inline;margin:0;">{r.time}</dd></div>
+            <div><dt style="display:inline;color:var(--c-ink-faint);">Who suits · </dt><dd style="display:inline;margin:0;">{r.suits}</dd></div>
+            <div><dt style="display:inline;color:var(--c-ink-faint);">Credit · </dt><dd style="display:inline;margin:0;">{r.credit}</dd></div>
+          </dl>
+          <a class="btn btn--ghost" href={mailto(r.name)}>Take this role →</a>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8);">
+    <h2 style="font-size:var(--fs-400);">How it works</h2>
+    <p style="color:var(--c-ink-soft);">No application form, no interview, no onboarding call.</p>
+    <ol style="display:grid;gap:var(--sp-4);padding-inline-start:var(--sp-6);margin-top:var(--sp-4);">
+      <li><strong>Email the role name.</strong> One line is enough: which role, and roughly when you have the time.</li>
+      <li><strong>We send you one unit of work.</strong> A specific lesson, page or issue, plus whatever you need to do it — the pronunciation sheet, the style note, the repo link.</li>
+      <li><strong>You do it and send it back.</strong> Or tell us you would rather not, which is a perfectly good outcome and costs nothing.</li>
+      <li><strong>It ships, credited and logged.</strong> Your change goes live, your hours enter the public ledger, and your name appears if you asked for it.</li>
+    </ol>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8);">
+    <h2 style="font-size:var(--fs-400);">Ground rules</h2>
+    <ul class="prose" style="padding-inline-start:var(--sp-6);display:grid;gap:var(--sp-2);">
+      <li>Lessons stay free. Anything you contribute is published under the same open terms as the rest of the site.</li>
+      <li>Do not submit material you do not have the right to give us — no lifted text, no copied images, no employer's work.</li>
+      <li>AI-assisted drafting is fine if you have checked it. Unchecked machine output is worse than nothing, and we can tell.</li>
+      <li>Learners come first. If a change makes the site prettier but harder to read, it does not ship.</li>
+    </ul>
+
+    <div class="note note--try" style="margin-top:var(--sp-6);">
+      <h3 style="font-size:var(--fs-300);margin-top:0;">Not sure you're qualified?</h3>
+      <p style="margin-bottom:0;">
+        Proofreading and accessibility testing need no credentials at all — a learner who
+        got stuck is the best person to say where.
+      </p>
+    </div>
+
+    <div class="note note--aim" style="margin-top:var(--sp-4);">
+      <h3 style="font-size:var(--fs-300);margin-top:0;">If you are under 18</h3>
+      <p style="color:var(--c-ink-soft);">
+        You are welcome to volunteer, and younger contributors are often the best
+        proofreaders — you notice the sentence that lost you. But volunteering means we
+        hold an email address, and where the contributor is a child the law asks for a
+        parent or guardian's consent first. That is India's DPDP Act, and the GDPR and
+        COPPA equivalents elsewhere.
+      </p>
+      <p style="color:var(--c-ink-soft);">So the first email is a short one:</p>
+      <ol style="color:var(--c-ink-soft);padding-inline-start:var(--sp-6);">
+        <li>Tell us the role you want and that you are under 18.</li>
+        <li>Give us a parent or guardian's email address.</li>
+        <li>We write to them, explaining exactly what you would be doing and what we
+        would hold. <strong>They reply to confirm</strong> — that reply is the consent,
+        not a box you tick for them.</li>
+        <li>Then we send you the work.</li>
+      </ol>
+      <p style="margin-bottom:0;color:var(--c-ink-soft);">
+        We never publish an under-18 contributor's name or contact details, even with
+        consent. Your guardian can withdraw it at any time by emailing us, and we act on
+        that immediately. Full detail on the <a href="/privacy">privacy page</a>.
+      </p>
+    </div>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8) var(--sp-12);">
+    <div class="card">
+      <h2 style="font-size:var(--fs-400);margin-top:0;">Start with one lesson</h2>
+      <p style="color:var(--c-ink-soft);">
+        Say which role and we will send you something specific within two working days.
+        If it turns out not to suit you, that is useful information too.
+      </p>
+      <p style="margin-bottom:0;">
+        <a href={'mailto:' + CONTACT_EMAIL}>{CONTACT_EMAIL}</a>
+        {CONTACT_PHONE && <span> · <a href={'tel:' + CONTACT_PHONE.replace(/\s/g, '')}>{CONTACT_PHONE}</a></span>}
+      </p>
+    </div>
+  </section>
+</Base>

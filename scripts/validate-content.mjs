@@ -59,7 +59,8 @@ const TRACKS = ['explorer','practitioner','builder'];
 
 const registryIds = new Set(
   walk(join(ROOT, 'registry'), '.json')
-    .filter(p => !p.endsWith('_schema.json'))
+    // Underscore-prefixed files are machinery (_schema, _fingerprints), not cards.
+    .filter(p => !/[\/\\]_/.test(p))
     .map(p => JSON.parse(readFileSync(p, 'utf8')).id)
 );
 
@@ -106,7 +107,7 @@ for (const file of lessonFiles) {
 // ---------- registry checks ----------
 const today = process.env.OL_TODAY ? new Date(process.env.OL_TODAY) : new Date();
 for (const p of walk(join(ROOT, 'registry'), '.json')) {
-  if (p.endsWith('_schema.json')) continue;
+  if (/[\/\\]_/.test(p)) continue;   // machinery, not a card
   const rel = relative(ROOT, p);
   let card;
   try { card = JSON.parse(readFileSync(p, 'utf8')); }
@@ -151,6 +152,34 @@ if (existsSync(quizDir)) {
         if (!it.explain || it.explain.length < 20)
           errors.push(`${rel}:${it.id}: explanation required (>=20 chars) — feedback is the pedagogy`);
       }
+    }
+  }
+}
+
+// ---------- changelog checks ----------
+// /whats-new is the public record of content corrections, so a malformed or
+// undated entry is a broken promise rather than a cosmetic bug.
+const CHANGE_KINDS = ['New module','New lesson','Lesson corrected','Content updated',
+  'Narration added','Withdrawn','Accessibility','Fixed'];
+const changelogPath = join(ROOT, 'content/changelog.json');
+if (existsSync(changelogPath)) {
+  let log;
+  try { log = JSON.parse(readFileSync(changelogPath, 'utf8')); }
+  catch { errors.push('content/changelog.json: invalid JSON'); log = null; }
+  if (log) {
+    if (!Array.isArray(log.entries)) errors.push('content/changelog.json: missing "entries" array');
+    else for (const e of log.entries) {
+      const at = 'content/changelog.json:' + (e.date ?? '?');
+      for (const k of ['date','kind','where','what'])
+        if (!e[k]) errors.push(at + ': missing "' + k + '"');
+      if (e.date && !/^\d{4}-\d{2}-\d{2}$/.test(e.date))
+        errors.push(at + ': date must be YYYY-MM-DD');
+      if (e.date && new Date(e.date) > today)
+        errors.push(at + ': dated in the future');
+      if (e.kind && !CHANGE_KINDS.includes(e.kind))
+        errors.push(at + ': unknown kind "' + e.kind + '" (allowed: ' + CHANGE_KINDS.join(', ') + ')');
+      if (e.what && e.what.length < 20)
+        errors.push(at + ': "what" must explain the change, not just label it');
     }
   }
 }

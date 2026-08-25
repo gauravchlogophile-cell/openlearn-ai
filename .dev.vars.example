@@ -1,0 +1,25 @@
+# Local-only secrets for `wrangler dev`. Copy to `.dev.vars` and fill in.
+#
+#   cp .dev.vars.example .dev.vars
+#
+# `.dev.vars` is gitignored and must stay that way. It is read by the Worker at
+# runtime, never bundled, and never reaches the browser — the Sky panel talks
+# only to /api/sky on our own origin and receives an answer plus source links.
+#
+# PRODUCTION DOES NOT USE THIS FILE. Set the real key as a Cloudflare secret,
+# which is encrypted at rest and not visible in the dashboard afterwards:
+#
+#   npx wrangler secret put SKY_API_KEY
+#
+# Rotate it by running that again; no deploy is needed. If it ever leaks,
+# revoke at the provider first and rotate second — revoking is what stops the
+# spend, rotating only stops the old key being useful.
+
+# The provider key Sky uses. Absent or empty = Sky reports itself unavailable
+# rather than answering, which is the correct failure: it never invents an
+# answer from retrieved passages without a model.
+SKY_API_KEY=
+
+# Optional. Which model to call. Kept server-side with the key so the browser
+# never learns it.
+SKY_MODEL=

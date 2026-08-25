@@ -1,0 +1,86 @@
+---
+import Base from '../layouts/Base.astro';
+import changelog from '../../content/changelog.json';
+
+/* Grouped by month, newest first. The dates are the editorial record, not the
+   git log — git knows what changed, this knows why it mattered. */
+const entries = [...changelog.entries].sort((a, b) => b.date.localeCompare(a.date));
+
+const monthName = (iso: string) =>
+  new Date(iso + 'T00:00:00Z').toLocaleDateString('en-GB', { month: 'long', year: 'numeric', timeZone: 'UTC' });
+const dayLabel = (iso: string) =>
+  new Date(iso + 'T00:00:00Z').toLocaleDateString('en-GB', { day: 'numeric', month: 'short', timeZone: 'UTC' });
+
+const byMonth: { month: string; items: typeof entries }[] = [];
+for (const e of entries) {
+  const m = monthName(e.date);
+  const bucket = byMonth.find((b) => b.month === m);
+  if (bucket) bucket.items.push(e);
+  else byMonth.push({ month: m, items: [e] });
+}
+
+/* Colour carries meaning here, so each kind also keeps its word — never colour
+   alone. Withdrawn is the one that must not be quiet. */
+const tone: Record<string, string> = {
+  'New module': 'var(--c-progress)',
+  'New lesson': 'var(--c-progress)',
+  'Lesson corrected': 'var(--c-alert)',
+  'Withdrawn': 'var(--c-alert)',
+  'Content updated': 'var(--c-primary)',
+  'Narration added': 'var(--c-primary)',
+  'Accessibility': 'var(--c-primary)',
+  'Fixed': 'var(--c-reward)',
+};
+---
+<Base title="What's new — Lrnon"
+  description="Every change to the learning content, dated — including corrections. A lesson that was wrong is more useful to you as a published correction than as a quiet edit.">
+
+  <section class="container" style="padding-block:var(--sp-12) var(--sp-8);max-width:900px;">
+    <h1 style="font-size:var(--fs-600);margin:0 0 var(--sp-4);">What's new</h1>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      Every change to the learning content, dated, including the ones that make us look
+      bad. A lesson that was wrong is more useful to you as a correction than as a quiet
+      edit.
+    </p>
+  </section>
+
+  <section class="container" style="padding-block:0 var(--sp-8);max-width:900px;">
+    {byMonth.map((group) => (
+      <div style="margin-bottom:var(--sp-12);">
+        <h2 style="font-size:var(--fs-400);border-bottom:1px solid var(--c-border);padding-bottom:var(--sp-2);">
+          {group.month}
+          <span style="font-family:var(--font-body);font-size:var(--fs-100);color:var(--c-ink-faint);font-weight:400;letter-spacing:0;">
+            {' · '}{group.items.length} change{group.items.length === 1 ? '' : 's'}
+          </span>
+        </h2>
+        <ol style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-4);">
+          {group.items.map((e) => (
+            <li class="card">
+              <div style="display:flex;flex-wrap:wrap;gap:var(--sp-3);align-items:baseline;">
+                <time datetime={e.date} style="color:var(--c-ink-faint);font-size:var(--fs-100);font-variant-numeric:tabular-nums;">
+                  {dayLabel(e.date)}
+                </time>
+                <span style={`font-size:var(--fs-100);font-weight:600;color:${tone[e.kind] ?? 'var(--c-ink-soft)'};`}>
+                  {e.kind}
+                </span>
+                <strong style="font-family:var(--font-display);">{e.where}</strong>
+              </div>
+              <p style="margin:var(--sp-2) 0 0;color:var(--c-ink-soft);">{e.what}</p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    ))}
+  </section>
+
+  <section class="container" style="padding-block:0 var(--sp-12);max-width:900px;">
+    <div class="note note--aim">
+      <h2 style="font-size:var(--fs-300);margin-top:0;">Lessons you have finished get a note when they change</h2>
+      <p style="margin-bottom:0;">
+        Progress is recorded against the exact version of a lesson you read. If a lesson you
+        completed is corrected, the change is visible here — so you can relearn the fix
+        rather than keeping the mistake. <a href="/review">Your daily review →</a>
+      </p>
+    </div>
+  </section>
+</Base>

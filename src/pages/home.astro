@@ -18,7 +18,11 @@ const lessons = (await getCollection('lessons'))
 <Base title="Home — Lrnon"
   description="Your learning dashboard: continue where you left off, see module progress, and keep your streak going — all free, all yours.">
   <section class="container" style="padding-block:var(--sp-8) var(--sp-12);">
-    <h1 style="font-size:var(--fs-500);">Welcome back</h1>
+    {/* The <h1> lives inside Dashboard, not here: the design's heading is
+        "Good evening, quiet-fern", which needs the clock and the signed-in
+        handle. A static "Welcome back" above it would give the page two
+        competing first-level headings and make a screen reader announce the
+        wrong one first. */}
     <Dashboard client:load lessons={lessons} modules={meta.modules} cards={cards} />
   </section>
 </Base>

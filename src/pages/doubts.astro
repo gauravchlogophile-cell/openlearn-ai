@@ -1,0 +1,19 @@
+---
+import Base from '../layouts/Base.astro';
+import RoomsGate from '../components/RoomsGate.tsx';
+---
+<Base title="Ask Doubts — Lrnon"
+  description="Questions about the lessons, answered by other learners and checked by a person. Not open yet — the child safety conditions come first.">
+  <section class="container" style="padding-block:var(--sp-12) var(--sp-12);max-width:900px;">
+    <p style="letter-spacing:0.14em;text-transform:uppercase;font-size:var(--fs-100);color:var(--c-ink-faint);margin:0 0 var(--sp-3);">
+      Content questions only
+    </p>
+    <h1 style="font-size:var(--fs-600);margin:0 0 var(--sp-6);">Ask Doubts</h1>
+
+    <RoomsGate client:load
+      title="Ask Doubts"
+      blurb="A place to ask what a lesson actually meant, and have another learner answer — with every unverified answer visibly flagged as unverified, so nobody mistakes a guess for the course.">
+      <p>Rooms are open. The board loads here.</p>
+    </RoomsGate>
+  </section>
+</Base>

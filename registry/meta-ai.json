@@ -7,6 +7,7 @@
   "capabilities": { "chat": true, "vision": true, "files": false, "voice": true, "webSearch": true, "api": false },
   "freeTierNotes": "Free within Meta's apps; feature availability varies by region and changes over time.",
   "docsUrl": "https://www.meta.ai/",
+  "watchUrl": "https://about.fb.com/news/",
   "tosNotes": "Educational interactive use; note in-app data-handling terms differ from standalone assistants.",
   "lastVerified": "2026-08-22",
   "verifier": "core-team",

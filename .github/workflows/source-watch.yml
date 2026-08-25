@@ -1,0 +1,71 @@
+name: Source watch
+on:
+  schedule:
+    - cron: '0 7 * * 3'   # Wednesdays 07:00 UTC — offset from the Monday staleness check
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sources:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 20 }
+
+      # The staleness check is calendar-driven: it asks for re-verification
+      # every 90 days whether or not anything moved. This is change-driven —
+      # it fetches each vendor's documentation and reports the pages whose
+      # readable wording has actually diverged since the last baseline.
+      #
+      # It never edits lesson content. A changed source means "a human should
+      # look", not "the machine may rewrite the curriculum".
+      - id: check
+        run: |
+          set +e
+          node scripts/check-sources.mjs
+          echo "changed=$([ $? -eq 0 ] && echo false || echo true)" >> "$GITHUB_OUTPUT"
+          true
+
+      - if: steps.check.outputs.changed == 'true'
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const today = new Date().toISOString().slice(0, 10);
+
+            // One open issue at a time, or this files a fresh one every
+            // Wednesday for a source nobody has got to yet.
+            const open = await github.rest.issues.listForRepo({
+              owner: context.repo.owner, repo: context.repo.repo,
+              state: 'open', labels: 'source-change',
+            });
+            if (open.data.length) {
+              core.info(`Already tracking source changes in #${open.data[0].number}.`);
+              return;
+            }
+
+            const body = [
+              fs.readFileSync('source-report.md', 'utf8'),
+              '',
+              '---',
+              '',
+              'When you have checked a page and updated its card, refresh the baseline so',
+              'this does not report the same change again:',
+              '',
+              '```bash',
+              'node scripts/check-sources.mjs --update',
+              '```',
+              '',
+              'Commit `registry/_fingerprints.json` with the card change. Updating the',
+              'baseline is part of verifying — it records that a human looked.',
+            ].join('\n');
+
+            await github.rest.issues.create({
+              owner: context.repo.owner, repo: context.repo.repo,
+              title: '🔄 Vendor documentation changed (' + today + ')',
+              body, labels: ['content', 'source-change'],
+            });

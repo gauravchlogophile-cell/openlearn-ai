@@ -1,0 +1,112 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT_EMAIL } from '../lib/site-config';
+---
+<Base title="Child safety — Lrnon"
+  description="How Lrnon protects children: no public posting until moderation exists, guardian consent for under-18 accounts and volunteers, and a named route for reporting harm.">
+  <section class="container prose" style="padding-block:var(--sp-12);">
+    <h1 style="font-size:var(--fs-500);">Child safety</h1>
+    <p style="color:var(--c-ink-soft);">Version 1.0 · last updated 2026-08-24</p>
+
+    <div class="note note--aim">
+      <p style="margin:0;">
+        <strong>The short version.</strong> Learning here is open to every age and collects
+        no personal data at all. Nothing on Lrnon lets one learner send anything to another,
+        and that stays true until moderation exists. If you are worried about a child in
+        connection with Lrnon, write to <a href={'mailto:' + CONTACT_EMAIL}>{CONTACT_EMAIL}</a>
+        and say so in the subject line.
+      </p>
+    </div>
+
+    <h2>Why this page exists before the risk does</h2>
+    <p>Lrnon has no public rooms, no comments, no direct messages and no way for
+    one learner to reach another. The safest possible position, and the current
+    one.</p>
+    <p>The design for Lrnon includes topic rooms and a questions board. This
+    page is written first, deliberately. A safeguarding policy produced after a
+    feature ships is a reaction; produced before, it is a constraint on what may
+    ship at all. What follows is that constraint.</p>
+
+    <h2>What is open today</h2>
+    <ul>
+      <li><strong>Learning</strong> — every age, no account needed, no personal data collected.</li>
+      <li><strong>Accounts</strong> — optional, for syncing progress across devices. Under 18 requires guardian consent.</li>
+      <li><strong>Volunteering</strong> — open to under-18s with guardian consent, and we never publish their name or contact details.</li>
+      <li><strong>Feedback</strong> — reaches one person by email. It is not published.</li>
+    </ul>
+    <p><strong>Nothing a learner writes is visible to another learner.</strong>
+    There is currently no mechanism by which a stranger could contact a child
+    through this site.</p>
+
+    <h2>Conditions before any public posting opens</h2>
+    <p>Rooms, a questions board, or any other learner-to-learner surface will
+    not open until all of the following are true. This list is a commitment,
+    not an aspiration.</p>
+    <ol>
+      <li><strong>A named person is responsible</strong> for safeguarding, with
+      a deputy, and the role appears on the <a href="/admin/people">roles page</a>
+      rather than sitting in the unstaffed column.</li>
+      <li><strong>Posts are moderated before or immediately after publication</strong>,
+      with a queue somebody actually reads daily — not a report button and hope.</li>
+      <li><strong>No private messaging, ever.</strong> Public rooms only. Grooming
+      needs privacy; a site with no private channel removes the mechanism rather
+      than trying to detect it.</li>
+      <li><strong>No profile fields that identify a child</strong> — no age, school,
+      location, photo or contact details. Display names are generated, not chosen.</li>
+      <li><strong>Reporting is one click from every post</strong>, works without an
+      account, and reaches a person rather than a queue nobody owns.</li>
+      <li><strong>A written escalation route</strong>, including when to contact
+      local authorities, decided before it is needed rather than during.</li>
+      <li><strong>Retention and deletion rules</strong> for anything a child posts,
+      published on this page.</li>
+    </ol>
+    <p>Until every one of those holds, the <a href="/community">community page</a>
+    marks these spaces as planned and they stay closed. A room nobody is watching
+    is worse than no room.</p>
+
+    <h2>Guardian consent</h2>
+    <p>Where the law treats a person as a child, we ask a parent or guardian
+    first. India's <abbr title="Digital Personal Data Protection Act 2023">DPDP
+    Act</abbr> sets that at 18 and requires <em>verifiable</em> consent; the GDPR
+    sets 13–16 depending on the country and COPPA covers under-13s in the US. We
+    apply whichever is stricter for the person.</p>
+    <p>Consent is a reply from the guardian's own email address — never a
+    checkbox on a child's screen, which verifies nothing. It can be withdrawn at
+    any time, immediately, with no reason required. The full mechanism is on the
+    <a href="/privacy">privacy page</a>.</p>
+
+    <h2>What we will never do</h2>
+    <ul>
+      <li>Show advertising to anyone, at any age.</li>
+      <li>Profile or behaviourally target a child. DPDP prohibits it; we would not want it regardless.</li>
+      <li>Sell, share or license learner data.</li>
+      <li>Publish a child's name, photograph, school or location — even with consent.</li>
+      <li>Use anything a learner writes to train a model.</li>
+    </ul>
+
+    <h2>Sky, and why it is off</h2>
+    <p>Sky is the site assistant. It is currently disabled and will not reach
+    learners until it has been reviewed by hand at length. When it does run it
+    answers only from Lrnon's own pages, refuses medical, legal, exam-authority,
+    financial and personal-safety questions outright, and hands those to a
+    person instead. It never asks for a name, phone number, school or payment
+    details.</p>
+
+    <h2>Reporting a concern</h2>
+    <p>Write to <a href={'mailto:' + CONTACT_EMAIL}>{CONTACT_EMAIL}</a> with
+    <strong>"child safety"</strong> in the subject. One person reads it, and
+    it is treated ahead of everything else.</p>
+    <p>If a child is in immediate danger, contact your local emergency services
+    first. We are a learning website; we are not an emergency service and will
+    not pretend otherwise.</p>
+
+    <div class="note note--try">
+      <p style="margin:0;">
+        <strong>This policy is not legal advice and was not written by a lawyer.</strong>
+        It states what Lrnon does and what it will not ship without. Before public posting
+        opens, it should be reviewed by someone qualified in the jurisdictions Lrnon
+        operates in.
+      </p>
+    </div>
+  </section>
+</Base>

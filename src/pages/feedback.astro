@@ -1,0 +1,61 @@
+---
+import Base from '../layouts/Base.astro';
+import FeedbackForm from '../components/FeedbackForm.tsx';
+import { CONTACT_EMAIL, CONTACT_PHONE } from '../lib/site-config';
+---
+<Base title="Feedback & complaints — Lrnon"
+  description="Report a broken page, a wrong answer, or something confusing. Every message is read by a person, and accessibility problems are treated as bugs rather than requests.">
+
+  <section class="container" style="padding-block:var(--sp-12) var(--sp-8);max-width:900px;">
+    <h1 style="font-size:var(--fs-600);max-width:18ch;margin:0 0 var(--sp-4);">Tell us what's wrong</h1>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      A typo in a lesson, a quiz that marks a right answer wrong, a page that won't load on
+      your phone, or something that just felt confusing. All of it is useful, and none of it
+      is too small to send.
+    </p>
+  </section>
+
+  <section class="container" style="padding-block:0 var(--sp-8);max-width:900px;">
+    <FeedbackForm client:load email={CONTACT_EMAIL} />
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8);max-width:900px;">
+    <div class="card">
+      <h2 style="font-size:var(--fs-300);margin-top:0;">Rather not use a form?</h2>
+      <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-3);">
+        <li>
+          <a href={'mailto:' + CONTACT_EMAIL}>{CONTACT_EMAIL}</a>
+          <span style="color:var(--c-ink-soft);"> — best for anything with a screenshot or a long explanation.</span>
+        </li>
+        {CONTACT_PHONE && (
+          <li>
+            <a href={'tel:' + CONTACT_PHONE.replace(/\s/g, '')}>{CONTACT_PHONE}</a>
+            <span style="color:var(--c-ink-soft);"> — call or WhatsApp. Please keep to reasonable hours, IST.</span>
+          </li>
+        )}
+      </ul>
+      <p style="margin:var(--sp-4) 0 0;color:var(--c-ink-soft);">
+        Lrnon is run by one person, so there is no ticket queue and no bot. You will get a
+        real answer, just not instantly.
+      </p>
+    </div>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8);max-width:900px;">
+    <h2 style="font-size:var(--fs-400);">What happens next</h2>
+    <ol style="display:grid;gap:var(--sp-3);padding-inline-start:var(--sp-6);">
+      <li>Every message is read. Bugs that break learning get fixed first.</li>
+      <li>Content corrections are made in the lesson and dated, so you can see what changed.</li>
+      <li>Complaints get a written reply, even when the answer is no.</li>
+      <li>Accessibility problems are treated as bugs, not requests.</li>
+    </ol>
+
+    <div class="note note--aim" style="margin-top:var(--sp-6);">
+      <p style="margin:0;">
+        <strong>Before you write:</strong> <a href="/reading">Reading preferences</a> already
+        changes text size, line spacing, reading width, contrast and typeface. If reading is
+        the problem, that may fix it faster than we can.
+      </p>
+    </div>
+  </section>
+</Base>

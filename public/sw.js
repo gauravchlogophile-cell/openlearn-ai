@@ -3,7 +3,7 @@
  * network-first for pages with cache fallback · /offline as last resort.
  * Module packs live in caches named ol-pack-<module> (written by the page,
  * served here). Bump SHELL_V to invalidate the shell. */
-const SHELL_V = 'ol-shell-v3';
+const SHELL_V = 'ol-shell-v4';
 const ASSETS = 'ol-assets-v1';
 const SHELL_URLS = ['/', '/home', '/roadmap', '/achievements', '/account', '/offline'];
 

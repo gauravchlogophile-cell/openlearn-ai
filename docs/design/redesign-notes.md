@@ -96,3 +96,83 @@ npx astro dev --port 4321 --host
 
 `--host` matters on Windows: without it Astro binds to `[::1]` only and
 `127.0.0.1:4321` refuses the connection.
+
+---
+
+## Appendix B — full frame audit (all 9 turns)
+
+Every frame in `Lrnon Redesign.dc.html` was enumerated and checked against the
+built site. The file is 406,710 characters; the DesignSync MCP caps `get_file`
+at 256 KiB, so the inventory was taken through the design app's own RPC —
+`POST /design/anthropic.omelette.api.v1alpha.OmeletteService/GetFile` with
+`{projectId, path}` and header `connect-protocol-version: 1`, which returns the
+whole file base64-encoded. `docs/design/turns-1-3-extract.md` records the
+method; this is the frame list it yields.
+
+Fifteen frames exist. They are the complete design surface:
+
+| Turn | Frame | Route | State |
+|---|---|---|---|
+| 2 | Lesson page — the screen learners live in | `/learn/*` | built |
+| 3 | Landing page — light default | `/` | built |
+| 3 | Accessibility panel — one button, everything inside | header | built |
+| 3 | Reward moment — no confetti, no noise | quiz result | built |
+| 3 | Same landing page — phone, tablet, TV | `/` | verified 375 / 768 / 1920 |
+| 4 | Funding page | `/support` | built, hidden by `FUNDING_MODE` |
+| 5 | Site footer — appears on every page | all | built |
+| 5 | Feedback & complaints | `/feedback` | built |
+| 5 | Spread the word | `/share` | built |
+| 6 | Volunteer page | `/volunteer` | built |
+| 7 | Home — daily board & usage | `/home` | built |
+| 7 | Ask Doubts — content questions only | `/doubts` | built, gate shut |
+| 7 | Members & topic rooms | `/members` | built, gate shut |
+| 7 | What's new — content changes | `/whats-new` | built |
+| 7 | Community & More | `/community` | built |
+| 8 | Dock button & opening state | all | built, `SKY_MODE=off` |
+| 8 | Three conversation states | panel | built |
+| 9 | Super Admin console | `/admin` | built |
+
+The turn 7 header is drawn on every signed-in frame and is a frame-level
+element in its own right: `Home · Learn · Doubts · Community · Members ·
+What's new · More · ⌕ Search this page (/) · ◍ Accessibility · qf quiet-fern ▾`.
+
+### What the audit found that was NOT a missing component
+
+Two defects surfaced only because a design element was finally built against
+them, which is the argument for building the design rather than approximating
+it:
+
+1. **Handles were never generated.** `0007`'s comment on `posts.author_handle`
+   states handles are "generated, never chosen, so a child cannot publish
+   their own name by putting it in a handle". Nothing enforced that:
+   `handle_new_user()` inserted a NULL handle and the `profiles: update own`
+   policy accepted anything matching `^[a-z0-9_]{3,24}$` — `sarah_smith_11`
+   included. It went unnoticed because no page had ever displayed a handle.
+   The board is the first surface that does. `0008` generates handles, locks
+   them behind a trigger (RLS `WITH CHECK` cannot see the old row, so it
+   cannot tell a rename from a timezone change), and backfills the two
+   existing profiles. Verified against production by impersonating a learner:
+   the rename raises, ordinary updates still succeed.
+
+2. **Every page scrolled sideways on a phone.** The header `nav` was
+   `display:flex` with no `flex-wrap`, measuring 524px inside a 422px
+   viewport. Fixed with the turn 7 nav rebuild; now 375/375 with zero
+   overflowing elements.
+
+### Known deviations from the drawing, and why
+
+- **The sample board is not seeded.** The mock lists five learners because a
+  mock must show something. Shipping invented names would be a fabrication.
+- **`+110 XP`, not `+80`.** Eighty is eight lessons at ten XP, so the mock's
+  reward fires on the eighth lesson; ours fires when the module finishes,
+  which includes the quiz's thirty.
+- **Board columns read "N lessons · M reviews", not "· 38 cards".** Per-day
+  card counts are local-only (`ol.reviewlog.v1`) and never sync, so the server
+  cannot know them. Showing a number the database does not have would be
+  worse than showing a different true one.
+- **The avatar menu's contents are inferred.** The design draws the chip and
+  the `▾` but never draws the menu open. It holds only pages that already
+  exist.
+- **Search searches the current page**, which is what the design labels it
+  ("Search this page"). There is no site-wide index yet, and a box that said
+  "Search" while matching one page would be a lie.

@@ -1,8 +1,20 @@
 ---
 import '../styles/tokens.css';
-import ProgressChip from '../components/ProgressChip.tsx';
-interface Props { title: string; description: string; }
-const { title, description } = Astro.props;
+import AccessibilityPanel from '../components/AccessibilityPanel.tsx';
+import AccountMenu from '../components/AccountMenu.tsx';
+import PageSearch from '../components/PageSearch.tsx';
+import { CONTACT_EMAIL, CONTACT_PHONE, FUNDING_MODE } from '../lib/site-config';
+import Sky from '../components/Sky.tsx';
+import { SKY_MODE, SKY_COPY } from '../lib/sky-config';
+interface Props { title: string; description: string; noindex?: boolean; }
+const { title, description, noindex = false } = Astro.props;
+/* The design's founder switch: when funding is hidden, the Support link is not
+   rendered anywhere, not merely hidden with CSS. */
+const showSupport = FUNDING_MODE !== 'hidden';
+/* The server decides whether Sky exists at all. When it is off the dock button
+   is never rendered, and /api/sky independently returns 503 — so flipping a
+   flag in devtools gets a refusal, not an answer. */
+const showSky = SKY_MODE !== 'off';
 ---
 <!doctype html>
 <html lang="en">
@@ -11,39 +23,152 @@ const { title, description } = Astro.props;
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{title}</title>
     <meta name="description" content={description} />
+    {noindex && <meta name="robots" content="noindex, nofollow" />}
     <meta name="theme-color" content="#3d3d8f" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#0f1117" media="(prefers-color-scheme: dark)" />
     <!-- GSC verification, redeploy check -->
     <meta name="google-site-verification" content="pwnYLQZJbNx6YeSW4EUSaZC4WiGsb15eQcPvjLVCITA" />
     <link rel="manifest" href="/manifest.webmanifest" />
+    {/* SVG first — ~300 bytes, sharp at every size. The PNG stays as a
+        fallback for browsers that do not take SVG favicons. */}
+    <link rel="icon" href="/icons/lrnon-icon.svg" type="image/svg+xml" />
     <link rel="icon" href="/icons/icon-192.png" type="image/png" />
+    <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    {/* Reader preferences, applied BEFORE first paint. This has to be inline
+        and synchronous: a React island or a deferred script would run after
+        the browser has already painted the default theme, so every reload
+        would flash white before going dark.
+
+        The mapping is duplicated from src/lib/progress-store.ts on purpose —
+        pre-paint code cannot import a module. scripts/test-progress.mjs
+        asserts the two stay in step, and scripts/generate-headers.mjs hashes
+        this script into the CSP at build time, so no policy change is needed.
+
+        Wrapped in try/catch because localStorage throws outright in some
+        privacy modes, and a throw here would block the page from rendering. */}
+    <script is:inline>
+      (function () {
+        try {
+          var D = { theme: 'system', textsize: 'normal', leading: 'normal',
+                    width: 'normal', contrast: 'normal', font: 'default', saver: 'off',
+                    motion: 'system' };
+          var A = { theme: 'data-theme', textsize: 'data-textsize', leading: 'data-leading',
+                    width: 'data-width', contrast: 'data-contrast', font: 'data-font',
+                    saver: 'data-saver', motion: 'data-motion' };
+          var r = (JSON.parse(localStorage.getItem('ol.settings.v1') || '{}').reader) || {};
+          var el = document.documentElement;
+          for (var k in D) {
+            var v = r[k];
+            if (typeof v === 'string' && v !== D[k]) el.setAttribute(A[k], v);
+          }
+        } catch (e) { /* defaults are fine */ }
+      })();
+    </script>
     <script is:inline src="/register-sw.js"></script>
   </head>
   <body>
     <a class="skip-link" href="#main">Skip to content</a>
     <header class="container" style="display:flex;justify-content:space-between;align-items:center;gap:var(--sp-4);padding-block:var(--sp-4);flex-wrap:wrap;">
       {/* translate="no" + .notranslate stop Google Translate rendering the
-          brand as a phrase. "Lrnon" is coined so it is unlikely to be
-          translated anyway, but the wordmark is where a logo will replace this
-          text later, and a brand should never be machine-translated. */}
-      <a href="/" translate="no" class="notranslate" aria-label="Lrnon — home"
-        style="font-weight:700;text-decoration:none;color:var(--c-ink);">Lrnon</a>
-      <nav aria-label="Main" style="display:flex;gap:var(--sp-4);align-items:center;">
-        <a href="/home" style="margin-inline-end:var(--sp-4);">Home</a>
-        <a href="/review" style="margin-inline-end:var(--sp-4);">Review</a>
-        <a href="/roadmap" style="margin-inline-end:var(--sp-4);">Roadmap</a>
-        <a href="/achievements" style="margin-inline-end:var(--sp-4);">Badges</a>
-        <a href="/account">Account</a>
-        <ProgressChip client:load />
+          brand as a phrase — a brand should never be machine-translated.
+          The mark takes alt="" because the adjacent word is already the
+          accessible name; announcing both would read "Lrnon Lrnon". */}
+      <a href="/" translate="no" class="brand notranslate" aria-label="Lrnon — home">
+        <img src="/icons/lrnon-mark.svg" width="26" height="26" alt="" />
+        <span>Lrnon</span>
+      </a>
+      {/* The turn 7 header: seven destinations, then search, accessibility and
+          the avatar. flex-wrap is not cosmetic — without it the nav was 524px
+          wide inside a 422px viewport and every page scrolled sideways on a
+          phone. Links wrap onto a second line rather than collapsing into a
+          hamburger, because a wrapped nav needs no JavaScript, no focus trap
+          and no aria-expanded to get right. */}
+      <nav aria-label="Main" style="display:flex;gap:var(--sp-3) var(--sp-4);align-items:center;flex-wrap:wrap;">
+        <a href="/home">Home</a>
+        <a href="/roadmap">Learn</a>
+        <a href="/doubts">Doubts</a>
+        <a href="/community">Community</a>
+        <a href="/members">Members</a>
+        <a href="/whats-new">What's new</a>
+        <a href="/community#more">More</a>
+        <PageSearch client:idle />
+        {/* One button, everything inside — design turn 3. The moment someone
+            needs bigger text is the moment they are struggling with THIS page,
+            so the fix must not require navigating away to a settings screen. */}
+        <AccessibilityPanel client:load />
+        {/* Replaces ProgressChip in the header. The chip's numbers are not
+            lost: turn 7 moves level and streak onto /home's greeting line, and
+            the menu carries them on every other page. */}
+        <AccountMenu client:load />
       </nav>
     </header>
     <main id="main">
       <slot />
     </main>
-    <footer class="container" style="padding-block:var(--sp-12);color:var(--c-ink-soft);font-size:var(--fs-100);">
-      <p>Free forever. Open source. Content CC BY-SA 4.0 · Code MIT.
-      No ads, no paywalls, no dark patterns.
-      · <a href="/privacy">Privacy</a> · <a href="/terms">Terms</a></p>
+    {/* The site had no contact detail anywhere before this: no footer address,
+        no help route, no way to report a broken lesson. That is a real gap on
+        a learning site, so the details now sit on every page. */}
+    <footer style="background:var(--c-surface-2);border-top:1px solid var(--c-border);margin-top:var(--sp-16);">
+      <div class="container" style="padding-block:var(--sp-12);font-size:var(--fs-100);">
+        <div style="display:grid;gap:var(--sp-8);grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+          <div>
+            <p translate="no" class="brand notranslate" style="margin:0 0 var(--sp-2);">
+              <img src="/icons/lrnon-mark.svg" width="22" height="22" alt="" />
+              <span>Lrnon</span>
+            </p>
+            <p style="margin:0;color:var(--c-ink-soft);max-width:30ch;">
+              Learn AI at no cost. Free to use, free of ads, and funded in the open.
+            </p>
+          </div>
+
+          <nav aria-label="Learn">
+            <h2 style="font-size:var(--fs-100);font-family:var(--font-body);text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-2);">Learn</h2>
+            <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
+              <li><a href="/roadmap">Roadmap</a></li>
+              <li><a href="/review">Daily review</a></li>
+              <li><a href="/achievements">Badges</a></li>
+              <li><a href="/account">Your account</a></li>
+            </ul>
+          </nav>
+
+          <nav aria-label="Project">
+            <h2 style="font-size:var(--fs-100);font-family:var(--font-body);text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-2);">Project</h2>
+            <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
+              {showSupport && <li><a href="/support">Support Lrnon</a></li>}
+              <li><a href="/whats-new">What's new</a></li>
+              <li><a href="/community">Community</a></li>
+              <li><a href="/volunteer">Volunteer</a></li>
+              <li><a href="/feedback">Feedback</a></li>
+              <li><a href="/share">Spread the word</a></li>
+            </ul>
+          </nav>
+
+          <div>
+            <h2 style="font-size:var(--fs-100);font-family:var(--font-body);text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-2);">Reach us</h2>
+            <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
+              <li><a href={'mailto:' + CONTACT_EMAIL}>{CONTACT_EMAIL}</a></li>
+              {CONTACT_PHONE && <li><a href={'tel:' + CONTACT_PHONE.replace(/\s/g, '')}>{CONTACT_PHONE}</a></li>}
+            </ul>
+            <p style="margin:var(--sp-2) 0 0;color:var(--c-ink-soft);">
+              One person answers both. Expect a reply within two working days.
+            </p>
+          </div>
+        </div>
+
+        <p style="margin:var(--sp-8) 0 0;padding-top:var(--sp-4);border-top:1px solid var(--c-border);color:var(--c-ink-soft);">
+          © 2026 Lrnon · An independently built initiative, not yet a registered charity.
+          Content CC BY-SA 4.0 · Code MIT. No ads, no paywalls, no dark patterns.
+          · <a href="/reading">Reading preferences</a>
+          · <a href="/safeguarding">Child safety</a>
+          · <a href="/privacy">Privacy</a>
+          · <a href="/terms">Terms</a>
+        </p>
+      </div>
     </footer>
+
+    {showSky && (
+      <Sky client:idle intro={SKY_COPY.intro} disclaimer={SKY_COPY.disclaimer}
+        suggestions={['Explain this lesson more simply', 'How is Lrnon funded?', 'How do I volunteer?']} />
+    )}
   </body>
 </html>

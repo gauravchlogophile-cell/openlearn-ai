@@ -1,0 +1,11 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import AdminGate from '../../components/AdminGate.tsx';
+import AdminDecisions from '../../components/AdminDecisions.tsx';
+---
+<Admin title="Decisions — Lrnon admin" heading="Decision queue"
+  description="Everything that enters, stays, changes or leaves Lrnon, oldest first.">
+  <AdminGate client:load>
+    <AdminDecisions client:load />
+  </AdminGate>
+</Admin>

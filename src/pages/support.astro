@@ -1,0 +1,174 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT_EMAIL, FUNDING_MODE, CURRENCY } from '../lib/site-config';
+
+/* The founder switch. When funding is hidden the route still builds (a static
+   site cannot conditionally omit a page without breaking anything that links
+   to it) but it says plainly that giving is not open and points home, rather
+   than 404ing or — worse — soliciting. */
+const mode = FUNDING_MODE;
+
+const areas = [
+  { n: '01', name: 'Hosting & infrastructure', blurb: 'Servers, bandwidth, domain renewal. The one bill that has to be paid before anything else exists.' },
+  { n: '02', name: 'Development', blurb: 'Building and maintaining the site itself, including the accessibility work already shipped.' },
+  { n: '03', name: 'Learning content', blurb: 'Writing, editing and fact-checking lessons. Paid work where it needs a specialist.' },
+  { n: '04', name: 'Accessibility features', blurb: 'Recorded narration, dyslexia-friendly typography, high-contrast modes, and an external audit.' },
+  { n: '05', name: 'AI learning tools', blurb: 'Tools that help a learner practise and get feedback without waiting for a human to mark it.' },
+  { n: '06', name: 'Practical AI-learning experiences', blurb: 'Hands-on exercises where learners use AI tools directly, rather than reading about them.' },
+];
+
+const zero = CURRENCY.symbol + '0';
+const notify = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Tell me when giving opens')}`;
+const talk = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('About a gift to Lrnon')}`;
+---
+<Base title="Support Lrnon"
+  description="Where Lrnon stands financially, stated in the open: nothing raised, no invented targets, no progress bars, and every contribution published in a public ledger when giving opens.">
+
+  {mode === 'hidden' ? (
+    <section class="container" style="padding-block:var(--sp-16) var(--sp-12);max-width:760px;">
+      <h1 style="font-size:var(--fs-500);">Giving isn't open yet</h1>
+      <p class="prose" style="color:var(--c-ink-soft);">
+        Lrnon is not asking for money at the moment. When that changes, this page will
+        explain exactly where contributions go and publish every one of them in a public
+        ledger. Until then there is nothing here to see.
+      </p>
+      <p style="display:flex;gap:var(--sp-3);flex-wrap:wrap;">
+        <a class="btn" href="/">Back to learning</a>
+        <a class="btn btn--ghost" href="/volunteer">Volunteer instead</a>
+      </p>
+    </section>
+  ) : (
+    <>
+      <section class="container" style="padding-block:var(--sp-12) var(--sp-8);">
+        <p style="letter-spacing:0.14em;text-transform:uppercase;font-size:var(--fs-100);color:var(--c-ink-faint);margin:0 0 var(--sp-3);">
+          Nothing raised yet · opening now
+        </p>
+        <h1 style="font-size:var(--fs-600);max-width:16ch;margin:0 0 var(--sp-4);">Support Lrnon, in the open.</h1>
+        <div class="prose">
+          <p style="color:var(--c-ink-soft);">
+            We are raising funds to keep Lrnon free and improve the platform, learning
+            content, accessibility, AI learning tools and infrastructure. Initial funding
+            will support hosting, development, content creation, accessibility features
+            and practical AI-learning experiences.
+          </p>
+          <p style="color:var(--c-ink-soft);">
+            We don't want to invent fundraising targets until we have calculated our actual
+            3–6 months of operating expenses. So there is no goal on this page, and no
+            progress bar. Give to the area you care about, and watch the ledger below fill up.
+          </p>
+        </div>
+        <p style="display:flex;flex-wrap:wrap;gap:var(--sp-3);margin-top:var(--sp-6);">
+          <a class="btn" href={talk}>Email us about a gift</a>
+          <a class="btn btn--ghost" href={notify}>Tell me when giving opens</a>
+        </p>
+        <p style="margin-top:var(--sp-4);color:var(--c-ink-faint);font-size:var(--fs-100);">
+          No ads, ever · Nothing goes behind a paywall · Refunds on request
+        </p>
+      </section>
+
+      <section class="container" style="padding-block:var(--sp-8);">
+        <h2 style="font-size:var(--fs-400);">Where things stand today</h2>
+        <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">
+          {[
+            ['Received to date', zero],
+            ['Funders listed', '0'],
+            ['Taken as salary or fees', zero],
+            ['Fundraising target', 'none set — being calculated'],
+          ].map(([k, v]) => (
+            <div class="card">
+              <p style="margin:0 0 var(--sp-2);color:var(--c-ink-faint);font-size:var(--fs-100);">{k}</p>
+              <p style="margin:0;font-size:var(--fs-300);font-family:var(--font-display);">{v}</p>
+            </div>
+          ))}
+        </div>
+        <p class="prose" style="margin-top:var(--sp-6);color:var(--c-ink-soft);">
+          Lrnon is currently an independently built initiative. It is not yet a registered
+          charity or nonprofit. We are starting small, publishing our funding and spending
+          openly, and will formalise the appropriate structure as the initiative grows.
+        </p>
+      </section>
+
+      {mode === 'partial' && (
+        <section class="container" style="padding-block:var(--sp-8);">
+          <div class="note note--aim">
+            <h2 style="font-size:var(--fs-400);margin-top:0;">Opening in stages</h2>
+            <p style="color:var(--c-ink-soft);">
+              The areas list and the public ledger open once giving is live. Until then this
+              page states where Lrnon stands and how contributions will be published.
+              Nothing has been received, so there is nothing yet to show.
+            </p>
+            <p style="margin-bottom:0;">
+              <a class="btn" href={notify}>Tell me when giving opens</a>
+              <span style="margin-inline-start:var(--sp-3);color:var(--c-ink-soft);">
+                Or <a href={talk}>email us</a> to talk about a larger gift.
+              </span>
+            </p>
+          </div>
+        </section>
+      )}
+
+      {mode === 'published' && (
+        <>
+          <section class="container" style="padding-block:var(--sp-8);">
+            <h2 style="font-size:var(--fs-400);">Choose what your money does</h2>
+            <p class="prose" style="color:var(--c-ink-soft);">
+              Six areas. No amount attached to any of them. Pick an area and your
+              contribution is recorded against it in the ledger. You can split one gift
+              across several areas, or skip the choice entirely and give to whatever is
+              most urgent.
+            </p>
+            <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:var(--sp-6);">
+              {areas.map((a) => (
+                <article class="card">
+                  <p style="margin:0 0 var(--sp-2);color:var(--c-ink-faint);font-size:var(--fs-100);letter-spacing:0.08em;text-transform:uppercase;">Area {a.n}</p>
+                  <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">{a.name}</h3>
+                  <p style="color:var(--c-ink-soft);margin:0 0 var(--sp-4);">{a.blurb}</p>
+                  <a class="btn btn--ghost" href={talk + '%20—%20' + encodeURIComponent(a.name)}>Give to this area →</a>
+                </article>
+              ))}
+            </div>
+            <div class="note note--try" style="margin-top:var(--sp-6);">
+              <h3 style="font-size:var(--fs-300);margin-top:0;">Or give without picking an area</h3>
+              <p style="margin-bottom:0;">
+                Recorded in the ledger as <strong>wherever it's needed most</strong>, and
+                reported the same way once spent. Most useful early on, when the biggest gap
+                changes month to month.
+              </p>
+            </div>
+          </section>
+
+          <section class="container" style="padding-block:var(--sp-8);">
+            <h2 style="font-size:var(--fs-400);">The public ledger</h2>
+            <p class="prose" style="color:var(--c-ink-soft);">
+              Every contribution appears here, oldest first, with no tiers and no bigger
+              names for bigger cheques. This is the whole table — it is empty because
+              nothing has come in yet. Totals shown in {CURRENCY.code}.
+            </p>
+            <div style="overflow-x:auto;">
+              <table style="width:100%;border-collapse:collapse;margin-top:var(--sp-4);">
+                <thead>
+                  <tr>
+                    {['Date', 'Funder', 'Amount', 'Recorded against'].map((h) => (
+                      <th scope="col" style="text-align:left;padding:var(--sp-3);border-bottom:1px solid var(--c-border);color:var(--c-ink-faint);font-size:var(--fs-100);text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-body);">{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td colspan="4" style="padding:var(--sp-8);text-align:center;color:var(--c-ink-soft);">
+                      Lrnon is currently independently funded. The first contribution will appear here.
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <p style="margin-top:var(--sp-4);color:var(--c-ink-faint);font-size:var(--fs-100);">
+              Rows are added by hand within a few days of receipt, and never removed — a
+              correction is published as its own dated row.
+            </p>
+          </section>
+        </>
+      )}
+    </>
+  )}
+</Base>

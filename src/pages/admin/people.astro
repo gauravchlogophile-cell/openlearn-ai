@@ -1,0 +1,11 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import AdminGate from '../../components/AdminGate.tsx';
+import AdminPeople from '../../components/AdminPeople.tsx';
+---
+<Admin title="People & roles — Lrnon admin" heading="Roles, delegation and Others"
+  description="Four layers, who holds what, and the functions nobody holds yet.">
+  <AdminGate client:load>
+    <AdminPeople client:load />
+  </AdminGate>
+</Admin>

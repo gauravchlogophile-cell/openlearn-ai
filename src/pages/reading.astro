@@ -1,0 +1,11 @@
+---
+import Base from '../layouts/Base.astro';
+import ReaderPrefsPanel from '../components/ReaderPrefs.tsx';
+---
+<Base title="Reading preferences — Lrnon"
+  description="Set text size, line spacing, line length, contrast, typeface and data saver. Device-side display settings — nothing is sent anywhere and no account is needed.">
+  <section class="container" style="padding-block:var(--sp-8) var(--sp-12);max-width:820px;">
+    <h1 style="font-size:var(--fs-500);">Reading preferences</h1>
+    <ReaderPrefsPanel client:load />
+  </section>
+</Base>

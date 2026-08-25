@@ -1,0 +1,11 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import AdminGate from '../../components/AdminGate.tsx';
+import AdminSky from '../../components/AdminSky.tsx';
+---
+<Admin title="Sky — Lrnon admin" heading="Sky assistant"
+  description="Master switch, staged rollout, gates and kill switch for the site assistant.">
+  <AdminGate client:load>
+    <AdminSky client:load />
+  </AdminGate>
+</Admin>
