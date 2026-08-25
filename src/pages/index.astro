@@ -1,53 +1,53 @@
 ---
 import Base from '../layouts/Base.astro';
+import TryOneQuestion from '../components/TryOneQuestion.tsx';
 import { getCollection } from 'astro:content';
 import meta from '../../content/modules.json';
+import { BADGES } from '../lib/progress-core.js';
 
 const all = await getCollection('lessons');
 
-/* Everything below is derived from content, never hand-written. The previous
-   version hard-coded "E2 — first 5 lessons" and omitted E3 entirely, which is
-   what happens to a hand-maintained list: it silently under-sells the course.
-   Now a module going live and its lesson count are read from the same source
-   the lessons themselves come from. */
+/* Every figure on this page is derived from content, never typed in. The
+   previous version hard-coded "E2 — first 5 lessons" when E2 had ten and never
+   mentioned E3 at all: the failure mode of a hand-maintained list is that it
+   quietly undersells the course. */
 const countByModule = all.reduce<Record<string, number>>((acc, l) => {
   acc[l.data.module] = (acc[l.data.module] ?? 0) + 1;
   return acc;
 }, {});
 
-const firstLessonOf = (moduleId: string) =>
-  all.filter((l) => l.data.module === moduleId)
-     .sort((a, b) => a.data.order - b.data.order)[0];
+const firstOf = (moduleId: string) =>
+  all.filter((l) => l.data.module === moduleId).sort((a, b) => a.data.order - b.data.order)[0];
 
-const liveModules = meta.modules
-  .filter((m) => m.status === 'live' && countByModule[m.id])
-  .map((m) => ({ ...m, lessons: countByModule[m.id], first: firstLessonOf(m.id) }));
+const isLive = (m: { id: string; status: string }) =>
+  m.status === 'live' && !!countByModule[m.id];
+
+const liveModules = meta.modules.filter(isLive);
+const startHref = '/learn/' + firstOf(liveModules[0].id).id;
 
 const totalLessons = all.length;
 const totalCards = all.reduce((n, l) => n + (l.data.flashcards?.length ?? 0), 0);
-const startHref = '/learn/' + liveModules[0].first.id;
+const totalBadges = Array.isArray(BADGES) ? BADGES.length : 17;
 
-const explorer = meta.modules.filter((m) => m.track === 'explorer');
-const trackDots = [
-  ...explorer.map((m) => ({
-    id: m.id.toUpperCase(),
-    live: m.status === 'live' && !!countByModule[m.id],
-  })),
-  { id: 'P', live: false },
-  { id: 'B', live: false },
-];
+const tracks = meta.tracks.map((t) => {
+  const mods = meta.modules.filter((m) => m.track === t.id);
+  return { ...t, mods, live: mods.filter(isLive).length, total: mods.length };
+});
 ---
 <Base title="Lrnon — Learn AI. Free. Forever."
   description="An open-source, vendor-neutral AI curriculum from absolute beginner to builder. No paywalls, no ads, no tricks — free forever, for everyone.">
 
-  <section class="container" style="padding-block:var(--sp-16) var(--sp-12);">
-    <p style="font-family:var(--font-body);letter-spacing:0.14em;text-transform:uppercase;font-size:var(--fs-100);color:var(--c-ink-faint);margin:0 0 var(--sp-3);">
-      Open source · vendor neutral
+  <!-- Hero. The energy comes from things that cost nothing to load and never
+       hurt legibility: very large type, one hard colour block, and a question
+       you can answer before signing up. -->
+  <section class="container" style="padding-block:var(--sp-16) var(--sp-8);">
+    <p style="letter-spacing:0.14em;text-transform:uppercase;font-size:var(--fs-100);color:var(--c-ink-faint);margin:0 0 var(--sp-3);">
+      Free forever · open source
     </p>
-    <h1 style="font-size:var(--fs-600);max-width:20ch;margin:0 0 var(--sp-4);">
-      Learn AI. Free. Forever.
+    <h1 style="font-size:var(--fs-600);max-width:12ch;margin:0 0 var(--sp-4);line-height:1.05;">
+      Learn AI.<br />Free.<br />Forever.
     </h1>
-    <p class="prose" style="color:var(--c-ink-soft);margin:0 0 var(--sp-8);">
+    <p class="prose" style="color:var(--c-ink-soft);margin:0 0 var(--sp-6);">
       From zero to builder — an open-source curriculum with hands-on practice,
       honest guidance, and free certificates. No paywalls. No tricks.
     </p>
@@ -58,64 +58,88 @@ const trackDots = [
     </div>
 
     <p style="margin:var(--sp-6) 0 0;color:var(--c-ink-faint);font-size:var(--fs-100);">
-      {totalLessons} lessons live · {totalCards} review cards · nothing to pay, ever
+      No ads · No paywalls · No dark patterns · No account needed
     </p>
+  </section>
 
-    <!-- The skill tree, inline SVG: zero JS, and it reads live/planned straight
-         from modules.json so it cannot drift from the curriculum. -->
-    <figure style="margin:var(--sp-12) 0 0;">
-      <svg viewBox="0 0 680 170" role="img" aria-labelledby="tree-title tree-desc" style="width:100%;height:auto;">
-        <title id="tree-title">The learning roadmap</title>
-        <desc id="tree-desc">
-          Three tracks in order — Explorer, Practitioner, Builder.
-          {liveModules.length} Explorer modules are live now; the rest are planned.
-        </desc>
-        <line x1="40" y1="70" x2="640" y2="70" stroke="var(--c-border)" stroke-width="3"/>
-        {trackDots.map((d, i) => {
-          const x = 40 + i * (600 / (trackDots.length - 1));
-          return (
-            <g>
-              <circle cx={x} cy="70" r={d.live ? 20 : 15}
-                fill={d.live ? 'var(--c-progress)' : 'var(--c-bg)'}
-                stroke={d.live ? 'var(--c-progress)' : 'var(--c-border-strong)'} stroke-width="3"/>
-              <text x={x} y="112" text-anchor="middle" font-size="13"
-                fill={d.live ? 'var(--c-ink)' : 'var(--c-ink-faint)'}>{d.id}</text>
-            </g>
-          );
-        })}
-      </svg>
-      <figcaption style="color:var(--c-ink-faint);font-size:var(--fs-100);">
-        Explorer → Practitioner → Builder. Filled circles are live today.
-      </figcaption>
-    </figure>
+  <section class="container" style="padding-block:0 var(--sp-8);max-width:760px;">
+    <TryOneQuestion client:load startHref={startHref} />
+  </section>
+
+  <!-- What actually exists today, counted from the content itself. -->
+  <section class="container" style="padding-block:var(--sp-8);">
+    <dl style="display:grid;gap:var(--sp-6);grid-template-columns:repeat(auto-fit,minmax(160px,1fr));margin:0;">
+      {[
+        [String(totalLessons), 'lessons live today'],
+        [String(totalCards), 'flashcards for daily review'],
+        [String(totalBadges), 'badges to earn'],
+        ['Free', 'now, and at every step after'],
+      ].map(([big, small]) => (
+        <div>
+          <dt style="font-family:var(--font-display);font-size:var(--fs-500);font-weight:600;line-height:1;color:var(--c-ink);">{big}</dt>
+          <dd style="margin:var(--sp-2) 0 0;color:var(--c-ink-soft);font-size:var(--fs-100);">{small}</dd>
+        </div>
+      ))}
+    </dl>
   </section>
 
   <section class="container" style="padding-block:var(--sp-8);">
-    <div class="note note--aim prose" style="max-width:none;">
-      <h2 style="font-size:var(--fs-400);margin-top:0;">Why is this free?</h2>
-      <p style="margin-bottom:0;">
-        Because knowledge about AI shouldn't depend on the size of your wallet.
-        We're grant- and donation-funded, fully open source, and we publish our
-        finances. Nothing you need is ever behind money — not lessons, not
-        practice, not certificates.
-      </p>
-    </div>
-  </section>
-
-  <section class="container" style="padding-block:var(--sp-8) var(--sp-12);">
-    <h2 style="font-size:var(--fs-400);">Live now</h2>
-    <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(280px,1fr));">
-      {liveModules.map((m) => (
+    <h2 style="font-size:var(--fs-400);">Why is this free?</h2>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      Because knowledge about AI shouldn't depend on the size of your wallet.
+      We're grant- and donation-funded, fully open source, and we publish our
+      finances. Nothing you need is ever behind money — not lessons, not
+      practice, not certificates.
+    </p>
+    <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:var(--sp-6);">
+      {[
+        ['Published finances', 'Every grant and every cost, in the open repository.'],
+        ['Vendor-neutral', 'Tools are covered from an open registry. No sponsorships, ever.'],
+        ['Content CC BY-SA 4.0 · code MIT', 'Take it, translate it, teach with it. Attribution is all we ask.'],
+      ].map(([title, body]) => (
         <article class="card">
-          <p style="margin:0 0 var(--sp-2);color:var(--c-ink-faint);font-size:var(--fs-100);letter-spacing:0.08em;text-transform:uppercase;">
-            {m.id.toUpperCase()} · {m.lessons} lessons
-          </p>
-          <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">{m.title}</h3>
-          <p style="color:var(--c-ink-soft);margin:0 0 var(--sp-4);">{m.tagline}</p>
-          <a class="btn btn--ghost" href={'/learn/' + m.first.id}>Start {m.id.toUpperCase()}</a>
+          <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">{title}</h3>
+          <p style="margin:0;color:var(--c-ink-soft);">{body}</p>
         </article>
       ))}
     </div>
+  </section>
+
+  <!-- Three tracks, one path. Live modules are ticked; planned ones are named
+       so the shape of the whole course is visible from the front page. -->
+  <section class="container" style="padding-block:var(--sp-8) var(--sp-12);">
+    <h2 style="font-size:var(--fs-400);">Three tracks, one path</h2>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      Start anywhere that's live, in any order that serves you.
+    </p>
+
+    <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(280px,1fr));margin-top:var(--sp-6);">
+      {tracks.map((t) => (
+        <article class="card">
+          <p style="margin:0 0 var(--sp-2);color:var(--c-ink-faint);font-size:var(--fs-100);letter-spacing:0.08em;text-transform:uppercase;">
+            {t.live > 0 ? `${t.live} of ${t.total} live` : 'planned'}
+          </p>
+          <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">{t.title}</h3>
+          <p style="color:var(--c-ink-soft);margin:0 0 var(--sp-4);">{t.tagline}</p>
+          <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
+            {t.mods.map((m) => {
+              const live = isLive(m);
+              return (
+                <li style="display:flex;gap:var(--sp-2);align-items:baseline;">
+                  <span aria-hidden="true" style={`color:${live ? 'var(--c-progress)' : 'var(--c-ink-faint)'};`}>
+                    {live ? '✓' : '·'}
+                  </span>
+                  {live
+                    ? <a href={'/learn/' + firstOf(m.id).id}>{m.title}</a>
+                    : <span style="color:var(--c-ink-faint);">{m.title}</span>}
+                </li>
+              );
+            })}
+          </ul>
+        </article>
+      ))}
+    </div>
+
     <p style="margin-top:var(--sp-6);"><a href="/roadmap">Every planned module, on one page →</a></p>
   </section>
 </Base>
