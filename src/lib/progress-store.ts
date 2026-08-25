@@ -110,6 +110,28 @@ export function setGoalMode(mode: GoalMode) {
   window.dispatchEvent(new CustomEvent('ol:progress'));
 }
 
+/* ---------- read aloud ----------
+ * Deliberately NOT part of READER_PREFS. Those are all one data-* attribute
+ * driving CSS; this is a behaviour with no visual token behind it, and forcing
+ * it into that mechanism would mean inventing a meaningless stylesheet rule to
+ * satisfy the consistency test.
+ */
+export function readAloudEnabled(): boolean {
+  if (typeof localStorage === 'undefined') return false;
+  try {
+    return JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? '{}').readAloud === true;
+  } catch { return false; }
+}
+
+export function setReadAloud(on: boolean) {
+  const raw = localStorage.getItem(SETTINGS_KEY);
+  let s: Record<string, any> = {};
+  try { s = raw ? JSON.parse(raw) : {}; } catch { /* reset */ }
+  s.readAloud = on;
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+  window.dispatchEvent(new CustomEvent('ol:progress'));
+}
+
 /* ---------- reader preferences ----------
  * Each preference is one data-* attribute on <html>; tokens.css does the rest.
  * They live in the existing settings object rather than a second storage key,
@@ -131,6 +153,7 @@ export const READER_PREFS = {
   contrast: { attr: 'data-contrast', values: ['normal', 'high'] },
   font:     { attr: 'data-font',     values: ['default', 'readable'] },
   saver:    { attr: 'data-saver',    values: ['off', 'on'] },
+  motion:   { attr: 'data-motion',   values: ['system', 'reduce'] },
 } as const;
 
 export type ReaderPrefName = keyof typeof READER_PREFS;

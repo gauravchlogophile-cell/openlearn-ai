@@ -3,6 +3,7 @@ import Base from '../../layouts/Base.astro';
 import CompleteButton from '../../components/CompleteButton.tsx';
 import ModuleSidebar from '../../components/ModuleSidebar.tsx';
 import LessonControls from '../../components/LessonControls.tsx';
+import ReadAloud from '../../components/ReadAloud.tsx';
 import meta from '../../../content/modules.json';
 import { getCollection, render } from 'astro:content';
 import { createHash } from 'node:crypto';
@@ -67,6 +68,8 @@ const sidebarLessons = all.map((l) => ({ slug: l.id, title: l.data.title, order:
         ))}
       </ul>
     </section>
+
+    <ReadAloud client:idle />
 
     <div class="prose">
       <Content />

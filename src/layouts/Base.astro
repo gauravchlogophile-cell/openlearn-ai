@@ -1,6 +1,7 @@
 ---
 import '../styles/tokens.css';
 import ProgressChip from '../components/ProgressChip.tsx';
+import AccessibilityPanel from '../components/AccessibilityPanel.tsx';
 import { CONTACT_EMAIL, CONTACT_PHONE, FUNDING_MODE } from '../lib/site-config';
 import Sky from '../components/Sky.tsx';
 import { SKY_MODE, SKY_COPY } from '../lib/sky-config';
@@ -48,10 +49,11 @@ const showSky = SKY_MODE !== 'off';
       (function () {
         try {
           var D = { theme: 'system', textsize: 'normal', leading: 'normal',
-                    width: 'normal', contrast: 'normal', font: 'default', saver: 'off' };
+                    width: 'normal', contrast: 'normal', font: 'default', saver: 'off',
+                    motion: 'system' };
           var A = { theme: 'data-theme', textsize: 'data-textsize', leading: 'data-leading',
                     width: 'data-width', contrast: 'data-contrast', font: 'data-font',
-                    saver: 'data-saver' };
+                    saver: 'data-saver', motion: 'data-motion' };
           var r = (JSON.parse(localStorage.getItem('ol.settings.v1') || '{}').reader) || {};
           var el = document.documentElement;
           for (var k in D) {
@@ -80,6 +82,10 @@ const showSky = SKY_MODE !== 'off';
         <a href="/roadmap" style="margin-inline-end:var(--sp-4);">Roadmap</a>
         <a href="/achievements" style="margin-inline-end:var(--sp-4);">Badges</a>
         <a href="/account">Account</a>
+        {/* One button, everything inside — design turn 3. The moment someone
+            needs bigger text is the moment they are struggling with THIS page,
+            so the fix must not require navigating away to a settings screen. */}
+        <AccessibilityPanel client:load />
         <ProgressChip client:load />
       </nav>
     </header>

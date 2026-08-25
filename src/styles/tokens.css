@@ -75,6 +75,17 @@
 /* Data-saver: hide decorative figures rather than downloading them. */
 :root[data-saver="on"] figure[data-decorative] { display: none; }
 
+/* Motion. The OS preference is honoured on its own further down; this exists
+   so someone can reduce motion HERE without changing a system setting — often
+   the person on a borrowed or locked-down device, who cannot. */
+:root[data-motion="reduce"] *,
+:root[data-motion="reduce"] *::before,
+:root[data-motion="reduce"] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
 /* Dark theme — light is the default in :root above; dark applies only on
    explicit opt-in or an OS dark preference. Keep the two token lists
    identical; only the trigger differs. */
