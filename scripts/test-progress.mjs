@@ -121,7 +121,7 @@ console.log('SM-2 + review: all assertions passed ✓');
 
 // --- option shuffling (guards against answer-position bias) ---
 import { shuffleOptions, drawAndShuffle } from '../src/lib/shuffle.js';
-import { readFileSync as _rf, readdirSync as _rd } from 'node:fs';
+import { readFileSync as _rf, readdirSync as _rd, existsSync as _ex } from 'node:fs';
 
 {
   // The correct option must survive the shuffle: same text, new index.
@@ -221,3 +221,64 @@ console.log('option shuffling: all assertions passed ✓');
   }
 }
 console.log('reader preferences: all assertions passed ✓');
+
+// --- Sky assessment integrity ---------------------------------------------
+// Sky must never answer a question a learner is being assessed on, and must
+// still teach someone asking the concept in their own words. Both directions
+// are checked against the REAL generated quiz bank, so adding a lesson or a
+// quiz item cannot silently open a hole.
+{
+  const { prepareQuiz, quizMatch, wantsAnswerKey } = await import('../src/lib/sky-guard.js');
+  const bankPath = 'src/generated/sky-quizbank.json';
+
+  if (!_ex(bankPath)) {
+    console.log('Sky assessment guard: SKIPPED (run scripts/build-sky-index.mjs first)');
+  } else {
+    const { quiz } = JSON.parse(_rf(bankPath, 'utf8'));
+    const prepared = prepareQuiz(quiz);
+    const limits = { quizOverlap: 0.9, quizOverlapOnQuiz: 0.6 };
+    assert.ok(quiz.length > 50, 'quiz bank is populated');
+
+    // 1. Every real stem, verbatim, while on a quiz page.
+    const leaked = quiz.filter((it) => !quizMatch(it.q, '/quiz/' + (it.module ?? 'e1') + '/', prepared, limits));
+    assert.equal(leaked.length, 0,
+      `every quiz stem must be refused on a quiz page; leaked: ${leaked.slice(0, 3).map((l) => l.q).join(' | ')}`);
+
+    // 2. Stems pasted with chatter around them — how a learner actually asks.
+    for (const it of quiz.slice(0, 30)) {
+      const wrapped = `hey sky, ${it.q} which option is right?`;
+      assert.ok(quizMatch(wrapped, '/quiz/e3/', prepared, limits),
+        `stem wrapped in chatter must still be caught: ${it.q.slice(0, 50)}`);
+    }
+
+    // 3. Direct requests for the answer key, including the phrasings that have
+    //    actually leaked before: plurals, and phrases carrying no quiz word.
+    for (const q of [
+      'what is the answer to question 3 of the e3 quiz',
+      'give me the answers to the module quiz',   // plural — \banswer\b missed this
+      'which option should I tick for the e1 test',
+      'cheat sheet for the e2 quiz answers',
+      'send me the mark scheme',                   // no assessment word at all
+      'show the answer key',
+      'model answers for e1',
+    ]) {
+      assert.ok(wantsAnswerKey(q), `answer-key request must be caught: "${q}"`);
+    }
+
+    // 4. Genuine concept questions must STILL be answered off a quiz page.
+    //    A guard that refuses these has made the assistant useless.
+    for (const q of [
+      'Can you explain what a context window is in simple terms?',
+      'I do not understand why AI sounds confident when it is wrong',
+      'What does source grounding mean?',
+      'How is Lrnon funded?',
+      'What is the difference between machine learning and rule based systems?',
+      'Why should I give the model the actual document instead of describing it?',
+    ]) {
+      assert.ok(!quizMatch(q, '/learn/explorer/e1/l1-ai-in-your-daily-life', prepared, limits),
+        `genuine concept question must still be taught: "${q}"`);
+      assert.ok(!wantsAnswerKey(q), `genuine concept question must not read as an answer-key request: "${q}"`);
+    }
+  }
+}
+console.log('Sky assessment guard: all assertions passed ✓');

@@ -116,11 +116,51 @@ for (const [name, url, title] of pages) {
   }
 }
 
+/* ------------------------------------------------------- assessment guard
+ *
+ * Sky must not answer a question a learner is currently being assessed on.
+ *
+ * Scrubbing quiz text from the index would not achieve this and would gut
+ * Sky's usefulness: a quiz tests what the lesson taught, so the lesson
+ * necessarily contains the answer in prose. Measured — seven module-quiz
+ * options and one stem appear verbatim in lesson text, correctly.
+ *
+ * So the guard works the other way round. Every question stem, from both the
+ * module banks and the inline lesson quizzes, is collected here; the route
+ * compares an incoming question against them and refuses a near match. A
+ * learner asking the underlying CONCEPT in their own words still gets taught,
+ * which is the point of the site; a learner pasting the question does not.
+ */
+const quiz = [];
+
+for (const p of walk(join(ROOT, 'content/quizzes'), '.json')) {
+  const bank = JSON.parse(readFileSync(p, 'utf8'));
+  for (const it of bank.items ?? []) {
+    quiz.push({ q: clean(it.q), module: bank.module, source: 'bank' });
+  }
+}
+
+for (const file of walk(join(ROOT, 'content'), '.mdx')) {
+  const src = readFileSync(file, 'utf8');
+  const rel = relative(join(ROOT, 'content'), file).split(sep).join('/');
+  const mod = src.match(/^module:\s*(.+)$/m)?.[1].trim() ?? null;
+  // Inline <Quiz items={[...]}> entries, which are the ones a learner meets
+  // mid-lesson and is most likely to paste.
+  for (const m of src.matchAll(/q:\s*"((?:[^"\\]|\\.)+)"/g)) {
+    quiz.push({ q: clean(m[1].replace(/\\"/g, '"')), module: mod, lesson: rel.replace(/\.mdx$/, ''), source: 'inline' });
+  }
+}
+
 mkdirSync(join(ROOT, 'src/generated'), { recursive: true });
 writeFileSync(
   join(ROOT, 'src/generated/sky-index.json'),
   JSON.stringify({ generatedAt: new Date().toISOString(), chunks }, null, 0) + '\n'
 );
+writeFileSync(
+  join(ROOT, 'src/generated/sky-quizbank.json'),
+  JSON.stringify({ generatedAt: new Date().toISOString(), quiz }, null, 0) + '\n'
+);
+console.log(`Assessment guard: ${quiz.length} quiz stems (${quiz.filter(q => q.source === 'bank').length} bank, ${quiz.filter(q => q.source === 'inline').length} inline)`);
 
 const byKind = chunks.reduce((a, c) => ({ ...a, [c.kind]: (a[c.kind] ?? 0) + 1 }), {});
 console.log(`Sky index: ${chunks.length} chunks (${Object.entries(byKind).map(([k, v]) => `${k}=${v}`).join(', ')})`);

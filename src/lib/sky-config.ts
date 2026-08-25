@@ -63,6 +63,16 @@ export const SKY_LIMITS = {
    * genuine one. Coverage is the sanity check that catches that class. */
   minScore: 2.5,
   minCoverage: 0.5,
+
+  /* Assessment guard. The share of a quiz stem's distinctive words that must
+   * appear in the asked question before it counts as being the quiz question
+   * itself. Set from measurement: a verbatim paste scores 1.0 and stays near
+   * 1.0 with chatter wrapped around it, while a genuine paraphrase of the same
+   * CONCEPT sits well below. That is exactly the line we want — understanding
+   * the idea is the point of the site; being told which box to tick is not. */
+  quizOverlap: 0.9,
+  /** Stricter while the learner is actually on a quiz page. */
+  quizOverlapOnQuiz: 0.6,
 };
 
 /** Topics Sky must refuse outright, before retrieval, however well the site
@@ -87,6 +97,11 @@ export const SKY_COPY = {
     "I only read this site, so if the answer isn't here I'll say so.",
   disclaimer:
     'Sky can be wrong. Answers link to the page they came from. Nothing you type is used to train anything.',
+  assessmentTitle: 'That one is yours to answer',
+  assessment:
+    'That looks like a question from a quiz you are taking, so I am not going to answer it. ' +
+    'Getting it wrong and finding out why is how this sticks — that is what the explanations ' +
+    'after each question are for. Ask me about the idea behind it in your own words and I will help.',
   outOfScopeTitle: 'Outside what I know',
   outOfScope:
     "I only read Lrnon's own pages, so I'd be guessing — and this matters too much for a guess.",

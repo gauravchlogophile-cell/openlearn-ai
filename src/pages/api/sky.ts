@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro';
 import { SKY_MODE, SKY_LIMITS, SKY_COPY, SKY_REFUSE_PATTERNS } from '../../lib/sky-config';
 import index from '../../generated/sky-index.json';
+import quizbank from '../../generated/sky-quizbank.json';
+import { prepareQuiz, quizMatch, wantsAnswerKey } from '../../lib/sky-guard.js';
 
 /* This route must run per-request; the rest of the site is prerendered. */
 export const prerender = false;
@@ -69,6 +71,11 @@ function retrieve(question: string, limit = 4) {
   return scored.slice(0, limit);
 }
 
+/* Assessment integrity lives in src/lib/sky-guard.js so the exact code this
+   route runs is the code the test suite exercises. A guard that can only be
+   tested through a running Worker is a guard that stops being tested. */
+const QUIZ_PREPARED = prepareQuiz((quizbank as { quiz: any[] }).quiz);
+
 /** Redact things that look personal before anything leaves this process. The
  *  design promises Sky never asks for them; people volunteer them anyway. */
 function redact(s: string) {
@@ -133,14 +140,35 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     });
   }
 
-  // 5. Rate limit before retrieval, and before any provider call.
+  // 5. Assessment integrity. Checked before retrieval and before any spend:
+  //    a learner mid-quiz must not be able to have Sky sit it for them.
+  //    The refusal still teaches — it names the lesson to re-read — because
+  //    stonewalling a learner is not the goal; not answering FOR them is.
+  const page = typeof body.page === 'string' ? body.page : '/';
+  const quizHit = quizMatch(q, page, QUIZ_PREPARED, SKY_LIMITS);
+  if (quizHit || wantsAnswerKey(q)) {
+    const mod = quizHit?.module ?? null;
+    const back = quizHit?.lesson
+      ? { label: 'Re-read the lesson', href: '/learn/' + quizHit.lesson }
+      : mod
+        ? { label: `Re-read module ${mod.toUpperCase()}`, href: '/roadmap' }
+        : { label: 'Back to the roadmap', href: '/roadmap' };
+    return json({
+      verdict: 'assessment',
+      title: SKY_COPY.assessmentTitle,
+      message: SKY_COPY.assessment,
+      handoff: [back, { label: 'Daily review', href: '/review' }],
+    });
+  }
+
+  // 6. Rate limit before retrieval, and before any provider call.
   const env = (locals as any)?.runtime?.env;
   const ip = clientAddress ?? 'unknown';
   if (!(await rateLimit(env, `ip:${ip}`, SKY_LIMITS.maxPerIpPerHour))) {
     return json({ error: 'rate_limited', message: 'Too many questions for now. Try again shortly.' }, 429);
   }
 
-  // 6. Retrieve from our own index. No match, no answer — this is the whole
+  // 7. Retrieve from our own index. No match, no answer — this is the whole
   //    promise, and it is enforced here rather than requested in a prompt,
   //    because a prompt is a suggestion and this is a return statement.
   const hits = retrieve(q);
@@ -161,7 +189,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     href: h.chunk.url,
   }));
 
-  /* 7. The provider seam.
+  /* 8. The provider seam.
    *
    * This is the ONLY part of Sky that needs a key, and it is deliberately the
    * last thing that happens: every guard above has already run, the context is
