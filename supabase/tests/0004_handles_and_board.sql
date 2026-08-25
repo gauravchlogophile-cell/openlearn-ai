@@ -19,9 +19,17 @@ select ok(
   (select public.generate_handle()) ~ '^[a-z]+-[a-z]+(-[0-9]{3})?$',
   'a generated handle is two gentle words, optionally suffixed');
 
-select isnt(
-  (select public.generate_handle()), (select public.generate_handle()),
-  'two draws differ — 1600 pairs, so a repeat here means the RNG is not running');
+/* Twenty draws, expecting at least ten distinct. Comparing just two would
+   have been flaky: 1600 pairs means two draws collide roughly one run in
+   1600, which is rare enough to look like a real failure when it finally
+   happens and often enough to happen. Across twenty draws the expected number
+   of collisions is about 0.12, so needing eleven of them to fail this is
+   effectively impossible — while a frozen RNG returns one distinct value and
+   fails every time, which is the thing worth catching. */
+select cmp_ok(
+  (select count(distinct public.generate_handle())::int from generate_series(1, 20)),
+  '>=', 10,
+  'handles are actually random, not a frozen value');
 
 -- Every existing learner has one, or the board has to render a NULL.
 select is(
