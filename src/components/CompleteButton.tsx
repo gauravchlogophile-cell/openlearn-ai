@@ -26,7 +26,20 @@ export default function CompleteButton(
   const [justEarned, setJustEarned] = useState(false);
 
   useEffect(() => {
-    const read = () => { setDone(isComplete(slug)); setAttempted(hasAttemptedQuiz(slug)); };
+    /* A lesson with no inline quiz has no way to ever record an attempt, so
+       gating on one would make it permanently uncompletable — no tick, no XP,
+       and the module could never reach 100%, which would also block the
+       module-complete reward. Every lesson has a quiz today, but E4 onward is
+       being written now and nothing enforces that they must.
+
+       The quiz island renders section[aria-label="Check your understanding"],
+       which is in the prerendered HTML and therefore present before this
+       effect runs. Absent quiz, nothing to attempt, so nothing to gate on. */
+    const read = () => {
+      const hasQuiz = !!document.querySelector('section[aria-label="Check your understanding"]');
+      setDone(isComplete(slug));
+      setAttempted(!hasQuiz || hasAttemptedQuiz(slug));
+    };
     read();
     // The quiz island dispatches this when answers are checked, so the button
     // unlocks in place rather than needing a reload.

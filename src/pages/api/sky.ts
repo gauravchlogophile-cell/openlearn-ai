@@ -76,9 +76,17 @@ function retrieve(question: string, limit = 4) {
    tested through a running Worker is a guard that stops being tested. */
 const QUIZ_PREPARED = prepareQuiz((quizbank as { quiz: any[] }).quiz);
 
-/** Redact things that look personal before anything leaves this process. The
- *  design promises Sky never asks for them; people volunteer them anyway. */
-function redact(s: string) {
+/** Redact things that look personal. The design promises Sky never asks for
+ *  them; people volunteer them anyway.
+ *
+ *  NOT WIRED UP YET, and deliberately not presented as if it were. It has no
+ *  caller because nothing currently leaves this process — the provider seam
+ *  below is unimplemented. It previously carried a comment claiming it ran
+ *  "before anything leaves this process", which was a safety-shaped no-op:
+ *  the next person to wire the provider would reasonably assume scrubbing was
+ *  already happening and ship the learner's raw question to a third party.
+ *  The call site is marked in the seam below; this must be applied there. */
+export function redactForProvider(s: string) {
   return s
     .replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, '[email]')
     .replace(/\+?\d[\d\s().-]{7,}\d/g, '[phone]')
@@ -201,6 +209,12 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
    * the passages as user content and keep the system prompt fixed — a lesson
    * that happens to contain the words "ignore previous instructions" is a
    * string, and must be treated as one.
+   *
+   * APPLY redactForProvider(q) HERE, at the moment the question is handed to
+   * the provider. It is not called anywhere yet because nothing leaves this
+   * process yet; the first line of the provider call is where it belongs.
+   * Learners volunteer emails and phone numbers into free-text boxes even
+   * when never asked, and this is the last point at which that is our choice.
    *
    * KNOWN LIMIT, measured. Retrieval narrows; it does not adjudicate. Asked
    * "What is the capital of France?", the gates above let the question through

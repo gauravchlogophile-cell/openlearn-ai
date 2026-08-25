@@ -46,6 +46,17 @@ export default function Dashboard(
   const [due, setDue] = useState(0);
   const [lastAt, setLastAt] = useState<string | null>(null);
   const [handle, setHandle] = useState<string | null>(null);
+  /* The greeting must not be computed during the first render. This site is
+     output:'static', so that render happens ONCE at build time and its result
+     is the HTML every visitor downloads — a site built at 02:37 shipped
+     "Good morning" as the <h1> to somebody opening it at 8pm, and the text
+     only corrected itself when the island hydrated. It was also a hydration
+     mismatch, since the server string and the client string differ.
+
+     So the first client render must produce exactly what the build produced,
+     and the clock is only consulted afterwards. */
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
   const now = new Date();
 
   const lessonMinutes = Object.fromEntries(lessons.map((l) => [l.slug, l.minutes]));
@@ -92,7 +103,8 @@ export default function Dashboard(
   return (
     <div>
       <h1 style={{ fontSize: 'var(--fs-500)', margin: '0 0 var(--sp-2)' }}>
-        {greeting(now)}{handle && <>, <span translate="no">{handle}</span></>}
+        {mounted ? greeting(now) : 'Welcome back'}
+        {handle && <>, <span translate="no">{handle}</span></>}
       </h1>
       <p style={{ color: 'var(--c-ink-soft)', marginTop: 0 }}>
         Level {stats.level}

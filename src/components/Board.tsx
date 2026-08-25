@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { isConfigured, supabase } from '../lib/supabase';
 
 /** "Today's board" — design turn 7, /home.
@@ -29,10 +29,20 @@ export default function Board() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  /* Guards against an out-of-order response. Clicking "This week" then
+     "Today" leaves two calls in flight, and if the slower first one resolves
+     last its rows land under the Today tab — weekly totals labelled Today,
+     with nothing to indicate anything is wrong. Only the newest call is
+     allowed to write. */
+  const latest = useRef(0);
+
   const refresh = useCallback(async (s: Scope) => {
+    const ticket = ++latest.current;
+    const fresh = () => ticket === latest.current;
     if (!isConfigured) { setSignedIn(false); return; }
     const sb = supabase();
     const { data: { user } } = await sb.auth.getUser();
+    if (!fresh()) return;
     setSignedIn(!!user);
     if (!user) return;
 
@@ -40,6 +50,7 @@ export default function Board() {
       sb.from('profiles').select('leaderboard_opt_in').eq('id', user.id).single(),
       sb.rpc('daily_board', { p_scope: s, p_limit: 10 }),
     ]);
+    if (!fresh()) return;
     setOptedIn(prof?.leaderboard_opt_in === true);
     if (e) { setError('The board could not be loaded just now.'); setRows([]); return; }
     setError(null);
