@@ -2,6 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import CompleteButton from '../../components/CompleteButton.tsx';
 import ModuleSidebar from '../../components/ModuleSidebar.tsx';
+import LessonControls from '../../components/LessonControls.tsx';
 import meta from '../../../content/modules.json';
 import { getCollection, render } from 'astro:content';
 import { createHash } from 'node:crypto';
@@ -33,13 +34,18 @@ const sidebarLessons = all.map((l) => ({ slug: l.id, title: l.data.title, order:
         lessons between the header and the lesson for a screen reader, so it
         comes after the article and is placed alongside with CSS instead. */}
     <article>
-    <nav aria-label="Breadcrumb" style="margin:0 0 var(--sp-3);font-size:var(--fs-100);color:var(--c-ink-faint);">
-      <a href="/" translate="no" class="notranslate">Lrnon</a>
-      <span aria-hidden="true"> / </span>
-      <a href="/roadmap">{trackMeta?.title ?? lesson.data.track}</a>
-      <span aria-hidden="true"> · </span>
-      <span>{lesson.data.module.toUpperCase()} · {modMeta?.title ?? ''}</span>
-    </nav>
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:var(--sp-4);flex-wrap:wrap;margin:0 0 var(--sp-3);">
+      <nav aria-label="Breadcrumb" style="font-size:var(--fs-100);color:var(--c-ink-faint);">
+        <a href="/" translate="no" class="notranslate">Lrnon</a>
+        <span aria-hidden="true"> / </span>
+        <a href="/roadmap">{trackMeta?.title ?? lesson.data.track}</a>
+        <span aria-hidden="true"> · </span>
+        <span>{lesson.data.module.toUpperCase()} · {modMeta?.title ?? ''}</span>
+      </nav>
+      {/* Text size, theme and streak, per design turn 2 — wanted mid-lesson,
+          which is exactly when leaving for a settings page loses your place. */}
+      <LessonControls client:idle />
+    </div>
 
     <p style="color:var(--c-ink-faint);font-size:var(--fs-100);margin:0;letter-spacing:0.06em;text-transform:uppercase;">
       Lesson {lesson.data.order} of {all.length}

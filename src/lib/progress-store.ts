@@ -29,6 +29,34 @@ export function markComplete(slug: string, hash: string) {
   return summary();
 }
 
+/* ---------- lesson quiz attempts ----------
+ * A lesson may only be marked complete once the learner has actually answered
+ * its questions at least once. Clicking "Mark complete" without engaging with
+ * anything was previously enough to earn XP and a tick, which made the tick
+ * mean "I scrolled past this" rather than "I understood this".
+ *
+ * An ATTEMPT is recorded, never a score. The inline quizzes are formative —
+ * getting one wrong and reading why is the pedagogy — so the gate is
+ * engagement, not correctness. Requiring a right answer would push people to
+ * guess until the button unlocked, which teaches the opposite of E1·L7.
+ */
+export function recordQuizAttempt(slug: string) {
+  if (typeof localStorage === 'undefined') return;
+  const raw = localStorage.getItem(SETTINGS_KEY);
+  let s: Record<string, any> = {};
+  try { s = raw ? JSON.parse(raw) : {}; } catch { /* reset */ }
+  s.attempted = { ...(s.attempted ?? {}), [slug]: true };
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+  window.dispatchEvent(new CustomEvent('ol:progress'));
+}
+
+export function hasAttemptedQuiz(slug: string): boolean {
+  if (typeof localStorage === 'undefined') return false;
+  try {
+    return JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? '{}').attempted?.[slug] === true;
+  } catch { return false; }
+}
+
 export function isComplete(slug: string): boolean {
   return Boolean(load().completions[slug]);
 }

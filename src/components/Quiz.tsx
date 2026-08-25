@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { shuffleOptions } from '../lib/shuffle.js';
+import { recordQuizAttempt } from '../lib/progress-store';
 
 export interface QuizItem {
   q: string;
@@ -32,6 +33,13 @@ export default function Quiz({ items }: { items: QuizItem[] }) {
 
   const correct = view.filter((v, i) => picked[i] === v.answer).length;
 
+  /** Derive the lesson slug from the path: /learn/<slug>/ → <slug>. */
+  function noteAttempt() {
+    if (typeof location === 'undefined') return;
+    const m = location.pathname.match(/^\/learn\/(.+?)\/?$/);
+    if (m) recordQuizAttempt(m[1]);
+  }
+
   return (
     <section aria-label="Check your understanding" style={{
       background: 'var(--c-surface)', borderRadius: 'var(--r-m)',
@@ -60,7 +68,11 @@ export default function Quiz({ items }: { items: QuizItem[] }) {
           )}
         </fieldset>
       ))}
-      <button className="btn" onClick={() => setChecked(true)}
+      {/* Recording the attempt here, rather than in the lesson page, is what
+          lets "Mark complete" require engagement. The slug comes from the URL
+          so the 26 lesson files do not each need a new prop — and a Quiz used
+          anywhere that is not a lesson simply records nothing. */}
+      <button className="btn" onClick={() => { setChecked(true); noteAttempt(); }}
         disabled={Object.keys(picked).length < items.length}>
         Check answers
       </button>

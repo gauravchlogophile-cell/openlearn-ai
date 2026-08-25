@@ -52,7 +52,7 @@ export default function ModuleSidebar({
           {moduleTitle}
         </p>
         <p style={{ margin: 'var(--sp-1) 0 0', color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>
-          {completed}/{lessons.length} done
+          {completed}/{lessons.length}
         </p>
       </div>
 
