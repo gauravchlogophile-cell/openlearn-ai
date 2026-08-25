@@ -39,19 +39,20 @@ select is(
 -- Signup assigns one. Checking the source is weaker than calling the trigger,
 -- but calling it needs an auth.users insert, which this fixture cannot do.
 select ok(
-  (select prosrc like '%generate_handle%' from pg_proc where proname = 'handle_new_user'),
+  (select prosrc like '%generate_handle%' from pg_proc where proname = 'handle_new_user' and pronamespace = 'public'::regnamespace),
   'signup generates a handle rather than leaving it null');
 
 select has_function('public', 'profiles_lock_handle', 'the handle lock exists');
 
 select ok(
   (select count(*) > 0 from pg_trigger
-    where tgname = 'profiles_lock_handle' and not tgisinternal),
+    where tgname = 'profiles_lock_handle' and not tgisinternal
+      and tgrelid = 'public.profiles'::regclass),
   'the lock is actually attached to profiles, not merely defined');
 
 -- The one that would have let a child publish their own name.
 select ok(
-  (select prosrc like '%cannot be changed%' from pg_proc where proname = 'profiles_lock_handle'),
+  (select prosrc like '%cannot be changed%' from pg_proc where proname = 'profiles_lock_handle' and pronamespace = 'public'::regnamespace),
   'a learner cannot rename themselves');
 
 -- The constraint must still accept every handle already stored, or this

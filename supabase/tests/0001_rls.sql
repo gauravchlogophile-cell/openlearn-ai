@@ -7,8 +7,8 @@ select has_table('public', 'profiles', 'profiles exists');
 select has_table('public', 'reward_events', 'reward_events exists');
 
 -- RLS enabled everywhere
-select ok((select relrowsecurity from pg_class where relname='profiles'), 'RLS on profiles');
-select ok((select relrowsecurity from pg_class where relname='reward_events'), 'RLS on reward_events');
+select ok((select relrowsecurity from pg_class where relname = 'profiles' and relnamespace = 'public'::regnamespace), 'RLS on profiles');
+select ok((select relrowsecurity from pg_class where relname = 'reward_events' and relnamespace = 'public'::regnamespace), 'RLS on reward_events');
 
 -- No direct write policies on the ledger (function-only invariant, FR-GAME-1)
 select is(
@@ -18,7 +18,7 @@ select is(
 
 -- award() exists and is definer
 select ok(
-  (select prosecdef from pg_proc where proname='award'),
+  (select prosecdef from pg_proc where proname = 'award' and pronamespace = 'public'::regnamespace),
   'award() is SECURITY DEFINER');
 
 select * from finish();

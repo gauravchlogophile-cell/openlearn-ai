@@ -13,9 +13,9 @@ select has_table('public', 'owner_proposals', 'owner_proposals exists');
 select has_column('public', 'user_roles', 'expires_at', 'grants can be time-boxed');
 select has_column('public', 'user_roles', 'function', 'grants name their surface');
 
-select ok((select relrowsecurity from pg_class where relname='admin_audit'),
+select ok((select relrowsecurity from pg_class where relname = 'admin_audit' and relnamespace = 'public'::regnamespace),
   'RLS on admin_audit');
-select ok((select relrowsecurity from pg_class where relname='owner_proposals'),
+select ok((select relrowsecurity from pg_class where relname = 'owner_proposals' and relnamespace = 'public'::regnamespace),
   'RLS on owner_proposals');
 
 -- The audit log must be append-only: no policy may allow rewriting history.
@@ -43,13 +43,13 @@ select ok(
   not has_table_privilege('authenticated', 'public.admin_audit', 'INSERT'),
   'authenticated cannot write audit rows directly');
 
-select ok((select prosecdef from pg_proc where proname='grant_role'),
+select ok((select prosecdef from pg_proc where proname = 'grant_role' and pronamespace = 'public'::regnamespace),
   'grant_role is SECURITY DEFINER');
 
 -- ------------------------------------------------------------- behaviour
 -- Expired grants must stop counting, or the expiry column is decorative.
 select ok(
-  (select prosrc like '%expires_at%' from pg_proc where proname='has_role'),
+  (select prosrc like '%expires_at%' from pg_proc where proname = 'has_role' and pronamespace = 'public'::regnamespace),
   'has_role accounts for expiry');
 
 -- A caller with no role at all must be refused.
@@ -61,18 +61,18 @@ select throws_ok(
 -- The two-owner rule: the person confirming must not be the person who
 -- proposed, or a single owner can mint themselves a second one.
 select ok(
-  (select prosrc like '%proposed_by = v_actor%' from pg_proc where proname='confirm_owner'),
+  (select prosrc like '%proposed_by = v_actor%' from pg_proc where proname = 'confirm_owner' and pronamespace = 'public'::regnamespace),
   'confirm_owner refuses self-confirmation');
 
 -- An owner must not be able to remove the last owner and lock the project out
 -- of its own administration.
 select ok(
-  (select prosrc like '%cannot remove the last super_admin%' from pg_proc where proname='revoke_role'),
+  (select prosrc like '%cannot remove the last super_admin%' from pg_proc where proname = 'revoke_role' and pronamespace = 'public'::regnamespace),
   'revoke_role protects the last owner');
 
 -- Owners are minted only through propose/confirm, never grant_role.
 select ok(
-  (select prosrc like '%use propose_owner/confirm_owner%' from pg_proc where proname='grant_role'),
+  (select prosrc like '%use propose_owner/confirm_owner%' from pg_proc where proname = 'grant_role' and pronamespace = 'public'::regnamespace),
   'grant_role routes super_admin through the two-owner path');
 
 select * from finish();

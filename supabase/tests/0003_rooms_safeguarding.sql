@@ -4,7 +4,11 @@
 -- a policy page that no test enforces is a promise waiting to be broken by a
 -- later migration.
 begin;
-select plan(17);
+-- 18, not 17. The file has always contained eighteen assertions; the plan
+-- said seventeen, so pg_prove reported "Bad plan" and marked the last one
+-- failed. Nobody saw it because the db job never ran on a pull request until
+-- now — the very failure mode the comment in ci.yml describes.
+select plan(18);
 
 -- ---------------------------------------------------- structure
 select has_table('public', 'rooms', 'rooms exists');
@@ -29,9 +33,9 @@ select is(
   0, 'posts carry no identifying fields');
 
 -- ---------------------------------------------------- the gate
-select ok((select relrowsecurity from pg_class where relname='posts'), 'RLS on posts');
-select ok((select relrowsecurity from pg_class where relname='rooms'), 'RLS on rooms');
-select ok((select relrowsecurity from pg_class where relname='reports'), 'RLS on reports');
+select ok((select relrowsecurity from pg_class where relname = 'posts' and relnamespace = 'public'::regnamespace), 'RLS on posts');
+select ok((select relrowsecurity from pg_class where relname = 'rooms' and relnamespace = 'public'::regnamespace), 'RLS on rooms');
+select ok((select relrowsecurity from pg_class where relname = 'reports' and relnamespace = 'public'::regnamespace), 'RLS on reports');
 
 -- Ships closed, and closed means closed: the gate needs BOTH a flag and two
 -- named people, so flipping one by accident opens nothing.
@@ -41,7 +45,7 @@ select is(
     where open = false and safeguarding_owner is null and deputy is null),
   1, 'no safeguarding owner or deputy is set');
 select ok(
-  (select prosrc like '%safeguarding_owner is not null%' from pg_proc where proname='rooms_open'),
+  (select prosrc like '%safeguarding_owner is not null%' from pg_proc where proname = 'rooms_open' and pronamespace = 'public'::regnamespace),
   'opening requires a named owner, not just a flag');
 
 -- ---------------------------------------------------- moderation
