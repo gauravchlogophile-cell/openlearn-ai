@@ -1,10 +1,19 @@
-import { useMemo, useState } from 'react';
-import { passQuiz, hasPassedQuiz } from '../lib/progress-store';
-import { XP_MODULE_QUIZ } from '../lib/progress-core';
+import { useEffect, useMemo, useState } from 'react';
+import { passQuiz, hasPassedQuiz, badges, summary, load } from '../lib/progress-store';
+import { XP_MODULE_QUIZ, XP_LESSON_COMPLETE, BADGES } from '../lib/progress-core';
 import { drawAndShuffle } from '../lib/shuffle.js';
+import RewardMoment from './RewardMoment';
 
 interface Item { id: string; q: string; options: string[]; answer: number; explain: string; }
-interface Props { moduleId: string; title: string; items: Item[]; drawCount: number; passThreshold: number; }
+interface Props {
+  moduleId: string; title: string; items: Item[]; drawCount: number; passThreshold: number;
+  /** Every lesson slug in this module, so the reward moment can say whether
+   *  passing the quiz actually COMPLETED the module or merely passed a quiz
+   *  with lessons still unread. */
+  moduleLessons: string[];
+}
+
+type Reward = { lessons: number; xp: number; newBadges: string[]; streak: number };
 
 /* Draw order was already random; option order was not, and the banks put 96%
    of correct answers at index 1. drawAndShuffle randomises both. Safe to do in
@@ -15,14 +24,50 @@ interface Props { moduleId: string; title: string; items: Item[]; drawCount: num
  *  (formative), 80% pass, unlimited retries with a fresh draw, XP awarded
  *  once. Module quizzes are practice-grade by design; certification item
  *  banks stay server-side (FR-CERT-1) and arrive with accounts. */
-export default function ModuleQuiz({ moduleId, title, items, drawCount, passThreshold }: Props) {
+export default function ModuleQuiz({ moduleId, title, items, drawCount, passThreshold, moduleLessons }: Props) {
   const [round, setRound] = useState(0);
   const drawn = useMemo(() => drawAndShuffle(items, drawCount), [round, items, drawCount]);
   const [idx, setIdx] = useState(-1);
   const [picked, setPicked] = useState<number | null>(null);
   const [revealed, setRevealed] = useState(false);
   const [correct, setCorrect] = useState(0);
-  const alreadyPassed = typeof window !== 'undefined' && hasPassedQuiz(moduleId);
+  const [reward, setReward] = useState<Reward | null>(null);
+  /* Captured ONCE, at mount. Read fresh on every render it flips to true the
+     moment the pass is awarded, so a learner passing for the first time was
+     told "Still sharp" — the message for someone who had passed before —
+     instead of "+30 XP earned". */
+  const [alreadyPassed] = useState(() => typeof window !== 'undefined' && hasPassedQuiz(moduleId));
+
+  const finished = idx >= drawn.length && idx > -1;
+  const score = drawn.length ? correct / drawn.length : 0;
+  const passed = finished && score >= passThreshold;
+
+  /* Awarding XP used to happen inline during render. That worked, but a
+     write in a render body runs again on every re-render and is exactly the
+     kind of thing React's strict mode is designed to catch — and it left no
+     way to see which badges were new, because the award had already landed
+     by the time anything could look. Doing it in an effect gives a clean
+     before/after. */
+  useEffect(() => {
+    if (!passed) return;
+    const totals = { [moduleId]: moduleLessons.length };
+    const before = new Set(badges(totals));
+
+    if (!hasPassedQuiz(moduleId)) passQuiz(moduleId, score);
+
+    const done = load().completions;
+    const readCount = moduleLessons.filter((s) => done[s]).length;
+    // The reward moment claims the MODULE is complete. Only say so when it is.
+    if (readCount < moduleLessons.length) return;
+
+    const gained = badges(totals).filter((b) => !before.has(b));
+    setReward({
+      lessons: moduleLessons.length,
+      xp: moduleLessons.length * XP_LESSON_COMPLETE + XP_MODULE_QUIZ,
+      newBadges: gained.map((id) => BADGES.find((b: { id: string; name: string }) => b.id === id)?.name ?? id),
+      streak: summary().streak,
+    });
+  }, [passed, moduleId, score, moduleLessons]);
 
   function start() { setIdx(0); setPicked(null); setRevealed(false); setCorrect(0); }
   function check() {
@@ -43,14 +88,23 @@ export default function ModuleQuiz({ moduleId, title, items, drawCount, passThre
     </section>
   );
 
-  if (idx >= drawn.length) {
-    const score = correct / drawn.length;
-    const passed = score >= passThreshold;
-    if (passed && !hasPassedQuiz(moduleId)) passQuiz(moduleId, score);
+  if (finished) {
     return (
+      <>
+      {/* The reward moment sits ABOVE the score, because "Module E1 complete"
+          is the news and "9/10" is the detail. It appears only when the whole
+          module is done — passing the quiz with lessons still unread gets the
+          ordinary result panel, which is the truth. */}
+      {reward && (
+        <RewardMoment moduleId={moduleId} lessons={reward.lessons} xp={reward.xp}
+          newBadges={reward.newBadges} streak={reward.streak} />
+      )}
       <section role="status" style={{ background: 'var(--c-surface)', borderRadius: 'var(--r-l)', padding: 'var(--sp-6)' }}>
         <h2 style={{ marginTop: 0, fontSize: 'var(--fs-400)' }}>
-          {passed ? '🎉 Passed' : 'Not yet — and that\u2019s fine'}: {correct}/{drawn.length}
+          {/* The party popper is gone on purpose: turn 3's frame is titled "Reward
+            moment — no confetti, no noise", and when a module is finished the
+            panel above carries the celebration in words instead. */}
+          {passed ? 'Passed' : 'Not yet — and that\u2019s fine'}: {correct}/{drawn.length}
         </h2>
         {passed ? (
           <p>{alreadyPassed ? 'Still sharp.' : `+${XP_MODULE_QUIZ} XP earned.`} Module {moduleId.toUpperCase()} is
@@ -62,6 +116,7 @@ export default function ModuleQuiz({ moduleId, title, items, drawCount, passThre
         <button className="btn" onClick={retry}>Try a fresh draw</button>{' '}
         <a className="btn btn--ghost" href="/home">Back to dashboard</a>
       </section>
+      </>
     );
   }
 

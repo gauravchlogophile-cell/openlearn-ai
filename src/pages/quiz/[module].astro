@@ -1,6 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import ModuleQuiz from '../../components/ModuleQuiz.tsx';
+import { getCollection } from 'astro:content';
 
 export async function getStaticPaths() {
   const banks = import.meta.glob('../../../content/quizzes/*.json', { eager: true });
@@ -9,13 +10,22 @@ export async function getStaticPaths() {
   }));
 }
 const { bank } = Astro.props;
+
+/* The reward moment claims a MODULE is complete, so it needs to know which
+   lessons that module contains — passing the quiz with three lessons still
+   unread is a quiz pass, not a finished module. */
+const moduleLessons = (await getCollection('lessons'))
+  .filter((l) => l.data.module === bank.module)
+  .sort((a, b) => a.data.order - b.data.order)
+  .map((l) => l.id);
 ---
 <Base title={bank.title + ' — Lrnon'}
   description={'Module quiz for ' + bank.module.toUpperCase() + ': a random draw from the item bank, instant explanations, 80% to pass, unlimited free retries.'}>
   <section class="container prose" style="padding-block:var(--sp-8) var(--sp-12);">
     <h1 style="font-size:var(--fs-500);">{bank.module.toUpperCase()} module quiz</h1>
     <ModuleQuiz client:load moduleId={bank.module} title={bank.title}
-      items={bank.items} drawCount={bank.drawCount} passThreshold={bank.passThreshold} />
+      items={bank.items} drawCount={bank.drawCount} passThreshold={bank.passThreshold}
+      moduleLessons={moduleLessons} />
     <p style="color:var(--c-ink-soft);font-size:var(--fs-100);margin-top:var(--sp-8);">
       Module quizzes are formative: instant explanations, no cooldowns, no stakes.
       Track certification quizzes (with server-side item banks) arrive with accounts.
