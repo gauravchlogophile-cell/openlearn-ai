@@ -3,6 +3,12 @@
 -- The handle tests matter most. 0007 already CLAIMED handles were generated
 -- and never chosen; nothing enforced it, and nothing noticed, because no page
 -- displayed one. These assertions are what turn that comment into a fact.
+--
+-- All fourteen were additionally run against the production schema as plain
+-- SQL predicates, and all fourteen passed. pgTAP is available there but not
+-- installed, and installing an extension on production to run a test suite is
+-- not a trade worth making — the CI `db` job runs this file properly against
+-- a local instance.
 begin;
 select plan(14);
 
