@@ -7,11 +7,20 @@
 
 /* ------------------------------------------------------------------ contact */
 
-/** TODO(founder): replace both before pushing.
+/** The address every page promises a reply on within two working days.
+ *
+ *  This is a build-time constant on purpose: the footer appears on every page,
+ *  including cached ones served offline by the service worker, so fetching it
+ *  at runtime would mean a visible gap on first paint and a blank line with no
+ *  network. Changing it is a one-line edit and a deploy.
+ *
+ *  Making it editable from /admin without a deploy needs a settings row plus a
+ *  runtime read on the pages that show it — worth doing when there is more
+ *  than one value to manage, not for a single address.
  *  These appear on /feedback, /volunteer, /support and in the site footer.
  *  The design promises "a reply within two working days" against them, so put
  *  an address a human actually reads. */
-export const CONTACT_EMAIL = 'hello@lrnon.org';
+export const CONTACT_EMAIL = 'gaurav.ch.logophile@gmail.com';
 
 /** Shown as "Call or WhatsApp. Please keep to reasonable hours, IST."
  *  Set to an empty string to hide every phone row on the site — the layouts

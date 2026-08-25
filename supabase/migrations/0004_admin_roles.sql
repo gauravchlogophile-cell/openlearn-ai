@@ -30,8 +30,12 @@ comment on column public.user_roles.function is
 comment on column public.user_roles.expires_at is
   'Access ends automatically when the task does. NULL = no expiry (owners, standing admins).';
 
-create index if not exists user_roles_active on public.user_roles (user_id, role)
-  where expires_at is null or expires_at > now();
+-- No partial index here. `where expires_at > now()` looks natural and is
+-- rejected: index predicates must be IMMUTABLE and now() is not, since the set
+-- of matching rows would change without any write. Index the column instead
+-- and let the planner filter.
+create index if not exists user_roles_active
+  on public.user_roles (user_id, role, expires_at);
 
 -- ------------------------------------------------------------- audit log
 -- "Who did what, when, from where, and why — for every layer, kept 24 months.
