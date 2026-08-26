@@ -86,9 +86,24 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
 
   const db = createClient(url, anon, { auth: { persistSession: false } });
 
+  /* The certification migrations can land in the database after this code
+     lands on the site — they are applied by hand, deliberately. Until they do,
+     PostgREST reports the function as missing (PGRST202) and the honest answer
+     is "not available yet", not a generic failure. Someone standing there with
+     a printed certificate deserves to know which of the two it is. */
+  const notMigrated = (e: { code?: string; message?: string } | null) =>
+    e?.code === 'PGRST202' || /could not find the function/i.test(e?.message ?? '');
+
+  const unavailable = () => json({
+    error: 'unavailable',
+    message: 'Certificate verification is not switched on yet. No certificates '
+           + 'have been issued, so there is nothing this could have told you.',
+  }, 503);
+
   // ---------------------------------------------------------------- step one
   if (body.initials === undefined) {
     const { data, error } = await db.rpc('verify_credential', { p_code: code });
+    if (notMigrated(error)) return unavailable();
     if (error) return json({ error: 'lookup_failed' }, 502);
 
     const row = Array.isArray(data) ? data[0] : data;
@@ -119,6 +134,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
   const { data, error } = await db.rpc('reveal_credential', {
     p_code: code, p_initials: initials, p_ip_hash: ipHash,
   });
+  if (notMigrated(error)) return unavailable();
   if (error) return json({ error: 'lookup_failed' }, 502);
 
   const row = Array.isArray(data) ? data[0] : data;

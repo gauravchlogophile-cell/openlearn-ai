@@ -40,6 +40,7 @@ export default function AssessmentResult({ moduleId }: { moduleId: string }) {
   const [result, setResult] = useState<Result | null | 'none'>(null);
   const [error, setError] = useState<string | null>(null);
   const [preview, setPreview] = useState<number | null>(null);
+  const [notYet, setNotYet] = useState(false);
 
   /* ?preview=<attempt> is read here rather than on the server, because the page
      is prerendered — a value resolved at build time would be identical for
@@ -57,6 +58,11 @@ export default function AssessmentResult({ moduleId }: { moduleId: string }) {
       const { data, error } = preview
         ? await supabase().rpc('fixture_result', { p_attempt: preview })
         : await supabase().rpc('my_result', { p_module: moduleId });
+      /* The certification migrations are applied by hand and can land after
+         this code does. PGRST202 means the function is not there yet, which is
+         a different thing from "something went wrong" and should not be shown
+         to a learner as an error they might think is theirs. */
+      if (error?.code === 'PGRST202') { setResult('none'); setNotYet(true); return; }
       if (error) { setError(error.message); return; }
       const row = Array.isArray(data) ? data[0] : data;
       setResult(row ?? 'none');
@@ -67,6 +73,18 @@ export default function AssessmentResult({ moduleId }: { moduleId: string }) {
   if (result === null) return <p style={{ color: 'var(--c-ink-faint)' }}>Loading…</p>;
 
   if (result === 'none') {
+    if (notYet) {
+      return (
+        <div className="note note--aim">
+          <strong>Assessments are not switched on yet.</strong>
+          <p className="prose" style={{ margin: 'var(--sp-2) 0 0' }}>
+            Nobody has sat one, so there is no result this page could be
+            withholding from you. <a href={`/certification/${moduleId}`}>What
+            the two tiers mean</a> explains what opens when they do.
+          </p>
+        </div>
+      );
+    }
     return (
       <div className="note note--aim">
         <strong>No attempt to show.</strong>

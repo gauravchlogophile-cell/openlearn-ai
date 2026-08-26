@@ -28,6 +28,13 @@ export default function AdminFixtures() {
   async function refresh() {
     if (!isConfigured) return;
     const { data, error } = await supabase().rpc('list_test_fixtures');
+    /* Migrations are applied by hand, so this panel can exist on the site
+       before its functions exist in the database. Say which it is. */
+    if (error?.code === 'PGRST202') {
+      setError('The certification migrations (0009–0011) have not been applied to '
+             + 'this database yet, so there is nothing to seed into.');
+      setRows([]); return;
+    }
     if (error) { setError(error.message); return; }
     setRows((data ?? []) as Row[]);
 
