@@ -1,0 +1,168 @@
+---
+title: "Doing this respectfully"
+description: "Making things other people rely on, without speaking for them. Alt text, captions, consent, and why the accessible version cannot be the worse one."
+track: explorer
+module: e9
+order: 8
+minutes: 9
+objectives:
+  - "Produce alt text and captions that are actually useful"
+  - "Avoid making decisions about someone's access on their behalf"
+concepts: ["alt text", "inclusive practice", "consent"]
+flashcards:
+  - front: "What makes alt text good?"
+    back: "It conveys what the image is doing in context — not a generic description, and not a list of everything visible."
+  - front: "Why must AI-generated alt text be reviewed?"
+    back: "The model cannot know why you used the image, and it is the purpose that determines what the description should say."
+  - front: "What is the rule about accessible versions?"
+    back: "They must carry the same information. A shorter, later or worse version is not access."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The previous six lessons were about using these tools yourself. This one is
+about the other side: you will make and share things that other people have to
+get at.
+
+That is most readers of this module, including those who will never need any of
+it personally.
+
+## Alt text, and why AI cannot finish the job
+
+Ask an assistant to write alt text and you get a description of what is in the
+picture. That is a reasonable start and it is not what alt text is.
+
+**Alt text conveys what the image is doing here.** The same photograph needs
+different alt text depending on why it was used:
+
+> On an article about a flood: *"A car submerged to its windows in brown
+> floodwater on a residential street."*
+>
+> On a page about that car model: *"A 2019 Astra, side view, in silver."*
+>
+> Purely decorative, beside text that already says everything: `alt=""` — an
+> empty attribute, so a screen reader skips it rather than announcing noise.
+
+Only you know which situation you are in. So use AI for the first draft and
+then edit it against the reason you used the image:
+
+> *Write alt text for this image. It appears in [context], and the point I am
+> making is [point]. Under 125 characters. Do not begin with "an image of".*
+
+That last instruction saves a lot of tidying — screen readers already announce
+that it is an image.
+
+**Do not caption decorative images.** Filling every `alt` with generated
+description makes pages noisier, not more accessible. An empty alt is often the
+correct, considerate answer.
+
+## Captions and transcripts you publish
+
+E9·L5 was about consuming these. Publishing them has a different standard.
+
+Automatic captions are a starting point, not a finished product. Before they go
+out, fix names, technical terms and anything the transcript garbled — the
+things L5 identified as failure points.
+
+Uncorrected auto-captions on published material are widely regarded as not
+meeting accessibility requirements, and they are frequently worse than nothing
+because they look like provision while conveying something else.
+
+## The accessible version cannot be the worse one
+
+The rule that matters most, and the one most often broken with good intentions.
+
+If there is a plain-text version, it must contain the same information as the
+designed one. If there is a transcript, it must include everything said. If
+there is an audio description, it must convey what the visuals convey.
+
+Common failures: the accessible version arrives three weeks later. It is a
+summary rather than the content. It omits the diagrams because they were hard.
+It exists but nobody links to it.
+
+Each of these communicates the same thing to the person relying on it, and it
+is not what was intended.
+
+## Ask, do not assume
+
+The active principle behind this whole module.
+
+Do not decide what somebody needs. Do not announce that a tool will help them.
+Do not describe a person's disability to an assistant to get advice about how to
+treat them.
+
+**Ask what would help, and then do that.** People know their own requirements
+and have usually spent years refining them. The answer is often smaller and more
+specific than you would have guessed — a document format, a seat position, more
+notice before a meeting.
+
+Two specifics worth stating:
+
+**Someone's disability is their information.** Do not put it into an assistant,
+or into a document, without their agreement. E4·L8's paste test applies
+completely.
+
+**Do not use AI to assess or second-guess a request.** Somebody says they need
+something; that is the end of the enquiry, not the start of an investigation.
+
+## Build it in, do not bolt it on
+
+Retrofitting access is expensive and always partial. Doing it as you go costs
+very little: headings in order, alt text as you insert images, captions with the
+video, colour that is not the only signal, and text you can resize.
+
+Most of it takes seconds at the point of creation and hours afterwards. That is
+the entire argument.
+
+## Try it now (7 minutes)
+
+Take something you published recently with an image in it.
+
+Write alt text using the context prompt, then edit it against why you used the
+image. If the image was decorative, change it to an empty alt — that is the
+right answer more often than people expect.
+
+<Quiz client:visible items={[
+  {
+    q: "Good alt text describes:",
+    options: [
+      "Everything visible in the image",
+      "What the image is doing in this particular context",
+      "The image's file name and dimensions"
+    ],
+    answer: 1,
+    explain: "The same photograph needs different alt text on a flood article than on a page about that car model. Only you know which you are writing."
+  },
+  {
+    q: "For a purely decorative image beside text that already says everything:",
+    options: [
+      "Write a full generated description",
+      "Use an empty alt attribute so screen readers skip it",
+      "Omit the alt attribute entirely"
+    ],
+    answer: 1,
+    explain: "Filling every alt with description makes pages noisier rather than more accessible. Omitting the attribute is different from an empty one."
+  },
+  {
+    q: "When someone tells you what they need in order to take part:",
+    options: [
+      "Check whether the request is reasonable first",
+      "Ask what would help and then do it — the request is the end of the enquiry",
+      "Ask an assistant how best to accommodate them"
+    ],
+    answer: 1,
+    explain: "People have usually spent years refining what works for them, and their disability is their information to share, not yours to process."
+  }
+]} />
+
+## Recap
+
+Alt text conveys what an image is doing here, so AI can draft it and only you
+can finish it — and decorative images take an empty alt. Correct auto-captions
+before publishing. Never let the accessible version be shorter, later or worse.
+Ask what would help rather than deciding, keep people's disability out of your
+tools, and build access in as you go, because retrofitting costs hours where
+doing it costs seconds. That completes E9.

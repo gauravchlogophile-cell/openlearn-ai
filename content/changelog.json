@@ -4,6 +4,12 @@
     {
       "date": "2026-08-26",
       "kind": "New module",
+      "where": "Explorer · E9",
+      "what": "AI as an Assistive Tool published — eight lessons on reading, writing, seeing, hearing, focus and communication when those are barriers, plus how to make things other people can actually get at. Written after an audit found the curriculum had no coverage of assistive use at all."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
       "where": "Practitioner · P1",
       "what": "Advanced Prompting published — the first Practitioner module. Eight lessons on few-shot examples, structured output, splitting a prompt into single-purpose steps, chaining without compounding errors, persistent instructions, long inputs, testing a prompt against a saved evaluation set, and building prompts that survive a model update."
     },

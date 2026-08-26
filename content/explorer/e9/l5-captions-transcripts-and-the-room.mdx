@@ -1,0 +1,161 @@
+---
+title: "Captions, transcripts and the room"
+description: "Automatic captions got good enough to rely on, and still fail exactly where meetings matter most. What to do about names, crosstalk and accents."
+track: explorer
+module: e9
+order: 5
+minutes: 8
+objectives:
+  - "Use live captions and transcripts with realistic expectations"
+  - "Arrange a meeting so captions have a chance of working"
+concepts: ["captions", "transcription", "meeting access"]
+flashcards:
+  - front: "Where do automatic captions fail most?"
+    back: "Names, technical terms, crosstalk, accents outside the training data, and poor microphones."
+  - front: "What single change most improves caption accuracy?"
+    back: "One person speaking at a time, close to a decent microphone."
+  - front: "Why ask for a transcript as well as captions?"
+    back: "Captions vanish as they scroll. A transcript can be re-read, corrected and searched afterwards."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Automatic captioning crossed a threshold in the last few years. For deaf and
+hard-of-hearing people, for anyone in a noisy place, and for anyone following a
+language they read better than they hear, it went from a novelty to something
+you can plan around.
+
+It still fails, and it fails in a pattern worth knowing.
+
+## Where captions break
+
+**Names.** Personal names, company names, product names. They are exactly what
+a meeting is about and exactly what a general model has least reason to
+recognise.
+
+**Technical vocabulary.** Your industry's terms, acronyms and jargon.
+
+**Crosstalk.** Two people at once produces confident nonsense rather than a
+gap.
+
+**Accents.** Accuracy varies substantially by accent, and the variation tracks
+how much of that accent was in the training data. This is not a small effect
+and it lands hardest on people already less well served.
+
+**Poor audio.** A laptop microphone across a room, a bad connection, an echoing
+hall.
+
+Notice how many are properties of *the room*, not the software. That is where
+the leverage is.
+
+## Arrange the room, not just the tool
+
+The single most effective change is **one person speaking at a time, close to a
+decent microphone**. Everything else is secondary.
+
+Practical things that work, and are reasonable to ask for:
+
+**Say names at the start.** A round of introductions gives you a written list
+to correct the transcript against later.
+
+**Ask people to use headsets.** A £20 headset outperforms any amount of
+processing.
+
+**Ask for an agenda and materials in advance.** Knowing the topic makes garbled
+captions recoverable — you can reconstruct "the Q3 forecast" from a mangled
+line if you knew it was coming.
+
+**Ask for a pause between speakers.** Half a second removes most crosstalk
+errors.
+
+None of this is a special favour. It is the same request as "please share your
+screen", and it makes meetings better for everyone — which is worth saying when
+you ask.
+
+## Transcript as well as captions
+
+Live captions scroll away. Ask for a transcript too.
+
+A transcript can be re-read at your pace, searched, corrected, and turned into
+actions with E4·L5's structure — including its UNCLEAR section, which does
+double duty here: the things the transcript garbled land in it rather than
+being smoothed into confident wrong minutes.
+
+Two cautions:
+
+**Consent first.** E4·L5's rule. Recording or transcribing needs everyone to
+know and agree, and it is a legal requirement in many places.
+
+**Correct the names before circulating.** A transcript with everybody's name
+misspelled is worse than no transcript, and fixing them takes a minute.
+
+## What captions do not give you
+
+Honest limits, because expecting these and not getting them is worse than
+knowing.
+
+**Tone.** Whether that was a joke, or annoyance, or hesitation.
+
+**Who is not speaking.** Silence in a transcript looks the same whether the
+room agreed or went cold.
+
+**Overlap and interruption.** The texture of a conversation flattens into
+sequential lines.
+
+Professional captioners and sign language interpreters convey these, which is
+one reason automatic captions are an addition to that provision rather than a
+replacement for it. Where a meeting genuinely matters, ask for the human
+service — and note that in many jurisdictions employers and public bodies have
+a duty to provide it.
+
+## Try it now (6 minutes)
+
+Turn on captions in your next call, and afterwards read the transcript.
+
+Mark every place it got a name wrong. That list is the fastest possible measure
+of how much to trust it — and if you paste the list of correct names into the
+transcript request next time, many tools do noticeably better.
+
+<Quiz client:visible items={[
+  {
+    q: "Automatic captions fail most on:",
+    options: [
+      "Long sentences",
+      "Names, jargon, crosstalk, accents and poor audio",
+      "Fast speech alone"
+    ],
+    answer: 1,
+    explain: "Several of those are properties of the room rather than the software, which is where the leverage is."
+  },
+  {
+    q: "The single most effective improvement to caption accuracy:",
+    options: [
+      "A more advanced captioning service",
+      "One person speaking at a time, close to a decent microphone",
+      "Slower speech"
+    ],
+    answer: 1,
+    explain: "A £20 headset outperforms any amount of processing, and half a second between speakers removes most crosstalk errors."
+  },
+  {
+    q: "What do automatic captions systematically fail to convey?",
+    options: [
+      "The words themselves",
+      "Tone, silence and interruption",
+      "The order people spoke in"
+    ],
+    answer: 1,
+    explain: "Whether that was a joke, and whether silence meant agreement, are exactly what human captioners and interpreters do convey."
+  }
+]} />
+
+## Recap
+
+Captions became reliable enough to plan around and still fail on names, jargon,
+crosstalk, accents and bad audio. Fix the room first — one speaker, a real
+microphone, names read out, materials in advance. Take a transcript as well as
+captions, get consent, correct the names before circulating, and remember that
+tone, silence and interruption do not survive the transfer at all.
