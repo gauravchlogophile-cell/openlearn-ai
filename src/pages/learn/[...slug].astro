@@ -4,6 +4,7 @@ import CompleteButton from '../../components/CompleteButton.tsx';
 import ModuleSidebar from '../../components/ModuleSidebar.tsx';
 import LessonControls from '../../components/LessonControls.tsx';
 import ReadAloud from '../../components/ReadAloud.tsx';
+import LessonSources from '../../components/LessonSources.astro';
 import meta from '../../../content/modules.json';
 import { getCollection, render } from 'astro:content';
 import { createHash } from 'node:crypto';
@@ -84,6 +85,11 @@ const sidebarLessons = all.map((l) => ({ slug: l.id, title: l.data.title, order:
         a lesson were "All lessons" and the forward button, so a learner who
         wanted to re-read the previous lesson had to go back to the module list
         and find it. Previous/next are now symmetrical. */}
+    {/* Every tool this lesson names, with the vendor's own source and the date
+        it was checked. Rendered from frontmatter so a lesson cannot name a
+        product without sourcing it — see LessonSources for why that matters. */}
+    <LessonSources ids={lesson.data.tools ?? []} />
+
     <nav aria-label="Lesson navigation" style="display:flex;justify-content:space-between;gap:var(--sp-4);align-items:center;flex-wrap:wrap;">
       <span style="display:flex;gap:var(--sp-2);align-items:center;flex-wrap:wrap;">
         {prev

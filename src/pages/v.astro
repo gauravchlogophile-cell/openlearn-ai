@@ -1,0 +1,82 @@
+---
+/* 10e · lrnon.org/v — public certificate verification.
+ *
+ * The short path is the point. This URL gets printed on a certificate, read off
+ * a photocopy, and typed by someone who has never been to this site — so it is
+ * two characters, it needs no account, and 10g rules that it can never be
+ * switched off: "Verification can never be switched off while certificates
+ * exist in the wild. A certificate that cannot be checked is worse than no
+ * certificate."
+ *
+ * Which is why this page is live now, before issuing is. Nothing has been
+ * issued yet, so every code returns "no record" — and that is the correct
+ * answer, not a broken page.
+ */
+import Base from '../layouts/Base.astro';
+import VerifyCertificate from '../components/VerifyCertificate.tsx';
+import { TIERS } from '../lib/certification';
+---
+<Base title="Verify a certificate — Lrnon"
+  description="Check a Lrnon certificate code. No account needed. Shows what the certificate claims, what it does not, and who to contact about a specific one.">
+
+  <section class="container" style="padding-block:var(--sp-8) var(--sp-12);max-width:720px;">
+    <h1 style="font-size:var(--fs-500);margin:0 0 var(--sp-3);">Certificate verification</h1>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      Enter the code from the certificate. You do not need an account, and we do
+      not record who you are.
+    </p>
+
+    <VerifyCertificate client:load />
+
+    {/* ------------------------------------------ for schools and employers */}
+    <h2 style="font-size:var(--fs-400);margin-top:var(--sp-12);">
+      For a school or an employer
+    </h2>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      A plain-language note on what this document does and does not claim, so
+      you can weigh it properly.
+    </p>
+
+    <div class="card" style="margin-top:var(--sp-4);">
+      <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">What it claims</h3>
+      <p class="prose" style="color:var(--c-ink-soft);margin:0;">
+        A <strong>{TIERS.certificate.name}</strong> means the holder sat an
+        open-book assessment for one module and a volunteer reviewer judged
+        their written answer against a rubric published in advance — you can
+        read that rubric yourself on the module's certification page. A
+        <strong> {TIERS.record.name}</strong> is a lower tier and claims less:
+        that they completed every lesson in the module and passed its quizzes.
+        It involves no assessment.
+      </p>
+    </div>
+
+    <div class="card" style="margin-top:var(--sp-3);">
+      <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">What it does not claim</h3>
+      <p class="prose" style="color:var(--c-ink-soft);margin:0;">
+        Lrnon is not a recognised examination board and does not present itself
+        as one. This is our own record of work we assessed, against our own
+        published standard. It does not replace a school certificate, a board
+        result, or a professional qualification, and it should not be weighed as
+        if it did. It is evidence that someone learned something and could
+        demonstrate it — no more, and no less.
+      </p>
+    </div>
+
+    <div class="card" style="margin-top:var(--sp-3);">
+      <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">Why we ask for initials</h3>
+      <p class="prose" style="color:var(--c-ink-soft);margin:0;">
+        A code on its own returns the certificate's status but never the
+        holder's name. Most Lrnon learners are children, and a code that
+        returned a child's name to anyone who typed it would be a worse thing to
+        publish than no verification at all. If the person is with you, the
+        initials on their copy unlock the rest.
+      </p>
+    </div>
+
+    <p class="prose" style="color:var(--c-ink-soft);margin-top:var(--sp-6);">
+      A question about one specific certificate — including a suspicion that one
+      is not genuine — goes to <a href="/support">our contact page</a>, and a
+      person answers. We would rather hear about a forgery than not.
+    </p>
+  </section>
+</Base>

@@ -1,0 +1,150 @@
+---
+title: "Forgetting is the point"
+description: "Spacing beats cramming, and it works because you partly forget in between. Why review scheduling exists, and what to do with it."
+track: explorer
+module: e13
+order: 4
+minutes: 8
+objectives:
+  - "Space study sessions rather than massing them"
+  - "Use review scheduling without letting it become the whole activity"
+concepts: ["spacing effect", "forgetting curve", "spaced repetition"]
+flashcards:
+  - front: "Why does spacing beat cramming?"
+    back: "Partial forgetting makes the next retrieval effortful, and the effort is what strengthens the memory."
+  - front: "What does a spaced repetition system do?"
+    back: "Schedules each item for review just as you are about to forget it, lengthening the gap each time you succeed."
+  - front: "What is the limit of flashcards?"
+    back: "They build recall of facts. They do not build understanding, judgement, or the ability to do anything."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Cramming works, briefly. Four hours the night before produces a real effect that
+is largely gone within a week.
+
+Spread the same four hours across two weeks and you will know it months later.
+Same total effort, different result — and the mechanism is one people find
+counter-intuitive.
+
+## Forgetting a little is the active ingredient
+
+Memory fades along a curve, steeply at first. Review it while it is still fresh
+and retrieval is easy — and easy retrieval strengthens very little.
+
+Wait until it has partly faded, and pulling it back takes effort. **That effort
+is the strengthening.** You are not topping something up; you are rebuilding it,
+slightly, and the rebuild is what lasts.
+
+Hence the counter-intuitive part: **a review that felt too easy was slightly
+wasted.** You should be a little unsure. That discomfort is L1's desirable
+difficulty in its most practical form.
+
+## What a scheduling system does
+
+A spaced repetition system tracks each item and schedules it for just before
+you would forget it. Get it right and the gap lengthens — a day, then three,
+then a week, then a month. Get it wrong and the gap shrinks back.
+
+Over time you spend almost all your effort on the minority of things that are
+genuinely difficult for you, and barely any on what you have solidly learned.
+That efficiency is the whole point, and it is why Lrnon's review cards exist and
+why the intervals stretch the way they do.
+
+You do not need software for it. A shuffled stack of paper cards in dated boxes
+is the original version and works.
+
+## Where AI helps, and where it hurts
+
+**Helps:** turning material into cards quickly, which is the tedious step that
+stops people starting.
+
+> *Turn this into flashcards. One fact per card. The front must be a question
+> that cannot be answered by recognition. Include a few asking WHY, not only
+> what.*
+
+**Hurts:** it will happily generate two hundred cards, and two hundred cards is
+a daily obligation you will abandon in three weeks.
+
+Ask for **fifteen**. The rule that matters: *make cards for things you would be
+annoyed to have forgotten in six months.* Everything else is noise you have
+committed to reviewing forever.
+
+## What flashcards cannot do
+
+Worth being clear, because people over-invest here.
+
+Cards build **recall of specific things** — definitions, dates, formulas,
+vocabulary, the name of the thing. Genuinely valuable, and a foundation.
+
+They do not build **understanding**, **judgement**, or the **ability to do**.
+No number of cards teaches you to write well, diagnose a fault, structure an
+argument, or notice that a situation is unusual.
+
+So cards are one component. L3's application questions and L5's teaching-back
+are where understanding gets built, and L7 covers what neither can reach.
+
+## Making it survive
+
+Same argument as E4·L7. A system you abandon has taught you nothing.
+
+**Small daily beats large weekly.** Ten minutes most days outperforms two hours
+on Sunday, both for the spacing effect and for actually happening.
+
+**Do the due ones, not all of them.** The scheduler exists to tell you what
+needs attention. Overriding it is doing more work for less benefit.
+
+**Delete cards you no longer care about.** A backlog is the main reason people
+quit, and the cure is a smaller deck rather than more discipline.
+
+## Try it now (6 minutes)
+
+Take something you learned recently. Ask for fifteen cards, one fact each,
+question-fronted, some asking why.
+
+Then cut it to the ten you would genuinely be annoyed to have forgotten in six
+months. Review those tomorrow, not today.
+
+<Quiz client:visible items={[
+  {
+    q: "Spacing beats cramming because:",
+    options: [
+      "It spreads fatigue more evenly",
+      "Partial forgetting makes the next retrieval effortful, and the effort strengthens it",
+      "You cover more material overall"
+    ],
+    answer: 1,
+    explain: "You are not topping memory up, you are rebuilding it slightly — which is why a review that felt too easy was slightly wasted."
+  },
+  {
+    q: "The most common reason people abandon a review system:",
+    options: [
+      "The intervals are too long",
+      "Too many cards, creating a backlog that becomes a daily obligation",
+      "The software is unreliable"
+    ],
+    answer: 1,
+    explain: "The cure is a smaller deck rather than more discipline — make cards only for what you would be annoyed to forget."
+  },
+  {
+    q: "Flashcards are poorly suited to building:",
+    options: [
+      "Recall of definitions and formulas",
+      "Understanding, judgement and the ability to do something",
+      "Vocabulary in a new language"
+    ],
+    answer: 1,
+    explain: "No number of cards teaches you to diagnose a fault or structure an argument. Cards are one component, not the method."
+  }
+]} />
+
+## Recap
+
+Spacing works because partial forgetting makes the next retrieval effortful, and
+the effort is the strengthening — so an easy review was a slightly wasted one. A
+scheduler concentrates your effort on the minority you find hard. Use AI to make
+cards quickly, then cut ruthlessly to what you would mind forgetting in six
+months. And remember cards build recall, not understanding or capability.

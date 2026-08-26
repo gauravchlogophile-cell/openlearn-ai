@@ -1,0 +1,15 @@
+{
+  "id": "llama",
+  "name": "Llama",
+  "vendor": "Meta",
+  "category": "open-model",
+  "summary": "Meta's family of open-weight models, downloadable and runnable on your own hardware, and the most widely used base for locally-hosted and privately-deployed assistants.",
+  "capabilities": { "chat": true, "vision": true, "files": false, "voice": false, "webSearch": false, "api": false },
+  "freeTierNotes": "Weights are free to download under a community licence. Running them costs hardware and electricity rather than a subscription.",
+  "docsUrl": "https://www.llama.com/docs/overview/",
+  "tosNotes": "Released under a community licence with conditions, not a standard open-source licence. Read the licence before commercial deployment.",
+  "lastVerified": "2026-08-26",
+  "verifier": "core-team",
+  "tier": "B",
+  "status": "active"
+}

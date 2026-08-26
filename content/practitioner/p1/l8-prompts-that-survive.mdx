@@ -1,0 +1,172 @@
+---
+title: "Prompts that survive"
+description: "The model behind your prompt will change without asking you. How to build something that degrades visibly rather than silently, and hand it over intact."
+track: practitioner
+module: p1
+order: 8
+minutes: 9
+objectives:
+  - "Make a prompt robust to model updates and unexpected input"
+  - "Document a prompt so someone else can maintain it"
+concepts: ["robustness", "versioning", "handover"]
+flashcards:
+  - front: "Why does a working prompt stop working?"
+    back: "The model behind it is updated or replaced. Your prompt did not change; what it was tuned against did."
+  - front: "What makes a prompt brittle?"
+    back: "Depending on quirks — exact phrasings that happened to work, output formats that were never enforced, undocumented assumptions."
+  - front: "What does a prompt need beside itself?"
+    back: "Its purpose, its evaluation set, its known failures, and the date and model it was last verified against."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The last lesson of P1, and the one that determines whether anything you built
+in the previous seven is still working in a year.
+
+## Your prompt is the stable part
+
+This surprises people. You wrote the prompt, so it feels like the thing that
+might break.
+
+It is not. The prompt sits in a file, unchanged. What moves is **everything
+underneath it** — the model gets updated, a provider retires a version, your
+automation platform switches its default, someone changes the plan.
+
+Nothing announces this. One day output looks slightly different, and then a
+downstream step fails on a value it has never seen. If you skipped L7, you
+cannot even tell whether it was the model or something you edited.
+
+## Do not depend on quirks
+
+Some prompts work for reasons that will not survive.
+
+**Magic phrasings.** A specific incantation that happened to produce good output
+on one version. If you cannot say *why* a phrase helps, treat it as fragile.
+
+**Unenforced format luck.** It has always returned clean JSON, so you never
+validated it (L2). It was a tendency, and tendencies move.
+
+**Undocumented assumptions.** The prompt assumes input is under 500 words, or
+always in English, or always has a date. Nothing says so, so nothing checks it.
+
+**Exact-order dependence.** Fields have always come back in schema order, so a
+downstream step reads by position rather than by key.
+
+Robust prompts state their requirements explicitly and their consumers verify
+rather than assume. That is L2 and L4 doing their real work.
+
+## Fail visibly
+
+The most important property. When something breaks, it must be obvious.
+
+**Validate every step** (L4). An unparseable result should stop the chain, not
+become an empty string that looks like a legitimate blank.
+
+**Range-check values.** A date in 1902, a negative amount, a category you never
+defined.
+
+**Alert on rate changes.** If 3% of runs normally fail validation and today 40%
+do, something changed underneath you. That signal is worth more than any single
+failure, and most automation platforms can send it.
+
+Silent degradation is the thing to design against. A workflow that stops is an
+inconvenience. One that quietly produces slightly wrong output for six weeks is
+a data-cleanup project.
+
+## Version and date
+
+Keep with every prompt in production:
+
+**A version number**, incremented on every change.
+
+**The date and model it was last verified against** — E7·L8's uncertainty
+formula applied to your own tooling. *"Verified against [model] on 12 August
+2026"* tells the next person exactly how much to trust it.
+
+**Its evaluation score** at that verification (L7).
+
+When output looks wrong, the first question is "when was this last checked, and
+against what?" Without a date, diagnosis starts with archaeology.
+
+## Write the handover
+
+Assume someone else maintains this. Often that someone is you, having forgotten
+everything.
+
+Store beside the prompt:
+
+**What it is for** — one sentence, in terms of the job rather than the
+technique.
+
+**What it expects** — input shape, language, size limits.
+
+**What it produces** — the schema, and what happens on failure.
+
+**Known failures** — the cases you know it gets wrong. This is the most valuable
+and most often missing part. Someone who knows the boundary can work around it;
+someone who does not will find it in production.
+
+**The evaluation set** — so the next person can change it safely.
+
+Without this, the next person rewrites it from scratch and rediscovers every
+edge case you already paid for.
+
+## Re-verify on a schedule
+
+Put a date in the calendar — quarterly is reasonable. Run the evaluation set. If
+the score moved, investigate.
+
+Same argument as E8·L8's review date, and the same failure mode without it:
+prompts stay in production long after they stopped doing what everyone assumes.
+
+## Try it now (7 minutes)
+
+Take a prompt you actually rely on. Add a header: purpose, expected input,
+output schema, known failures, last verified date and model.
+
+Then put a re-verification date in your calendar. That header is the difference
+between a prompt and a maintained one.
+
+<Quiz client:visible items={[
+  {
+    q: "A prompt that worked for months stops working. The most likely cause:",
+    options: [
+      "The prompt degraded over time",
+      "The model behind it was updated or replaced",
+      "The input data changed format"
+    ],
+    answer: 1,
+    explain: "Your prompt sits unchanged in a file. What moves is everything underneath it, and nothing announces the change."
+  },
+  {
+    q: "Which is a sign of a brittle prompt?",
+    options: [
+      "It states its input requirements explicitly",
+      "It relies on a phrasing that works for reasons you cannot explain",
+      "It uses few-shot examples"
+    ],
+    answer: 1,
+    explain: "Magic incantations, unenforced format luck and undocumented assumptions all depend on behaviour that can move without notice."
+  },
+  {
+    q: "The most valuable and most often missing part of a handover:",
+    options: [
+      "The prompt text itself",
+      "The known failures",
+      "The model it was written for"
+    ],
+    answer: 1,
+    explain: "Someone who knows the boundary can work around it. Someone who does not will find it in production."
+  }
+]} />
+
+## Recap
+
+Your prompt is stable; the model under it is not. Avoid depending on
+unexplained phrasings, unenforced formats and undocumented assumptions. Make
+failures visible with validation, range checks and alerts on changing failure
+rates. Version each prompt, record the date and model it was verified against,
+write down its known failures, and re-verify on a schedule. That completes P1.

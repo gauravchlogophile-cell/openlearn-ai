@@ -1,0 +1,159 @@
+---
+title: "Structured output you can rely on"
+description: "Prose is for people; automation needs a shape it can parse. How to specify a format that holds, and what to do about the run that breaks it."
+track: practitioner
+module: p1
+order: 2
+minutes: 9
+objectives:
+  - "Specify an output format precisely enough to be machine-readable"
+  - "Plan for the run that returns something unparseable"
+concepts: ["structured output", "schemas", "failure handling"]
+flashcards:
+  - front: "Why does automation need structured output?"
+    back: "The next step has to find values by position or key. Prose has neither, so anything reading it is guessing."
+  - front: "What makes a format specification reliable?"
+    back: "A worked example of the exact shape, an explicit rule for missing values, and a ban on anything outside the structure."
+  - front: "What must every automated prompt plan for?"
+    back: "The run that returns something unparseable — a check, and a defined action when it fails."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The moment output feeds something other than a human reader, prose becomes a
+liability.
+
+A person reading *"Acme invoiced about £1,200 last Tuesday"* extracts three
+facts without effort. A spreadsheet, an automation step or a form cannot. They
+need a value in a known place, every time.
+
+## Ask for a shape, and show it
+
+The reliable specification has three parts, and all three matter.
+
+**A worked example of the exact shape.** Not a description of JSON — actual
+JSON, with your field names, filled in.
+
+**A rule for every missing value.** What goes in `amount` when there is no
+amount? Decide it: `null`, `0`, the string `"none"`. Undecided means varied.
+
+**A ban on anything outside the structure.** This is the one people forget:
+
+> *Return only the JSON object. No explanation before or after it, no code
+> fences, no commentary.*
+
+Without that line you will frequently get *"Here's the extracted data:"*
+followed by your perfect JSON followed by *"Let me know if you'd like any
+changes!"* — and whatever consumes it chokes on the first character.
+
+## A format that works
+
+*Return only this JSON, with no other text:*
+
+```json
+{"company": "Acme Ltd", "amount": 1200, "currency": "GBP",
+ "date": "2026-03-01", "confidence": "high"}
+```
+
+*Rules: amount is a number with no separators. If absent, null. currency is a
+three-letter code, or null. date is YYYY-MM-DD, or null if not stated.
+confidence is "high" when every field came from the text, "low" if you inferred
+any of it.*
+
+The `confidence` field is worth stealing. It costs nothing and gives the next
+step something to route on — send the low-confidence ones to a person rather
+than treating everything as equally solid.
+
+## Use the feature if your tool has one
+
+Several assistants and APIs now offer a structured-output or JSON mode, where
+you supply a schema and valid output is enforced rather than requested.
+
+Use it where available. It is categorically better than asking politely,
+because the guarantee is mechanical rather than a matter of the model
+cooperating.
+
+Where it is not available — most chat interfaces, many automation platforms —
+the prompt above is your version, and it needs the validation below.
+
+## Plan for the broken run
+
+This is the difference between something that demos and something that runs.
+
+Prompted structure is a strong tendency, not a guarantee. Over a thousand runs
+you will get a stray sentence, a truncated object, a field that arrived as a
+string when you expected a number.
+
+So decide in advance:
+
+**Check it.** Does it parse? Are the required keys present? Are the types
+right? Most automation tools can test this without code.
+
+**Define what happens when it fails.** Retry once, then route to a human. Never
+silently continue, and never let a failed parse become an empty value that
+looks like a legitimate "none" — that is the failure that corrupts data
+quietly, and it is far worse than a loud error.
+
+**Log the failures.** They are your best source of the next example to add,
+which takes you straight back to L1.
+
+## Keep the schema small
+
+One temptation to resist: extracting fourteen fields because you might want
+them later.
+
+Every field is another thing that can be wrong, and a long schema encourages
+the model to fill gaps with plausible values rather than nulls. Extract what
+the next step actually uses. Add fields when a real need appears.
+
+## Try it now (7 minutes)
+
+Take an extraction task and write it as a JSON specification with a worked
+example, explicit null rules, and the "return only the JSON" line.
+
+Run it twenty times on real inputs. Count the failures — that number is your
+error rate, and you cannot design the handling step without it.
+
+<Quiz client:visible items={[
+  {
+    q: "Why does automation need structured output rather than prose?",
+    options: [
+      "Structured output is shorter",
+      "The next step must find values by key or position, which prose does not provide",
+      "Models are more accurate in JSON"
+    ],
+    answer: 1,
+    explain: "A person extracts facts from a sentence effortlessly. A spreadsheet or automation step cannot, so it ends up guessing."
+  },
+  {
+    q: "Which instruction is most often forgotten?",
+    options: [
+      "Naming the fields",
+      "Banning any text outside the structure",
+      "Specifying the date format"
+    ],
+    answer: 1,
+    explain: "Without it you get \"Here's the extracted data:\" wrapped around your JSON, and the consumer chokes on the first character."
+  },
+  {
+    q: "When a run returns unparseable output, the worst response is:",
+    options: [
+      "Retry once, then route to a human",
+      "Let the failure become an empty value that looks like a legitimate 'none'",
+      "Log it and raise a visible error"
+    ],
+    answer: 1,
+    explain: "That corrupts data silently, which is far worse than failing loudly — nobody finds out until the numbers are already wrong."
+  }
+]} />
+
+## Recap
+
+Show the exact shape, define what a missing value looks like, and forbid any
+text outside the structure. Use a real structured-output mode where your tool
+has one, because a mechanical guarantee beats a request. Then validate every
+run and define what happens when parsing fails — never letting a broken run
+become a plausible-looking empty value.

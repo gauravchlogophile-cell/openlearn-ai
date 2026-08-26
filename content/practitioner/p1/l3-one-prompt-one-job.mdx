@@ -1,0 +1,147 @@
+---
+title: "One prompt, one job"
+description: "A prompt asked to do four things does all four adequately. Splitting the work is the single largest reliability gain available, and it costs almost nothing."
+track: practitioner
+module: p1
+order: 3
+minutes: 8
+objectives:
+  - "Split a multi-part request into single-purpose prompts"
+  - "Explain why decomposition improves reliability and debuggability"
+concepts: ["decomposition", "single responsibility", "debuggability"]
+flashcards:
+  - front: "Why split one prompt into several?"
+    back: "Each step gets full attention, each is testable in isolation, and a failure tells you exactly which step broke."
+  - front: "What is the sign a prompt is doing too much?"
+    back: "The word 'and' in your description of it, or a quality that varies between the parts of the output."
+  - front: "What is the cost of decomposition?"
+    back: "More calls, so more latency and cost — traded for reliability and the ability to find faults."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Here is a prompt that looks efficient:
+
+> *Read this support email. Work out what the customer is asking for,
+> categorise it, judge how urgent it is, draft a reply, and flag anything
+> needing a manager.*
+
+Five jobs. It will do all five, and it will do each of them worse than it would
+have done alone.
+
+## Why one prompt does five things badly
+
+Attention is finite. A single pass has to satisfy five objectives at once, and
+they compete — effort spent getting the category right is effort not spent on
+the draft.
+
+Worse, they interact. Having decided the issue is urgent, the draft becomes
+apologetic. Having written an apologetic draft, the urgency judgement looks
+confirmed. The steps contaminate each other, and you cannot see it happening
+because you only see the finished output.
+
+And when something is wrong, you have no idea which part failed. You rewrite the
+whole prompt and hope.
+
+## Split it
+
+> **Prompt 1** — Classify. Return one of: billing, technical, account, other.
+> **Prompt 2** — Rate urgency, with the reason. Return low, normal or urgent.
+> **Prompt 3** — Draft a reply, given the email and the category.
+> **Prompt 4** — Decide whether a manager is needed, given the urgency and
+> category.
+
+Four prompts, each with one job. Every one can be tested on its own, improved on
+its own, and swapped without touching the others.
+
+## What this buys you
+
+**Reliability.** Each step gets undivided attention on a narrower task.
+
+**Testability.** You can run twenty emails through the classifier alone and
+count how many it gets right. That number is meaningful. "How good is my big
+prompt" is not a question with an answer.
+
+**Debuggability.** When the reply is wrong, you look at which step produced the
+wrong input to it. This is the difference between fixing something and
+rewriting it.
+
+**Different treatment per step.** Classification can go to a small, cheap, fast
+model. Only the draft needs a capable one. That is often a large cost
+reduction, and E8·L5's proportionality argument in its practical form.
+
+**Human checkpoints.** You can put a person between step two and step three for
+the urgent ones only, which is impossible when everything happens in one pass.
+
+## The test for "too much"
+
+Two signals, both easy to spot.
+
+**The word "and".** If describing what your prompt does needs an *and*, it is
+probably two prompts. *"Summarise the meeting and extract the actions"* — two.
+
+**Uneven quality.** If the categories are always right and the drafts are
+inconsistent, they are competing. Separate them and the drafts improve without
+you touching the drafting instructions.
+
+## The honest cost
+
+Decomposition is not free. Four calls instead of one means four times the
+latency and roughly four times the cost — although using a cheap model for the
+simple steps often makes it cheaper overall.
+
+For a one-off task you are watching, one prompt is fine. For anything running
+repeatedly, unattended, where being wrong matters, the trade is almost always
+worth taking. That is the line between using an assistant and building
+something.
+
+## Try it now (6 minutes)
+
+Take your most complicated prompt. Write down what it does, and count the
+*and*s.
+
+Split it at the first one. Run both versions on the same five inputs and compare
+the part you care about most.
+
+<Quiz client:visible items={[
+  {
+    q: "Why does one prompt doing five jobs do each one worse?",
+    options: [
+      "Prompts have a length limit",
+      "The objectives compete for finite attention, and the steps contaminate each other",
+      "Models can only follow one instruction"
+    ],
+    answer: 1,
+    explain: "Having decided something is urgent, the draft becomes apologetic — and you cannot see the interaction because you only see the final output."
+  },
+  {
+    q: "The clearest signal a prompt is doing too much:",
+    options: [
+      "It is longer than a paragraph",
+      "Describing what it does requires the word 'and'",
+      "It uses few-shot examples"
+    ],
+    answer: 1,
+    explain: "\"Summarise the meeting and extract the actions\" is two prompts wearing one coat."
+  },
+  {
+    q: "A practical benefit of splitting beyond reliability:",
+    options: [
+      "Cheap models can handle the simple steps",
+      "Prompts become shorter to write",
+      "Output no longer needs validation"
+    ],
+    answer: 0,
+    explain: "Classification can go to a small fast model while only the draft needs a capable one, which often makes the whole chain cheaper."
+  }
+]} />
+
+## Recap
+
+A prompt with several jobs does each one worse, and the steps quietly influence
+one another. Split at the word "and": each piece gets full attention, becomes
+testable in isolation, can use a cheaper model, and allows a human checkpoint.
+The cost is more calls — worth paying for anything that runs unattended.

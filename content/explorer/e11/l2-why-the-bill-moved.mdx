@@ -1,0 +1,147 @@
+---
+title: "Why the bill moved"
+description: "Long threads, attached documents, retries and one badly-placed automation. The five things that actually cause a cost surprise, and what to do first."
+track: explorer
+module: e11
+order: 2
+minutes: 8
+objectives:
+  - "Identify the common causes of an unexpected cost increase"
+  - "Reduce cost without reducing what you get done"
+concepts: ["context growth", "retries", "cost drivers"]
+flashcards:
+  - front: "What is the most common cause of creeping cost?"
+    back: "Long conversations, because the whole history is re-sent with every message."
+  - front: "Why is a failed run more expensive than it looks?"
+    back: "You are charged for it anyway, and the retry costs the same again."
+  - front: "What is the cheapest large saving available?"
+    back: "Starting a new conversation, and attaching only the part of a document the task needs."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Costs rarely rise because you did one dramatic thing. They rise because of five
+ordinary ones, all of which look free at the moment you do them.
+
+## 1. The conversation that never ended
+
+The biggest and least visible.
+
+L1 established that the whole history is re-sent every turn. A working session
+that runs all afternoon is therefore paying for its own transcript, repeatedly,
+and the cost per message climbs steadily even though your questions stay the
+same size.
+
+**Fix:** start a new conversation when the topic changes. Not for tidiness —
+because you stop paying for two hours of unrelated history.
+
+This is also P1·L5's instruction drift arriving as a bill. Long threads cost
+more *and* follow instructions worse, which makes the fix free of trade-offs.
+
+## 2. The document you attached once
+
+Attach a 60-page PDF and it enters the context. Ask nine follow-up questions and
+that PDF is sent ten times.
+
+**Fix:** E5 and P1·L6's advice, now with a price attached. Extract the section
+you need and work with that. It is cheaper, and L6 showed it produces better
+answers — one of the rare changes that improves both.
+
+## 3. Retries you did not count
+
+A run that fails still costs. A malformed answer you regenerate costs twice. A
+prompt that needs four attempts costs four times, and the three you discarded
+were billed exactly like the one you kept.
+
+**Fix:** this is what P1·L7's evaluation set is for. A prompt that works first
+time is a cost improvement as well as a quality one, and vague prompts are
+expensive in a way that is invisible until you look.
+
+## 4. The automation nobody watched
+
+The one that produces a genuinely alarming invoice.
+
+An automation that runs per email, per row or per webhook has no natural limit.
+A loop that retries on failure can retry indefinitely. A trigger that fires on
+its own output can run away entirely.
+
+**Fix:** caps and alerts before it runs unattended. L7 covers this properly —
+it is the single most important lesson for anyone building.
+
+## 5. The biggest model, by default
+
+Using a capable model for everything is the quiet, steady version of this. It
+does not spike; it just costs several times what the work needed.
+
+**Fix:** L3.
+
+## What to actually do first
+
+In order of saving per minute spent:
+
+1. **Start new conversations.** Free, immediate, and helps quality.
+2. **Trim what you attach.** Cheaper and better answers.
+3. **Ask for shorter output** where you do not need length — output tokens cost
+   more.
+4. **Check for caps** on anything automated.
+5. **Right-size the model** (L3).
+
+None of these involves doing less work. That is the point: the common cost
+problems are waste rather than usage.
+
+## Where the meter is not running
+
+If you are on a flat subscription, none of this appears on a bill — it appears
+as hitting your limit sooner. The fixes are identical; the symptom differs.
+
+## Try it now (5 minutes)
+
+Open your longest current conversation. Ask yourself whether the first half is
+still relevant.
+
+If not, start a fresh one and paste only what matters forward. You have just
+made every subsequent message cheaper and more likely to follow instructions.
+
+<Quiz client:visible items={[
+  {
+    q: "The most common cause of quietly rising cost:",
+    options: [
+      "Using a more capable model",
+      "Long conversations, since the whole history is re-sent each turn",
+      "Asking more questions per day"
+    ],
+    answer: 1,
+    explain: "Cost per message climbs even though your questions stay the same size — and long threads follow instructions worse too."
+  },
+  {
+    q: "A prompt that needs four attempts costs:",
+    options: [
+      "The same as one, since only the final answer counts",
+      "Four times, because discarded attempts are billed identically",
+      "Less, because failed runs are not charged"
+    ],
+    answer: 1,
+    explain: "This is what an evaluation set is for — a prompt that works first time is a cost improvement as well as a quality one."
+  },
+  {
+    q: "Which change improves both cost and answer quality?",
+    options: [
+      "Attaching only the section the task needs",
+      "Using a larger model",
+      "Asking for longer answers"
+    ],
+    answer: 0,
+    explain: "Relevant material is not diluted and there is less chance of drawing on the wrong part — one of the rare wins on both axes."
+  }
+]} />
+
+## Recap
+
+Five causes: threads that never end, documents re-sent with every follow-up,
+uncounted retries, unwatched automations, and defaulting to the biggest model.
+The first two are free to fix and improve quality at the same time. None of the
+fixes involves doing less work, because the usual cost problem is waste rather
+than usage.

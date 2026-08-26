@@ -1,19 +1,203 @@
 {
   "tracks": [
-    { "id": "explorer", "title": "Explorer", "tagline": "Understand and use AI well — from absolute zero." },
-    { "id": "practitioner", "title": "Practitioner", "tagline": "Automate and build workflows — no code required." },
-    { "id": "builder", "title": "Builder", "tagline": "Engineer AI applications, agents, and deployments." }
+    {
+      "id": "explorer",
+      "title": "Explorer",
+      "tagline": "Understand and use AI well — from absolute zero."
+    },
+    {
+      "id": "practitioner",
+      "title": "Practitioner",
+      "tagline": "Automate and build workflows — no code required."
+    },
+    {
+      "id": "builder",
+      "title": "Builder",
+      "tagline": "Engineer AI applications, agents, and deployments."
+    }
   ],
   "modules": [
-    { "id": "e1", "track": "explorer", "title": "What Is AI, Really?", "tagline": "Patterns, predictions, and an honest capability map.", "status": "live" },
-    { "id": "e2", "track": "explorer", "title": "Meet Your AI Assistants", "tagline": "The major assistants, vendor-neutrally — and how to choose.", "status": "live" },
-    { "id": "e3", "track": "explorer", "title": "Prompting Fundamentals", "tagline": "Clear requests, iteration, and reusable patterns.", "status": "live" },
-    { "id": "e4", "track": "explorer", "title": "Everyday Productivity", "tagline": "Email, research, notes, planning — your daily AI routine.", "status": "live" },
-    { "id": "e5", "track": "explorer", "title": "Documents, Spreadsheets & Presentations", "tagline": "From blank page to finished draft, responsibly.", "status": "live" },
-    { "id": "e6", "track": "explorer", "title": "Creative AI: Image, Video & Voice", "tagline": "Making media — and the ethics of it.", "status": "live" },
-    { "id": "e7", "track": "explorer", "title": "Truth, Verification & Critical Thinking", "tagline": "The module that keeps you safe. Compulsory for certification.", "status": "live" },
-    { "id": "e8", "track": "explorer", "title": "AI Ethics & Responsible Use", "tagline": "Integrity, disclosure, and your personal code of conduct.", "status": "live" },
-    { "id": "p1", "track": "practitioner", "title": "Advanced Prompting", "tagline": "Few-shot, structure, chaining, templates.", "status": "planned" },
-    { "id": "b1", "track": "builder", "title": "Python On-Ramp for AI", "tagline": "Just enough code to build.", "status": "planned" }
+    {
+      "id": "e1",
+      "track": "explorer",
+      "title": "What Is AI, Really?",
+      "tagline": "Patterns, predictions, and an honest capability map.",
+      "status": "live"
+    },
+    {
+      "id": "e2",
+      "track": "explorer",
+      "title": "Meet Your AI Assistants",
+      "tagline": "The major assistants, vendor-neutrally — and how to choose.",
+      "status": "live"
+    },
+    {
+      "id": "e3",
+      "track": "explorer",
+      "title": "Prompting Fundamentals",
+      "tagline": "Clear requests, iteration, and reusable patterns.",
+      "status": "live"
+    },
+    {
+      "id": "e4",
+      "track": "explorer",
+      "title": "Everyday Productivity",
+      "tagline": "Email, research, notes, planning — your daily AI routine.",
+      "status": "live"
+    },
+    {
+      "id": "e5",
+      "track": "explorer",
+      "title": "Documents, Spreadsheets & Presentations",
+      "tagline": "From blank page to finished draft, responsibly.",
+      "status": "live"
+    },
+    {
+      "id": "e6",
+      "track": "explorer",
+      "title": "Creative AI: Image, Video & Voice",
+      "tagline": "Making media — and the ethics of it.",
+      "status": "live"
+    },
+    {
+      "id": "e7",
+      "track": "explorer",
+      "title": "Truth, Verification & Critical Thinking",
+      "tagline": "The module that keeps you safe. Required for the Lrnon Certificate.",
+      "status": "live"
+    },
+    {
+      "id": "e8",
+      "track": "explorer",
+      "title": "AI Ethics & Responsible Use",
+      "tagline": "Integrity, disclosure, and your personal code of conduct.",
+      "status": "live"
+    },
+    {
+      "id": "e9",
+      "track": "explorer",
+      "title": "AI as an Assistive Tool",
+      "tagline": "Reading, writing, seeing, hearing, focus — where AI changes most.",
+      "status": "live"
+    },
+    {
+      "id": "e10",
+      "track": "explorer",
+      "title": "Working in Your Own Language",
+      "tagline": "Beyond English: quality, translation and switching between them.",
+      "status": "live"
+    },
+    {
+      "id": "e11",
+      "track": "explorer",
+      "title": "What It Actually Costs",
+      "tagline": "Tokens, tiers, and why the bill jumped.",
+      "status": "live"
+    },
+    {
+      "id": "e12",
+      "track": "explorer",
+      "title": "AI You Didn't Choose",
+      "tagline": "It is already in your email, your phone and your bank.",
+      "status": "live"
+    },
+    {
+      "id": "e13",
+      "track": "explorer",
+      "title": "Using AI to Actually Learn",
+      "tagline": "Tutoring, self-testing, and the illusion of understanding.",
+      "status": "live"
+    },
+    {
+      "id": "e14",
+      "track": "explorer",
+      "title": "Health, Money and Legal",
+      "tagline": "High stakes, real life: preparation, not substitution.",
+      "status": "live"
+    },
+    {
+      "id": "p1",
+      "track": "practitioner",
+      "title": "Advanced Prompting",
+      "tagline": "Few-shot, structure, chaining, templates.",
+      "status": "live"
+    },
+    {
+      "id": "p2",
+      "track": "practitioner",
+      "title": "Your Own Documents and Sources",
+      "tagline": "Grounding answers in material you control.",
+      "status": "planned"
+    },
+    {
+      "id": "p3",
+      "track": "practitioner",
+      "title": "Untrusted Input and Prompt Injection",
+      "tagline": "Your workflow reads things an attacker can write.",
+      "status": "planned"
+    },
+    {
+      "id": "p4",
+      "track": "practitioner",
+      "title": "Custom Assistants",
+      "tagline": "Reusable configurations a team can share.",
+      "status": "planned"
+    },
+    {
+      "id": "p5",
+      "track": "practitioner",
+      "title": "Connecting Tools",
+      "tagline": "Automation platforms, triggers and actions.",
+      "status": "planned"
+    },
+    {
+      "id": "p6",
+      "track": "practitioner",
+      "title": "Multi-Step Workflows and Agents",
+      "tagline": "Autonomy, and exactly where it goes wrong.",
+      "status": "planned"
+    },
+    {
+      "id": "p7",
+      "track": "practitioner",
+      "title": "Cost, Monitoring and Reliability",
+      "tagline": "Running it in production without surprises.",
+      "status": "planned"
+    },
+    {
+      "id": "p8",
+      "track": "practitioner",
+      "title": "Data Protection for Workflows",
+      "tagline": "DPDP and GDPR in practice, not in theory.",
+      "status": "planned"
+    },
+    {
+      "id": "p9",
+      "track": "practitioner",
+      "title": "Rolling It Out to a Team",
+      "tagline": "Training others, and the change nobody asked for.",
+      "status": "planned"
+    },
+    {
+      "id": "p10",
+      "track": "practitioner",
+      "title": "Vendor Risk and Portability",
+      "tagline": "Lock-in, migration, and having an exit.",
+      "status": "planned"
+    },
+    {
+      "id": "p11",
+      "track": "practitioner",
+      "title": "When Not to Automate",
+      "tagline": "What to leave alone, and how to switch things off.",
+      "status": "planned"
+    },
+    {
+      "id": "b1",
+      "track": "builder",
+      "title": "Python On-Ramp for AI",
+      "tagline": "Just enough code to build.",
+      "status": "planned"
+    }
   ]
 }

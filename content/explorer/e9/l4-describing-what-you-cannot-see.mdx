@@ -1,0 +1,170 @@
+---
+title: "Describing what you cannot see"
+description: "Image description, reading signs and labels, and the specific things these tools get wrong when nobody sighted is there to catch them."
+track: explorer
+module: e9
+order: 4
+minutes: 9
+objectives:
+  - "Get useful image descriptions by asking for the right level of detail"
+  - "Know the failure modes that matter when you cannot verify visually"
+concepts: ["image description", "OCR", "verification"]
+flashcards:
+  - front: "What should you ask for instead of 'describe this image'?"
+    back: "The specific thing you need — what the sign says, whether the room is occupied, what is on the plate."
+  - front: "Which image errors are most dangerous when you cannot see?"
+    back: "Confident detail that is wrong — a misread number, an invented label, a described object that is not there."
+  - front: "What must never be decided from an image description alone?"
+    back: "Anything involving safety, medication, money or a signature."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Point a camera at something and ask what it is. For blind and low-vision users
+this has genuinely changed what can be done alone — reading post, checking
+whether the milk has turned, finding the right door, knowing what is in a
+photograph a friend sent.
+
+It is also the use in this module where being confidently wrong does the most
+damage, because there is no glance available to catch it.
+
+## Ask for what you need, not for a description
+
+"Describe this image" gets you a paragraph of scene-setting, most of which is
+not what you wanted.
+
+Ask the actual question:
+
+> *What does the sign say, word for word?*
+> *Is there anyone in this room?*
+> *What is the expiry date on this packet?*
+> *Which of these two boxes is the blue one?*
+> *Is the cooker ring on?*
+
+Specific questions get shorter, more accurate answers, and they let you tell
+when the tool has not understood — a non-answer to a specific question is
+obvious in a way that a vague paragraph is not.
+
+Ask for a general description when you actually want one — a photo of family, a
+view — where there is no single fact you are after.
+
+## Ask it to say when it cannot tell
+
+The most valuable instruction in this lesson:
+
+> *If you cannot tell, say so. Do not guess.*
+
+Without it you get a plausible answer to everything. With it you get "the image
+is too blurred to read the third line", which is genuinely useful — you can
+retake the photo.
+
+Follow it up when precision matters:
+
+> *How confident are you about the number? Would a clearer photo help?*
+
+## The failure modes
+
+Know these specifically, because you cannot spot them by looking.
+
+**Misread digits.** Numbers are where this most often goes wrong — expiry
+dates, doses, reference numbers, prices, house numbers. A 3 read as an 8 arrives
+with exactly the same confidence as a correct reading.
+
+**Invented plausible detail.** Asked what is on a table, a model may add things
+that are usually on tables. The description reads naturally and contains
+something that is not there.
+
+**Text that is nearly right.** Long text gets transcribed with small
+substitutions — a word swapped for a similar one, a line skipped. Fine for
+gist, not fine for instructions.
+
+**Stale scene.** The photo is a moment. "The door is closed" was true when the
+shutter fired.
+
+**Confident answers about people.** Age, mood, relationship, whether someone
+looks unwell — treat all of these as guesses, because that is what they are.
+
+## Where it must not be the only source
+
+Draw this line before you need it:
+
+**Medication.** Never identify a tablet or a dose from a photo alone. Use a
+pharmacist, a labelling system, or a dedicated medication-identification
+service.
+
+**Anything you are signing.** Get a human or an official accessible copy.
+Organisations are usually obliged to provide one, and asking costs a phone
+call.
+
+**Money.** Note denominations, card details, meter readings — verify by another
+route.
+
+**Safety.** Whether an appliance is off, whether a substance is what the bottle
+says, whether a road is clear.
+
+This is not because the tool is bad. It is because "I could not check" is
+different from "I checked", and these are the cases where that difference is
+expensive.
+
+## Use the purpose-built ones too
+
+General assistants are convenient. Dedicated tools exist for this exact job —
+some with the option to connect to a sighted human volunteer or a trained agent
+when the machine cannot tell.
+
+That combination is the practical answer for anything important: try the fast
+automated route, escalate to a person when it matters. There is no prize for
+refusing help.
+
+## Try it now (7 minutes)
+
+Photograph something with small print — a packet, a bill, a label.
+
+Ask a specific question about a number on it, adding *say so if you cannot
+tell*. Then check the answer against the real thing, or ask someone. That
+comparison tells you how much to trust this for your own use, which is worth
+more than any general claim.
+
+<Quiz client:visible items={[
+  {
+    q: "Instead of 'describe this image', you should usually ask:",
+    options: [
+      "For a longer, more detailed description",
+      "The specific question you actually need answered",
+      "For a description in bullet points"
+    ],
+    answer: 1,
+    explain: "Specific questions get shorter, more accurate answers — and a non-answer to a specific question is obvious in a way a vague paragraph is not."
+  },
+  {
+    q: "The most valuable instruction to add when using a camera this way:",
+    options: [
+      "Be concise",
+      "If you cannot tell, say so — do not guess",
+      "Describe colours precisely"
+    ],
+    answer: 1,
+    explain: "Without it you get a plausible answer to everything. With it you learn the photo is too blurred, and can retake it."
+  },
+  {
+    q: "Which must never rest on an image description alone?",
+    options: [
+      "Identifying a tablet or its dose",
+      "Finding out what a poster is advertising",
+      "Checking whether a photo is in focus"
+    ],
+    answer: 0,
+    explain: "Medication, signatures, money and safety all need a second route — a pharmacist, an official accessible copy, or a person."
+  }
+]} />
+
+## Recap
+
+Ask the specific question rather than for a description, and always add "say so
+if you cannot tell". Know that digits, invented detail and near-right
+transcription are the failure modes, and that none announce themselves. For
+medication, signatures, money and safety, use a second route — and use the
+purpose-built tools, including the ones that can reach a human.

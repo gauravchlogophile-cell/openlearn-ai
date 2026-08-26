@@ -1,0 +1,272 @@
+{
+  "module": "e12",
+  "title": "AI You Didn't Choose — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "e12-01",
+      "q": "Why does embedded AI need different scrutiny from an assistant you opened?",
+      "options": [
+        "It uses weaker models",
+        "You may not know it is involved, never evaluated it, and it acts by default",
+        "It is always less accurate"
+      ],
+      "answer": 1,
+      "explain": "All three conditions that make deliberate use safer — awareness, evaluation, and acting only when asked — are absent."
+    },
+    {
+      "id": "e12-02",
+      "q": "For many people their main AI use is now:",
+      "options": [
+        "A chatbot they open deliberately",
+        "Generated answers at the top of search results",
+        "Image generation"
+      ],
+      "answer": 1,
+      "explain": "And most have never called it AI use, which is exactly why it goes unchecked."
+    },
+    {
+      "id": "e12-03",
+      "q": "Why do defaults matter so much?",
+      "options": [
+        "They are hard to change",
+        "Most people never change one, so the vendor's choice governs almost everyone",
+        "They cannot be changed on mobile"
+      ],
+      "answer": 1,
+      "explain": "\"I did not turn this on\" and \"I agreed to this\" are different statements."
+    },
+    {
+      "id": "e12-04",
+      "q": "Which word most reliably signals an AI feature without saying 'AI'?",
+      "options": [
+        "Advanced",
+        "Smart",
+        "Premium"
+      ],
+      "answer": 1,
+      "explain": "Smart, suggested, auto, intelligent, magic and enhance are the vocabulary — usually beside a sparkle icon."
+    },
+    {
+      "id": "e12-05",
+      "q": "The most important question about an embedded feature:",
+      "options": [
+        "Which model does it use?",
+        "Does my content leave the device, and where does it go?",
+        "What does it cost?"
+      ],
+      "answer": 1,
+      "explain": "That determines whether the paste test applies. On-device prediction and a cloud summariser are different propositions."
+    },
+    {
+      "id": "e12-06",
+      "q": "If you cannot determine where a feature sends your data:",
+      "options": [
+        "Assume on-device, since that is now common",
+        "Assume cloud and third party",
+        "Assume it is not AI"
+      ],
+      "answer": 1,
+      "explain": "That is the assumption that keeps you safe if you turn out to be wrong."
+    },
+    {
+      "id": "e12-07",
+      "q": "A toggle labelled 'Show suggestions' most likely:",
+      "options": [
+        "Stops the processing entirely",
+        "Only changes what you see, while the analysis continues",
+        "Deletes previously processed content"
+      ],
+      "answer": 1,
+      "explain": "Hiding is not disabling, and the wording is your only clue."
+    },
+    {
+      "id": "e12-08",
+      "q": "Turning off an AI feature usually:",
+      "options": [
+        "Also stops your content being used for training",
+        "Leaves training to a separate setting",
+        "Deletes your data from the provider"
+      ],
+      "answer": 1,
+      "explain": "You can switch off suggestions and still be contributing text."
+    },
+    {
+      "id": "e12-09",
+      "q": "When a feature genuinely cannot be disabled, a legitimate control is:",
+      "options": [
+        "Using a different tool for that content",
+        "Accepting it, since nothing can be done",
+        "Reporting the vendor"
+      ],
+      "answer": 0,
+      "explain": "Choosing not to use a tool for certain material is a real control, and sometimes the only one available."
+    },
+    {
+      "id": "e12-10",
+      "q": "Voice input on a phone is often better than typing because:",
+      "options": [
+        "Recognition is more accurate than keyboards",
+        "It is faster and you supply far more context than you would thumb-type",
+        "It uses less data"
+      ],
+      "answer": 1,
+      "explain": "Rambling is fine — models handle disfluent speech, and richer context produces better answers."
+    },
+    {
+      "id": "e12-11",
+      "q": "On-device processing means the feature:",
+      "options": [
+        "Is more capable than the cloud version",
+        "Works offline, costs no data, and transmits nothing",
+        "Requires a subscription"
+      ],
+      "answer": 1,
+      "explain": "It is less capable and adequate for a great deal — and it resolves the paste test differently."
+    },
+    {
+      "id": "e12-12",
+      "q": "Which mobile cost is most often overlooked?",
+      "options": [
+        "Mobile data used by cloud AI features",
+        "The subscription price",
+        "Screen wear"
+      ],
+      "answer": 0,
+      "explain": "Battery and storage matter too, and none appears in the feature description."
+    },
+    {
+      "id": "e12-13",
+      "q": "Email thread summaries most often lose:",
+      "options": [
+        "The subject line",
+        "Conditions, attribution and the actual ask",
+        "Participant names"
+      ],
+      "answer": 1,
+      "explain": "\"Thursday if the figures arrive by Tuesday\" becoming \"they agreed to Thursday\" is the characteristic failure."
+    },
+    {
+      "id": "e12-14",
+      "q": "The real risk of suggested replies is:",
+      "options": [
+        "The English is often wrong",
+        "They encourage replying without reading, so you agree to things",
+        "They are too formal"
+      ],
+      "answer": 1,
+      "explain": "\"Sounds good!\" on a message whose second paragraph committed you to a cost is the failure that matters."
+    },
+    {
+      "id": "e12-15",
+      "q": "An always-on email summariser involves whose privacy?",
+      "options": [
+        "Only yours, since it is your account",
+        "Also your correspondents', who never chose it and cannot object",
+        "Nobody's, if the provider does not train on it"
+      ],
+      "answer": 1,
+      "explain": "They wrote to a person, not a processing service — and it matters most in privileged or protected roles."
+    },
+    {
+      "id": "e12-16",
+      "q": "Priority sorting fails invisibly because:",
+      "options": [
+        "It runs overnight",
+        "You cannot notice the message you were not shown",
+        "It does not log its decisions"
+      ],
+      "answer": 1,
+      "explain": "Unlike a bad summary there is no output to inspect — and unusual, atypical messages are what it handles worst."
+    },
+    {
+      "id": "e12-17",
+      "q": "The core right in many data protection regimes concerns:",
+      "options": [
+        "Any use of AI by an organisation",
+        "Solely automated decisions with legal or similarly significant effects",
+        "Only employment decisions"
+      ],
+      "answer": 1,
+      "explain": "The threshold phrase does real work — a recommendation feed is not the same category as a mortgage refusal."
+    },
+    {
+      "id": "e12-18",
+      "q": "The fastest route to changing an automated decision is often:",
+      "options": [
+        "Challenging the algorithm's design",
+        "Checking and correcting the data it was based on",
+        "Reapplying immediately"
+      ],
+      "answer": 1,
+      "explain": "Old addresses, mismatched names and duplicate records are common. Wrong input means re-running, not arguing."
+    },
+    {
+      "id": "e12-19",
+      "q": "Requests for human review should be made in writing because:",
+      "options": [
+        "Phone staff cannot help",
+        "It starts a formal clock, creates a record, and reaches the team who must answer",
+        "Verbal requests are invalid"
+      ],
+      "answer": 1,
+      "explain": "It also lets you be factual and specific, which is what gets a request routed rather than deflected."
+    },
+    {
+      "id": "e12-20",
+      "q": "The most common workplace situation regarding AI tooling:",
+      "options": [
+        "A clear policy everyone has read",
+        "Confident beliefs with no document behind them",
+        "No tools deployed"
+      ],
+      "answer": 1,
+      "explain": "\"They can read everything\" and \"nobody's looking\" are both guesses; the policy usually exists and is unread."
+    },
+    {
+      "id": "e12-21",
+      "q": "Automatic transcription in a work meeting:",
+      "options": [
+        "Needs no announcement, being a company tool",
+        "Still requires everyone to know, and in many places to agree",
+        "Only needs announcing to external participants"
+      ],
+      "answer": 1,
+      "explain": "Colleagues are people, and the announcement is what makes it lawful in many jurisdictions."
+    },
+    {
+      "id": "e12-22",
+      "q": "When AI-derived metrics feed your performance review, ask:",
+      "options": [
+        "Which model is used",
+        "What is measured, whether it captures the job, and whether a person can overrule it",
+        "How often it runs"
+      ],
+      "answer": 1,
+      "explain": "Activity metrics reliably miss thinking and mentoring, and a reviewer without authority is worse than none."
+    },
+    {
+      "id": "e12-23",
+      "q": "Why re-run a settings audit after a redesign?",
+      "options": [
+        "Settings expire",
+        "New features arrive switched on, and migrations sometimes reset preferences",
+        "Providers must reset them"
+      ],
+      "answer": 1,
+      "explain": "A tool audited in March can gain a default-on feature in June, announced in a changelog nobody reads."
+    },
+    {
+      "id": "e12-24",
+      "q": "If a feature cannot be disabled, the audit still helps because:",
+      "options": [
+        "You can complain more effectively",
+        "Knowing what is running lets you decide what to put into it",
+        "It may become disableable later"
+      ],
+      "answer": 1,
+      "explain": "The confidential conversation happens elsewhere; the search summary gets checked like any other AI output."
+    }
+  ]
+}

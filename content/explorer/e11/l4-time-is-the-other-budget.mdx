@@ -1,0 +1,151 @@
+---
+title: "Time is the other budget"
+description: "The subscription is the visible cost. The invisible one is the hours spent prompting, checking and redoing — and it is usually the larger number."
+track: explorer
+module: e11
+order: 4
+minutes: 8
+objectives:
+  - "Account for time spent alongside money paid"
+  - "Recognise tasks where the total cost exceeds doing it yourself"
+concepts: ["total cost", "verification time", "opportunity cost"]
+flashcards:
+  - front: "What is the total cost of an AI task?"
+    back: "Money, plus the time spent prompting, checking, correcting and redoing it."
+  - front: "Which hidden cost is largest for most people?"
+    back: "Verification — E4·L1's rule, now measured in hours rather than described."
+  - front: "What does a forgotten subscription actually cost?"
+    back: "The fee, every month, plus the decision you never revisited about whether you still need it."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+A subscription has a number on it, so it feels like the cost. For most people
+it is the smaller half.
+
+## The four costs of getting something done
+
+Count all of them, or the arithmetic is wrong.
+
+**Money.** The subscription or the metered charge. Visible.
+
+**Prompting time.** Writing the request, and rewriting it when the first
+attempt missed.
+
+**Verification time.** Reading the output properly and checking anything that
+matters. E4·L1 named this and this is where it gets a number.
+
+**Correction time.** Fixing what came back, or doing it yourself after the
+third attempt.
+
+A task that costs a fraction of a penny and forty minutes of your attention is
+not cheap. That is the calculation people skip because only one of the four
+terms arrives as an invoice.
+
+## Measure it once
+
+Not forever — for a fortnight, on your three most frequent AI tasks. Two
+columns: minutes with, minutes without.
+
+You will find, reliably, that some tasks are enormous wins and one or two are
+losses you had assumed were wins because they *felt* efficient. The feeling
+comes from the output appearing instantly. The forty minutes afterwards do not
+feel like part of it, and they are.
+
+This is P1·L7's evaluation discipline pointed at your own time.
+
+## Where time costs exceed the saving
+
+Patterns worth recognising early:
+
+**Tasks you cannot check quickly.** E4·L1's rule. If verifying takes as long as
+doing, you have moved work rather than removed it.
+
+**Tasks where you know exactly what you want.** Specifying it precisely enough
+often takes longer than typing it.
+
+**Short, familiar tasks.** A two-line email you have written a hundred times.
+Opening a tool costs more than the task.
+
+**Anything needing three attempts routinely.** Either fix the prompt properly
+(P1·L1's examples usually solve it) or stop using it for that.
+
+## The subscriptions nobody cancels
+
+A specific and very common waste.
+
+People accumulate several paid AI subscriptions — one they use daily, one from a
+trial, one for a project that finished in March. Each is a small monthly amount
+and none is individually alarming.
+
+**Once a quarter, list every AI subscription you pay for and what you used it
+for last month.** Cancel anything with an empty answer. You can resubscribe; the
+month you were not using it is not refundable.
+
+Also check what your employer already provides. A surprising number of people
+pay personally for something their organisation has a licence for, because
+nobody announced it.
+
+## Free is not free of time
+
+The counterpart, so this is even-handed.
+
+Free tiers cost you queue time, lower limits, slower models and the effort of
+working around caps. If a paid tier removes an hour a week of friction, the
+comparison is not "free versus £20" — it is "£20 versus an hour a week".
+
+For some people that is obviously worth it. For others the free tier genuinely
+covers the work. The point is to compare the same quantities on both sides,
+which is what almost nobody does.
+
+## Try it now (5 minutes)
+
+List your AI subscriptions and what you used each for in the last month.
+
+Then take your most frequent AI task and estimate, honestly, the minutes it
+takes including checking. Compare that to doing it yourself. One of your tasks
+will surprise you.
+
+<Quiz client:visible items={[
+  {
+    q: "The total cost of an AI task is:",
+    options: [
+      "The subscription divided across your tasks",
+      "Money plus prompting, verification and correction time",
+      "The per-token charge for that request"
+    ],
+    answer: 1,
+    explain: "Only one of the four terms arrives as an invoice, which is why the arithmetic usually gets skipped."
+  },
+  {
+    q: "Why do people misjudge tasks that are actually losses?",
+    options: [
+      "The output appears instantly, and the checking afterwards does not feel like part of it",
+      "The billing is delayed",
+      "They use the wrong model"
+    ],
+    answer: 0,
+    explain: "The feeling of efficiency comes from the speed of the response. The forty minutes afterwards are still part of the cost."
+  },
+  {
+    q: "Comparing a free tier to a paid one fairly means comparing:",
+    options: [
+      "Zero against the monthly fee",
+      "The fee against the time the free tier's friction costs you",
+      "The features listed on each page"
+    ],
+    answer: 1,
+    explain: "Free costs queue time, lower limits and workarounds. The real comparison is money against hours, on both sides."
+  }
+]} />
+
+## Recap
+
+Count all four costs — money, prompting, verification and correction — because
+only the first one is invoiced. Measure your three most frequent tasks for a
+fortnight and expect one supposed win to be a loss. Audit subscriptions
+quarterly and check what your employer already provides. And when comparing free
+against paid, put time on both sides of the equation.

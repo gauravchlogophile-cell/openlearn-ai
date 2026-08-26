@@ -1,0 +1,158 @@
+---
+title: "Names, scripts and getting them right"
+description: "Whose names break software, why models mangle them, and how to stop a system you build from doing the same thing to other people."
+track: explorer
+module: e10
+order: 5
+minutes: 8
+objectives:
+  - "Recognise where systems mishandle names outside a narrow pattern"
+  - "Avoid building the same assumptions into your own work"
+concepts: ["names", "transliteration", "data assumptions"]
+flashcards:
+  - front: "What assumption breaks most name handling?"
+    back: "That a name is one given name plus one family name, in Latin script, of moderate length."
+  - front: "Why is inconsistent transliteration a practical problem?"
+    back: "The same person becomes two records, and searching for them fails."
+  - front: "What should you do about names in anything you build?"
+    back: "Store what the person typed, in one field, without imposed structure or 'correction'."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+A small subject with a large effect, and one nobody teaches.
+
+Names are where software's assumptions about people become visible, and AI
+tools inherit every one of those assumptions plus a few of their own.
+
+## The assumption that breaks everything
+
+Most systems assume a name is: one given name, one family name, in Latin
+script, moderate length, stable over time.
+
+That describes a minority of humanity. Consider what it excludes:
+
+- **Mononyms.** Many Indonesians have one name. Full stop.
+- **Patronymics.** Icelandic *-son* and *-dóttir*; Arabic *bin* and *bint*.
+- **Family name first.** Chinese, Japanese, Korean, Hungarian.
+- **Multiple family names.** Spanish and Portuguese conventions.
+- **Caste, village or gotra elements**, and initials that expand differently
+  across South India.
+- **Names with apostrophes, hyphens, spaces, or non-Latin script.**
+- **Names that change**, on marriage, migration or transition.
+
+Every one of those breaks a form somewhere, usually at a moment when the person
+needed the form to work.
+
+## What AI adds to this
+
+Three specific behaviours worth knowing.
+
+**Silent "correction".** Models normalise unfamiliar names towards familiar
+ones. A name is quietly respelled into something more common — and it reads
+perfectly, so nobody notices. This is E7·L1's fluency problem applied to
+someone's identity.
+
+**Inconsistent transliteration.** The same name rendered several ways across
+one document. This is not cosmetic: the same person becomes two records, and
+searching for them fails.
+
+**Gender and origin guessing.** Asked to infer either from a name, a model will
+produce a confident answer. It will be wrong often, and E8·L3's bias lesson
+explains why the errors are not evenly distributed.
+
+## Working with names practically
+
+**Give the spelling and demand it.** *"The name is [X]. Use exactly this
+spelling everywhere. Do not change it."*
+
+**Pick one transliteration and state it.** Include it in the prompt for
+consistency across a document.
+
+**Check every name before sending.** E4·L2's rule, and this is the field that
+matters most — a misspelled name is the error people actually take personally.
+
+**Never infer gender from a name.** Ask, or avoid gendered forms entirely. In
+languages where grammar forces a choice, ask which form the person uses.
+
+## If you build anything
+
+Most readers will at some point make a form, a spreadsheet or a small tool. Four
+rules that avoid the common harms:
+
+**One field, called "name".** Not first/last. If you genuinely need a sort key
+or a greeting, ask for those separately — *"What should we call you?"*
+
+**Accept the full range of characters.** Unicode, apostrophes, hyphens, spaces.
+Length limits generous enough for real names.
+
+**Do not auto-capitalise or auto-correct.** You will be wrong, and the person
+will have to fight your form.
+
+**Let people change it.** Names change, and the record should follow.
+
+Note that Lrnon's own handles are generated rather than entered, which sidesteps
+this — a deliberate safeguarding choice from E6 and E8's territory, not a
+solution to name handling.
+
+## Why this is in a language module
+
+Because it is the same problem as everything else here: systems built mostly
+around one language's assumptions, applied to everybody, failing quietly for the
+people outside the assumption.
+
+The difference is that with names, the person on the receiving end usually
+notices — and experiences it as being told their name is wrong.
+
+## Try it now (5 minutes)
+
+Ask an assistant to write a short email to three people whose names use
+different conventions — including at least one non-Latin-script name and one
+mononym.
+
+Check every spelling, and check whether it invented a family name for the
+mononym. That last failure is common and revealing.
+
+<Quiz client:visible items={[
+  {
+    q: "The assumption that breaks most name handling is:",
+    options: [
+      "That names are short",
+      "One given name plus one family name, in Latin script",
+      "That names are unique"
+    ],
+    answer: 1,
+    explain: "Mononyms, patronymics, family-name-first ordering and multiple family names all fall outside it — a large share of humanity."
+  },
+  {
+    q: "Why is inconsistent transliteration more than cosmetic?",
+    options: [
+      "It looks unprofessional",
+      "The same person becomes two records, and searching for them fails",
+      "It makes documents longer"
+    ],
+    answer: 1,
+    explain: "Consistency matters because names are identifiers, not just words."
+  },
+  {
+    q: "In a form you build, names should be:",
+    options: [
+      "Split into first and last name fields",
+      "One field, accepting the full range of characters, editable later",
+      "Validated against a list of known names"
+    ],
+    answer: 1,
+    explain: "Ask separately for a sort key or a greeting if you truly need them, and never auto-capitalise or auto-correct."
+  }
+]} />
+
+## Recap
+
+Name handling assumes one given name plus one family name in Latin script,
+which excludes a large share of people. AI adds silent correction, inconsistent
+transliteration and confident guessing about gender and origin. State the exact
+spelling and demand it, never infer gender, and if you build anything: one name
+field, full character range, no auto-correction, editable later.

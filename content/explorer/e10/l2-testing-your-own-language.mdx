@@ -1,0 +1,151 @@
+---
+title: "Testing your own language"
+description: "General claims about multilingual quality will not tell you what you need. A twenty-minute test that measures the thing you actually do."
+track: explorer
+module: e10
+order: 2
+minutes: 8
+objectives:
+  - "Measure model quality in your language for your own tasks"
+  - "Compare assistants on the work you actually do"
+concepts: ["benchmarking", "task-specific quality", "comparison"]
+flashcards:
+  - front: "Why not rely on published multilingual benchmarks?"
+    back: "They measure average performance on general tasks. Your quality depends on your language, your subject and your task type."
+  - front: "What should a personal language test include?"
+    back: "A factual question about your region, a formal writing task, an instruction-following task, and something in your own field."
+  - front: "Why test the same prompt on two assistants?"
+    back: "The gap between assistants is often larger than the gap between languages, and it differs by language."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+L1 described the gap in general. This lesson is about replacing "in general"
+with a measurement, because the general picture will not tell you whether to
+trust this for the thing you do on Tuesdays.
+
+It is E7·L2's triage and P1·L7's evaluation set, applied to a question nobody
+else can answer for you.
+
+## Why published benchmarks will not do
+
+Multilingual benchmarks are useful and they average across languages, tasks and
+subjects.
+
+Your situation is one language, your subjects, your task types. A model can be
+strong at conversational Hindi and weak at Hindi legal vocabulary. Strong at
+Swahili summarising and weak at Swahili instruction-following. The average tells
+you none of that.
+
+Twenty minutes gets you an answer about your case.
+
+## The four-part test
+
+Run each in your language. Keep the results — you will re-run this when models
+update.
+
+**1. A factual question about your region.** Something you can verify: a local
+regulation, a historical date, how an institution works, a public holiday.
+
+*This is the most important one and the most often skipped.* L1's point: it is
+easy to notice awkward phrasing and easy to miss that the facts degraded too.
+
+**2. A formal writing task.** A letter to an official, or whatever your
+language's high-register writing looks like.
+
+Judge whether the register is right. Would you send it? Is the honorific
+correct? Does it sound like a person from your place wrote it, or like a
+translation?
+
+**3. An instruction-following task with constraints.** *"Write exactly three
+sentences. Do not use the word X. End with a question."*
+
+Constraints degrade before fluency does, so this is a sensitive early warning.
+
+**4. Something from your actual work.** The task you would genuinely use this
+for.
+
+## Score it usefully
+
+Not out of ten. Three buckets, per task:
+
+- **Would send / would use as is.**
+- **Useful with editing.**
+- **Faster to do myself.**
+
+That is decision-shaped. You do not need a number; you need to know which of
+your tasks belong in which bucket, and to stop using it for the third.
+
+## Test two assistants, not one
+
+The single most valuable half of this exercise.
+
+The gap **between assistants** is often larger than the gap between languages —
+and it is not consistent. One may be markedly better at Bengali and worse at
+Tamil than another. There is no general winner in your language, only a winner
+for your language and your tasks.
+
+E2·L2 gave the method for a fair comparison: identical prompt, same day,
+compare the outputs side by side. That is the whole procedure. Two assistants,
+four tasks, twenty minutes.
+
+## Re-test when things change
+
+Keep the four prompts in a file. Re-run them when you notice output getting
+better or worse, when a provider announces a new model, or every few months.
+
+This is P1·L8 arriving early: your prompts are stable, the model under them is
+not, and in multilingual use the change is often larger than for English —
+because that is where the headroom was.
+
+## Try it now (7 minutes)
+
+Write your four prompts now, in your language. Regional fact, formal letter,
+constrained instruction, real task.
+
+Run them on your usual assistant and score each into one of the three buckets.
+You now know something specific that no benchmark could have told you.
+
+<Quiz client:visible items={[
+  {
+    q: "Published multilingual benchmarks are insufficient because:",
+    options: [
+      "They are usually out of date",
+      "They average across languages, tasks and subjects — yours is one of each",
+      "They only test translation"
+    ],
+    answer: 1,
+    explain: "A model can be strong at conversational Hindi and weak at Hindi legal vocabulary. The average tells you neither."
+  },
+  {
+    q: "Which test item is most often skipped and most important?",
+    options: [
+      "A factual question about your own region",
+      "A formal writing task",
+      "A constrained instruction"
+    ],
+    answer: 0,
+    explain: "Awkward phrasing is easy to spot; degraded facts about local law, history and institutions are not."
+  },
+  {
+    q: "Why test two assistants rather than one?",
+    options: [
+      "To find the generally best assistant",
+      "The gap between assistants is often larger than between languages, and varies by language",
+      "Because one may be unavailable later"
+    ],
+    answer: 1,
+    explain: "There is no general winner in your language — only a winner for your language and your tasks."
+  }
+]} />
+
+## Recap
+
+Replace general claims with a measurement of your case: a regional fact, a
+formal letter, a constrained instruction and a real task from your work. Score
+into would-use, would-edit, and faster-myself. Run the same four on a second
+assistant, because that gap is often the bigger one — then keep the prompts and
+re-test, since multilingual quality moves faster than English does.

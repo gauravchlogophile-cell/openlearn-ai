@@ -1,0 +1,165 @@
+---
+title: "Taking back the controls"
+description: "A one-hour sweep of every device and account you use, and a short list of what to re-check whenever something gets redesigned."
+track: explorer
+module: e12
+order: 8
+minutes: 8
+objectives:
+  - "Carry out a complete settings audit across devices and accounts"
+  - "Maintain it when tools change underneath you"
+concepts: ["audit", "defaults", "maintenance"]
+flashcards:
+  - front: "What should a settings audit cover?"
+    back: "Phone, email, documents, messaging, browser, work tools, and each provider's separate privacy dashboard."
+  - front: "Why re-check after a redesign?"
+    back: "New features arrive switched on, and settings sometimes reset to defaults during a migration."
+  - front: "What is the point of the audit if some things cannot be turned off?"
+    back: "Knowing what is running lets you decide what to put into it, which is a control in itself."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Seven lessons of recognising things. This one is the hour that acts on them.
+
+Do it once properly rather than fixing settings individually as you trip over
+them, which is how people never finish.
+
+## The sweep
+
+Work through these in order. For each, look for what L2 taught you to spot,
+then apply L3's distinction between hiding and disabling.
+
+**1. Phone.** Keyboard prediction. Voice assistant, and what it can reach when
+locked. Photo analysis and search. Call and message features. Whether AI
+features may use mobile data (L4).
+
+**2. Email.** Suggested replies, compose assistance, thread summaries, priority
+sorting. The separate training opt-out (L3).
+
+**3. Documents and storage.** Writing assistance, content analysis, and whether
+files are scanned for feature purposes.
+
+**4. Messaging.** Suggested replies, summaries, translation. Check each app —
+they differ.
+
+**5. Browser.** Built-in assistants, page summarisation, and any extension with
+a sparkle icon. Extensions deserve particular attention: they frequently read
+every page you visit.
+
+**6. Search.** Whether generated answers can be turned off, and whether your
+searches feed model training.
+
+**7. Work tools.** Per L7 — and here you are finding out rather than changing.
+
+**8. Privacy dashboards.** Each major provider keeps data controls separate from
+ordinary settings. This is where the training opt-outs usually live.
+
+## Three questions per feature
+
+Not a long deliberation. For each thing you find:
+
+**Do I want it?** Some are genuinely useful. This is not an exercise in turning
+everything off.
+
+**Does my content leave the device?** L2's question, which decides whether it
+matters much.
+
+**Is my content training future models?** Usually a separate switch, usually on.
+
+## What you will find
+
+Predictably, three things.
+
+**Something you did not know was running.** Almost everyone finds at least one.
+
+**A training opt-out that was on.** Very common, because it is separated from
+the feature toggle.
+
+**Something you want to keep.** Good — an audit that ends with everything off
+was not a judgement, it was a reflex.
+
+## Keep it current
+
+The audit decays, for two specific reasons.
+
+**New features arrive switched on.** A tool you audited in March gains an AI
+feature in June, enabled by default, announced in a changelog nobody reads.
+
+**Redesigns reset things.** Settings migrations lose preferences more often than
+vendors admit, and a "new experience" frequently starts from defaults.
+
+So re-check when: an app announces a major update, an interface looks different,
+or you notice something behaving in a new way. Ten minutes, not an hour.
+
+## When the answer is still no
+
+Some things cannot be turned off (L3). The audit is still worth doing, because
+knowing what is running lets you decide **what to put into it** — and that is a
+genuine control.
+
+You cannot switch off the summariser, so the confidential conversation happens
+elsewhere. You cannot disable the search summary, so you check it as you would
+any other AI output. That is E12 working as intended.
+
+## Where this module leaves you
+
+The point was never that embedded AI is bad. Much of it is useful and some of it
+is excellent.
+
+The point is that **you did not choose it, and choosing is what the previous
+eleven modules were about**. Having done the sweep, whatever remains is running
+because you decided it should — which is a different situation from where you
+started, even if the settings are identical.
+
+## Try it now (8 minutes)
+
+Do the first two: phone and email. That is where most of it is.
+
+Set a reminder for six months. Then finish the rest of the list this week — the
+hour buys you a year.
+
+<Quiz client:visible items={[
+  {
+    q: "Which is most often overlooked in a settings audit?",
+    options: [
+      "Email suggested replies",
+      "Each provider's separate privacy dashboard, where training opt-outs usually live",
+      "Phone keyboard prediction"
+    ],
+    answer: 1,
+    explain: "Data controls are frequently kept somewhere entirely different from ordinary settings."
+  },
+  {
+    q: "Why does an audit need re-checking after a redesign?",
+    options: [
+      "Settings expire automatically",
+      "New features arrive switched on, and migrations sometimes reset preferences",
+      "Providers are required to reset them"
+    ],
+    answer: 1,
+    explain: "A tool audited in March can gain a default-on feature in June, announced in a changelog nobody reads."
+  },
+  {
+    q: "If a feature cannot be disabled, the audit was still worth doing because:",
+    options: [
+      "You can complain more effectively",
+      "Knowing what is running lets you decide what to put into it",
+      "It may become disableable later"
+    ],
+    answer: 1,
+    explain: "The confidential conversation happens elsewhere; the search summary gets checked like any other AI output."
+  }
+]} />
+
+## Recap
+
+Sweep phone, email, documents, messaging, browser, search, work tools and each
+provider's separate privacy dashboard — asking for each feature whether you want
+it, whether content leaves the device, and whether it trains future models.
+Expect to find something you did not know was running and a training opt-out
+that was on. Re-check after updates and redesigns. And where there is no off
+switch, deciding what to put in is still a control. That completes E12.

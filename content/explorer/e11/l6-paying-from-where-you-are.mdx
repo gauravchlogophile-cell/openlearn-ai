@@ -1,0 +1,160 @@
+---
+title: "Paying from where you are"
+description: "Prices are set in dollars and lives are lived in rupees, naira and pesos. Regional pricing, payment access, and what to do when the card is refused."
+track: explorer
+module: e11
+order: 6
+minutes: 8
+objectives:
+  - "Understand why the same subscription costs different amounts of effort"
+  - "Find legitimate routes when standard payment is unavailable"
+concepts: ["regional pricing", "purchasing power", "payment access"]
+flashcards:
+  - front: "Why is a $20 subscription not the same price everywhere?"
+    back: "It is a different share of income, and often carries conversion fees and card restrictions on top."
+  - front: "What is regional pricing?"
+    back: "A provider charging less in some countries to reflect local purchasing power. It exists unevenly and is worth checking for."
+  - front: "What should you never do to obtain access?"
+    back: "Misrepresent your location or use someone else's payment method — it breaches terms and risks losing the account entirely."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Every price in this module has been a number. For most people on earth it is
+also a decision about something else they will not buy that month.
+
+This lesson exists because a free, global course that discussed cost only in
+dollars would be writing for a minority of its readers.
+
+## The same price is not the same price
+
+A twenty-dollar monthly subscription is a rounding error on some incomes and a
+significant share of others. That is obvious and it is routinely ignored in
+writing about these tools, where "just get the paid tier" is offered as though
+it settles the matter.
+
+Three things stack on top of the headline figure:
+
+**Conversion and card fees.** Foreign-currency charges, bank markups, and a
+worse exchange rate than the published one.
+
+**Card acceptance.** Many domestic cards are declined by international
+subscription services, or blocked from recurring foreign payments by the issuing
+bank or by national rules on outbound payments.
+
+**Tax added at checkout**, sometimes at rates that surprise.
+
+The advertised price is a floor.
+
+## Regional pricing exists, unevenly
+
+Some providers charge less in some countries, reflecting local purchasing
+power. It is inconsistent, it changes, and it is rarely advertised prominently.
+
+**Worth doing:** check the pricing page while in your own country, without a
+VPN, in your own currency. Check whether there is a local payment option — UPI
+in India, local wallets and bank transfer elsewhere. Check whether a regional
+reseller offers it.
+
+**Also worth checking:** student and educator pricing, which several providers
+offer and which is frequently a large discount rather than a token one. And
+whether a national or institutional programme covers it — some universities and
+governments have arrangements.
+
+## What not to do
+
+Stated plainly because it is common advice online and it is bad advice.
+
+**Do not misrepresent your country** to obtain a lower price. It breaches the
+terms you agree to, and the usual consequence is not a warning but the loss of
+the account, including anything you had stored in it.
+
+**Do not use someone else's payment method** without their genuine, informed
+agreement — and understand that shared-account arrangements usually breach terms
+too.
+
+The risk is asymmetric. You save a modest monthly amount and stake an account
+you may depend on.
+
+## When you cannot pay at all
+
+A real situation for a lot of people, and there are legitimate routes.
+
+**Free tiers**, per L5, cover more than most assume.
+
+**Local models**, per L5, cost nothing recurring and need only a capable enough
+device.
+
+**Regional providers.** Several countries have domestic AI services priced in
+local currency with local payment methods, and for work in the local language
+they are sometimes better than the global option — E10·L1 noted that
+region-specific models often outperform general ones on their target languages.
+
+**Institutional access.** Your university, library, employer or a government
+skilling programme. Ask before assuming.
+
+**Shared organisational accounts**, where the organisation licenses it properly
+and you are a named user. This is legitimate; informal password-sharing is not.
+
+## For anyone building something
+
+If you are building on the Practitioner track and your users are in a range of
+countries, this lesson is about them rather than you.
+
+A per-seat price that is trivial in one market is prohibitive in another. Usage
+that costs cents adds up differently against different incomes. If your product
+charges, decide deliberately whether you price by market — and if you cannot,
+know who that excludes rather than discovering it later.
+
+## Try it now (5 minutes)
+
+Open the pricing page of a tool you use, in your own country and currency, with
+no VPN.
+
+Check for a local payment method, a student rate, and the actual total after tax
+and card fees. That number, not the headline, is what it costs you.
+
+<Quiz client:visible items={[
+  {
+    q: "The advertised subscription price is best treated as:",
+    options: [
+      "The final cost",
+      "A floor, before conversion fees, card charges and tax",
+      "An estimate that usually falls"
+    ],
+    answer: 1,
+    explain: "Foreign-currency markups, bank charges and checkout tax all stack on top, and cards are sometimes declined outright."
+  },
+  {
+    q: "Misrepresenting your country to get regional pricing risks:",
+    options: [
+      "A warning email",
+      "Losing the account entirely, including anything stored in it",
+      "Nothing, since providers rarely check"
+    ],
+    answer: 1,
+    explain: "The risk is asymmetric — a modest monthly saving staked against an account you may depend on."
+  },
+  {
+    q: "For work in a local language, a regional provider may be:",
+    options: [
+      "Always worse than a global one",
+      "Sometimes better, since region-specific models can outperform general ones",
+      "Identical, as they use the same models"
+    ],
+    answer: 1,
+    explain: "E10·L1 noted this. Local currency, local payment methods and better language coverage can coincide."
+  }
+]} />
+
+## Recap
+
+The headline price is a floor — conversion fees, card acceptance and tax sit on
+top, and the same figure is a very different decision on different incomes.
+Check regional, student and institutional pricing, and local payment methods,
+from your own country. Never misrepresent where you are: the saving is small and
+the account is the stake. Free tiers, local models and regional providers are the
+legitimate routes when paying is not possible.

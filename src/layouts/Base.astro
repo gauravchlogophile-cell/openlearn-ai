@@ -127,6 +127,10 @@ const showSky = SKY_MODE !== 'off';
               <li><a href="/roadmap">Roadmap</a></li>
               <li><a href="/review">Daily review</a></li>
               <li><a href="/achievements">Badges</a></li>
+              {/* Someone verifying a certificate arrives from a printout, not
+                  from inside the site — but a link they can find beats asking
+                  them to type a URL they half-remember. */}
+              <li><a href="/v">Verify a certificate</a></li>
               <li><a href="/account">Your account</a></li>
             </ul>
           </nav>
@@ -135,6 +139,7 @@ const showSky = SKY_MODE !== 'off';
             <h2 style="font-size:var(--fs-100);font-family:var(--font-body);text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-2);">Project</h2>
             <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
               {showSupport && <li><a href="/support">Support Lrnon</a></li>}
+              <li><a href="/about">About Lrnon</a></li>
               <li><a href="/whats-new">What's new</a></li>
               <li><a href="/community">Community</a></li>
               <li><a href="/volunteer">Volunteer</a></li>

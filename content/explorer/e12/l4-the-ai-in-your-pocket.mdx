@@ -1,0 +1,162 @@
+---
+title: "The AI in your pocket"
+description: "For most of the world the phone is the computer. Voice, camera, on-device processing, and the data and battery costs nobody mentions."
+track: explorer
+module: e12
+order: 4
+minutes: 9
+objectives:
+  - "Use voice and camera input effectively on a phone"
+  - "Account for data, battery and offline limits in mobile use"
+concepts: ["mobile", "voice input", "on-device processing"]
+flashcards:
+  - front: "Why is voice input often better than typing on a phone?"
+    back: "It is faster, it suits long context, and rambling is fine because the model handles disfluency."
+  - front: "What does on-device processing change?"
+    back: "Nothing is transmitted, so it works offline, costs no data, and the paste test is answered differently."
+  - front: "What are the mobile-specific costs?"
+    back: "Mobile data for cloud features, battery for on-device ones, and storage for downloaded models."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Everything in this curriculum has quietly pictured a keyboard and a screen. For
+most people on earth the phone is not a secondary device — it is the only one.
+
+This lesson is what changes when that is your situation.
+
+## Voice is the better input
+
+On a phone, dictation usually beats typing for anything longer than a sentence,
+and people under-use it because it feels informal.
+
+It is faster. It suits the long, context-rich prompts that E3 showed produce
+better answers — you will happily say four sentences of background you would
+never thumb-type. And **rambling is fine**: false starts, corrections mid-flow,
+"actually, no, what I mean is". Models handle disfluent speech well, and E9·L3's
+dictate-then-tidy pattern applies to everyone, not only people who find writing
+hard.
+
+Two practical notes: check whether dictation runs on-device or in the cloud
+(L2's question), and remember that you are speaking aloud — in an office, a
+train, or a shared home, that is a privacy decision about the people around you
+as much as the software.
+
+## The camera is an input
+
+The phone's real advantage over a laptop. Point it at:
+
+- A document, a form, a letter — text extraction and explanation.
+- A whiteboard after a meeting.
+- A product label, an ingredients list, a warning notice.
+- A screen showing an error message.
+- Something you cannot name and want identified.
+
+E9·L4 covered this as an access tool with its failure modes; the same cautions
+hold for everyone. Digits are where it errs, and it will answer confidently
+about a blurred image unless you tell it to say when it cannot tell.
+
+For anything with small print, **ask for the exact text first, then the
+explanation.** Checkable, quotable, and it exposes a misread before you act on
+it.
+
+## On-device changes the calculation
+
+Modern phones run small models locally. Vendors advertise this, because it is a
+genuine advantage rather than marketing.
+
+**Works offline.** No signal, no problem — on a train, in a basement, in a
+place with patchy coverage.
+
+**Costs no mobile data.** Which matters enormously where data is metered and
+expensive.
+
+**Nothing is transmitted**, so E4·L8's paste test resolves differently. Content
+that could not go to a cloud service may be fine on-device.
+
+**Less capable**, and adequate for a surprising amount: prediction,
+transcription, summarising, tidying.
+
+Where a feature offers a choice, on-device is frequently the better default for
+ordinary work, with cloud reserved for things that genuinely need capability.
+
+## The costs nobody mentions
+
+**Mobile data.** Cloud AI features move real amounts of data, and image and
+voice features move more. On a metered plan that is money — E11's subject,
+arriving in a form its lessons did not cover.
+
+**Battery.** On-device inference is computationally heavy. Sustained use warms
+the phone and drains it noticeably.
+
+**Storage.** Downloaded models take gigabytes, on devices where storage is often
+the binding constraint.
+
+None of these appears in the feature description. All three are real for someone
+using a mid-range phone on a limited plan, which is a large share of the world.
+
+## Practical settings worth checking
+
+Three specific ones on any phone:
+
+**Which features work offline** — so you know what still functions with no
+signal.
+
+**Whether AI features are restricted on mobile data** — many can be limited to
+Wi-Fi, which is the single most useful setting for a metered plan.
+
+**What the assistant can access** when the phone is locked, and what a voice
+assistant does with recordings — L3's territory, and phones are where the
+defaults are most permissive.
+
+## Try it now (6 minutes)
+
+Dictate a prompt instead of typing it — at least three sentences of context.
+Compare the answer to your usual shorter typed version.
+
+Then find your phone's setting for restricting AI features to Wi-Fi. Whether or
+not you enable it, knowing it exists is worth the minute.
+
+<Quiz client:visible items={[
+  {
+    q: "Voice input on a phone is often better than typing because:",
+    options: [
+      "Speech recognition is more accurate than keyboards",
+      "It is faster and you will supply far more context than you would thumb-type",
+      "It uses less data"
+    ],
+    answer: 1,
+    explain: "Rambling is fine — models handle disfluent speech, and the richer context produces better answers."
+  },
+  {
+    q: "On-device processing means the feature:",
+    options: [
+      "Is more capable than the cloud version",
+      "Works offline, costs no data, and transmits nothing",
+      "Requires a subscription"
+    ],
+    answer: 1,
+    explain: "It is less capable and adequate for a great deal — and it resolves the paste test differently."
+  },
+  {
+    q: "Which mobile cost is most often overlooked?",
+    options: [
+      "Mobile data used by cloud AI features",
+      "The subscription price",
+      "Screen wear"
+    ],
+    answer: 0,
+    explain: "Battery and storage matter too, and none of the three appears in the feature description — all are real on a mid-range phone with a limited plan."
+  }
+]} />
+
+## Recap
+
+On a phone, dictate rather than type — it is faster and you will give more
+context. Use the camera, asking for exact text before explanation. Prefer
+on-device where offered: offline, no data cost, nothing transmitted, and
+adequate for most ordinary work. And count the mobile-specific costs — data,
+battery and storage — which no feature description mentions.

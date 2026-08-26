@@ -1,0 +1,45 @@
+---
+/* 10c · Three results · /certification/e7/result
+ *
+ * Left unbuilt in the first pass because a results page with no results is a
+ * mock-up, and inventing one would have been the same overclaiming 10i had just
+ * finished removing. 0010's fixtures supply real rows in every band and state,
+ * so it can now be built against something.
+ *
+ * ?preview=<attempt> renders a seeded scenario for an administrator. That is
+ * safe because fixture_result() refuses any attempt not marked as a fixture —
+ * the restriction is in the function, not in this page.
+ */
+import Base from '../../../layouts/Base.astro';
+import AssessmentResult from '../../../components/AssessmentResult.tsx';
+import modulesData from '../../../../content/modules.json';
+import { ASSESSED_MODULES } from '../../../lib/certification';
+
+export async function getStaticPaths() {
+  return ASSESSED_MODULES.map((id) => ({ params: { module: id } }));
+}
+
+const { module: moduleId } = Astro.params;
+const mod = modulesData.modules.find((m) => m.id === moduleId)!;
+
+/* Read at render on the client, not here: this page is prerendered, so a
+   preview id baked in at build time would be the same for every visitor. The
+   island reads the query string itself. */
+---
+<Base title={`Your result — ${mod.title} — Lrnon`}
+  description="Your assessment result: the band, what the reviewer saw, and what you can do next.">
+
+  <section class="container" style="padding-block:var(--sp-8) var(--sp-12);max-width:760px;">
+    <p style="letter-spacing:0.12em;text-transform:uppercase;font-size:var(--fs-100);color:var(--c-ink-faint);margin:0 0 var(--sp-2);">
+      {moduleId.toUpperCase()} · {mod.title}
+    </p>
+    <h1 style="font-size:var(--fs-500);margin:0 0 var(--sp-6);">Your result</h1>
+
+    {/* One renderer for all three results and for the admin preview. A second
+        component for previewing would be free to drift from what a learner
+        actually sees, which would defeat the point of previewing it. The island
+        reads ?preview itself — this page is prerendered, so anything resolved
+        here would be baked in identically for every visitor. */}
+    <AssessmentResult client:load moduleId={moduleId} />
+  </section>
+</Base>

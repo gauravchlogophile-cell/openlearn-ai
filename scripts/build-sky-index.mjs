@@ -140,6 +140,19 @@ for (const p of walk(join(ROOT, 'content/quizzes'), '.json')) {
   }
 }
 
+/* Certification assessment items. These matter more than the rest of this
+   guard, not less: a spoiled lesson quiz costs a learner some practice, and a
+   spoiled assessment question costs a certificate its meaning — and the
+   certificate is the thing someone might show an employer. Collected first so a
+   missing directory fails loudly here rather than silently leaving the
+   highest-stakes questions unprotected. */
+for (const p of walk(join(ROOT, 'content/assessments'), '.json')) {
+  const bank = JSON.parse(readFileSync(p, 'utf8'));
+  for (const it of bank.items ?? []) {
+    quiz.push({ q: clean(it.q), module: bank.module, source: 'assessment' });
+  }
+}
+
 for (const file of walk(join(ROOT, 'content'), '.mdx')) {
   const src = readFileSync(file, 'utf8');
   const rel = relative(join(ROOT, 'content'), file).split(sep).join('/');
@@ -160,7 +173,7 @@ writeFileSync(
   join(ROOT, 'src/generated/sky-quizbank.json'),
   JSON.stringify({ generatedAt: new Date().toISOString(), quiz }, null, 0) + '\n'
 );
-console.log(`Assessment guard: ${quiz.length} quiz stems (${quiz.filter(q => q.source === 'bank').length} bank, ${quiz.filter(q => q.source === 'inline').length} inline)`);
+console.log(`Assessment guard: ${quiz.length} quiz stems (${quiz.filter(q => q.source === 'bank').length} bank, ${quiz.filter(q => q.source === 'inline').length} inline, ${quiz.filter(q => q.source === 'assessment').length} certification)`);
 
 const byKind = chunks.reduce((a, c) => ({ ...a, [c.kind]: (a[c.kind] ?? 0) + 1 }), {});
 console.log(`Sky index: ${chunks.length} chunks (${Object.entries(byKind).map(([k, v]) => `${k}=${v}`).join(', ')})`);

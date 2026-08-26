@@ -1,0 +1,272 @@
+{
+  "module": "e14",
+  "title": "Health, Money and Legal — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "e14-01",
+      "q": "The line between safe and unsafe questions in these domains is:",
+      "options": [
+        "How technical the subject is",
+        "Whether answering substitutes for a decision needing an accountable person",
+        "Whether the topic is medical or financial"
+      ],
+      "answer": 1,
+      "explain": "Understanding a term is educational; deciding your case requires facts the model lacks and responsibility it cannot hold."
+    },
+    {
+      "id": "e14-02",
+      "q": "Why is 'just consult a professional' incomplete advice?",
+      "options": [
+        "Professionals are often wrong",
+        "Many cannot afford or access one, and will ask anyway without safer framing",
+        "AI answers are usually better"
+      ],
+      "answer": 1,
+      "explain": "Access is the real reason people ask, and refusing to engage does not create access."
+    },
+    {
+      "id": "e14-03",
+      "q": "Which is a reasonable question to ask?",
+      "options": [
+        "Should I take this medication?",
+        "What does this term in my diagnosis mean?",
+        "Do I have a legal case?"
+      ],
+      "answer": 1,
+      "explain": "Understanding what you have been told makes you a better-informed participant, which is protective."
+    },
+    {
+      "id": "e14-04",
+      "q": "Why is being interviewed better than writing your own history?",
+      "options": [
+        "It produces a longer document",
+        "Questions surface things you would not have thought to mention",
+        "It is faster"
+      ],
+      "answer": 1,
+      "explain": "Left alone you organise by what worries you, not by what the clinician most needs to know."
+    },
+    {
+      "id": "e14-05",
+      "q": "If an assistant's explanation conflicts with what your clinician said:",
+      "options": [
+        "Trust the assistant, which has read more medical text",
+        "Go back and ask — the clinician saw you and the model did not",
+        "Average the two"
+      ],
+      "answer": 1,
+      "explain": "Understanding what you were told is the goal; forming a private conclusion against it is not."
+    },
+    {
+      "id": "e14-06",
+      "q": "You should not arrive at an appointment with:",
+      "options": [
+        "A written list of questions",
+        "A diagnosis reached with an assistant, presented as a conclusion",
+        "A summary of your history"
+      ],
+      "answer": 1,
+      "explain": "It turns the consultation into a negotiation about your theory. Bring it as a worry instead."
+    },
+    {
+      "id": "e14-07",
+      "q": "Why do symptom questions reliably surface frightening possibilities?",
+      "options": [
+        "Models are designed to be cautious",
+        "Rare serious conditions are over-represented in medical writing, so they are more available",
+        "Common conditions are harder to describe"
+      ],
+      "answer": 1,
+      "explain": "Availability tracks how much has been written, not how likely something is for you — which is what base rates provide."
+    },
+    {
+      "id": "e14-08",
+      "q": "Three questions deep and more frightened than when you started means:",
+      "options": [
+        "You are getting closer to the answer",
+        "Stop — you have selected a path where reassurance was never available",
+        "Ask something more specific"
+      ],
+      "answer": 1,
+      "explain": "Each step feels like progress while only alarming answers remain reachable, and fluency makes each sound authoritative."
+    },
+    {
+      "id": "e14-09",
+      "q": "The most useful thing to ask about symptoms:",
+      "options": [
+        "Which condition matches them",
+        "What would make this urgent, and what should I do in the next 24 hours",
+        "How rare the serious possibility is"
+      ],
+      "answer": 1,
+      "explain": "Both are about action rather than identity, and an over-cautious threshold errs towards being checked."
+    },
+    {
+      "id": "e14-10",
+      "q": "Which money question is reasonable?",
+      "options": [
+        "Should I put my savings in this fund?",
+        "What is the difference between APR and AER?",
+        "Will this share price rise?"
+      ],
+      "answer": 1,
+      "explain": "Concepts and mechanisms are educational; what to do with your money is regulated advice for a reason."
+    },
+    {
+      "id": "e14-11",
+      "q": "Why is stale information especially dangerous with money?",
+      "options": [
+        "Old advice is more cautious",
+        "Rates and thresholds change regularly, and wrong numbers look exactly like right ones",
+        "Financial writing is rarely updated"
+      ],
+      "answer": 1,
+      "explain": "A plausible allowance figure is not obviously wrong the way a fabricated citation is."
+    },
+    {
+      "id": "e14-12",
+      "q": "Faced with a pressured investment opportunity, the check that matters:",
+      "options": [
+        "Asking an assistant to analyse the deal",
+        "Checking the regulator's register to see whether the firm is authorised",
+        "Comparing it with similar products"
+      ],
+      "answer": 1,
+      "explain": "An analysis of what you described is not knowledge of whether the thing is real."
+    },
+    {
+      "id": "e14-13",
+      "q": "The safe use of an assistant with a legal document:",
+      "options": [
+        "Deciding whether to sign",
+        "Understanding what it means and preparing questions for an adviser",
+        "Estimating your chances in a dispute"
+      ],
+      "answer": 1,
+      "explain": "Comprehension of a document you have is reading; advice requires law, facts and professional responsibility."
+    },
+    {
+      "id": "e14-14",
+      "q": "The most notorious legal failure mode is:",
+      "options": [
+        "Excessively cautious answers",
+        "Fabricated case citations that look entirely real",
+        "Refusing legal questions"
+      ],
+      "answer": 1,
+      "explain": "It has reached actual courtrooms and produced sanctions. Never repeat a citation you have not looked up."
+    },
+    {
+      "id": "e14-15",
+      "q": "A legal answer that does not mention jurisdiction should be:",
+      "options": [
+        "Treated as generally applicable",
+        "Treated as untrustworthy on that basis alone",
+        "Assumed to cover your country"
+      ],
+      "answer": 1,
+      "explain": "Law differs between and within countries, and answers drift towards whatever dominates the training data."
+    },
+    {
+      "id": "e14-16",
+      "q": "In a suspected medical emergency you should:",
+      "options": [
+        "Describe symptoms to an assistant first",
+        "Call your emergency number",
+        "Search the symptoms online"
+      ],
+      "answer": 1,
+      "explain": "Minutes matter, an assistant cannot send an ambulance, and describing it is the whole cost."
+    },
+    {
+      "id": "e14-17",
+      "q": "Why is a mental health crisis a hard stop?",
+      "options": [
+        "Assistants refuse to discuss it",
+        "It cannot summon help, assess risk, stay with you or follow up — a crisis line does all four",
+        "The advice is usually wrong"
+      ],
+      "answer": 1,
+      "explain": "It may respond kindly, and kindness is not the same as help."
+    },
+    {
+      "id": "e14-18",
+      "q": "The right response to a decision demanded faster than you can check it:",
+      "options": [
+        "Ask an assistant to evaluate it quickly",
+        "Get more time — legitimate parties accommodate that",
+        "Go with your instinct"
+      ],
+      "answer": 1,
+      "explain": "Manufactured urgency is a warning sign, and refusing an extension tells you something."
+    },
+    {
+      "id": "e14-19",
+      "q": "If someone may have access to your devices, before searching about leaving you should:",
+      "options": [
+        "Delete your history afterwards",
+        "Use a device they cannot reach, and check specialist guidance on covering your tracks",
+        "Use a different search engine"
+      ],
+      "answer": 1,
+      "explain": "Many domestic abuse organisations publish this guidance and provide a quick-exit control on their own sites."
+    },
+    {
+      "id": "e14-20",
+      "q": "The strongest argument for using these tools in high-stakes domains:",
+      "options": [
+        "They replace unavailable professionals",
+        "They turn scarce professional time into more useful professional time",
+        "They are more current than professionals"
+      ],
+      "answer": 1,
+      "explain": "Which disproportionately helps the people who get the least professional time to begin with."
+    },
+    {
+      "id": "e14-21",
+      "q": "Taking someone with you to an appointment helps because:",
+      "options": [
+        "They can speak on your behalf",
+        "They hear what you missed, remember what you forgot, and make it harder to be dismissed",
+        "It is required for complaints"
+      ],
+      "answer": 1,
+      "explain": "Free advocacy services exist in many places and are the specific answer to leaving an appointment feeling unheard."
+    },
+    {
+      "id": "e14-22",
+      "q": "The single rule preventing most serious harm in this module:",
+      "options": [
+        "Always state your jurisdiction",
+        "Never act on a number, citation, dose or deadline without checking the official source",
+        "Never ask about health"
+      ],
+      "answer": 1,
+      "explain": "It covers stale rates, fabricated citations and confident clinical detail in one line."
+    },
+    {
+      "id": "e14-23",
+      "q": "Which states make you most likely to break your own rules?",
+      "options": [
+        "Tired and hungry",
+        "Frightened, rushed, wanting a particular answer, and alone at night",
+        "Unfamiliar with the subject"
+      ],
+      "answer": 1,
+      "explain": "If two or more apply, stop and wait for morning or call a human-staffed line. The technology did not get worse; you did, temporarily."
+    },
+    {
+      "id": "e14-24",
+      "q": "The thread running through the whole Explorer track is:",
+      "options": [
+        "These tools are transformative",
+        "They are genuinely useful and specifically limited, and knowing which is which is the skill",
+        "They should be used sparingly"
+      ],
+      "answer": 1,
+      "explain": "Neither enthusiasm nor suspicion — the entire curriculum is about telling the two apart in each situation."
+    }
+  ]
+}

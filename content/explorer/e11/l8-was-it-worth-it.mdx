@@ -1,0 +1,154 @@
+---
+title: "Was it worth it?"
+description: "Deciding honestly whether the spending earned its place — and resisting the two ways people usually get this answer wrong."
+track: explorer
+module: e11
+order: 8
+minutes: 8
+objectives:
+  - "Judge whether AI spending is delivering value for you"
+  - "Avoid the two standard errors in that judgement"
+concepts: ["value", "sunk cost", "counterfactual"]
+flashcards:
+  - front: "What is the counterfactual question?"
+    back: "Not 'did this help?' but 'what would have happened without it?' — the only comparison that measures anything."
+  - front: "Why does 'I use it every day' not prove value?"
+    back: "Frequency measures habit. It says nothing about whether the outcome was better than the alternative."
+  - front: "What should trigger a review?"
+    back: "A calendar date, not a feeling — the same reason E8·L8's code of conduct has one."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Seven lessons of mechanics. This one is the question they were for: is this
+spending — money and time — actually earning its place?
+
+Most people never ask, and the two ways they answer when they do are both
+wrong.
+
+## The two standard errors
+
+**"I use it every day, so it must be worth it."**
+
+Frequency measures habit. Plenty of things are used daily and produce nothing —
+that is what a habit is. The question is not whether you reach for it but
+whether the outcome was better than not reaching for it.
+
+**"It saved me hours."**
+
+Almost always estimated, almost always generously, and almost always excluding
+L4's verification and correction time. The saving is remembered; the checking is
+not.
+
+Both errors share a shape: they measure your *experience* of the tool rather
+than the *difference it made*.
+
+## Ask the counterfactual
+
+The only question that measures anything:
+
+> **What would have happened without it?**
+
+Not "did it help" — everything helps a little. What would the document have
+looked like? How long would it have taken? Would you have done it at all?
+
+That last one is worth attention, because it is the honest answer surprisingly
+often. Some things you now do were not previously worth the effort. That is real
+value, and it does not show up as time saved because the baseline was zero.
+
+Equally, some tasks would have been fine without it, done slightly differently,
+in about the same time. Also real, and worth admitting.
+
+## Three questions, once a quarter
+
+Enough to be useful, short enough to actually happen.
+
+**1. What did I stop doing manually, and would I go back?**
+The strongest signal available. If having it removed would genuinely hurt, it is
+earning its place. If you would shrug, it is not.
+
+**2. What can I now do that I could not before?**
+New capability, not faster old capability. E9's access argument is the extreme
+version of this — and for most readers it will be something smaller and still
+real.
+
+**3. Where did it cost me?**
+Time spent correcting, something shipped wrong, understanding you did not build
+because you handed the thinking over (E8·L1). Count these. A review with nothing
+in this column is not a review.
+
+## Do not let the subscription decide
+
+The sunk-cost trap arrives specifically here.
+
+Having paid for a year, people use it to justify the payment — reaching for it
+on tasks where it does not help, because not using it feels wasteful.
+
+The money is gone either way. The only question is whether *the next month* is
+worth paying for, and that question is not affected by what you have already
+spent. E8·L8's review-date discipline exists for exactly this: decide on a
+schedule, not on a feeling that arrives after a large charge.
+
+## When the honest answer is "not really"
+
+It is a legitimate outcome, and it will be true for some readers of some tools.
+
+Cancel it. Drop to the free tier. Keep the two tasks where it genuinely helps
+and stop forcing the rest.
+
+Nothing in this curriculum has argued you should use these tools more. It has
+argued you should use them well, which includes using them less where less is
+correct — and being able to say so is the point of having measured anything.
+
+## Try it now (6 minutes)
+
+Answer the three questions for one tool you pay for.
+
+Be specific: name the task you stopped doing manually, name the thing you can
+now do, and name a cost. If you cannot fill the third column, you are not
+looking hard enough.
+
+<Quiz client:visible items={[
+  {
+    q: "The counterfactual question is:",
+    options: [
+      "Did this help?",
+      "What would have happened without it?",
+      "How often do I use it?"
+    ],
+    answer: 1,
+    explain: "Everything helps a little. Only the comparison against not using it measures anything."
+  },
+  {
+    q: "Why is 'I use it every day' weak evidence of value?",
+    options: [
+      "Daily use suggests over-reliance",
+      "Frequency measures habit, not whether outcomes improved",
+      "Usage statistics are unreliable"
+    ],
+    answer: 1,
+    explain: "Plenty of things are used daily and produce nothing — that is what a habit is."
+  },
+  {
+    q: "Having already paid for a year should affect your decision to keep using it:",
+    options: [
+      "Yes — you should get value from what you paid for",
+      "No — the money is gone either way; only next month is the question",
+      "Only if the tool has improved"
+    ],
+    answer: 1,
+    explain: "That is the sunk-cost trap, and it leads to using a tool on tasks where it does not help because stopping feels wasteful."
+  }
+]} />
+
+## Recap
+
+Ask what would have happened without it, not whether it helped. Review quarterly
+on three questions: what you stopped doing and would not go back to, what you
+can now do that you could not, and where it cost you — and a review with an
+empty third column has not been done properly. Ignore what you have already
+paid. And if the honest answer is that it is not earning its place, stopping is
+a legitimate result. That completes E11.

@@ -1,0 +1,152 @@
+---
+title: "Real work for nothing"
+description: "What free tiers genuinely cover, how to stretch them, and when running a model on your own machine makes sense — including on a phone."
+track: explorer
+module: e11
+order: 5
+minutes: 8
+objectives:
+  - "Get substantial work done without paying"
+  - "Judge when a locally-run model is a genuine option"
+concepts: ["free tiers", "local models", "rate limits"]
+flashcards:
+  - front: "What is the main limit of free tiers?"
+    back: "Message caps, slower or smaller models, and queueing at busy times — not usually capability for simple tasks."
+  - front: "What does running a model locally cost instead of money?"
+    back: "Setup effort, disk space, and a device capable of running it — plus lower capability than the large hosted models."
+  - front: "What is the strongest reason to run locally?"
+    back: "Privacy. Nothing leaves your device, which changes what you are allowed to put in."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+A course that is free forever should be straight about this: a great deal of
+useful AI work costs nothing, and the pressure to subscribe is not always
+matched by need.
+
+## What free tiers actually cover
+
+Most major assistants have a free tier, and for a large share of ordinary use it
+is enough.
+
+What you usually give up: a **message cap**, a **smaller or older model** once
+the cap is hit, **queueing** at busy times, and **fewer extras** — file uploads,
+image generation, longer context.
+
+What you usually keep: the ability to do the everyday work in E3, E4 and E5.
+Drafting, tidying, explaining, summarising, rewriting.
+
+If your use is a handful of tasks a day, test whether the free tier covers them
+before assuming it does not. E2·L9 gives the method for deciding between tiers;
+this lesson is about not skipping the free option in the first place.
+
+## Stretching a free tier
+
+Everything in L2, with more effect:
+
+**Batch related work.** One session, several tasks, rather than opening a new
+one each time.
+
+**Ask well the first time.** Every retry spends a message. P1·L1's examples pay
+for themselves fastest here.
+
+**Keep threads short.** Caps that count messages punish long conversations
+directly.
+
+**Use more than one free tier.** Several assistants have one. Using different
+providers for different tasks is legitimate, and it doubles as E2·L2's
+comparison habit.
+
+## Running a model on your own machine
+
+Genuinely possible now, and worth understanding even if you decide against it.
+
+Several capable open-weight models can be downloaded and run on an ordinary
+computer through free desktop applications. Modern phones can run small ones. No
+account, no per-token charge, no message cap.
+
+**What it costs instead:** several gigabytes of disk, initial setup effort, and
+a device with enough memory — a recent laptop with 16GB is a reasonable floor,
+and it runs faster with a decent graphics card.
+
+**What you get:** capable models, noticeably below the largest hosted ones on
+hard reasoning, and completely adequate for summarising, drafting, tidying,
+extraction and classification.
+
+## The reason that is not money
+
+Privacy is the strongest argument, and it is not really a cost argument at all.
+
+A locally-run model **does not send anything anywhere**. That changes what you
+are permitted to put in — E4·L8's paste test is answered differently when the
+text never leaves your device.
+
+For anyone handling confidential material, client data, medical or legal
+information, or working under a policy that forbids external services, this is
+frequently the only compliant option. It also works with no internet at all.
+
+If that is your situation, the setup effort is not a cost; it is the price of
+being able to do the task legitimately.
+
+## When local is the wrong answer
+
+Even-handedly:
+
+- You need the strongest available reasoning.
+- You need very long context.
+- Your device cannot run it, and buying hardware to save a subscription is
+  false economy.
+- You would spend more time maintaining it than the subscription would cost —
+  L4's arithmetic.
+
+## Try it now (6 minutes)
+
+Check what your current free tier allows: how many messages, which model after
+that, what resets when.
+
+Most people have never read it and are either paying for something they did not
+need, or hitting a cap they could plan around.
+
+<Quiz client:visible items={[
+  {
+    q: "Free tiers usually limit you by:",
+    options: [
+      "Removing all capability",
+      "Message caps, smaller models after the cap, and queueing",
+      "Restricting which languages you may use"
+    ],
+    answer: 1,
+    explain: "The everyday work in E3, E4 and E5 is generally within reach; extras and volume are what you give up."
+  },
+  {
+    q: "The strongest reason to run a model locally is:",
+    options: [
+      "It is more capable than hosted models",
+      "Privacy — nothing leaves your device, which changes what you may put in",
+      "It is faster"
+    ],
+    answer: 1,
+    explain: "For confidential material or a policy forbidding external services, it is frequently the only compliant option."
+  },
+  {
+    q: "Buying a more powerful computer to avoid a subscription is:",
+    options: [
+      "Usually sound, since hardware lasts longer",
+      "Usually false economy",
+      "Necessary for any local model"
+    ],
+    answer: 1,
+    explain: "L4's arithmetic applies: count the total cost, including your time maintaining it, not only the avoided fee."
+  }
+]} />
+
+## Recap
+
+Free tiers cover a great deal of ordinary work — check yours before assuming
+otherwise, and stretch it by batching, prompting well first time and keeping
+threads short. Running a model locally is a real option, costing disk, setup and
+some capability instead of money. Its strongest argument is privacy rather than
+price: nothing leaves the device, which changes what you are allowed to ask.

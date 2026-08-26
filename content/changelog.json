@@ -3,6 +3,66 @@
   "entries": [
     {
       "date": "2026-08-26",
+      "kind": "Content updated",
+      "where": "Whole site",
+      "what": "Corrected how the site describes certification, which it had been promising in more places than it could deliver. There are two things, and they were being said as one: a Module Record, earned by finishing every lesson, which is issued today; and a Lrnon Certificate, which additionally requires passing that module's assessment, and which nothing on the site can issue yet. The landing page said 'free certificates', E7 said it was 'compulsory for certification', and the achievements page listed the two together. All of that now names the tier and says what it takes. Two words are retired: 'compulsory', because nothing on Lrnon is, and 'certified' as a verb, because it implies an authority we are not. The entry below of 26 August is left as it was published, wrong claim included — a correction belongs in a new dated entry, not in a quiet edit to an old one. Anyone who finished E7 under the old wording will be told directly when the assessment opens, and will not be charged to sit it."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "Accessibility",
+      "where": "Whole site",
+      "what": "Every lesson that names a tool now shows where the description came from and when it was last checked, with a warning when that is over 120 days old. A new About page states the position on brands and sources: no sponsorship ever, neutral rather than silent, and the vendor is always the authority over us."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "Content updated",
+      "where": "Explorer · E2 and E13",
+      "what": "Market review of the whole Explorer track. Added E2·L11 on open-weight and regional assistants — DeepSeek, Llama, Mistral and Qwen now have registry cards, closing a gap where E10 and E11 both referenced a tier the landscape module never covered. Added E13·L9 on whether AI use counts as cheating, which research showed is the question learners actually ask."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
+      "where": "Explorer · E14",
+      "what": "Health, Money and Legal published, completing the Explorer track at 14 modules and 112 lessons. Eight lessons on preparing for appointments, why symptom questions spiral, financial concepts versus financial advice, understanding legal documents, the four hard stops where AI is the wrong tool entirely, getting to a real person, and six rules for high-stakes questions."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
+      "where": "Explorer · E13",
+      "what": "Using AI to Actually Learn published — eight lessons on the illusion of understanding, getting explanations pitched at you, retrieval practice, spacing and forgetting, teaching it back, where AI is a bad teacher, what explanation cannot teach at all, and a study loop that survives a bad week."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
+      "where": "Explorer · E12",
+      "what": "AI You Didn't Choose published — eight lessons on AI embedded in tools you already had: spotting it, turning it off, the AI in your phone, features that read your messages, decisions made about you and your rights, workplace tooling, and a one-hour settings audit."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
+      "where": "Explorer · E11",
+      "what": "What It Actually Costs published — eight lessons on tokens as the unit you pay in, why bills move, right-sizing the model, the time budget nobody counts, getting real work done for nothing, paying from outside the dollar economy, spending caps before automation, and judging honestly whether it was worth it."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
+      "where": "Explorer · E10",
+      "what": "Working in Your Own Language published — eight lessons on why quality varies by language, testing your own, back-translation and what it cannot catch, code-switching, names and scripts, honorifics and register, learning a language, and running a two-language working life."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
+      "where": "Explorer · E9",
+      "what": "AI as an Assistive Tool published — eight lessons on reading, writing, seeing, hearing, focus and communication when those are barriers, plus how to make things other people can actually get at. Written after an audit found the curriculum had no coverage of assistive use at all."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
+      "where": "Practitioner · P1",
+      "what": "Advanced Prompting published — the first Practitioner module. Eight lessons on few-shot examples, structured output, splitting a prompt into single-purpose steps, chaining without compounding errors, persistent instructions, long inputs, testing a prompt against a saved evaluation set, and building prompts that survive a model update."
+    },
+    {
+      "date": "2026-08-26",
       "kind": "New module",
       "where": "Explorer · E8",
       "what": "AI Ethics & Responsible Use published — eight lessons on authorship, disclosing AI use, where bias comes from and lands, who answers when something goes wrong, the environmental and labour costs, automating work that belongs to colleagues, how to refuse, and writing your own code of conduct. This completes the Explorer track: 64 lessons across eight modules."

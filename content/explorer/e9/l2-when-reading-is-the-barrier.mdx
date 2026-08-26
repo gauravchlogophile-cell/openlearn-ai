@@ -1,0 +1,166 @@
+---
+title: "When reading is the barrier"
+description: "Dyslexia, low vision, fatigue, unfamiliar jargon. Reshaping text so it can be read, and the one thing to check before trusting a simplified version."
+track: explorer
+module: e9
+order: 2
+minutes: 9
+objectives:
+  - "Reshape text for readability without losing its meaning"
+  - "Check a simplified version against the original where it matters"
+concepts: ["readability", "simplification", "text-to-speech"]
+flashcards:
+  - front: "What is the risk when AI simplifies a document?"
+    back: "Conditions and exceptions go first, so the simple version often states something stronger than the original."
+  - front: "How do you get the benefit without the risk?"
+    back: "Ask for the plain version AND what it left out, then check any conditions against the original."
+  - front: "Why is reading aloud plus text better than either alone?"
+    back: "Following the words while hearing them helps many readers more than listening alone, and keeps the original checkable."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Reading is not one skill and it fails in several different ways. Dense text is
+hard when you have dyslexia, when your vision is limited, when you are exhausted
+or in pain, when you are reading a second language, and when the writing is
+simply bad.
+
+What these have in common is that **the words are not the problem — the shape
+they arrive in is**. And shape is something AI is genuinely good at changing.
+
+## Ask for a different shape, not a summary
+
+There is an important distinction here, and E4·L3 covered half of it.
+
+A **summary** is shorter and leaves things out. A **reshaping** keeps everything
+and changes how it is presented. For a document you actually need — a letter
+from a landlord, a medical leaflet, a contract — you usually want the second.
+
+> *Rewrite the text below so it is easier to read. Keep every fact, condition
+> and exception. Do not shorten it if that means leaving something out.*
+>
+> *Use short sentences. One idea per sentence. Everyday words instead of formal
+> ones. Put the thing I have to do first, then the details.*
+>
+> *Then list separately: anything I must do, and any deadline.*
+
+That final instruction is doing real work. In official letters the action and
+the deadline are frequently buried in the fourth paragraph, and they are the
+part that matters.
+
+## The one check that matters
+
+Simplification drops qualifiers. E5·L7 established this and it is more
+important here, because the whole point is that you may not be re-reading the
+original closely.
+
+> *"You may be eligible for a reduction if you have been resident for six
+> months and are not claiming elsewhere."*
+
+becomes
+
+> *"You can get a reduction."*
+
+Shorter, clearer, and now wrong for most readers.
+
+So add one line to every simplification request:
+
+> *Then list every condition, exception or "only if" from the original, in
+> plain words.*
+
+Read that list. It is short, it is where the meaning lives, and checking it is
+far less work than reading the whole original.
+
+## Hearing it and seeing it together
+
+Text-to-speech is the oldest tool here and still among the best. Two things
+worth knowing.
+
+**Following along helps.** Many people read better hearing the words while
+seeing them than doing either alone. Lrnon's read-aloud is built this way
+deliberately: it does not replace the page, it reads the page you are looking
+at.
+
+**Speed is a setting.** Most people settle well above the default once used to
+it, and a faster voice makes long documents realistic rather than punishing.
+
+## Fonts, spacing and contrast come first
+
+Before any AI is involved: change how text looks. It is free, instant and
+frequently sufficient.
+
+Larger text, more line spacing, shorter lines, higher contrast, and a typeface
+with distinguishable letterforms all measurably help. Lrnon's accessibility
+panel does all five, and every major browser and operating system has
+equivalents.
+
+Try that first. Reshaping with AI is for documents you cannot restyle — a PDF,
+a photographed letter, someone else's website.
+
+## Photographs of text
+
+A great deal of important text arrives as an image: a letter photographed on a
+phone, a screenshot, a form.
+
+Most assistants can now read these. Two cautions specific to this case:
+
+**Numbers and dates are where it errs.** A misread digit in a reference number
+or an amount is both easy to produce and hard to notice.
+
+**Ask for the text first, then the explanation.** *"Type out exactly what this
+says, then explain it in plain words."* The transcription is checkable by
+someone else in a way an explanation is not, and it gives you something to
+quote when you ring them up.
+
+## Try it now (7 minutes)
+
+Take a genuinely dense document — an official letter, terms and conditions, a
+policy.
+
+Ask for the reshaped version, the list of actions and deadlines, and the list
+of conditions. Read the conditions list. That is the part that would have been
+lost.
+
+<Quiz client:visible items={[
+  {
+    q: "For a letter you actually need to act on, you usually want:",
+    options: [
+      "A summary that is much shorter",
+      "A reshaping that keeps every fact but changes the presentation",
+      "A translation into formal English"
+    ],
+    answer: 1,
+    explain: "A summary leaves things out. When the document has consequences, you want everything kept and presented differently."
+  },
+  {
+    q: "The single most important line to add to a simplification request:",
+    options: [
+      "Keep it under 200 words",
+      "List every condition, exception or 'only if' from the original",
+      "Use a friendly tone"
+    ],
+    answer: 1,
+    explain: "\"You may be eligible if resident six months and not claiming elsewhere\" becoming \"You can get a reduction\" is shorter, clearer and wrong."
+  },
+  {
+    q: "When reading a photographed letter, ask for the exact text first because:",
+    options: [
+      "It is faster than an explanation",
+      "A transcription is checkable and quotable in a way an explanation is not",
+      "Explanations are usually inaccurate"
+    ],
+    answer: 1,
+    explain: "It also matters because misread digits in reference numbers and amounts are easy to produce and hard to notice."
+  }
+]} />
+
+## Recap
+
+Change how text looks before reaching for anything cleverer — size, spacing,
+line length, contrast and typeface are free and often enough. When you do use
+AI, ask for a reshaping that keeps every fact rather than a summary, and always
+ask separately for the conditions and exceptions, because those are what
+simplification drops. For photographed text, get the exact words first.

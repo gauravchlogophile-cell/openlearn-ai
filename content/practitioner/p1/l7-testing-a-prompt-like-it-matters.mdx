@@ -1,0 +1,159 @@
+---
+title: "Testing a prompt like it matters"
+description: "Twenty saved examples with known answers turn prompt work from opinion into measurement — and tell you whether your last change helped or hurt."
+track: practitioner
+module: p1
+order: 7
+minutes: 9
+objectives:
+  - "Build a small evaluation set with known correct answers"
+  - "Measure whether a prompt change improved or worsened results"
+concepts: ["evaluation", "regression", "sampling"]
+flashcards:
+  - front: "What is an evaluation set?"
+    back: "A saved collection of real inputs with the correct output recorded, run after every prompt change."
+  - front: "Why is 'it looks better' unreliable?"
+    back: "You tested the case you were thinking about. A change that fixes one input often breaks two others you did not check."
+  - front: "How many examples do you need?"
+    back: "Twenty is enough to be useful. The gain from having any set at all dwarfs the gain from a large one."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+This is the lesson that separates a prompt someone tinkers with from one that
+can be relied on, and almost nobody does it.
+
+You change a prompt, try it once, and it looks better. Ship it. Two weeks later
+something is wrong and you cannot tell whether your change caused it.
+
+## Why "it looks better" fails
+
+You tested the input you had in mind — which is usually the one that prompted
+the change.
+
+A change that fixes that input frequently breaks others. Adding *"be concise"*
+fixes a verbose case and truncates the ones that needed detail. Adding an
+example (L1) fixes one pattern and shifts behaviour on a neighbouring one.
+
+Without a fixed set of inputs, you never see the damage. You see the case you
+fixed, and you conclude the prompt improved. This is E7·L7's asymmetric
+scrutiny wearing a technical costume: you checked the thing you hoped for.
+
+## Build the set
+
+Twenty examples. It takes about an hour once, and it is the highest-return hour
+in this module.
+
+**Use real inputs.** From actual work. Invented test cases are too clean and
+miss the messiness that causes real failures.
+
+**Record the correct output** for each — what you actually want, written down
+before you start changing things.
+
+**Weight it towards the awkward.** The same principle as L1: a few normal cases
+so you notice basic regressions, and a majority of edge cases, ambiguity, empty
+fields, things that should be refused.
+
+**Include the failures you have already seen.** Every production failure becomes
+a permanent test case. This is why L4 said to keep intermediate outputs.
+
+A spreadsheet is a perfectly good home for this. Input in one column, expected
+output in another, results in a third.
+
+## Run it on every change
+
+Then the discipline, which is the whole point:
+
+**Run the whole set before you change anything.** Record the score. That is your
+baseline, and without it every later number is meaningless.
+
+**Change one thing.** Only one — E6·L3's rule, for the same reason.
+
+**Run the whole set again.** Compare. Not just the total: look at *which* items
+moved. A change taking you from 16/20 to 17/20 while breaking two previously
+correct items is not an improvement, it is a trade, and you should decide it
+deliberately.
+
+**Keep the record.** Prompt version, score, date, what changed. When you need to
+go back you will know where to go back to.
+
+## Grading
+
+Some outputs are exactly checkable — a category, a number, a JSON field. Compare
+directly.
+
+Others are judgement calls, like the quality of a draft. Three options, in order
+of preference:
+
+**Check properties rather than the whole.** Under 200 words? Contains the
+deadline? No opening pleasantry? Mechanical and reliable.
+
+**Grade by hand.** Twenty items is not many. Score each as good, acceptable or
+bad, and be consistent about what those mean.
+
+**Use a model as grader, carefully.** It scales, and it inherits every weakness
+in this curriculum — including agreeing with whatever framing you supply. Never
+use the same prompt to grade its own output, and spot-check the grader against
+your own judgement before trusting it.
+
+## What the number is for
+
+Not a target. A **change detector**.
+
+You are not chasing 20/20; some inputs are genuinely ambiguous and 20/20
+usually means your set is too easy. You want to know whether today's edit helped,
+and whether last month's prompt still works after the model behind it was
+updated.
+
+That second one is L8.
+
+## Try it now (8 minutes)
+
+Open a spreadsheet. Put in ten real inputs from a task you automate, with the
+correct output beside each.
+
+Run your current prompt against all ten and record the score. You now have a
+baseline, which is the part almost nobody has.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is 'it looks better after my change' unreliable?",
+    options: [
+      "Models are inconsistent between runs",
+      "You tested the case you were thinking about, and the change may have broken others",
+      "Improvements take time to appear"
+    ],
+    answer: 1,
+    explain: "Adding \"be concise\" fixes a verbose case and truncates the ones that needed detail. Without a fixed set you never see that."
+  },
+  {
+    q: "An evaluation set should be weighted towards:",
+    options: [
+      "Typical, representative inputs",
+      "Edge cases, ambiguity and previously seen failures",
+      "The longest inputs you handle"
+    ],
+    answer: 1,
+    explain: "A few normal cases catch basic regressions; the edge cases are where automated work actually fails."
+  },
+  {
+    q: "The score from an evaluation set is primarily:",
+    options: [
+      "A target to maximise",
+      "A change detector — did this edit help or hurt?",
+      "A measure of model quality"
+    ],
+    answer: 1,
+    explain: "20/20 usually means the set is too easy. The value is knowing whether today's edit improved things, and whether last month's prompt still works."
+  }
+]} />
+
+## Recap
+
+Twenty real inputs with known correct answers, weighted towards the awkward
+ones and including every failure you have already seen. Score before you change
+anything, change one thing, score again, and look at which items moved rather
+than only the total. The number is a change detector, not a target.

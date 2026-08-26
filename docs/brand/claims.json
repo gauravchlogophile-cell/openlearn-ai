@@ -1,0 +1,106 @@
+{
+  "$comment": [
+    "Machine-checkable claims made by the brand guides.",
+    "",
+    "The guides make factual assertions about Lrnon — how many modules are live,",
+    "whether certification exists, whether the assistant is switched on. Those",
+    "assertions go stale the moment the product moves, and a brand guide that is",
+    "quietly wrong is worse than none: it gets pasted into a funding application.",
+    "",
+    "This is the same problem the curriculum already solved. A tool description",
+    "older than 120 days fails the build (CUR-7); a vendor doc that changes is",
+    "reported by check-sources.mjs. Brand claims get the same treatment rather",
+    "than a promise to remember.",
+    "",
+    "Each entry names an `expect` value and the `probe` that measures reality.",
+    "scripts/check-brand-claims.mjs runs every probe and fails when one drifts,",
+    "naming the guide and the line to change. Update the guide AND this file",
+    "together — that is the point of the pairing.",
+    "",
+    "reviewEveryDays sets the staleness rule for the guides themselves, the way",
+    "lastVerified does for a registry card."
+  ],
+
+  "reviewEveryDays": 180,
+  "guides": {
+    "01": { "file": "01-internal-operating-guide.md", "lastReviewed": "2026-08-26" },
+    "02": { "file": "02-public-brand-statement.md",   "lastReviewed": "2026-08-26" },
+    "03": { "file": "03-layered-positioning.md",      "lastReviewed": "2026-08-26" },
+    "04": { "file": "04-partner-and-funder-guide.md", "lastReviewed": "2026-08-26" }
+  },
+
+  "claims": [
+    {
+      "id": "explorer-modules-live",
+      "probe": "explorerModulesLive",
+      "expect": 14,
+      "saidIn": ["02", "03", "04"],
+      "guideText": "\"Fourteen Explorer modules\" — appears in the public statement and the funder guide.",
+      "onDrift": "Change the module count everywhere it appears. The funder guide compares it against Google AI Essentials' five, so that contrast moves too."
+    },
+    {
+      "id": "practitioner-modules-live",
+      "probe": "practitionerModulesLive",
+      "expect": 1,
+      "saidIn": ["03"],
+      "guideText": "Part B: \"Practitioner and Builder are incomplete. One module of a planned twenty.\"",
+      "onDrift": "Update Part B. Once several are live, 'incomplete' may stop being the honest framing and the marketing copy can say more."
+    },
+    {
+      "id": "builder-modules-live",
+      "probe": "builderModulesLive",
+      "expect": 0,
+      "saidIn": ["03"],
+      "guideText": "Part B implies the Builder track has nothing published yet.",
+      "onDrift": "Part B must stop implying Builder is empty."
+    },
+    {
+      "id": "certification-built",
+      "probe": "certificationBuilt",
+      "expect": true,
+      "saidIn": ["02", "03"],
+      "guideText": "\"Certification is now built — schema, assessment, published rubric and verification page — but switched off.\"",
+      "onDrift": "The certification code has been removed or renamed. Both guides describe machinery that no longer exists; either restore it or take the description down."
+    },
+    {
+      "id": "certification-not-issuing",
+      "probe": "certificationIssuing",
+      "expect": false,
+      "saidIn": ["02", "03"],
+      "guideText": "\"No learner can obtain one yet.\" Part B: never imply a certificate is obtainable; do not demo an issued one.",
+      "onDrift": "Certification is now issuing. Both guides must stop saying no learner can obtain one, and Part B's do-not-demo instruction should go. Before changing a word, check the two human gates actually closed — two reviewers agreed on twenty samples, guardian path tested with real families — rather than someone having flipped the seed row."
+    },
+    {
+      "id": "assistant-switched-off",
+      "probe": "skyEnabled",
+      "expect": false,
+      "saidIn": ["03"],
+      "guideText": "Part B: \"The assistant is not enabled... Do not demo it.\"",
+      "onDrift": "Sky is on. Remove the do-not-demo instruction, and check the rate limiter was replaced before it could spend money."
+    },
+    {
+      "id": "rooms-closed",
+      "probe": "roomsShipClosed",
+      "expect": true,
+      "saidIn": ["01", "02", "04"],
+      "guideText": "\"Community features stay closed until a named safeguarding owner and deputy exist.\"",
+      "onDrift": "Rooms are open. Every guide claiming they are closed is now wrong, and the safeguarding claims need re-checking against what actually shipped."
+    },
+    {
+      "id": "no-sponsorship",
+      "probe": "sponsorshipMentions",
+      "expect": 0,
+      "saidIn": ["01", "02", "03", "04"],
+      "guideText": "\"No sponsorship, ever.\" The load-bearing claim in all four guides.",
+      "onDrift": "Something in the codebase now references a sponsor, affiliate or paid placement. If that is real, every guide is wrong and the claim comes down the same day."
+    },
+    {
+      "id": "staleness-threshold",
+      "probe": "stalenessThresholdDays",
+      "expect": 120,
+      "saidIn": ["01", "02", "03", "04"],
+      "guideText": "\"A tool description older than 120 days fails the build.\"",
+      "onDrift": "The threshold in validate-content.mjs changed. Update the number in the guides, or restore the threshold."
+    }
+  ]
+}

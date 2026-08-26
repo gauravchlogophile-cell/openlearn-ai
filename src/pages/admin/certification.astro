@@ -1,0 +1,121 @@
+---
+/* 10f · Issuance queue and revocation.
+ *
+ * The line this whole frame turns on: "Issuing is automatic. Revoking is not."
+ *
+ * So this page is mostly a queue, and the destructive half is deliberately not
+ * a button that does the thing. propose_revocation() raises a Delete in the
+ * owners' decision queue (0006), starts a 30-day hold, and refuses to execute
+ * until the holder has been told — none of which an admin page can shortcut,
+ * because the check lives in the function rather than here.
+ */
+import Admin from '../../layouts/Admin.astro';
+import AdminGate from '../../components/AdminGate.tsx';
+import AdminFixtures from '../../components/AdminFixtures.tsx';
+import ReviewQueue from '../../components/ReviewQueue.tsx';
+import rubricE7 from '../../../content/rubrics/e7.json';
+
+/* 10g's gates, as they actually stand. Written here rather than fetched so the
+   page is honest with no database configured — and so the two that need people
+   are visible to whoever opens this looking for a switch to flip. */
+const gates = [
+  { done: true,  label: 'Rubric written and published',
+    detail: 'content/rubrics/e7.json — readable before sitting' },
+  { done: true,  label: 'Copy corrected everywhere',
+    detail: 'Turn 10i, shipped ahead of this build' },
+  { done: true,  label: 'Verification page live and tested',
+    detail: '/v — answers today, and can never be switched off' },
+  { done: false, label: 'Two reviewers band 20 sample answers and agree',
+    detail: 'Needs two named people. certification_open() refuses without both.' },
+  { done: false, label: 'Guardian-email path tested with real families',
+    detail: 'Needs families, not a test account.' },
+];
+const remaining = gates.filter((g) => !g.done).length;
+---
+<Admin title="Certification — Lrnon admin" heading="Certification"
+  description="Issuance queue, reviewer banding, and the revocation path. Issuing is automatic; revoking is not.">
+  <AdminGate client:load>
+
+    <div class="note note--aim">
+      <strong>Certification is closed on every module.</strong>
+      <p class="prose" style="margin:var(--sp-2) 0 0;">
+        {remaining} of {gates.length} gates are still open, and both need people
+        rather than code. Until they close, <code>certification_open()</code>
+        returns false and <code>start_attempt()</code> refuses — so there is no
+        switch on this page that would open it, on purpose. A certificate nobody
+        competent banded is worse than no certificate.
+      </p>
+    </div>
+
+    <h2 style="font-size:var(--fs-400);margin-top:var(--sp-8);">Gates before it can go live</h2>
+    <ul style="list-style:none;padding:0;display:grid;gap:var(--sp-2);margin-top:var(--sp-3);">
+      {gates.map((g) => (
+        <li class="card" style="display:flex;gap:var(--sp-3);align-items:flex-start;">
+          <span aria-hidden="true" style="font-size:var(--fs-300);line-height:1;">{g.done ? '✓' : '○'}</span>
+          <span>
+            <strong>{g.label}</strong>
+            <span class="sr-only">{g.done ? ' — done' : ' — outstanding'}</span>
+            <br /><span style="color:var(--c-ink-soft);font-size:var(--fs-200);">{g.detail}</span>
+          </span>
+        </li>
+      ))}
+    </ul>
+
+    <h2 style="font-size:var(--fs-400);margin-top:var(--sp-10);">Awaiting review</h2>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      Oldest first. Reviewers reach answers through <code>review_queue()</code>,
+      which does not select the learner's name — so a reviewer cannot see who
+      wrote what they are banding, whatever this page chooses to render.
+    </p>
+    <ReviewQueue client:load />
+
+    <h2 id="fixtures" style="font-size:var(--fs-400);margin-top:var(--sp-10);">Test entries</h2>
+    <AdminFixtures client:load />
+
+    <h2 style="font-size:var(--fs-400);margin-top:var(--sp-10);">The rubric reviewers band against</h2>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      {rubricE7.banding.rule} {rubricE7.banding.noteRequired}
+    </p>
+    <ul style="display:grid;gap:var(--sp-2);padding-inline-start:var(--sp-5);margin-top:var(--sp-3);">
+      {rubricE7.criteria.map((c) => <li><strong>{c.name}</strong> — {c.secure}</li>)}
+    </ul>
+
+    <h2 style="font-size:var(--fs-400);margin-top:var(--sp-10);">Grounds for revocation</h2>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      Every one of these goes to the owners as a Delete decision, holds for 30
+      days, and cannot execute until the holder has been notified and had a
+      chance to respond. That last check is in <code>execute_revocation()</code>,
+      not in this page: a revocation the holder first learns about from a
+      rejected job application is the failure the clause exists to prevent.
+    </p>
+    <div style="display:grid;gap:var(--sp-2);margin-top:var(--sp-3);">
+      <div class="card"><strong>Proven cheating</strong><br />
+        <span style="color:var(--c-ink-soft);">Evidence attached. The learner is told and can respond first.</span></div>
+      <div class="card"><strong>Impersonation or shared account</strong><br />
+        <span style="color:var(--c-ink-soft);">Withdrawn — and the real learner may sit it.</span></div>
+      <div class="card"><strong>Defect in the assessment</strong><br />
+        <span style="color:var(--c-ink-soft);">Our fault. Everyone affected is told, and re-sits free.</span></div>
+      <div class="card"><strong>Learner asks for removal</strong><br />
+        <span style="color:var(--c-ink-soft);">Honoured without asking why. The verify page reads "withdrawn at holder's request".</span></div>
+      <div class="card"><strong>Legal or safeguarding order</strong><br />
+        <span style="color:var(--c-ink-soft);">Handled by the owners directly. No detail is published.</span></div>
+    </div>
+
+    <div class="note note--try" style="margin-top:var(--sp-4);">
+      <strong>Never a ground.</strong>
+      <p class="prose" style="margin:var(--sp-2) 0 0;">
+        Refusing to donate, going inactive, or criticising Lrnon. These are not
+        merely disallowed by policy — they are not values the
+        <code>reason_public</code> constraint accepts, so no administrator and no
+        owner can record one, and the pgTAP suite asserts it.
+      </p>
+    </div>
+
+    <h2 style="font-size:var(--fs-400);margin-top:var(--sp-10);">What a reviewer cannot do</h2>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      An assessment reviewer bands answers and issues certificates. They cannot
+      revoke one, edit an issued certificate, see a learner's identity, or change
+      the rubric. Those sit with Admin or the owners.
+    </p>
+  </AdminGate>
+</Admin>

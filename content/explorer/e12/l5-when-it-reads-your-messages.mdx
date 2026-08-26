@@ -1,0 +1,157 @@
+---
+title: "When it reads your messages"
+description: "Summaries, suggested replies and priority sorting act on your correspondence continuously. What they get wrong, and whose privacy is involved besides yours."
+track: explorer
+module: e12
+order: 5
+minutes: 8
+objectives:
+  - "Judge the reliability of automatic summaries and suggested replies"
+  - "Account for the other people whose messages are being processed"
+concepts: ["message summarisation", "suggested replies", "third-party consent"]
+flashcards:
+  - front: "What does an email summariser most often get wrong?"
+    back: "The condition, the deadline and the ask — the parts that determine what you must actually do."
+  - front: "Why are suggested replies risky?"
+    back: "They are optimised for plausibility and speed, so you agree to things quickly without reading properly."
+  - front: "Whose privacy is involved?"
+    back: "Also the sender's. They wrote to you, not to a processing service, and were never asked."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Of all embedded AI, the features that read your correspondence deserve the most
+attention. They operate on everything, continuously, and what they touch is
+frequently sensitive and rarely only yours.
+
+## Summaries of threads
+
+The "here is what this thread says" box at the top of a long email chain.
+Genuinely useful — and it drops exactly the things E4·L3 warned about.
+
+**Conditions.** *"We can do Thursday if the figures arrive by Tuesday"* becomes
+*"They agreed to Thursday."*
+
+**Who said what.** In a thread with several people, attribution is where these
+most often blur — and in a disagreement it is the only thing that matters.
+
+**The actual ask.** Buried in paragraph four of a long message, which is exactly
+where summarisation deprioritises it.
+
+**Tone.** Somebody being carefully polite about being extremely unhappy reads as
+neutral.
+
+Use the summary as a map, as E4·L3 taught — to decide which messages to read
+properly. Never as the basis for a reply, and never for anything with a
+commitment in it.
+
+## Suggested replies
+
+The one-tap responses. Convenient, and they carry a specific risk that is about
+you rather than the technology.
+
+They are optimised for **plausibility and speed**. That combination encourages
+replying without reading properly — you glance, the suggestion looks right, you
+tap.
+
+The failure is not that the reply is wrong English. It is that you have agreed
+to something. *"Sounds good!"* on a message whose second paragraph committed you
+to a date, a cost, or a position.
+
+**Rule: never use a suggested reply on a message you have not read to the end.**
+That sounds obvious and it is precisely the behaviour the feature is designed to
+make unnecessary.
+
+For anything with a decision, a number or a person's feelings in it, write your
+own — E4·L2's rule about bad news, apologies and disagreement applies at least
+as strongly here.
+
+## Priority sorting
+
+Deciding which messages you see first, and which land in a low-priority pile.
+
+The failure mode is invisible by construction: **you cannot notice the message
+you were not shown.** Unlike a bad summary, there is no output to inspect.
+
+Two habits worth keeping: look through the deprioritised folder occasionally,
+and be aware that anything unusual — an unfamiliar sender, an atypical format,
+a first approach from someone who matters — is exactly what a
+sorted-by-typicality system handles worst.
+
+## The privacy that is not yours
+
+The part most people never consider, and the most important in this lesson.
+
+Your correspondents wrote to **you**. They did not choose your email provider,
+your assistant, or the summarisation feature you enabled. They have no way to
+know their message is being processed and no way to object.
+
+That matters most when:
+
+- Someone wrote something **confidential** on the understanding it was going to
+  a person.
+- The message contains **third-party personal data** — a colleague's health, a
+  client's details, someone's address.
+- You are in a role where correspondence is **privileged or protected** — legal,
+  medical, journalistic, HR, safeguarding, pastoral.
+
+For those roles specifically, an always-on summariser reading everything is a
+professional question rather than a preference, and your organisation's rules
+almost certainly have something to say about it.
+
+E4·L8's paste test framed this as a decision about what you paste. Embedded
+features remove the pasting step — the content goes automatically — which makes
+it a settings decision made once, on behalf of everyone who writes to you.
+
+## Try it now (5 minutes)
+
+Find a thread summary in your email. Read the whole thread, then re-read the
+summary.
+
+Note what it dropped — most people find a condition or an attribution. Then
+decide, deliberately, whether you want that feature on given who writes to you.
+
+<Quiz client:visible items={[
+  {
+    q: "Email thread summaries most often lose:",
+    options: [
+      "The subject line",
+      "Conditions, attribution and the actual ask",
+      "The names of participants"
+    ],
+    answer: 1,
+    explain: "\"Thursday if the figures arrive by Tuesday\" becoming \"they agreed to Thursday\" is the characteristic failure."
+  },
+  {
+    q: "The real risk of suggested replies is:",
+    options: [
+      "The English is often wrong",
+      "They encourage replying without reading, so you agree to things",
+      "They are too formal"
+    ],
+    answer: 1,
+    explain: "\"Sounds good!\" on a message whose second paragraph committed you to a cost is the failure that matters."
+  },
+  {
+    q: "Whose privacy does an always-on email summariser involve?",
+    options: [
+      "Only yours, since it is your account",
+      "Also your correspondents', who never chose it and cannot object",
+      "Nobody's, if the provider does not train on it"
+    ],
+    answer: 1,
+    explain: "They wrote to a person, not a processing service — and it matters most in privileged or protected roles."
+  }
+]} />
+
+## Recap
+
+Treat thread summaries as maps, never as the basis for a reply, because
+conditions, attribution and the ask are what they drop. Never send a suggested
+reply on a message you have not read to the end. Remember that priority sorting
+fails invisibly, since you cannot notice what you were not shown. And recognise
+that these features process other people's messages — a decision made once, on
+behalf of everyone who writes to you.

@@ -1,0 +1,272 @@
+{
+  "module": "e11",
+  "title": "What It Actually Costs — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "e11-01",
+      "q": "When a provider charges per token, one token is:",
+      "options": [
+        "One word",
+        "A chunk roughly three-quarters of an English word",
+        "A single character"
+      ],
+      "answer": 1,
+      "explain": "Common words are one token; longer or unusual ones split. About 100 tokens to 75 English words."
+    },
+    {
+      "id": "e11-02",
+      "q": "The same meaning written in Hindi rather than English usually costs:",
+      "options": [
+        "The same, since the meaning is identical",
+        "Several times more tokens",
+        "Fewer tokens, as the script is denser"
+      ],
+      "answer": 1,
+      "explain": "Tokenisers were built largely on English, so other scripts split into many more tokens — you pay more and hit limits sooner."
+    },
+    {
+      "id": "e11-03",
+      "q": "Why does message forty in a thread cost more than message one?",
+      "options": [
+        "Providers raise prices during long sessions",
+        "The whole conversation is re-sent each time, so the context keeps growing",
+        "Later answers are always longer"
+      ],
+      "answer": 1,
+      "explain": "Models have no memory between calls, so the history travels with every new message."
+    },
+    {
+      "id": "e11-04",
+      "q": "Between input and output tokens:",
+      "options": [
+        "Input is usually the more expensive",
+        "Output is usually the more expensive, often several times",
+        "They are always priced identically"
+      ],
+      "answer": 1,
+      "explain": "That makes 'answer in one paragraph' a genuine saving rather than only a readability preference."
+    },
+    {
+      "id": "e11-05",
+      "q": "The most common cause of quietly rising cost:",
+      "options": [
+        "Using a more capable model",
+        "Long conversations, since the whole history is re-sent each turn",
+        "Asking more questions per day"
+      ],
+      "answer": 1,
+      "explain": "Cost per message climbs even though your questions stay the same size — and long threads follow instructions worse too."
+    },
+    {
+      "id": "e11-06",
+      "q": "A prompt that routinely needs four attempts costs:",
+      "options": [
+        "The same as one, since only the final answer counts",
+        "Four times — discarded attempts are billed identically",
+        "Less, because failed runs are free"
+      ],
+      "answer": 1,
+      "explain": "An evaluation set pays for itself here: a prompt that works first time is a cost improvement as well as a quality one."
+    },
+    {
+      "id": "e11-07",
+      "q": "Which change improves cost and answer quality together?",
+      "options": [
+        "Attaching only the section the task needs",
+        "Using a larger model",
+        "Requesting longer answers"
+      ],
+      "answer": 0,
+      "explain": "Relevant material is not diluted and there is less chance of drawing on the wrong part."
+    },
+    {
+      "id": "e11-08",
+      "q": "Which task most needs the most capable model?",
+      "options": [
+        "Extracting a date from an email",
+        "A multi-step problem where getting step two wrong ruins the rest",
+        "Reformatting a list into a table"
+      ],
+      "answer": 1,
+      "explain": "Dependent steps, fine judgement, long inputs and expensive errors are where capability earns its price."
+    },
+    {
+      "id": "e11-09",
+      "q": "The right way to decide which model a task needs:",
+      "options": [
+        "Use the most capable to be safe",
+        "Run your evaluation set against the cheaper model and compare",
+        "Follow the provider's recommendation"
+      ],
+      "answer": 1,
+      "explain": "The answer is task-specific and often surprising; fifteen minutes of measurement can remove most of a workflow's cost."
+    },
+    {
+      "id": "e11-10",
+      "q": "The two-tier pattern means:",
+      "options": [
+        "Alternating between two providers",
+        "Cheap model first, escalating only flagged uncertain cases",
+        "Paying for two subscriptions"
+      ],
+      "answer": 1,
+      "explain": "If most cases are routine, you pay the premium only on the minority."
+    },
+    {
+      "id": "e11-11",
+      "q": "The total cost of an AI task is:",
+      "options": [
+        "The subscription divided across your tasks",
+        "Money plus prompting, verification and correction time",
+        "The per-token charge for the request"
+      ],
+      "answer": 1,
+      "explain": "Only one of the four terms arrives as an invoice, which is why the arithmetic gets skipped."
+    },
+    {
+      "id": "e11-12",
+      "q": "Why do people misjudge tasks that are actually losses?",
+      "options": [
+        "The output appears instantly, and the checking afterwards does not feel like part of it",
+        "Billing is delayed",
+        "They chose the wrong model"
+      ],
+      "answer": 0,
+      "explain": "The feeling of efficiency comes from response speed. The forty minutes afterwards are still part of the cost."
+    },
+    {
+      "id": "e11-13",
+      "q": "Comparing a free tier to a paid one fairly means comparing:",
+      "options": [
+        "Zero against the monthly fee",
+        "The fee against the time the free tier's friction costs you",
+        "The feature lists"
+      ],
+      "answer": 1,
+      "explain": "Free costs queue time, lower limits and workarounds. Put time on both sides."
+    },
+    {
+      "id": "e11-14",
+      "q": "Free tiers usually limit you by:",
+      "options": [
+        "Removing all capability",
+        "Message caps, smaller models after the cap, and queueing",
+        "Restricting which languages you may use"
+      ],
+      "answer": 1,
+      "explain": "The everyday work in E3, E4 and E5 is generally within reach; volume and extras are what you give up."
+    },
+    {
+      "id": "e11-15",
+      "q": "The strongest reason to run a model on your own machine:",
+      "options": [
+        "It is more capable than hosted models",
+        "Privacy — nothing leaves your device, which changes what you may put in",
+        "It is faster"
+      ],
+      "answer": 1,
+      "explain": "For confidential material or a policy forbidding external services, it is frequently the only compliant option."
+    },
+    {
+      "id": "e11-16",
+      "q": "Buying more powerful hardware to avoid a subscription is:",
+      "options": [
+        "Usually sound, since hardware lasts",
+        "Usually false economy",
+        "Required for any local model"
+      ],
+      "answer": 1,
+      "explain": "Count the total cost including your time maintaining it, not only the avoided fee."
+    },
+    {
+      "id": "e11-17",
+      "q": "The advertised subscription price is best treated as:",
+      "options": [
+        "The final cost",
+        "A floor, before conversion fees, card charges and tax",
+        "An estimate that usually falls"
+      ],
+      "answer": 1,
+      "explain": "Currency markups, bank charges and checkout tax stack on top, and cards are sometimes declined outright."
+    },
+    {
+      "id": "e11-18",
+      "q": "Misrepresenting your country to obtain regional pricing risks:",
+      "options": [
+        "A warning email",
+        "Losing the account entirely, including anything stored in it",
+        "Nothing, since providers rarely check"
+      ],
+      "answer": 1,
+      "explain": "The risk is asymmetric — a modest saving staked against an account you may depend on."
+    },
+    {
+      "id": "e11-19",
+      "q": "For work in a local language, a regional provider may be:",
+      "options": [
+        "Always worse than a global one",
+        "Sometimes better, since region-specific models can outperform general ones",
+        "Identical, as they use the same models"
+      ],
+      "answer": 1,
+      "explain": "Local currency, local payment methods and better language coverage can coincide."
+    },
+    {
+      "id": "e11-20",
+      "q": "A spending cap should be set:",
+      "options": [
+        "Once you understand your typical usage",
+        "Before anything runs unattended",
+        "Only for API access, not subscriptions"
+      ],
+      "answer": 1,
+      "explain": "Runaway cases happen in minutes. A cap added afterwards is a lesson rather than a safeguard."
+    },
+    {
+      "id": "e11-21",
+      "q": "Which pattern most commonly causes a runaway cost?",
+      "options": [
+        "A person asking many questions in a day",
+        "An unbounded retry loop, or a trigger firing on its own output",
+        "Using the most capable model"
+      ],
+      "answer": 1,
+      "explain": "The runaway shapes share one property: nothing in the design says how many times it can run."
+    },
+    {
+      "id": "e11-22",
+      "q": "The question to answer before any unattended automation goes live:",
+      "options": [
+        "How accurate is the output?",
+        "What is the maximum number of times this can run in an hour, and what does that cost?",
+        "Which model should it use?"
+      ],
+      "answer": 1,
+      "explain": "If you cannot answer it, the design is not finished. If the answer is 'unlimited', add a limit."
+    },
+    {
+      "id": "e11-23",
+      "q": "The counterfactual question is:",
+      "options": [
+        "Did this help?",
+        "What would have happened without it?",
+        "How often do I use it?"
+      ],
+      "answer": 1,
+      "explain": "Everything helps a little. Only the comparison against not using it measures anything."
+    },
+    {
+      "id": "e11-24",
+      "q": "Having already paid for a year should affect whether you keep using it:",
+      "options": [
+        "Yes — you should get value from what you paid",
+        "No — the money is gone either way; only next month is the question",
+        "Only if the tool has improved since"
+      ],
+      "answer": 1,
+      "explain": "That is the sunk-cost trap, and it leads to using a tool where it does not help because stopping feels wasteful."
+    }
+  ]
+}

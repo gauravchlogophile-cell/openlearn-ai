@@ -1,0 +1,154 @@
+---
+title: "Show, don't tell"
+description: "Two or three worked examples do more than a paragraph of instructions. Why few-shot prompting works, and how to choose examples that teach the edge cases."
+track: practitioner
+module: p1
+order: 1
+minutes: 8
+objectives:
+  - "Use worked examples instead of describing a format in words"
+  - "Choose examples that cover the awkward cases rather than the obvious ones"
+concepts: ["few-shot", "examples", "edge cases"]
+flashcards:
+  - front: "What is few-shot prompting?"
+    back: "Supplying worked input–output examples so the pattern is demonstrated rather than described."
+  - front: "Why do examples beat instructions?"
+    back: "An example is unambiguous. A description of a format has to be interpreted, and interpretation is where output drifts."
+  - front: "Which examples should you choose?"
+    back: "The awkward ones — empty fields, ambiguous cases, things that should be refused. The obvious case handles itself."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Welcome to Practitioner. Explorer was about using these systems well. This track
+is about building things with them that keep working when you are not watching —
+and that shift raises the bar on everything, starting with the prompt.
+
+E3 taught you to describe what you want clearly. This lesson is the technique
+that replaces most of that description.
+
+## Demonstrate the pattern
+
+Compare two ways of asking for the same thing.
+
+**Described:**
+
+> *Extract the company name and the amount from each line. Format as company
+> then a colon then the amount. Use no currency symbol. If there is no amount,
+> write "none".*
+
+**Demonstrated:**
+
+> *Acme Ltd invoiced £1,200 → Acme Ltd: 1200*
+> *Beta Co sent a reminder → Beta Co: none*
+> *Gamma plc — 450 GBP outstanding → Gamma plc: 450*
+>
+> *Now: Delta Industries billed 2,300 euros →*
+
+The second is shorter and far more reliable. Every rule in the description is
+present in the examples, and none of it has to be interpreted.
+
+This is **few-shot prompting**: showing several worked examples so the pattern
+is demonstrated rather than explained.
+
+## Why it works better
+
+E1 established that these models continue patterns. A description of a format is
+a paragraph the model has to convert into a pattern. Examples *are* the pattern
+already — you have skipped the lossy step.
+
+It also removes the ambiguity you cannot see. "No currency symbol" seems
+unambiguous until output arrives with `GBP` after the number, which is not a
+symbol. The example settles it without anyone having to anticipate the question.
+
+## Choose the awkward examples
+
+The instinct is to give clean, representative examples. That is the wrong
+instinct, and it is the single most useful idea in this lesson.
+
+The straightforward case usually works without help. Spend your examples on
+what does not:
+
+- **The empty case.** No amount, no date, a missing field. Show what to write.
+- **The ambiguous case.** Two possible readings. Show which one you want.
+- **The one that should be refused.** Input that does not fit the task at all.
+  Show the output you want then — an error marker, a blank, a flag.
+- **The formatting trap.** Extra whitespace, a different date order, an odd
+  spelling of the same company.
+
+Three well-chosen awkward examples beat ten tidy ones, because you are teaching
+the boundary, and the boundary is where automated work fails.
+
+## How many
+
+Two or three is usually enough for a format. Five or six for something with real
+variation.
+
+Beyond that you get diminishing returns and a long prompt, which costs more and
+— as P1·L6 will cover — can push your actual instruction into a position where
+it gets less attention.
+
+If more examples are not helping, the problem is usually that your examples
+disagree with each other. Check them against each other before adding a
+seventh.
+
+## Keep them consistent
+
+One rule that catches everyone: your examples must be internally consistent.
+
+If one writes `none` and another writes `N/A`, you have demonstrated that either
+is acceptable, and the model will use both — unpredictably. If one has a space
+after the colon and another does not, expect both.
+
+Read your examples as a set and check that every one obeys every rule. This is
+the most common cause of "it mostly works but not reliably".
+
+## Try it now (7 minutes)
+
+Take a repetitive extraction or formatting task you do. Write three examples —
+one normal, one with a missing field, one ambiguous.
+
+Run it on ten real inputs. Every failure tells you which example is missing.
+
+<Quiz client:visible items={[
+  {
+    q: "Few-shot prompting means:",
+    options: [
+      "Keeping the prompt as short as possible",
+      "Supplying worked input–output examples so the pattern is demonstrated",
+      "Asking the same question several times"
+    ],
+    answer: 1,
+    explain: "Examples are the pattern already, which skips the lossy step of the model converting your description into one."
+  },
+  {
+    q: "Which examples are most valuable?",
+    options: [
+      "Clean, representative ones",
+      "The awkward ones — empty fields, ambiguity, cases to refuse",
+      "The longest realistic ones"
+    ],
+    answer: 1,
+    explain: "The straightforward case usually works unaided. The boundary is where automated work fails, so that is what to teach."
+  },
+  {
+    q: "The most common cause of 'it mostly works but not reliably' is:",
+    options: [
+      "Too few examples",
+      "Examples that contradict each other",
+      "The model being too small"
+    ],
+    answer: 1,
+    explain: "If one example writes 'none' and another 'N/A', you have demonstrated both are acceptable — and you will get both."
+  }
+]} />
+
+## Recap
+
+Demonstrate the pattern instead of describing it. Spend your examples on the
+awkward cases — empty, ambiguous, refusable, oddly formatted — because the
+obvious case handles itself. Two or three is usually enough, and every example
+must obey every rule, or you have taught the model that your rules are optional.

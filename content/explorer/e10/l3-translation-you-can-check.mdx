@@ -1,0 +1,163 @@
+---
+title: "Translation you can check"
+description: "Back-translation, the errors it catches and the ones it hides, and why a fluent translation is harder to distrust than an awkward one."
+track: explorer
+module: e10
+order: 3
+minutes: 9
+objectives:
+  - "Use back-translation to check a translation you cannot read"
+  - "Identify what machine translation reliably gets wrong"
+concepts: ["back-translation", "fluency trap", "terminology"]
+flashcards:
+  - front: "What is back-translation?"
+    back: "Translating the result back to the original language, with a fresh conversation, to see whether the meaning survived."
+  - front: "What does back-translation fail to catch?"
+    back: "Register, tone and cultural fit — a rude translation back-translates perfectly."
+  - front: "Why is a fluent translation dangerous?"
+    back: "Fluency reads as accuracy. An awkward translation warns you; a smooth wrong one does not."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Machine translation is the most-used language feature in the world and the one
+people check least, for an obvious reason: if you could evaluate the output, you
+would not have needed it.
+
+This lesson is about checking anyway.
+
+## The fluency trap
+
+E7·L1's argument, arriving in its most acute form.
+
+Older machine translation was visibly clumsy. That clumsiness was
+*information* — it told you to be careful, get a human, not send it.
+
+Modern translation is fluent. It reads as though a competent speaker wrote it,
+including when the meaning is wrong. The warning signal has been removed while
+the error rate has fallen but not vanished, which is a worse combination than
+it sounds.
+
+You now need a deliberate check where you used to get a free one.
+
+## Back-translation
+
+The single most useful technique, and it costs a minute.
+
+Translate your text into the target language. Then, **in a fresh conversation**,
+translate the result back.
+
+The fresh conversation matters. In the same thread the model has your original
+in context and will reproduce it rather than genuinely re-translating — you get
+a comforting match that tested nothing.
+
+Compare the round trip to your original:
+
+**Meaning preserved, wording different** — normal, and fine.
+
+**A fact, number, name or negation changed** — a real error. Fix it.
+
+**Something disappeared** — usually a qualifier, and usually the important part.
+E4·L3 and E5·L7 again: conditions go first.
+
+**Something appeared** — the translation added a claim.
+
+## What back-translation cannot catch
+
+Be clear about the limit, because this technique inspires false confidence.
+
+**Register and politeness.** A translation that is grammatically perfect and
+insultingly informal back-translates perfectly. In languages with grammatical
+honorifics this is the most common serious failure, and the round trip is blind
+to it.
+
+**Cultural fit.** An idiom rendered literally, a form of address that is wrong
+for the relationship, a phrasing that is technically right and lands badly.
+
+**Terminology conventions.** Your industry's accepted term versus a correct but
+unused synonym.
+
+All three need a speaker. Back-translation checks *meaning*, not
+*appropriateness* — and for anything going to a customer, an official or a
+public audience, appropriateness is most of the job.
+
+## What to translate, and what not to
+
+**Fine to machine translate:** internal understanding, gist of an incoming
+message, first drafts, low-stakes correspondence, your own notes.
+
+**Get a human:** contracts and anything legally binding, medical information,
+safety instructions, marketing (where tone *is* the product), anything published
+under your organisation's name, and anything where being wrong is expensive or
+embarrassing.
+
+The middle ground — machine translate, then have a speaker review — is
+frequently the right answer and much cheaper than full human translation. Ask
+for a review rather than a translation and the cost drops a long way.
+
+## Give it the context it lacks
+
+Translation quality improves substantially with information the text does not
+contain:
+
+> *Translate into [language]. This is a message from a supplier to a
+> long-standing customer. Formal but not stiff. Keep "SKU" and the product
+> codes in English. The audience is in [place].*
+
+Audience, relationship, register and do-not-translate terms. Those four lines
+prevent most of what back-translation cannot catch — which is the practical
+answer to the previous section.
+
+## Try it now (7 minutes)
+
+Take a short message you have actually sent. Translate it, then back-translate
+in a new conversation.
+
+Compare against the original and note which category any difference falls into.
+Then re-translate with audience, relationship and register specified, and see
+how much moves.
+
+<Quiz client:visible items={[
+  {
+    q: "Back-translation must be done in a fresh conversation because:",
+    options: [
+      "It is faster",
+      "Otherwise the model has your original in context and reproduces it rather than re-translating",
+      "The context window would overflow"
+    ],
+    answer: 1,
+    explain: "In the same thread you get a comforting match that tested nothing."
+  },
+  {
+    q: "Which error does back-translation reliably fail to catch?",
+    options: [
+      "A changed number",
+      "A politeness level that is grammatically perfect and insultingly informal",
+      "A dropped qualifier"
+    ],
+    answer: 1,
+    explain: "It checks meaning, not appropriateness — and a rude translation back-translates perfectly."
+  },
+  {
+    q: "Modern fluent translation is more dangerous than older clumsy translation because:",
+    options: [
+      "It is wrong more often",
+      "Clumsiness used to be a free warning signal, and fluency removed it",
+      "It is harder to back-translate"
+    ],
+    answer: 1,
+    explain: "The error rate fell but did not vanish, while the signal that told you to be careful disappeared entirely."
+  }
+]} />
+
+## Recap
+
+Fluent translation removed the clumsiness that used to warn you, so check
+deliberately. Back-translate in a fresh conversation and look for changed facts,
+dropped qualifiers and added claims — while remembering it is blind to register,
+culture and terminology. Supply audience, relationship, register and
+do-not-translate terms up front, and get a human for anything binding,
+medical, safety-related or published.

@@ -1,0 +1,272 @@
+{
+  "module": "p1",
+  "title": "Advanced Prompting — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "p1-01",
+      "q": "Few-shot prompting means:",
+      "options": [
+        "Keeping the prompt as short as possible",
+        "Supplying worked input–output examples so the pattern is demonstrated",
+        "Asking the same question several times and comparing"
+      ],
+      "answer": 1,
+      "explain": "Examples are the pattern already, which skips the lossy step of converting your description into one."
+    },
+    {
+      "id": "p1-02",
+      "q": "Which examples are most valuable in a few-shot prompt?",
+      "options": [
+        "Clean, representative ones",
+        "The awkward ones — empty fields, ambiguity, cases to refuse",
+        "The longest realistic ones"
+      ],
+      "answer": 1,
+      "explain": "The straightforward case usually works unaided. The boundary is where automated work fails."
+    },
+    {
+      "id": "p1-03",
+      "q": "The most common cause of 'it mostly works but not reliably':",
+      "options": [
+        "Too few examples",
+        "Examples that contradict each other",
+        "An underpowered model"
+      ],
+      "answer": 1,
+      "explain": "If one example writes 'none' and another 'N/A', you have demonstrated both are acceptable — and you will get both."
+    },
+    {
+      "id": "p1-04",
+      "q": "Why does automation need structured output rather than prose?",
+      "options": [
+        "It is shorter",
+        "The next step must find values by key or position, which prose does not provide",
+        "Models are more accurate when writing JSON"
+      ],
+      "answer": 1,
+      "explain": "A person extracts facts from a sentence effortlessly; a spreadsheet or automation step ends up guessing."
+    },
+    {
+      "id": "p1-05",
+      "q": "Which instruction is most often forgotten in a format specification?",
+      "options": [
+        "Naming the fields",
+        "Banning any text outside the structure",
+        "Specifying the date format"
+      ],
+      "answer": 1,
+      "explain": "Without it you get \"Here's the extracted data:\" wrapped around your JSON, and the consumer chokes on the first character."
+    },
+    {
+      "id": "p1-06",
+      "q": "When a run returns unparseable output, the worst response is:",
+      "options": [
+        "Retry once, then route to a human",
+        "Let it become an empty value that looks like a legitimate 'none'",
+        "Log it and raise a visible error"
+      ],
+      "answer": 1,
+      "explain": "That corrupts data silently, which is worse than failing loudly — nobody finds out until the numbers are already wrong."
+    },
+    {
+      "id": "p1-07",
+      "q": "Why does one prompt doing five jobs do each one worse?",
+      "options": [
+        "Prompts have a hard length limit",
+        "The objectives compete for finite attention and contaminate each other",
+        "Models can only follow one instruction at a time"
+      ],
+      "answer": 1,
+      "explain": "Having decided something is urgent, the draft becomes apologetic — and you cannot see the interaction in the final output."
+    },
+    {
+      "id": "p1-08",
+      "q": "The clearest signal a prompt is doing too much:",
+      "options": [
+        "It is longer than a paragraph",
+        "Describing what it does requires the word 'and'",
+        "It contains examples"
+      ],
+      "answer": 1,
+      "explain": "\"Summarise the meeting and extract the actions\" is two prompts wearing one coat."
+    },
+    {
+      "id": "p1-09",
+      "q": "A practical benefit of splitting a prompt, beyond reliability:",
+      "options": [
+        "Cheap models can handle the simple steps",
+        "Prompts become shorter to write",
+        "Output no longer needs validating"
+      ],
+      "answer": 0,
+      "explain": "Classification can go to a small fast model while only the draft needs a capable one, often making the chain cheaper overall."
+    },
+    {
+      "id": "p1-10",
+      "q": "Four chained steps, each 95% accurate, are roughly:",
+      "options": [
+        "95% accurate end to end",
+        "81% accurate end to end",
+        "99% accurate end to end"
+      ],
+      "answer": 1,
+      "explain": "Accuracy multiplies rather than averaging, so adding steps costs reliability even when each is individually good."
+    },
+    {
+      "id": "p1-11",
+      "q": "Chains fail quietly because:",
+      "options": [
+        "Errors are logged but not surfaced",
+        "Each step produces plausible output from whatever it received",
+        "Models suppress error messages"
+      ],
+      "answer": 1,
+      "explain": "A misclassification at step one is processed confidently by every later step. The result is coherent, wrong, and does not look wrong."
+    },
+    {
+      "id": "p1-12",
+      "q": "A human checkpoint belongs:",
+      "options": [
+        "After every step",
+        "Before anything irreversible, and after steps later ones cannot sanity-check",
+        "Only at the very end of the chain"
+      ],
+      "answer": 1,
+      "explain": "Checking everything defeats the purpose. Flagged cases plus everything irreversible is what actually scales."
+    },
+    {
+      "id": "p1-13",
+      "q": "Between chained steps you should pass:",
+      "options": [
+        "A prose summary of the result",
+        "Structured data, and only what the next step needs",
+        "The entire conversation so far"
+      ],
+      "answer": 1,
+      "explain": "Prose means every step re-parses natural language. Sending everything also lets irrelevant material influence the next prompt."
+    },
+    {
+      "id": "p1-14",
+      "q": "Which belongs in persistent instructions?",
+      "options": [
+        "The specific task you want done",
+        "Standing format and language rules you would otherwise retype",
+        "The current project's name"
+      ],
+      "answer": 1,
+      "explain": "The test is whether you would write it every time. Tasks and anything that varies belong in the request."
+    },
+    {
+      "id": "p1-15",
+      "q": "Instruction drift means:",
+      "options": [
+        "The model is updated and behaves differently",
+        "Persistent rules weaken as a conversation grows and competes with them",
+        "Stored instructions become corrupted"
+      ],
+      "answer": 1,
+      "explain": "A system prompt sits at the very start of the context. By message forty its influence has faded."
+    },
+    {
+      "id": "p1-16",
+      "q": "For an automated chain you should:",
+      "options": [
+        "Rely on a long-running conversation for context",
+        "Send every request fresh with its full instructions",
+        "Put the task into the system prompt"
+      ],
+      "answer": 1,
+      "explain": "A chain should not depend on conversational history it did not control, and fresh requests avoid drift entirely."
+    },
+    {
+      "id": "p1-17",
+      "q": "In a long input, material is used least reliably when it sits:",
+      "options": [
+        "At the beginning",
+        "In the middle",
+        "At the end"
+      ],
+      "answer": 1,
+      "explain": "Beginning and end are attended to more reliably; a fact buried halfway through is measurably more likely to be missed."
+    },
+    {
+      "id": "p1-18",
+      "q": "With a very long document, the instruction is best placed:",
+      "options": [
+        "Before the document, kept brief",
+        "After the document, or in both places",
+        "In the system prompt only"
+      ],
+      "answer": 1,
+      "explain": "The end of the input is attended to reliably. Repeating it before and after feels inelegant and measurably helps."
+    },
+    {
+      "id": "p1-19",
+      "q": "Supplying only the relevant section rather than the whole document:",
+      "options": [
+        "Usually produces worse answers because context is missing",
+        "Usually produces better answers and costs less",
+        "Makes no measurable difference"
+      ],
+      "answer": 1,
+      "explain": "Relevant material is not diluted and there is less chance of drawing on the wrong part — better quality and lower cost together."
+    },
+    {
+      "id": "p1-20",
+      "q": "Why is 'it looks better after my change' unreliable?",
+      "options": [
+        "Models vary between runs",
+        "You tested the case you were thinking about, and the change may have broken others",
+        "Improvements take time to become visible"
+      ],
+      "answer": 1,
+      "explain": "Adding \"be concise\" fixes a verbose case and truncates ones that needed detail. Without a fixed set you never see that."
+    },
+    {
+      "id": "p1-21",
+      "q": "An evaluation set should be weighted towards:",
+      "options": [
+        "Typical, representative inputs",
+        "Edge cases, ambiguity and previously seen failures",
+        "The longest inputs you handle"
+      ],
+      "answer": 1,
+      "explain": "A few normal cases catch basic regressions; the edge cases are where automated work actually fails."
+    },
+    {
+      "id": "p1-22",
+      "q": "The score from an evaluation set is primarily:",
+      "options": [
+        "A target to maximise",
+        "A change detector — did this edit help or hurt?",
+        "A measure of the model's quality"
+      ],
+      "answer": 1,
+      "explain": "20/20 usually means your set is too easy. The value is knowing whether today's edit improved things."
+    },
+    {
+      "id": "p1-23",
+      "q": "A prompt that worked for months stops working. Most likely cause:",
+      "options": [
+        "The prompt degraded over time",
+        "The model behind it was updated or replaced",
+        "The prompt file was corrupted"
+      ],
+      "answer": 1,
+      "explain": "Your prompt sits unchanged in a file. What moves is everything underneath it, and nothing announces the change."
+    },
+    {
+      "id": "p1-24",
+      "q": "The most valuable and most often missing part of a prompt handover:",
+      "options": [
+        "The prompt text",
+        "The known failures",
+        "The author's name"
+      ],
+      "answer": 1,
+      "explain": "Someone who knows the boundary can work around it. Someone who does not will find it in production."
+    }
+  ]
+}

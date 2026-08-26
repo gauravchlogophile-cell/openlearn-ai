@@ -1,0 +1,162 @@
+---
+title: "Mixing languages on purpose"
+description: "Hinglish, Taglish, Spanglish and every other real way people speak. How to work in mixed language, and when to split deliberately instead."
+track: explorer
+module: e10
+order: 4
+minutes: 8
+objectives:
+  - "Prompt effectively in mixed or code-switched language"
+  - "Use the English-thinking, own-language-output split when it helps"
+concepts: ["code-switching", "mixed input", "language separation"]
+flashcards:
+  - front: "Does mixing languages in a prompt cause problems?"
+    back: "Usually not for understanding. It becomes a problem when the output language is left unspecified."
+  - front: "What is the think-in-English, answer-in-yours split?"
+    back: "Asking the model to reason in English, where it is strongest, but produce the final answer in your language."
+  - front: "Why specify the output language explicitly?"
+    back: "With mixed input the model guesses, and it usually guesses English."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Most multilingual people do not speak one language at a time. A sentence starts
+in Hindi and the technical noun is English. Tagalog with English verbs.
+Arabic with French administrative vocabulary. Yoruba with English numbers.
+
+This is not sloppiness — it is how bilingual communities actually speak, with
+its own consistent grammar. And it is how you will naturally type into an
+assistant, so it is worth knowing what happens when you do.
+
+## Mixed input mostly works
+
+Good news first. Models generally handle code-switched input well, because
+their training data contained plenty of it — the internet is full of people
+writing exactly this way.
+
+You can type naturally. You usually do not need to "clean up" your prompt into
+one language before sending it.
+
+## The failure is the output language
+
+The problem is not comprehension. It is that mixed input leaves the output
+language ambiguous, and an ambiguous choice defaults to English.
+
+So say it:
+
+> *Reply entirely in Hindi, Devanagari script.*
+>
+> *Reply in Tagalog. Keep technical terms in English.*
+>
+> *Reply in the same mix I used.*
+
+That third one is worth knowing about. If you write Hinglish and want Hinglish
+back — because that is how your colleagues actually communicate — ask for it
+explicitly. Models can do it, and will not choose it on their own.
+
+## Which terms stay untranslated
+
+Every field has vocabulary that lives in English regardless of the surrounding
+language. Translating those makes text *harder* to read for the intended
+audience, not easier.
+
+A doctor writing in Bengali does not want *hypertension* rendered into
+classical Bengali. A developer writing in Spanish does not want *pull request*
+translated. The English term is the term.
+
+So supply the list:
+
+> *Keep these in English: [terms]. Translate everything else.*
+
+This is the single most effective instruction in this lesson for professional
+writing, and it is the thing generic translation gets most reliably wrong.
+
+## Think in English, answer in yours
+
+A genuinely useful technique that follows from L1.
+
+If the model reasons better in English, you can use that without accepting an
+English answer:
+
+> *Work through this problem in English first. Then give me only the final
+> answer, in Marathi.*
+
+Or, when you want to see both:
+
+> *Answer in English, then give the same answer in Marathi.*
+
+You get English-level reasoning quality with an output you can use. For anything
+analytical — comparisons, planning, working something out — this often beats
+asking in your language directly.
+
+**The caveat**: what you get is a translation of English-shaped reasoning. For
+anything where local context is the point — local law, local convention, what
+is normal in your city — this is exactly the wrong technique, because the
+English reasoning may not know those things. Ask directly in your language
+there, and check the facts as L2's test taught.
+
+## Scripts and romanisation
+
+Many languages are written in a non-Latin script and typed in Latin characters:
+Hindi as *kaise ho*, Arabic as *kayfa haluk*, Greek in Latin letters.
+
+Models generally understand romanised input. Two things to specify:
+
+**Which script you want back.** Romanised input often produces romanised
+output, which may not be what you want to send anyone.
+
+**Which romanisation, if it matters.** There are competing conventions for most
+languages, and consistency matters for names and searchable text.
+
+## Try it now (6 minutes)
+
+Write a prompt the way you would actually type it, mixing languages if that is
+natural for you.
+
+Add one line specifying the output language, the script, and which terms stay in
+English. Compare that against the same prompt without the line — the difference
+is usually larger than expected.
+
+<Quiz client:visible items={[
+  {
+    q: "Mixing languages in a prompt usually causes problems with:",
+    options: [
+      "The model understanding you",
+      "The output language, which defaults to English when unspecified",
+      "The length of the response"
+    ],
+    answer: 1,
+    explain: "Models handle code-switched input well because their training data was full of it. The ambiguity is about what comes back."
+  },
+  {
+    q: "The most effective instruction for professional writing in your language:",
+    options: [
+      "Ask for simpler vocabulary",
+      "List the terms that must stay in English",
+      "Request a longer answer"
+    ],
+    answer: 1,
+    explain: "A doctor writing in Bengali does not want 'hypertension' rendered into classical Bengali. Generic translation gets this most reliably wrong."
+  },
+  {
+    q: "'Reason in English, answer in my language' is the wrong technique when:",
+    options: [
+      "The task is analytical",
+      "Local context is the point — local law, convention, what is normal where you are",
+      "The answer needs to be long"
+    ],
+    answer: 1,
+    explain: "You get a translation of English-shaped reasoning, which may not know those things. Ask directly and check the facts."
+  }
+]} />
+
+## Recap
+
+Type the way you actually speak — mixed input is usually understood — but
+always specify the output language, the script, and which terms stay in
+English. Use "reason in English, answer in mine" for analytical work where the
+reasoning quality matters, and avoid it whenever local context is the substance
+of the question.

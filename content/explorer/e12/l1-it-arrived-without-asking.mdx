@@ -1,0 +1,152 @@
+---
+title: "It arrived without asking"
+description: "Most people's first AI was not a chatbot they chose. It was a feature switched on in software they already had, and that changes what you need to know."
+track: explorer
+module: e12
+order: 1
+minutes: 8
+objectives:
+  - "Recognise where AI has been added to tools you already use"
+  - "Explain why unchosen AI needs different scrutiny from chosen AI"
+concepts: ["embedded AI", "defaults", "informed use"]
+flashcards:
+  - front: "Why does unchosen AI need different scrutiny?"
+    back: "You never evaluated it, so you have no sense of its reliability — and you may not know it is involved at all."
+  - front: "Where does embedded AI usually appear?"
+    back: "Email, documents, search results, phone keyboards, messaging apps, photo tools and customer service."
+  - front: "What makes a default powerful?"
+    back: "Most people never change one, so whoever sets it decides the behaviour for almost everyone."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+This whole curriculum has assumed you opened an assistant on purpose. For most
+people that is not how it started.
+
+It started with a suggested reply appearing under an email. A summary at the top
+of a search page. A phone keyboard finishing sentences. A "write with AI" button
+in a document. Nobody chose any of it — it turned up in software they already
+had, usually switched on.
+
+## Chosen and unchosen are different situations
+
+When you open an assistant, you know it is one. You bring expectations. You know
+to check things, because eleven modules told you to.
+
+Embedded AI removes all three conditions:
+
+**You may not know it is AI.** A "suggested" reply, a "smart" summary, a search
+result that reads like an answer. The word AI often appears nowhere.
+
+**You never evaluated it.** E2 taught a fair comparison before choosing. Nobody
+ran that on the summariser their email provider enabled last Tuesday.
+
+**It acts by default.** Not when you ask. Continuously, on everything, unless
+you find the setting.
+
+That combination is why this module exists. Everything you have learned still
+applies — it just has to be applied to something you did not go looking for.
+
+## Where it already is
+
+Not exhaustive, but enough to recognise the pattern:
+
+**Email** — suggested replies, tone rewriting, thread summaries, priority
+sorting.
+
+**Documents and spreadsheets** — drafting, rewriting, formula generation,
+summarising.
+
+**Search** — generated answers above the results. For many people this is now
+their main AI use and they have never called it that.
+
+**Phones** — keyboard prediction, photo editing and search, voice assistants,
+call transcription, on-device summaries.
+
+**Messaging** — suggested replies, translation, chat summaries.
+
+**Customer service** — the first responder is frequently a model.
+
+**Work software** — meeting notes, ticket routing, CV screening, performance
+tooling.
+
+## The default is the decision
+
+A quiet but important point.
+
+Most people never change a default setting. So whoever picks the default is
+effectively deciding the behaviour for almost everyone — and defaults are chosen
+by the vendor, in their interest, which is usually "on".
+
+That is not sinister; it is how software has always worked. But it means
+**"I did not turn this on" and "I agreed to this" are different statements**,
+and only the second one implies you considered it.
+
+L3 is about finding those switches. L2 is about noticing there is something to
+switch.
+
+## What does not change
+
+Reassuringly, the substance transfers directly:
+
+- **E7 still applies.** A generated search summary needs the same checking as a
+  chatbot answer, and gets less of it because it looks like a search result.
+- **E4·L8's paste test still applies.** An email assistant reads your email. A
+  meeting summariser hears your meeting.
+- **E9's caution still applies.** If a captioning feature is doing the work,
+  know its failure modes.
+
+You are not learning a new subject. You are pointing an existing one at
+something that did not announce itself.
+
+## Try it now (5 minutes)
+
+Open the app you use most for email or messaging. Look for anything offering to
+write, summarise, suggest or organise.
+
+Count them. Most people find between two and five, and are surprised by at least
+one — that surprise is the point of this module.
+
+<Quiz client:visible items={[
+  {
+    q: "Why does embedded AI need different scrutiny from an assistant you opened?",
+    options: [
+      "It uses weaker models",
+      "You may not know it is involved, never evaluated it, and it acts by default",
+      "It is always less accurate"
+    ],
+    answer: 1,
+    explain: "All three conditions that make chosen use safer — awareness, evaluation, and acting only when asked — are absent."
+  },
+  {
+    q: "For many people, their main use of AI is now:",
+    options: [
+      "A chatbot they open deliberately",
+      "Generated answers at the top of search results",
+      "Image generation"
+    ],
+    answer: 1,
+    explain: "And most have never called it AI use, which is precisely why it goes unchecked."
+  },
+  {
+    q: "Why do defaults matter so much?",
+    options: [
+      "They are difficult to change",
+      "Most people never change one, so the vendor's choice governs almost everyone",
+      "They cannot be changed on mobile"
+    ],
+      answer: 1,
+    explain: "\"I did not turn this on\" and \"I agreed to this\" are different statements, and only the second implies consideration."
+  }
+]} />
+
+## Recap
+
+Most people's AI arrived as a feature in software they already had, switched on
+by default. That removes the three things that make deliberate use safer —
+knowing it is AI, having evaluated it, and it acting only when asked. Everything
+you have learned still applies; it now has to be applied to something that did
+not announce itself.

@@ -1,0 +1,158 @@
+---
+title: "Explanations pitched at you"
+description: "Not 'explain it simply' but explaining from what you already know. How to get an explanation that connects, and why analogies need checking."
+track: explorer
+module: e13
+order: 2
+minutes: 8
+objectives:
+  - "Request explanations anchored to knowledge you already have"
+  - "Test an analogy for where it stops being true"
+concepts: ["prior knowledge", "analogy", "level"]
+flashcards:
+  - front: "What is better than asking for a simple explanation?"
+    back: "Telling it what you already understand, so the explanation can build from there."
+  - front: "What must you always ask about an analogy?"
+    back: "Where it breaks down — every analogy is wrong somewhere, and that is where misconceptions form."
+  - front: "Why ask for the same idea two ways?"
+    back: "If both make sense and agree, you have understood the idea rather than memorised one phrasing."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The most common learning prompt is *"explain X simply"*, and it is a weak
+request. Simple for whom?
+
+You get a generic beginner explanation, pitched at nobody, disconnected from
+everything you already know.
+
+## Anchor it to what you have
+
+New understanding attaches to existing understanding. So supply the anchor:
+
+> *Explain [thing]. I already understand [related things]. I do not know
+> [gap]. Build from what I know rather than starting from scratch.*
+
+The difference is substantial. An explanation of neural networks for someone who
+knows statistics should not begin where one for someone who knows carpentry
+begins, and *"explain simply"* gets you neither.
+
+This is E3·L3's rule — context beats cleverness — pointed at your own head.
+
+## State the confusion, not the topic
+
+Better still, when you can locate it:
+
+> *I understand [A] and I understand [B]. What I cannot see is how [A] leads to
+> [B].*
+
+That gets a targeted answer instead of a lecture containing your answer
+somewhere. It also forces you to articulate the gap, which occasionally
+dissolves it before you press send.
+
+## Analogies, and their edges
+
+Analogies are how most difficult ideas become graspable, and they are where
+misconceptions come from. Every analogy is wrong somewhere; the trouble starts
+when you do not know where.
+
+So always ask:
+
+> *Give me an analogy. Then tell me exactly where the analogy breaks down and
+> what it would mislead me about.*
+
+The second half is the valuable half. "A neural network is like a brain" is
+useful for thirty seconds and then actively harmful — and knowing the boundary
+is what stops the analogy calcifying into a belief.
+
+## Ask for it twice, differently
+
+A strong technique that costs one extra request:
+
+> *Now explain the same idea a completely different way, without reusing the
+> earlier analogy.*
+
+If both explanations make sense to you **and** you can see they describe the
+same thing, you have understood the idea. If only one landed, you memorised a
+phrasing.
+
+This also protects against a single misleading framing, since the second
+attempt rarely shares the first one's blind spot.
+
+## Ask what you should have asked
+
+The question learners cannot ask, because it requires knowing the shape of the
+subject:
+
+> *What question about this should I be asking that I have not?*
+>
+> *What do beginners usually misunderstand here?*
+>
+> *What will trip me up later if I accept this simplified version now?*
+
+That last one is particularly good. Introductory explanations lie a little by
+necessity, and knowing *which* simplification you have accepted is the
+difference between a foundation and a future problem.
+
+## Keep the level honest
+
+If an explanation is not landing, say so specifically rather than asking for
+"simpler" again — which usually just produces shorter.
+
+> *I lost you at [exact point]. Explain that step only, in more detail.*
+
+Zooming in on the break beats restarting the whole thing at a lower level, and
+it keeps you at a level that is still worth learning at.
+
+## Try it now (6 minutes)
+
+Pick something you half-understand. Ask for an explanation stating what you
+already know and where the gap is.
+
+Then ask for an analogy plus where it breaks. Then ask what beginners usually
+misunderstand. Three prompts, and the third will tell you something the first
+two did not.
+
+<Quiz client:visible items={[
+  {
+    q: "Better than 'explain it simply' is:",
+    options: [
+      "'Explain it in one paragraph'",
+      "Stating what you already understand so it can build from there",
+      "'Explain it like I am five'"
+    ],
+    answer: 1,
+    explain: "New understanding attaches to existing understanding, and 'simply' is pitched at nobody in particular."
+  },
+  {
+    q: "When given an analogy you should always ask:",
+    options: [
+      "For a second analogy",
+      "Where it breaks down and what it would mislead you about",
+      "Whether it is the standard analogy"
+    ],
+    answer: 1,
+    explain: "Every analogy is wrong somewhere. Not knowing where is how it calcifies into a misconception."
+  },
+  {
+    q: "Asking for the same idea explained a second, different way tells you:",
+    options: [
+      "Whether the first explanation was accurate",
+      "Whether you understood the idea or memorised a phrasing",
+      "Which explanation is more advanced"
+    ],
+    answer: 1,
+    explain: "If both land and you can see they describe the same thing, you have the idea rather than one wording of it."
+  }
+]} />
+
+## Recap
+
+Say what you already know and where exactly the gap is, rather than asking for
+simple. Demand the edge of every analogy, because that edge is where
+misconceptions live. Ask for the same idea a second way to check you have the
+idea rather than a phrasing. And ask what you should have asked, what beginners
+misunderstand, and which simplification will trip you up later.

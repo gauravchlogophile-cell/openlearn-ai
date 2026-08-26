@@ -1,0 +1,168 @@
+---
+title: "Symptoms and the spiral"
+description: "Why symptom questions go badly, how the anxiety loop works, and the two things worth asking instead at two in the morning."
+track: explorer
+module: e14
+order: 3
+minutes: 8
+objectives:
+  - "Explain why symptom-to-diagnosis questions are unreliable"
+  - "Ask questions that reduce rather than amplify anxiety"
+concepts: ["base rates", "anxiety loop", "triage"]
+flashcards:
+  - front: "Why can a model not diagnose from symptoms?"
+    back: "It has no examination, no history, no tests, and no sense of how common things are in someone like you."
+  - front: "What is the anxiety loop?"
+    back: "Worry prompts a question, the answer names something frightening, which prompts a narrower question, which finds worse."
+  - front: "What is worth asking instead?"
+    back: "What would make this urgent, and what should I do in the next 24 hours."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+This is the question everybody asks: *"I have these symptoms, what is it?"*
+
+It is worth understanding exactly why that goes badly, because "don't" has
+never stopped anybody at two in the morning.
+
+## What a diagnosis actually requires
+
+A clinician diagnosing you has things a model does not:
+
+**Examination.** Looking, listening, pressing, testing.
+
+**Your history**, properly — not the four things you thought to type.
+
+**Base rates.** How common each possibility is in someone of your age, sex,
+history and location. This is the big one, and it does most of the work in real
+diagnosis.
+
+**Tests**, when the answer is not clear.
+
+**Pattern from thousands of patients**, including the ones who looked like one
+thing and were another.
+
+An assistant has your paragraph. From a paragraph, many conditions match — and
+the model has no way to weight them by how likely they are for *you*, because it
+does not know you and was not built to estimate that.
+
+## The base rate problem
+
+The technical heart of it, and it explains the experience.
+
+Common things are common. A headache is almost always a headache. But the
+frightening explanations are heavily represented in the text a model learned
+from — medical writing discusses rare serious conditions far more than it
+discusses ordinary ones, because there is more to say about them.
+
+So the frightening possibility is not merely mentioned. It is **available**, in
+proportion to how much has been written about it rather than how likely it is.
+
+That is why symptom questions so reliably surface the worst option, and why that
+option is so rarely the right one.
+
+## The spiral
+
+The pattern is consistent enough to name.
+
+You ask about a symptom. The answer includes something serious. You ask about
+that. The answer contains more detail, all of it frightening and all of it
+plausible-sounding. You ask a narrower question. It finds a narrower, worse
+thing.
+
+Each step feels like getting closer to the truth. What is actually happening is
+that you keep asking questions whose answers can only be alarming, and the
+fluency (E7·L1) makes every step feel authoritative.
+
+**If you notice you are three questions deep and more frightened than when you
+started, stop.** That is the signal. Nothing at the fourth question is going to
+be reassuring, because you have selected a path where reassurance was never one
+of the available answers.
+
+## The two questions worth asking
+
+If you are going to ask something at two in the morning, ask these.
+
+> **What would make this urgent? What signs would mean I should seek help
+> immediately rather than waiting?**
+
+This is genuinely useful. It gives you a threshold rather than a diagnosis, and
+thresholds are actionable. It is also the question the answer can be *safely*
+wrong about in one direction — an over-cautious threshold sends you to be
+checked, which is the outcome you want when unsure.
+
+> **What should I do in the next 24 hours?**
+
+Practical, bounded, and it moves you towards a decision rather than a
+speculation.
+
+Notice both are about **action**, not identity. That is the difference between
+useful and harmful in this domain.
+
+## Where to go instead
+
+Most countries have a **non-emergency health line** staffed by people who
+triage for a living — 111 in the UK, 811 in much of Canada, similar elsewhere.
+Free, available at two in the morning, and specifically designed for "I do not
+know if this is serious".
+
+That is what you actually wanted. An assistant is a poor substitute for it and
+most people do not know it exists.
+
+**For emergencies, call your emergency number.** Chest pain, difficulty
+breathing, sudden weakness or numbness, severe bleeding, a first seizure,
+thoughts of harming yourself. Do not type it into anything.
+
+## Try it now (4 minutes)
+
+Look up your country's non-emergency health line now, while nothing is wrong,
+and save it in your phone.
+
+That is a two-minute task that will matter more than anything else in this
+lesson, on some future night when looking it up is the last thing you will
+manage.
+
+<Quiz client:visible items={[
+  {
+    q: "Why do symptom questions reliably surface frightening possibilities?",
+    options: [
+      "Models are designed to be cautious",
+      "Rare serious conditions are over-represented in medical writing, so they are more available",
+      "Common conditions are harder to describe"
+    ],
+    answer: 1,
+    explain: "Availability tracks how much has been written, not how likely something is for you — which is what base rates provide and a model lacks."
+  },
+  {
+    q: "You are three questions deep and more frightened than when you started. This means:",
+    options: [
+      "You are getting closer to the answer",
+      "Stop — you have selected a path where reassurance was never an available answer",
+      "You should ask a more specific question"
+    ],
+    answer: 1,
+    explain: "Each step feels like progress while only alarming answers remain reachable, and fluency makes each one sound authoritative."
+  },
+  {
+    q: "The most useful thing to ask at two in the morning:",
+    options: [
+      "What condition matches my symptoms?",
+      "What would make this urgent, and what should I do in the next 24 hours?",
+      "How rare is the serious possibility?"
+    ],
+    answer: 1,
+    explain: "Both are about action rather than identity, and an over-cautious threshold errs towards being checked — the outcome you want when unsure."
+  }
+]} />
+
+## Recap
+
+A model cannot diagnose because it lacks examination, history, tests and base
+rates — and frightening conditions are over-represented in what it learned from,
+so they surface out of proportion to their likelihood. Recognise the spiral and
+stop when you notice it. Ask what would make this urgent and what to do in the
+next 24 hours. Save your non-emergency health line now, and for emergencies call
+your emergency number rather than typing anything.

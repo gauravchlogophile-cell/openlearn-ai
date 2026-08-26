@@ -1,0 +1,272 @@
+{
+  "module": "e9",
+  "title": "AI as an Assistive Tool — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "e9-01",
+      "q": "What distinguishes an access gain from a convenience gain?",
+      "options": [
+        "Access gains save more time",
+        "Access makes something possible that was not possible for that person",
+        "Access gains only apply to registered disabilities"
+      ],
+      "answer": 1,
+      "explain": "Convenience makes an easy thing faster and you could still do it yourself. Access changes whether it can be done independently at all."
+    },
+    {
+      "id": "e9-02",
+      "q": "Why does assistive use demand higher reliability than ordinary use?",
+      "options": [
+        "Assistive tools are used more often",
+        "You may be unable to check the output, so an undetectable error is worse than no answer",
+        "The underlying models are less accurate"
+      ],
+      "answer": 1,
+      "explain": "E7's verification advice assumes you could read, see or hear the original. \"I could not check\" is different from \"I checked\"."
+    },
+    {
+      "id": "e9-03",
+      "q": "This module positions AI relative to established assistive technology as:",
+      "options": [
+        "A replacement for screen readers and AAC devices",
+        "A useful addition, especially where a task previously needed another person",
+        "Unnecessary for anyone with existing tools"
+      ],
+      "answer": 1,
+      "explain": "Established assistive technology is mature and specialised. AI does not need to be more than an addition to that toolkit."
+    },
+    {
+      "id": "e9-04",
+      "q": "For an official letter you must act on, you usually want:",
+      "options": [
+        "A much shorter summary",
+        "A reshaping that keeps every fact but changes the presentation",
+        "A translation into more formal English"
+      ],
+      "answer": 1,
+      "explain": "A summary leaves things out. When a document has consequences, you want everything kept and presented differently."
+    },
+    {
+      "id": "e9-05",
+      "q": "The most important line to add to any simplification request:",
+      "options": [
+        "Keep it under 200 words",
+        "List every condition, exception or 'only if' from the original",
+        "Use a friendly tone"
+      ],
+      "answer": 1,
+      "explain": "\"Eligible if resident six months and not claiming elsewhere\" becoming \"You can get a reduction\" is shorter, clearer and wrong."
+    },
+    {
+      "id": "e9-06",
+      "q": "Before reaching for AI to make text readable, you should first:",
+      "options": [
+        "Change size, spacing, line length, contrast and typeface",
+        "Convert the document to plain text",
+        "Ask someone else to read it"
+      ],
+      "answer": 0,
+      "explain": "Those five are free, instant and frequently sufficient. Reshaping with AI is for documents you cannot restyle."
+    },
+    {
+      "id": "e9-07",
+      "q": "Why does 'dictate, then tidy' work when writing is difficult?",
+      "options": [
+        "Dictation is faster than typing",
+        "It separates having the thought from producing correct text",
+        "Spoken language is simpler than written"
+      ],
+      "answer": 1,
+      "explain": "If your difficulty is the second part, splitting them removes the barrier without handing over what you wanted to say."
+    },
+    {
+      "id": "e9-08",
+      "q": "Does using dictation and tidying change who authored the work?",
+      "options": [
+        "Yes — any AI involvement transfers authorship",
+        "No — the test is whether you can defend every choice, and the thinking stayed yours",
+        "Only for work that will be assessed"
+      ],
+      "answer": 1,
+      "explain": "It is no different in kind from a spellchecker or a scribe. The line is the argument itself, not the typing."
+    },
+    {
+      "id": "e9-09",
+      "q": "Instead of 'describe this image', a blind user should usually ask:",
+      "options": [
+        "For a longer, more detailed description",
+        "The specific question they actually need answered",
+        "For the description in bullet points"
+      ],
+      "answer": 1,
+      "explain": "Specific questions get shorter, more accurate answers, and a non-answer to a specific question is obvious in a way a paragraph is not."
+    },
+    {
+      "id": "e9-10",
+      "q": "The most valuable instruction when using a camera to read something:",
+      "options": [
+        "Be concise",
+        "If you cannot tell, say so — do not guess",
+        "Describe the colours precisely"
+      ],
+      "answer": 1,
+      "explain": "Without it you get a plausible answer to everything. With it you learn the photo is too blurred and can retake it."
+    },
+    {
+      "id": "e9-11",
+      "q": "Which should never rest on an image description alone?",
+      "options": [
+        "Identifying a tablet or its dose",
+        "Working out what a poster advertises",
+        "Checking whether a photo is in focus"
+      ],
+      "answer": 0,
+      "explain": "Medication, signatures, money and safety all need a second route — a pharmacist, an official accessible copy, or a person."
+    },
+    {
+      "id": "e9-12",
+      "q": "Automatic captions fail most on:",
+      "options": [
+        "Long sentences",
+        "Names, jargon, crosstalk, accents and poor audio",
+        "Fast speech alone"
+      ],
+      "answer": 1,
+      "explain": "Several of those are properties of the room rather than the software, which is where the leverage is."
+    },
+    {
+      "id": "e9-13",
+      "q": "The single most effective way to improve caption accuracy:",
+      "options": [
+        "A more advanced captioning service",
+        "One person speaking at a time, close to a decent microphone",
+        "Asking everyone to speak slowly"
+      ],
+      "answer": 1,
+      "explain": "A cheap headset outperforms any amount of processing, and half a second between speakers removes most crosstalk errors."
+    },
+    {
+      "id": "e9-14",
+      "q": "What do automatic captions systematically fail to convey?",
+      "options": [
+        "The words themselves",
+        "Tone, silence and interruption",
+        "The order in which people spoke"
+      ],
+      "answer": 1,
+      "explain": "Whether that was a joke, and whether silence meant agreement, are exactly what human captioners and interpreters convey."
+    },
+    {
+      "id": "e9-15",
+      "q": "When a task will not start, the obstacle is usually:",
+      "options": [
+        "The amount of work involved",
+        "That the first step is undefined, and defining it needs the capacity that is missing",
+        "Insufficient motivation"
+      ],
+      "answer": 1,
+      "explain": "\"Sort out the insurance\" is a category, not a task. Finding the five-minute action inside it is the hard part."
+    },
+    {
+      "id": "e9-16",
+      "q": "Why forbid a plan when asking for a first step?",
+      "options": [
+        "Plans take longer to produce",
+        "A twelve-item plan is a new thing to feel behind on — you asked for a door, not a map",
+        "Plans are usually wrong"
+      ],
+      "answer": 1,
+      "explain": "The request is for the single smallest startable action, and a list undoes the point of asking."
+    },
+    {
+      "id": "e9-17",
+      "q": "The condition attached to relying on external memory:",
+      "options": [
+        "It must be digital",
+        "Capture has to be reliable, or your head keeps holding everything anyway",
+        "It must be reviewed every day"
+      ],
+      "answer": 1,
+      "explain": "If things only sometimes get written down, you maintain two systems and trust neither."
+    },
+    {
+      "id": "e9-18",
+      "q": "When asking what a message meant, you should request:",
+      "options": [
+        "The single most likely interpretation",
+        "Two or three possible readings",
+        "A drafted reply"
+      ],
+      "answer": 1,
+      "explain": "A single confident interpretation sounds authoritative and is a guess. You are learning how words commonly land, not what someone meant."
+    },
+    {
+      "id": "e9-19",
+      "q": "Rehearsing a difficult conversation works better if you ask the assistant to:",
+      "options": [
+        "Be encouraging so you gain confidence",
+        "Be more resistant than you think is likely",
+        "Summarise rather than act it out"
+      ],
+      "answer": 1,
+      "explain": "Practising against an easy version teaches you nothing. The point is finding where your argument falls apart."
+    },
+    {
+      "id": "e9-20",
+      "q": "Why not adopt a polished draft of a difficult message wholesale?",
+      "options": [
+        "It may contain factual errors",
+        "It sets an expectation of a register you then have to sustain in person",
+        "It is usually too long"
+      ],
+      "answer": 1,
+      "explain": "The reply comes back pitched to someone who writes like that — in a conversation you already found difficult."
+    },
+    {
+      "id": "e9-21",
+      "q": "Good alt text describes:",
+      "options": [
+        "Everything visible in the image",
+        "What the image is doing in this particular context",
+        "The file name and dimensions"
+      ],
+      "answer": 1,
+      "explain": "The same photograph needs different alt text on a flood article than on a page about that car model."
+    },
+    {
+      "id": "e9-22",
+      "q": "For a decorative image beside text that already says everything:",
+      "options": [
+        "Write a full generated description",
+        "Use an empty alt attribute so screen readers skip it",
+        "Leave the alt attribute off entirely"
+      ],
+      "answer": 1,
+      "explain": "Filling every alt with description makes pages noisier rather than more accessible, and omitting the attribute is not the same as an empty one."
+    },
+    {
+      "id": "e9-23",
+      "q": "Publishing uncorrected automatic captions is:",
+      "options": [
+        "Acceptable, since some captioning is better than none",
+        "Generally not adequate provision, and can be worse than nothing",
+        "Required before a video can be published"
+      ],
+      "answer": 1,
+      "explain": "They look like provision while conveying something else. Names and technical terms have to be fixed before publication."
+    },
+    {
+      "id": "e9-24",
+      "q": "When someone tells you what they need in order to take part:",
+      "options": [
+        "Assess whether the request is reasonable",
+        "Ask what would help and do it — the request is the end of the enquiry",
+        "Ask an assistant how best to accommodate them"
+      ],
+      "answer": 1,
+      "explain": "People have usually spent years refining what works, and their disability is their information to share rather than yours to process."
+    }
+  ]
+}
