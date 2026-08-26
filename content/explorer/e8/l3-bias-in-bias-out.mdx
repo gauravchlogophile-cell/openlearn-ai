@@ -1,0 +1,150 @@
+---
+title: "Bias in, bias out"
+description: "Where model bias comes from, why fixing it is harder than it sounds, and the specific places it lands on real people in ordinary work."
+track: explorer
+module: e8
+order: 3
+minutes: 9
+objectives:
+  - "Explain how bias enters a model and why it is hard to remove"
+  - "Identify the everyday tasks where bias reaches a person"
+concepts: ["bias", "representation", "aggregate harm"]
+flashcards:
+  - front: "Where does model bias come from?"
+    back: "Training data reflecting the world as recorded, including its historical patterns, plus choices made in filtering and tuning."
+  - front: "Why can bias not simply be removed?"
+    back: "It is entangled with useful patterns, and 'unbiased' has no agreed definition — fairness measures conflict mathematically."
+  - front: "Where does bias reach people in ordinary work?"
+    back: "Wherever text about people is sorted, screened, summarised or scored."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Every model carries the shape of what it was trained on. That is not a defect
+introduced by carelessness; it is what training means.
+
+The useful version of this topic is not "AI is biased" — true, and no help to
+anyone — but knowing where it comes from, why it resists fixing, and where it
+touches someone in the work you actually do.
+
+## Where it comes from
+
+**The data.** Models are trained on enormous amounts of human-produced text and
+images, which record the world as it has been described — including every
+pattern of who was written about, in what terms, and who was doing the writing.
+A model learns those associations along with everything else, because nothing
+separates them.
+
+**Who is represented.** Some languages, countries and communities produced far
+more digitised text than others. A model is correspondingly better at some
+people's lives, and its idea of "typical" comes from where the data was
+thickest.
+
+**The choices afterwards.** What was filtered out, what human raters preferred,
+what the tuning optimised for. Decisions made by particular people with
+particular assumptions, and they leave a mark too.
+
+## Why it is not simply fixable
+
+Three reasons, and the third surprises people.
+
+Bias is **entangled** with useful patterns. The same machinery that knows
+doctors work in hospitals knows what the corpus said about who doctors tend to
+be. You cannot delete one association without damaging the rest.
+
+The training data **is the historical record**. There is no text from a fairer
+world to train on instead.
+
+And **"unbiased" has no single definition** — not as hand-waving, but as a
+mathematical result. Reasonable fairness criteria (equal error rates across
+groups, equal predictive value, equal treatment of like cases) cannot in general
+all hold at once. Improving one can worsen another, so "make it fair" is
+underspecified until someone says *which* fairness — and that is a value
+judgement, not a technical one.
+
+Mitigation is real and worth doing. Solved is not on the table.
+
+## Where it lands in ordinary work
+
+Not in dramatic scenarios. In routine ones:
+
+**Screening and sorting.** Applications, submissions, complaints, tickets —
+anything ranked or filtered.
+
+**Summarising people.** Performance notes, references, incident reports.
+Which details survive a summary is a judgement, and it is not made neutrally.
+
+**Generating examples.** Names, scenarios, personas. Defaults skew, and the
+skew becomes the material other people then see.
+
+**Images of people.** Ask for "a nurse" and then "a CEO" and watch what arrives.
+A one-minute demonstration.
+
+**Language.** Text in non-standard dialects, or by non-native speakers, gets
+scored as lower quality by systems trained mostly on standard forms.
+
+## What to actually do
+
+**Keep it out of the deciding seat about people.** E4·L8's rule, and this is
+its deepest justification.
+
+**Check the defaults.** Look at what it reached for when generating examples.
+Correct it — and notice that you had to.
+
+**Vary the input.** For anything evaluative, run the same content with one
+identifying detail changed. If the assessment moves, you have learned something
+essential before relying on it.
+
+**Ask who is missing.** Whose situation does this answer not cover?
+
+## Try it now (6 minutes)
+
+Take an evaluative task — assessing a proposal, a piece of writing. Run it
+twice with one identifying detail changed and nothing else.
+
+Compare. Whatever you find, you now know something about that task you did not
+know before.
+
+<Quiz client:visible items={[
+  {
+    q: "Why can bias not simply be removed from a model?",
+    options: [
+      "Providers have not prioritised it",
+      "It is entangled with useful patterns, and fairness criteria conflict mathematically",
+      "The training data is proprietary"
+    ],
+    answer: 1,
+    explain: "Equal error rates, equal predictive value and equal treatment cannot generally all hold at once, so 'make it fair' is underspecified."
+  },
+  {
+    q: "Where does bias most often reach real people in ordinary work?",
+    options: [
+      "In dramatic, high-profile decisions",
+      "In routine sorting, screening and summarising of text about people",
+      "Only in image generation"
+    ],
+    answer: 1,
+    explain: "Which details survive a summary of a person is a judgement, and it is not made neutrally."
+  },
+  {
+    q: "The most practical test for an evaluative task:",
+    options: [
+      "Ask the model whether it is being fair",
+      "Run the same content twice with one identifying detail changed",
+      "Use a larger model"
+    ],
+    answer: 1,
+    explain: "If the assessment moves when only a name or institution changes, you have found something you needed to know before relying on it."
+  }
+]} />
+
+## Recap
+
+Bias enters through training data, uneven representation and tuning choices,
+and resists removal because it is entangled with useful patterns and because
+fairness criteria genuinely conflict. It reaches people through sorting,
+summarising and defaults. Keep it out of decisions about people, check what it
+reaches for, and vary the input to see whether the judgement moves.

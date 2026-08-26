@@ -12,7 +12,7 @@
     { "id": "e5", "track": "explorer", "title": "Documents, Spreadsheets & Presentations", "tagline": "From blank page to finished draft, responsibly.", "status": "live" },
     { "id": "e6", "track": "explorer", "title": "Creative AI: Image, Video & Voice", "tagline": "Making media — and the ethics of it.", "status": "live" },
     { "id": "e7", "track": "explorer", "title": "Truth, Verification & Critical Thinking", "tagline": "The module that keeps you safe. Compulsory for certification.", "status": "live" },
-    { "id": "e8", "track": "explorer", "title": "AI Ethics & Responsible Use", "tagline": "Integrity, disclosure, and your personal code of conduct.", "status": "planned" },
+    { "id": "e8", "track": "explorer", "title": "AI Ethics & Responsible Use", "tagline": "Integrity, disclosure, and your personal code of conduct.", "status": "live" },
     { "id": "p1", "track": "practitioner", "title": "Advanced Prompting", "tagline": "Few-shot, structure, chaining, templates.", "status": "planned" },
     { "id": "b1", "track": "builder", "title": "Python On-Ramp for AI", "tagline": "Just enough code to build.", "status": "planned" }
   ]
