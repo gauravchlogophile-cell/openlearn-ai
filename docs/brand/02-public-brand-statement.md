@@ -29,8 +29,8 @@ code under MIT.
 
 - Not a vendor, a reseller, or an affiliate of one.
 - Not an AI product. We teach about AI; we are a website with lessons.
-- Not a certification body — where the curriculum mentions certification, that
-  is a stated intention and not yet a thing you can obtain.
+- Not a certification body — certification is designed but not built, and is
+  not yet a thing you can obtain.
 - Not a replacement for professional advice on health, money or law.
 
 ## The five commitments

@@ -49,9 +49,11 @@ no technical background, works on a phone, and does not require an account.
 
 ## What we are deliberately not saying yet
 
-- **Certification does not exist.** The curriculum references it in several
-  places as a stated intention. Never imply it is obtainable. If asked
-  directly: "planned, not built."
+- **Certification is designed, not built.** The design exists; no learner can
+  obtain one. The curriculum references it in several places. Never imply it is
+  obtainable. If asked directly: "designed, not built." A build-time check
+  (scripts/check-brand-claims.mjs) fails the moment it ships, so this line
+  cannot silently become untrue.
 - **Sky is not enabled.** Built, guarded, tested, and switched off pending an
   API key and a proper rate limiter. Do not demo it.
 - **One maintainer.** Say "a small team" only if it stops being one person.

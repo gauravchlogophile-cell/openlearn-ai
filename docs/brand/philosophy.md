@@ -108,3 +108,36 @@ a date. The accountability the neutrality position depends on existed in data an
 was invisible to readers. `LessonSources.astro` fixes that by construction: an
 author cannot name a tool in frontmatter and forget to source it, because the
 sourcing is no longer a thing they do.
+
+## Keeping the brand guides true
+
+The guides assert facts — module counts, whether certification exists, whether
+the assistant is on, that rooms are closed. Those go stale the moment the
+product moves, and a quietly-wrong brand guide is worse than none, because it is
+the document that gets pasted into a funding application.
+
+So brand claims get the same treatment as tool descriptions rather than a
+promise to remember:
+
+| | Content | Brand guides |
+|---|---|---|
+| Claim carries | `lastVerified` per registry card | `expect` value in `docs/brand/claims.json` |
+| Drift detected by | `check-sources.mjs` watching vendor docs | `check-brand-claims.mjs` probing the repo |
+| Staleness fails | build at 120 days (CUR-7) | `npm test` at 180 days per guide |
+
+`scripts/check-brand-claims.mjs` runs in `npm test`. Each claim names the guide
+and the sentence it lives in, so a failure reads as an instruction rather than a
+puzzle:
+
+> BRAND CLAIM DRIFTED — certification-not-built
+> guides say: false · repo says: true
+> where: guide 02, 03 — "designed, not built"
+> do: the public statement must stop disclaiming it…
+
+**When you change the product, the guides fail before anyone can quote them.**
+That is the whole mechanism. Update the guide and `claims.json` together — the
+pairing is what stops them drifting apart.
+
+Claims that cannot be probed — "one maintainer", tone of voice, the trademark
+position — are governed by the 180-day review interval instead. That is a weaker
+guarantee, stated as one.
