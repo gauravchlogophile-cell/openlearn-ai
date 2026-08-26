@@ -4,6 +4,12 @@
     {
       "date": "2026-08-26",
       "kind": "New module",
+      "where": "Explorer · E7",
+      "what": "Truth, Verification & Critical Thinking published — eight lessons on why fluency defeats scepticism, triaging which claims to check, a two-minute verification method, judging sources, handling disagreement, how manipulation finds you, your own bias, and a habit small enough to survive. This module is compulsory for certification."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
       "where": "Explorer · E6",
       "what": "Creative AI: Image, Video & Voice published — eight lessons on how diffusion models actually work, describing an image, iterating with seeds, the artist-style question, the current limits of video, voice cloning and consent, labelling what you made, and the categories that are not grey areas."
     },

@@ -1,0 +1,149 @@
+---
+title: "The bias you bring"
+description: "The hardest verification problem is not the model's accuracy. It is that you check answers you dislike far harder than answers you were hoping for."
+track: explorer
+module: e7
+order: 7
+minutes: 8
+objectives:
+  - "Recognise asymmetric scrutiny in your own checking"
+  - "Use techniques that work even when you are motivated"
+concepts: ["confirmation bias", "motivated reasoning", "asymmetric scrutiny"]
+flashcards:
+  - front: "What is asymmetric scrutiny?"
+    back: "Checking claims you dislike thoroughly and claims you like barely at all."
+  - front: "Why does knowing about a bias not fix it?"
+    back: "It operates before you notice, so awareness alone changes nothing. Only changed procedure helps."
+  - front: "What is the most practical countermeasure?"
+    back: "Decide in advance what evidence would change your mind, before you look."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Everything so far has treated verification as a technical problem: find the
+source, check the claim, judge the site. Those are the easy part.
+
+The hard part is that you are not a neutral instrument, and an assistant that
+produces plausible support for almost any position is unusually good at
+supplying whatever you were already inclined to believe.
+
+## Asymmetric scrutiny
+
+The core mechanism, and it is not exotic.
+
+When an answer contradicts what you think, you check it. You notice the hedge,
+wonder about the source, ask a follow-up.
+
+When an answer agrees with you, you move on.
+
+Both feel like normal reading. Neither feels like bias. But you have applied
+two completely different standards to two claims of identical reliability, and
+the one that survived unexamined is the one that matched your prior.
+
+E7·L2 named this trigger — an unusually convenient answer deserves a check —
+and this lesson is why: the risk lives in your reaction, not in the model.
+
+## Why knowing this changes nothing
+
+Worth being blunt. Reading about confirmation bias does not reduce it. It
+operates before you notice, and the feeling of being fair-minded is unrelated
+to whether you are being fair.
+
+What helps is not awareness. It is **procedure** — something you do that does
+not depend on catching yourself in the act.
+
+## Three that actually work
+
+**Decide what would change your mind, in advance.**
+
+Before researching, write: *I would abandon this if I saw ___.* Specific and
+falsifiable.
+
+This works because you set the standard before you knew which way the evidence
+went. Afterwards, the standard moves — you will find reasons why the evidence
+you found is not quite the evidence you meant.
+
+**Ask for the case against, and take it seriously.**
+
+E4·L4's technique, applied to yourself:
+
+> *What is the strongest case against [my position]? Steel-man it. Do not
+> balance it with counterarguments.*
+
+The forbidding matters. Otherwise you get an objection immediately defused, and
+you experience having considered it without having.
+
+**Notice when you stopped looking.**
+
+The moment you found a source confirming your position and felt satisfied — that
+satisfaction is the signal. Ask whether you would have stopped there had it said
+the opposite.
+
+## Where an assistant makes it worse
+
+Two specific ways, worth naming.
+
+It is **agreeable**. Push back on a correct answer and it will often concede.
+If you are motivated, you can walk almost any model to almost any conclusion,
+and the transcript will read like inquiry.
+
+It **supplies fluent support for anything**. Ask for the case for a position
+and you will get a well-organised one — regardless of the evidence. Fluency
+here is a function of the request, not of whether the position is sound.
+
+Both mean an assistant can manufacture the *experience* of having investigated
+something while confirming what you brought.
+
+## Try it now (6 minutes)
+
+Take something you believe about your field that colleagues disagree with.
+
+Write down what would change your mind. Then ask for the strongest case
+against, with counterarguments forbidden.
+
+Notice whether you are reading it to understand it, or to find the flaw. That
+noticing is the skill.
+
+<Quiz client:visible items={[
+  {
+    q: "Asymmetric scrutiny is:",
+    options: [
+      "Checking some sources more carefully than others",
+      "Checking claims you dislike thoroughly and claims you like barely at all",
+      "Applying different standards to different subjects"
+    ],
+    answer: 1,
+    explain: "Both feel like normal reading, yet two claims of identical reliability received completely different standards."
+  },
+  {
+    q: "Why does knowing about confirmation bias not reduce it?",
+    options: [
+      "It is not a real effect",
+      "It operates before you notice, so only changed procedure helps",
+      "It only affects people without training"
+    ],
+    answer: 1,
+    explain: "The feeling of being fair-minded is unrelated to whether you are. What helps is something that does not depend on catching yourself."
+  },
+  {
+    q: "Deciding in advance what would change your mind works because:",
+    options: [
+      "It commits you publicly",
+      "You set the standard before knowing which way the evidence went",
+      "It makes research faster"
+    ],
+    answer: 1,
+    explain: "Afterwards the standard moves — you find reasons the evidence you found is not quite the evidence you meant."
+  }
+]} />
+
+## Recap
+
+You scrutinise unwelcome answers and wave through welcome ones, and knowing
+that does not fix it. Use procedure instead: write down what would change your
+mind before you look, ask for the strongest case against with rebuttals
+forbidden, and treat the feeling of satisfaction as the signal that you stopped
+early. An agreeable assistant can manufacture the experience of inquiry.
