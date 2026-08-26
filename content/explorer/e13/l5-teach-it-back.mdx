@@ -1,0 +1,158 @@
+---
+title: "Teach it back"
+description: "Explaining something to a patient, ignorant, question-asking student exposes gaps nothing else finds. Making the assistant the learner instead of the teacher."
+track: explorer
+module: e13
+order: 5
+minutes: 8
+objectives:
+  - "Use explanation-to-another as a diagnostic for your own gaps"
+  - "Set up an assistant as a student rather than a teacher"
+concepts: ["teaching to learn", "Feynman technique", "gap detection"]
+flashcards:
+  - front: "Why does teaching expose gaps?"
+    back: "Producing a coherent explanation requires connections that following one does not, so missing links surface immediately."
+  - front: "How do you make the assistant a student?"
+    back: "Tell it to play someone who does not know the subject, ask questions when confused, and never supply the answer."
+  - front: "What is the most valuable signal?"
+    back: "The question you cannot answer — that is a gap, located precisely."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+L1 gave the test: explain it from memory and notice where you stall. This
+lesson turns that into a technique with a mechanism attached.
+
+## Why teaching finds what reading hides
+
+Reading an explanation requires only that you follow the connections somebody
+else made.
+
+Producing one requires you to **make them yourself** — decide the order, choose
+the words, bridge each step to the next. Those bridges are where understanding
+actually lives, and their absence is invisible until you try to build them.
+
+This is why the technique is old and reliable, and it is what people mean by the
+Feynman technique: explain it plainly enough for a beginner, and every place you
+reach for jargon is a place you do not understand.
+
+The obstacle has always been finding a patient beginner. That is what changed.
+
+## Set it up as a student
+
+The prompt shape that makes this work:
+
+> *You are a curious student who knows nothing about [topic] but is smart and
+> asks good questions.*
+>
+> *I am going to explain it to you. Interrupt whenever something does not
+> follow, when I use a term I have not defined, or when I say something that
+> raises an obvious question.*
+>
+> *Do not explain anything to me. Do not correct me yet. Just be confused where
+> a beginner would be confused.*
+
+Three prohibitions, and all three are necessary. Left to itself, an assistant
+will helpfully finish your explanation, correct you mid-flow, or agree
+encouragingly — and any of those collapses the exercise.
+
+## Then explain, badly
+
+Explain out loud or in writing. Do not prepare. The rough version is the point,
+because you are diagnosing rather than performing.
+
+Watch for:
+
+**Questions you cannot answer.** The main signal. Precisely located gaps.
+
+**Places you reach for jargon.** Using the term instead of explaining the idea
+is how you skip over a thing you do not have.
+
+**"It just does".** You have hit the edge.
+
+**Explanations that get longer as you go.** Usually you are circling something
+you cannot state.
+
+## Then ask for the marking
+
+Only afterwards, switch its role:
+
+> *Now stop being the student. What did I get wrong, what did I miss, and where
+> was I vague in a way that suggests I do not understand it?*
+
+*Vague in a way that suggests* is the useful clause. Errors are easy to spot
+yourself later; vagueness that concealed a gap is exactly what you cannot see,
+because you produced it.
+
+## The harder variant
+
+When you can do the above comfortably:
+
+> *Now be a student who asks awkward questions. Push on anything I glossed over,
+> and ask "but why?" until I cannot answer.*
+
+Three or four "but why"s reliably reach the bottom of anybody's understanding.
+That is not failure — knowing where your foundation ends is the most useful map
+you can have, and it tells you what to study next far better than any syllabus.
+
+## Where this beats every other technique
+
+Retrieval (L3) tests whether you can produce a known answer. Teaching tests
+whether the **structure** holds — whether the pieces connect, whether you can
+reorder them, whether you can meet an unexpected question.
+
+Those are different capabilities, and the second is what people mean by
+understanding. It is also the one that survives being asked about it in a
+meeting a year later.
+
+## Try it now (7 minutes)
+
+Pick something you believe you understand well. Set the assistant up as a
+student with the three prohibitions.
+
+Explain for five minutes. Count the questions you could not answer cleanly.
+Anything above zero is worth your next study session.
+
+<Quiz client:visible items={[
+  {
+    q: "Teaching exposes gaps that reading does not because:",
+    options: [
+      "Teaching takes longer",
+      "Producing an explanation requires making the connections yourself",
+      "Students ask unpredictable questions"
+    ],
+    answer: 1,
+    explain: "Reading only requires following connections somebody else made. The bridges are where understanding lives."
+  },
+  {
+    q: "Why forbid the assistant from explaining or correcting during the exercise?",
+    options: [
+      "It would take too long",
+      "It will otherwise finish your explanation or agree encouragingly, collapsing the exercise",
+      "Its corrections are unreliable"
+    ],
+    answer: 1,
+    explain: "The three prohibitions — do not explain, do not correct yet, be confused where a beginner would be — are all load-bearing."
+  },
+  {
+    q: "Reaching for jargon while explaining usually signals:",
+    options: [
+      "Appropriate technical precision",
+      "A place you are using the term instead of understanding the idea",
+      "That the student needs more background"
+    ],
+      answer: 1,
+    explain: "Alongside \"it just does\" and explanations that lengthen as you circle something you cannot state."
+  }
+]} />
+
+## Recap
+
+Producing an explanation requires making connections that following one does
+not, so teaching surfaces gaps immediately. Cast the assistant as a curious
+beginner and forbid it from explaining, correcting or agreeing. Explain roughly,
+watch for unanswerable questions, jargon and "it just does", then switch its
+role and ask where you were vague in a way that suggests you do not understand.

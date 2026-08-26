@@ -1,0 +1,155 @@
+---
+title: "Test yourself instead"
+description: "Re-reading is the most popular study method and among the least effective. Retrieval practice is the opposite on both counts, and AI is unusually good at it."
+track: explorer
+module: e13
+order: 3
+minutes: 8
+objectives:
+  - "Replace re-reading with retrieval practice"
+  - "Generate good questions rather than recognition-only ones"
+concepts: ["retrieval practice", "testing effect", "recognition versus recall"]
+flashcards:
+  - front: "Why is re-reading ineffective?"
+    back: "It builds familiarity, which feels like knowledge. Nothing is retrieved, so nothing is strengthened."
+  - front: "What is the testing effect?"
+    back: "Retrieving something from memory strengthens it more than reviewing it does — the act of recall is the learning."
+  - front: "What makes a bad practice question?"
+    back: "One answerable by recognising the right option without recalling anything."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+If you take one technique from this module, take this one. It has more evidence
+behind it than anything else here, and it is the opposite of what most people
+do.
+
+## Re-reading does very little
+
+The standard study method — read it again, highlight, read the highlights — is
+popular because it is comfortable and because it *feels* productive.
+
+What it builds is **familiarity**. The text looks known, so you conclude you
+know it. That is L1's illusion, arriving through the most common study habit in
+the world.
+
+Nothing was retrieved from your memory, so nothing in your memory was
+strengthened.
+
+## Retrieval is the learning
+
+The **testing effect** is among the most replicated findings in learning
+research: pulling something out of memory strengthens it substantially more than
+reviewing it does.
+
+Not testing to *measure* learning. Testing as the **method** of learning. The
+effortful, uncomfortable act of trying to recall is what does the work — and
+that includes attempts where you fail and then see the answer.
+
+This is why Lrnon's lessons end with questions rather than a summary, and why
+the site has review cards at all.
+
+## Where AI earns its place
+
+Generating good questions is slow work, which is why most people skip it. That
+is exactly the bottleneck a model removes.
+
+> *Below is material I am studying. Write ten questions that test whether I can
+> USE this, not whether I recognise it.*
+>
+> *Include: three that require applying it to a new situation, two asking me to
+> explain WHY, two about the boundaries or exceptions, and three I would get
+> wrong if I only skimmed.*
+>
+> *Do not give me the answers yet.*
+
+That last line matters more than it looks. With answers visible you read them,
+feel the click of recognition, and skip the retrieval entirely.
+
+## Recognition is not recall
+
+The commonest flaw in generated questions.
+
+*"Which of these describes X?"* can be answered by elimination. You may recall
+nothing and still be right — which is why the shuffled multiple-choice questions
+in this course are a check rather than the main event.
+
+Better shapes:
+
+**Open recall.** *"Explain X and give an example."*
+**Application.** *"Here is a new situation. What happens, and why?"*
+**Comparison.** *"How does X differ from Y, and when does it matter?"*
+**Error-finding.** *"Here is a wrong explanation. Say what is wrong with it."*
+
+That last one is excellent and under-used, because spotting an error requires
+holding the correct version in mind.
+
+## Answer before you check
+
+The discipline that makes the whole thing work.
+
+Write or say your answer **first**, completely, before revealing anything. Then
+compare and mark yourself honestly.
+
+Reading a question, thinking "yes, I know that", and moving on is not retrieval.
+It is recognition wearing retrieval's clothes, and it is the most common way
+people run this technique and get nothing from it.
+
+Then:
+
+> *Here is my answer. What did I miss, and what did I get subtly wrong?*
+
+*Subtly* is doing work — the near-miss is more useful than the outright error,
+and it is what you would never catch alone.
+
+## Try it now (6 minutes)
+
+Take something you are learning. Ask for ten questions in the shape above, with
+answers withheld.
+
+Answer three in writing before looking at anything. Then check. The gap between
+what you thought you knew and what you produced is the lesson.
+
+<Quiz client:visible items={[
+  {
+    q: "Re-reading is ineffective mainly because:",
+    options: [
+      "It takes too long",
+      "It builds familiarity without retrieving anything from memory",
+      "People read too fast"
+    ],
+    answer: 1,
+    explain: "The text looks known, so you conclude you know it — L1's illusion arriving through the world's most common study habit."
+  },
+  {
+    q: "The testing effect means:",
+    options: [
+      "Tests measure learning accurately",
+      "Retrieving from memory strengthens it more than reviewing does",
+      "Frequent tests reduce anxiety"
+    ],
+    answer: 1,
+    explain: "Testing is the method of learning, not a measurement of it — including attempts you get wrong."
+  },
+  {
+    q: "The most common way people get nothing from self-testing:",
+    options: [
+      "Using questions that are too hard",
+      "Reading the question, thinking 'I know that', and moving on",
+      "Testing too frequently"
+    ],
+    answer: 1,
+    explain: "That is recognition wearing retrieval's clothes. The answer has to be produced in full before anything is revealed."
+  }
+]} />
+
+## Recap
+
+Re-reading builds familiarity and strengthens nothing. Retrieval — pulling it
+out of memory — is the learning itself, including the failed attempts. Have AI
+generate questions that require applying, explaining, comparing and
+error-finding rather than recognising, with answers withheld. Then answer fully
+before checking, and ask what you got subtly wrong.
