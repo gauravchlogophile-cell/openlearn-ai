@@ -1,0 +1,226 @@
+---
+/* 10d · The certificate — on screen, and the ink-light A4 print.
+ *
+ * The print rules come straight from the frame, and each one is a decision
+ * about someone with no money and a bad printer: "no border, no seal, no
+ * gradient, no photographic trace, black text on white — legible from a ₹5
+ * cybercafé print and photocopyable without losing the code. The QR and the
+ * typed code both work, so a bad print is still verifiable."
+ *
+ * That is why this page has no ornament. A certificate that costs a colour
+ * cartridge to look real is a certificate the people this project is for cannot
+ * produce.
+ *
+ * Per-request rather than prerendered: codes are random by design, so there is
+ * no set of paths to build.
+ */
+export const prerender = false;
+
+import Base from '../../layouts/Base.astro';
+import modulesData from '../../../content/modules.json';
+import { TIERS, CODE_PATTERN } from '../../lib/certification';
+
+const { code = '' } = Astro.params;
+const clean = code.trim().toUpperCase();
+
+/* Reuse the public endpoint rather than reaching past it. Everything this page
+   may show is exactly what a stranger with the code may see — the name is not
+   in the status response, and is revealed only through the initials check on
+   /v. A page that quietly returned more would undo that. */
+type Status = {
+  found: boolean; tier?: string; module?: string;
+  version?: number; issued_at?: string; state?: string;
+};
+
+let status: Status = { found: false };
+let unavailable = false;
+
+if (CODE_PATTERN.test(clean)) {
+  try {
+    const res = await fetch(new URL('/api/verify', Astro.url), {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ code: clean }),
+    });
+    if (res.status === 503) unavailable = true;
+    else status = await res.json();
+  } catch {
+    unavailable = true;
+  }
+}
+
+const mod = modulesData.modules.find((m) => m.id === status.module);
+const issued = status.issued_at
+  ? new Date(status.issued_at).toLocaleDateString('en-GB',
+      { day: 'numeric', month: 'long', year: 'numeric' })
+  : '';
+const tierName = status.tier === 'record' ? TIERS.record.name : TIERS.certificate.name;
+---
+<Base title={`Certificate ${clean} — Lrnon`}
+  description="A Lrnon certificate, and the note explaining exactly what it claims.">
+
+  <section class="container" style="padding-block:var(--sp-8) var(--sp-12);max-width:820px;">
+
+    {unavailable && (
+      <div class="note note--aim">
+        <strong>Verification is unavailable right now.</strong>
+        <p class="prose" style="margin:var(--sp-2) 0 0;">
+          This is our problem, not a judgement on the certificate. Try again
+          shortly, or check the code at <a href="/v">lrnon.org/v</a>.
+        </p>
+      </div>
+    )}
+
+    {!unavailable && !status.found && (
+      <div class="note note--aim">
+        <strong>We have no record of this code.</strong>
+        <p class="prose" style="margin:var(--sp-2) 0 0;">
+          Check for a mistyped 0 and O, or 1 and I — codes never contain either.
+          You can also type it in at <a href="/v">lrnon.org/v</a>. We do not say
+          whether a code ever existed.
+        </p>
+      </div>
+    )}
+
+    {status.found && (
+      <>
+        {/* ------------------------------------------------ the document */}
+        <article class="certificate">
+          <header class="certificate__head">
+            <span class="certificate__brand" translate="no">Lrnon</span>
+            <span class="certificate__state" data-state={status.state}>
+              {status.state === 'valid' ? 'Valid'
+                : status.state === 'superseded' ? 'Valid · earlier syllabus'
+                : status.state === 'withdrawn' ? 'Withdrawn at holder’s request'
+                : 'Withdrawn'}
+            </span>
+          </header>
+
+          <p class="certificate__tier">{tierName}</p>
+
+          {/* 10e's rule holds even here: the name is not in a status response,
+              so this document shows what it can prove and points at how to see
+              the rest. */}
+          <p class="certificate__holder">Holder’s name shown on their own copy</p>
+
+          <p class="certificate__body">
+            {status.tier === 'record'
+              ? <>records completion of every lesson in <strong>{mod?.title}</strong>.</>
+              : <>was assessed on <strong>{mod?.title}</strong> and judged against
+                  the published rubric for that module.</>}
+          </p>
+
+          <dl class="certificate__meta">
+            <div><dt>Issued</dt><dd>{issued}</dd></div>
+            <div><dt>Syllabus</dt><dd>{status.module?.toUpperCase()} v{status.version}</dd></div>
+            <div><dt>Tier</dt><dd>{tierName}</dd></div>
+            <div><dt>Issued by</dt><dd>Lrnon</dd></div>
+          </dl>
+
+          <footer class="certificate__verify">
+            <div>
+              <span class="certificate__code">{clean}</span>
+              <span class="certificate__url">lrnon.org/v</span>
+            </div>
+          </footer>
+
+          <p class="certificate__disclaimer">
+            Lrnon is not a recognised examination board. This certificate records
+            work assessed by Lrnon against its own published rubric and does not
+            replace a school or board qualification.
+          </p>
+        </article>
+
+        <div class="no-print" style="display:flex;flex-wrap:wrap;gap:var(--sp-3);margin-top:var(--sp-6);">
+          <button class="btn" onclick="window.print()">Print</button>
+          <a class="btn btn--ghost" href="/v">Verify this code</a>
+        </div>
+
+        <p class="no-print prose" style="color:var(--c-ink-soft);margin-top:var(--sp-6);">
+          It prints in black on white with no border, seal or background —
+          deliberately. A certificate should be legible from the cheapest print
+          available and survive a photocopy without losing its code, and anything
+          decorative fails both. The typed code works on its own; nothing here
+          depends on an image reproducing well.
+        </p>
+      </>
+    )}
+  </section>
+</Base>
+
+<style>
+  /* Screen: quiet, and recognisably the same document that will print. */
+  .certificate {
+    border: 1px solid var(--c-border-strong);
+    border-radius: var(--r-m);
+    padding: var(--sp-8);
+    background: var(--c-surface);
+  }
+  .certificate__head {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: var(--sp-4); margin-bottom: var(--sp-8);
+  }
+  .certificate__brand { font-family: var(--font-display); font-size: var(--fs-400); }
+  .certificate__state {
+    font-size: var(--fs-100); letter-spacing: 0.08em; text-transform: uppercase;
+    padding: 2px 10px; border-radius: 999px;
+    background: var(--c-progress-soft); color: var(--c-ink);
+  }
+  .certificate__state[data-state="revoked"],
+  .certificate__state[data-state="withdrawn"] { background: var(--c-reward-soft); }
+
+  .certificate__tier {
+    font-family: var(--font-display); font-size: var(--fs-500);
+    margin: 0 0 var(--sp-2); line-height: 1.1;
+  }
+  .certificate__holder { color: var(--c-ink-faint); margin: 0 0 var(--sp-4); }
+  .certificate__body { color: var(--c-ink-soft); margin: 0 0 var(--sp-6); max-width: 52ch; }
+
+  .certificate__meta {
+    display: grid; gap: var(--sp-3);
+    grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    margin: 0 0 var(--sp-6);
+  }
+  .certificate__meta dt {
+    font-size: var(--fs-100); color: var(--c-ink-faint);
+    letter-spacing: 0.06em; text-transform: uppercase;
+  }
+  .certificate__meta dd { margin: 2px 0 0; }
+
+  .certificate__verify {
+    border-top: 1px solid var(--c-border);
+    padding-top: var(--sp-4); display: flex; gap: var(--sp-4);
+  }
+  .certificate__code {
+    display: block;
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: var(--fs-400); letter-spacing: 0.1em;
+  }
+  .certificate__url { font-size: var(--fs-100); color: var(--c-ink-faint); }
+
+  .certificate__disclaimer {
+    margin: var(--sp-6) 0 0; font-size: var(--fs-100);
+    color: var(--c-ink-faint); max-width: 60ch;
+  }
+
+  /* Print: A4, ink-light. Every rule here is one of 10d's constraints, and the
+     colour resets are not cosmetic — a dark-theme viewer printing this page
+     would otherwise send a full page of near-black to the printer. */
+  @media print {
+    @page { size: A4; margin: 18mm; }
+
+    :global(body) { background: #fff !important; color: #000 !important; }
+    :global(header), :global(footer), :global(nav), .no-print { display: none !important; }
+
+    .certificate {
+      border: none; padding: 0; background: #fff !important; color: #000 !important;
+    }
+    .certificate * { color: #000 !important; background: transparent !important; }
+
+    .certificate__state { border: 1px solid #000; }
+    .certificate__tier { font-size: 28pt; }
+    .certificate__code { font-size: 16pt; }
+    .certificate__verify { border-top: 1pt solid #000; }
+    .certificate__disclaimer { font-size: 8pt; }
+  }
+</style>

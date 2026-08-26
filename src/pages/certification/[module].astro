@@ -1,0 +1,197 @@
+---
+/* 10a · Requirements. The page a learner reaches before deciding to sit
+   anything, and the one that has to be honest about what they get.
+
+   Two tiers, side by side, because the whole failure this turn corrects was
+   presenting them as one thing. */
+import Base from '../../layouts/Base.astro';
+import modulesData from '../../../content/modules.json';
+import rubricE7 from '../../../content/rubrics/e7.json';
+import { getCollection } from 'astro:content';
+import {
+  TIERS, BANDS, ASSESSED_MODULES, CERTIFICATION_LIVE,
+} from '../../lib/certification';
+
+export async function getStaticPaths() {
+  return ASSESSED_MODULES.map((id) => ({ params: { module: id } }));
+}
+
+const { module: moduleId } = Astro.params;
+const mod = modulesData.modules.find((m) => m.id === moduleId)!;
+const lessons = (await getCollection('lessons')).filter((l) => l.data.module === moduleId);
+const rubric = rubricE7;  /* one assessed module today; see ASSESSED_MODULES */
+
+/* Each criterion names the lesson that teaches it as "e7/l3". Resolve that to
+   the real slug rather than building the href from the string: lesson slugs
+   carry a title tail ("l3-two-minutes-that-usually-settle-it"), and a rubric
+   that links to a 404 is worse than one that links nowhere — a learner checking
+   how they will be judged is exactly who must not hit a dead end. */
+const byOrder = new Map(lessons.map((l) => [l.data.order, l.id]));
+const lessonHref = (teaches: string) => {
+  const order = Number(teaches.split('/')[1]?.replace(/\D/g, ''));
+  const slug = byOrder.get(order);
+  return slug ? `/learn/${slug}` : null;
+};
+---
+<Base title={`${mod.title} — certification — Lrnon`}
+  description={`What the Module Record and the Lrnon Certificate for ${mod.title} each mean, what they require, and how the assessment is graded. Both free.`}>
+
+  <section class="container" style="padding-block:var(--sp-8) var(--sp-12);max-width:820px;">
+
+    <p style="letter-spacing:0.12em;text-transform:uppercase;font-size:var(--fs-100);color:var(--c-ink-faint);margin:0 0 var(--sp-2);">
+      {moduleId.toUpperCase()} · {mod.title} · syllabus v{rubric.syllabusVersion}
+    </p>
+    <h1 style="font-size:var(--fs-500);margin:0 0 var(--sp-3);">Two things you can earn here</h1>
+
+    <p class="prose" style="color:var(--c-ink-soft);">
+      Both are free. We invite a donation if the certificate turns out to be
+      useful to you, and refusing costs you nothing — the certificate is
+      identical either way.
+    </p>
+
+    {!CERTIFICATION_LIVE && (
+      <div class="note note--aim" style="margin-block:var(--sp-6);">
+        <strong>The assessment is not open yet.</strong>
+        <p class="prose" style="margin:var(--sp-2) 0 0;">
+          Everything on this page is built and the rubric below is final, but
+          certificates need two reviewers who have agreed on twenty sample
+          answers, and Lrnon does not have them yet. Module Records are issued
+          today, normally. When the assessment opens, anyone who has already
+          finished this module will be told — and will not be charged to sit it.
+          {' '}<a href="/volunteer">Reviewing is a volunteer role</a> if you can
+          help bring that forward.
+        </p>
+      </div>
+    )}
+
+    {/* ------------------------------------------------------ the two tiers */}
+    <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-block:var(--sp-6);">
+
+      <div class="card">
+        <p style="letter-spacing:0.1em;text-transform:uppercase;font-size:var(--fs-100);color:var(--c-ink-faint);margin:0 0 var(--sp-1);">Tier 1</p>
+        <h2 style="font-size:var(--fs-400);margin:0 0 var(--sp-2);">{TIERS.record.name}</h2>
+        <p class="prose" style="color:var(--c-ink-soft);margin:0 0 var(--sp-3);">
+          Says you finished {moduleId.toUpperCase()} and passed its lesson
+          quizzes. Issued automatically — no assessment, no waiting.
+        </p>
+        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
+          <li>✓ All {lessons.length} lessons read</li>
+          <li>✓ Each lesson quiz at 60% or better</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <p style="letter-spacing:0.1em;text-transform:uppercase;font-size:var(--fs-100);color:var(--c-ink-faint);margin:0 0 var(--sp-1);">Tier 2 · assessed</p>
+        <h2 style="font-size:var(--fs-400);margin:0 0 var(--sp-2);">{TIERS.certificate.name}</h2>
+        <p class="prose" style="color:var(--c-ink-soft);margin:0 0 var(--sp-3);">
+          Says a reviewer read your work and judged it secure against the
+          published rubric. This is the one you can show someone.
+        </p>
+        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
+          <li>✓ {TIERS.record.name} earned first</li>
+          <li>○ Assessment: auto-marked questions, plus one written answer read by a volunteer</li>
+          <li>○ Name confirmed by email</li>
+        </ul>
+      </div>
+    </div>
+
+    {/* ------------------------------------------------------------- bands */}
+    <h2 style="font-size:var(--fs-400);margin-top:var(--sp-10);">How you are graded</h2>
+    <div style="display:grid;gap:var(--sp-3);margin-top:var(--sp-3);">
+      <div class="card">
+        <strong>{BANDS.not_yet.name}</strong>
+        <p class="prose" style="margin:var(--sp-1) 0 0;color:var(--c-ink-soft);">
+          Key ideas are missing. No certificate — you get specific feedback and
+          can re-sit after 24 hours. Nothing is recorded publicly, and no one is told.
+        </p>
+      </div>
+      <div class="card">
+        <strong>{BANDS.nearly.name}</strong>
+        <p class="prose" style="margin:var(--sp-1) 0 0;color:var(--c-ink-soft);">
+          Close. Your {TIERS.record.name} issues straight away and the
+          Certificate stays open — no penalty, no expiry.
+        </p>
+      </div>
+      <div class="card">
+        <strong>{BANDS.secure.name}</strong>
+        <p class="prose" style="margin:var(--sp-1) 0 0;color:var(--c-ink-soft);">
+          You can use the method reliably, not just recall it. The Certificate issues.
+        </p>
+      </div>
+    </div>
+
+    <p class="prose" style="color:var(--c-ink-soft);margin-top:var(--sp-4);">
+      {moduleId.toUpperCase()} is judged by a volunteer against the rubric below.
+      A module with no written answer is banded on score instead: under 60 not
+      yet, 60–79 nearly, 80 and above secure. Every certificate prints which
+      method graded it.
+    </p>
+
+    {/* ------------------------------------------------------------ rubric */}
+    <h2 id="rubric" style="font-size:var(--fs-400);margin-top:var(--sp-10);">The rubric, before you sit</h2>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      Published on purpose. A learner who cannot see how they will be judged is
+      being examined, not taught, and this project is not an examination board.
+      {' '}{rubric.banding.rule}
+    </p>
+
+    <blockquote class="prose" style="border-inline-start:3px solid var(--c-border-strong);padding-inline-start:var(--sp-4);margin-block:var(--sp-4);">
+      {rubric.task.prompt}
+      <br /><span style="color:var(--c-ink-faint);font-size:var(--fs-100);">Aim for {rubric.task.words} words. Open book.</span>
+    </blockquote>
+
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:var(--fs-200);min-width:520px;">
+        <thead>
+          <tr style="text-align:left;border-bottom:2px solid var(--c-border-strong);">
+            <th style="padding:var(--sp-2);">Criterion</th>
+            <th style="padding:var(--sp-2);">Secure</th>
+            <th style="padding:var(--sp-2);">Not yet</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rubric.criteria.map((c) => (
+            <tr style="border-bottom:1px solid var(--c-border);">
+              <td style="padding:var(--sp-2);"><strong>{c.name}</strong><br />
+                {lessonHref(c.teaches)
+                  ? <a href={lessonHref(c.teaches)} style="font-size:var(--fs-100);">taught in {c.teaches.replace('/', '·').toUpperCase()}</a>
+                  : <span style="font-size:var(--fs-100);color:var(--c-ink-faint);">taught in {c.teaches.replace('/', '·').toUpperCase()}</span>}</td>
+              <td style="padding:var(--sp-2);color:var(--c-ink-soft);">{c.secure}</td>
+              <td style="padding:var(--sp-2);color:var(--c-ink-soft);">{c.not_yet}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <p class="prose" style="color:var(--c-ink-soft);">
+      {rubric.banding.noteRequired} {rubric.banding.nameHidden}
+    </p>
+
+    {/* ------------------------------------------------------- the caveats */}
+    <h2 style="font-size:var(--fs-400);margin-top:var(--sp-10);">What this is not</h2>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      Lrnon is not a recognised examination board. A Lrnon Certificate is our own
+      record of assessed work. It does not replace a school certificate or a
+      board result, and we say so on the certificate itself.
+    </p>
+
+    <h2 style="font-size:var(--fs-400);margin-top:var(--sp-8);">If we rewrite {moduleId.toUpperCase()}</h2>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      Your certificate is never withdrawn. It gains a note saying the syllabus
+      has been revised since, and you are invited to re-sit the new version free.
+    </p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:var(--sp-3);margin-top:var(--sp-8);">
+      {CERTIFICATION_LIVE
+        ? <a class="btn" href={`/certification/${moduleId}/assess`}>Start the assessment</a>
+        : <a class="btn btn--ghost" href={`/learn/explorer/${moduleId}/l1-fluency-is-not-evidence`}>Start the module</a>}
+      <a class="btn btn--ghost" href="/v">Verify a certificate</a>
+    </div>
+    {CERTIFICATION_LIVE && (
+      <p class="prose" style="color:var(--c-ink-faint);font-size:var(--fs-100);margin-top:var(--sp-2);">
+        Open book. {rubric.method === 'auto_human' ? '45 minutes.' : ''} Unlimited attempts, 24 hours between them.
+      </p>
+    )}
+  </section>
+</Base>

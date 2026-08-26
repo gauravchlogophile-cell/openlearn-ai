@@ -37,8 +37,16 @@ const probes = {
   practitionerModulesLive: () => liveIn('practitioner'),
   builderModulesLive: () => liveIn('builder'),
 
-  /* "Built" means a learner could obtain one: a route to reach, and somewhere
-     to record it. A design document is not a certification. */
+  /* Two questions, deliberately separated.
+
+     The original probe asked one — "is certification built?" — and treated the
+     answer as equivalent to "can a learner obtain one?". Those came apart the
+     day the build landed switched off, and the checker's own advice was wrong
+     as a result: it told us to stop disclaiming certification at the exact
+     moment the disclaimer became MORE important, because now there is
+     machinery a reader could reasonably assume is running.
+
+     So: does it exist, and separately, can anyone get one. */
   certificationBuilt: () => {
     const pages = readdirSync(join(ROOT, 'src/pages'))
       .some((f) => /^certif|^cert\b/i.test(f));
@@ -47,6 +55,18 @@ const probes = {
           .some((f) => /certificat/i.test(read('supabase/migrations/' + f)))
       : false;
     return pages || migrations;
+  },
+
+  /* Obtainable means a learner could actually hold one. Three independent
+     things must all say yes, and the migration's own gate is the one that
+     matters: certification_open() is conjunctive, so a seed row left at 'off'
+     keeps it shut regardless of what any page claims. */
+  certificationIssuing: () => {
+    const cfg = read('src/lib/certification.ts');
+    const live = /CERTIFICATION_LIVE\s*=\s*true/.test(cfg);
+    const sql = read('supabase/migrations/0009_certification.sql');
+    const seededOpen = /values\s*\(\s*'e7'\s*,\s*'(?!off')/i.test(sql);
+    return live || seededOpen;
   },
 
   skyEnabled: () => !/SKY_MODE[^=]*=\s*'off'/.test(read('src/lib/sky-config.ts')),

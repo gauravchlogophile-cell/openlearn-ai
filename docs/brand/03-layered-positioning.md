@@ -49,11 +49,23 @@ no technical background, works on a phone, and does not require an account.
 
 ## What we are deliberately not saying yet
 
-- **Certification is designed, not built.** The design exists; no learner can
-  obtain one. The curriculum references it in several places. Never imply it is
-  obtainable. If asked directly: "designed, not built." A build-time check
-  (scripts/check-brand-claims.mjs) fails the moment it ships, so this line
-  cannot silently become untrue.
+- **Certification is built and switched off.** This changed on 26 August 2026;
+  the previous line here read "designed, not built" and the build-time check
+  fired the day it stopped being true, which is what it is for.
+
+  What exists: the schema, the assessment flow, the published rubric, the
+  issuance and revocation paths, and the public verification page — which
+  answers today and can never be switched off while certificates exist in the
+  wild. What does not: any way for a learner to obtain one.
+  `certification_open()` is conjunctive and refuses without two named reviewers
+  who have agreed on twenty sample answers, plus a guardian-email path tested
+  with real families. Neither is a flag anyone can flip.
+
+  Never imply a certificate is obtainable. If asked directly: "built, and
+  switched off until we have reviewers." Do not demo an issued certificate —
+  none exists, and a mock-up shown to a funder becomes a screenshot we cannot
+  retract. The verification page IS demonstrable and is the honest thing to
+  show, including the fact that every code currently returns "no record".
 - **Sky is not enabled.** Built, guarded, tested, and switched off pending an
   API key and a proper rate limiter. Do not demo it.
 - **One maintainer.** Say "a small team" only if it stops being one person.

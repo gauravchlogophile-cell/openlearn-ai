@@ -1,0 +1,76 @@
+{
+  "_comment": [
+    "The published rubric for E7's assessment. Turn 10g lists 'rubric written and",
+    "published' as the first gate before certification can go live on a module,",
+    "and published means a learner can read it BEFORE sitting — not that it exists",
+    "in a database somewhere. A learner who cannot see how they will be judged is",
+    "being examined, not taught, and this project is not an examination board.",
+    "",
+    "Structure comes from 10f: one written answer, four criteria, each banded",
+    "individually. 'Three or four secure gives secure; two gives nearly.' A note is",
+    "required on any criterion below secure — record_review() refuses without one,",
+    "because actionable feedback is the entire value of a human read.",
+    "",
+    "The criteria themselves are NOT the design's. 10f illustrates the rubric with",
+    "'weighs both options' and 'uses a number to argue', which belong to the",
+    "everyday-money module its mock shows. Lrnon's E7 is Truth, Verification &",
+    "Critical Thinking, so the criteria are drawn from what that module actually",
+    "teaches: triage (L2), primary sources (L3, L4), and stating uncertainty (L8).",
+    "The fourth is kept verbatim because it is module-independent."
+  ],
+
+  "module": "e7",
+  "syllabusVersion": 1,
+  "method": "auto_human",
+  "lastVerified": "2026-08-26",
+
+  "task": {
+    "prompt": "A colleague forwards you a striking statistic about your field and wants to put it in tomorrow's presentation. Explain, in your own words, how you would decide whether to rely on it.",
+    "words": "100–200",
+    "openBook": true,
+    "guidance": "What the reviewer looks for is how you reason, not whether you reach our answer. Own words matter more than neat words."
+  },
+
+  "criteria": [
+    {
+      "id": "triage",
+      "name": "Decides whether it is worth checking",
+      "teaches": "e7/l2",
+      "secure": "Asks what turns on the claim before reaching for a source. Says plainly that some claims do not need checking.",
+      "nearly": "Checks everything, or checks nothing, without saying why this one.",
+      "not_yet": "Treats verification as a reflex with no sense of what is at stake."
+    },
+    {
+      "id": "primary-source",
+      "name": "Goes to the primary source",
+      "teaches": "e7/l3",
+      "secure": "Names the original publication and says they would open it and read the sentence in place — not a restatement of it.",
+      "nearly": "Says they would 'search for it' or 'check online' without distinguishing a source from a report of one.",
+      "not_yet": "Would ask a model whether the claim is true, or accept a second article repeating it."
+    },
+    {
+      "id": "risk",
+      "name": "Names a risk or trade-off",
+      "teaches": "e7/l5",
+      "secure": "Identifies something that could still be wrong after checking — a definition that differs, a date, a population the figure does not cover.",
+      "nearly": "Acknowledges uncertainty in general terms without locating it anywhere specific.",
+      "not_yet": "Treats a verified figure as settled."
+    },
+    {
+      "id": "own-words",
+      "name": "Own words, own reasoning",
+      "teaches": "e7/l8",
+      "secure": "Reads as a person thinking. States what they checked and what they did not, which is the module's closing formula.",
+      "nearly": "Recites the module's three questions without applying them to this case.",
+      "not_yet": "Reproduces lesson text, or reads as generated."
+    }
+  ],
+
+  "banding": {
+    "rule": "Three or four criteria at secure gives secure. Exactly two gives nearly. Fewer gives not yet.",
+    "noteRequired": "Any criterion below secure needs a written note the learner can act on.",
+    "nameHidden": "The reviewer does not see who wrote the answer. The name is attached after the decision, never before."
+  },
+
+  "ifNoReviewer": "If no reviewer is free, the auto-marked sections band the attempt on score and the certificate issues immediately at that band. A reviewer reads the written answer later and can only raise it. Nothing is taken away by an upgrade."
+}

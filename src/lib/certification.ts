@@ -50,6 +50,21 @@ export const assessedCount = () => ASSESSED_MODULES.length;
 export const isAssessed = (moduleId: string) =>
   (ASSESSED_MODULES as readonly string[]).includes(moduleId);
 
+/** The credential-code alphabet, and the shape a code takes.
+ *
+ *  10h: "Alphabet excludes 0/O and 1/I/L for handwriting and bad prints." Both
+ *  halves of each pair go — dropping only the digits would leave exactly the
+ *  ambiguity the rule exists to remove.
+ *
+ *  Defined once because it was briefly defined twice, and the second copy was
+ *  wrong: `[A-Z2-9]` looks like it implements this rule and does not, since the
+ *  letters O, I and L sit inside A-Z. A code containing one would have been
+ *  accepted and sent to the database, where it can never match.
+ */
+export const CODE_ALPHABET = 'ABCDEFGHJKMNPQRSTUVWXYZ23456789';
+const CH = '[A-HJKMNP-Z2-9]';
+export const CODE_PATTERN = new RegExp(`^${CH}{4}-${CH}{3}-${CH}{3}$`);
+
 /** Whether a learner can obtain a certificate today.
  *
  *  False until issuance exists. Every surface that mentions certification reads

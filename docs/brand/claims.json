@@ -55,12 +55,20 @@
       "onDrift": "Part B must stop implying Builder is empty."
     },
     {
-      "id": "certification-not-built",
+      "id": "certification-built",
       "probe": "certificationBuilt",
+      "expect": true,
+      "saidIn": ["02", "03"],
+      "guideText": "\"Certification is now built — schema, assessment, published rubric and verification page — but switched off.\"",
+      "onDrift": "The certification code has been removed or renamed. Both guides describe machinery that no longer exists; either restore it or take the description down."
+    },
+    {
+      "id": "certification-not-issuing",
+      "probe": "certificationIssuing",
       "expect": false,
       "saidIn": ["02", "03"],
-      "guideText": "\"Not a certification body — designed, not built.\" Part B: never imply it is obtainable.",
-      "onDrift": "Certification now exists in the product. The public statement must stop disclaiming it, and Part B's 'do not imply it is obtainable' has to go — it would now be understating what Lrnon offers."
+      "guideText": "\"No learner can obtain one yet.\" Part B: never imply a certificate is obtainable; do not demo an issued one.",
+      "onDrift": "Certification is now issuing. Both guides must stop saying no learner can obtain one, and Part B's do-not-demo instruction should go. Before changing a word, check the two human gates actually closed — two reviewers agreed on twenty samples, guardian path tested with real families — rather than someone having flipped the seed row."
     },
     {
       "id": "assistant-switched-off",

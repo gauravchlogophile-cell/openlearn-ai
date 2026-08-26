@@ -1,0 +1,114 @@
+---
+/* 10b · Taking the assessment.
+ *
+ * Sectioned, saved as you go, open book. The frame is explicit that open book
+ * is a design choice rather than a concession: "Notes and the lessons are
+ * allowed. Questions ask you to apply a method, not recall a fact. The 24-hour
+ * gap between attempts is what keeps the claim defensible."
+ *
+ * The gate is shut today, so this page's real job is to say so accurately and
+ * to show what will happen — not to pretend a start button works.
+ */
+import Base from '../../../layouts/Base.astro';
+import modulesData from '../../../../content/modules.json';
+import rubricE7 from '../../../../content/rubrics/e7.json';
+import { ASSESSED_MODULES, CERTIFICATION_LIVE, TIERS } from '../../../lib/certification';
+
+export async function getStaticPaths() {
+  return ASSESSED_MODULES.map((id) => ({ params: { module: id } }));
+}
+
+const { module: moduleId } = Astro.params;
+const mod = modulesData.modules.find((m) => m.id === moduleId)!;
+const rubric = rubricE7;
+---
+<Base title={`Assessment — ${mod.title} — Lrnon`}
+  description={`The ${mod.title} assessment: three sections, open book, 45 minutes, unlimited attempts with a day between them.`}>
+
+  <section class="container" style="padding-block:var(--sp-8) var(--sp-12);max-width:760px;">
+    <p style="letter-spacing:0.12em;text-transform:uppercase;font-size:var(--fs-100);color:var(--c-ink-faint);margin:0 0 var(--sp-2);">
+      {moduleId.toUpperCase()} assessment
+    </p>
+    <h1 style="font-size:var(--fs-500);margin:0 0 var(--sp-4);">What sitting this involves</h1>
+
+    {!CERTIFICATION_LIVE && (
+      <div class="note note--aim" style="margin-bottom:var(--sp-6);">
+        <strong>Not open yet — and this page is not a waiting room.</strong>
+        <p class="prose" style="margin:var(--sp-2) 0 0;">
+          There is nothing to start here today. The assessment needs two
+          reviewers who have agreed on twenty sample answers, and a guardian
+          email path tested with real families. Both are people, not code, so no
+          amount of building brings the date forward.
+          {' '}<a href={`/certification/${moduleId}`}>What you can earn today</a>
+          {' '}is the {TIERS.record.name}, and it is issued automatically.
+        </p>
+      </div>
+    )}
+
+    <h2 style="font-size:var(--fs-400);">Three sections</h2>
+    <ol style="display:grid;gap:var(--sp-3);padding-inline-start:var(--sp-5);margin-top:var(--sp-3);">
+      <li>
+        <strong>Auto-marked questions.</strong> Applying a method, not recalling
+        a fact — you may have the lessons open, and it will not help you if you
+        did not understand them.
+      </li>
+      <li>
+        <strong>A second auto-marked section</strong> on the same basis, so a
+        single bad question cannot decide the outcome.
+      </li>
+      <li>
+        <strong>One written answer, read by a person.</strong> Aim for
+        {' '}{rubric.task.words} words.
+        {' '}<a href={`/certification/${moduleId}#rubric`}>The rubric is published</a>
+        {' '}before you sit, so you know exactly what the reviewer looks for.
+      </li>
+    </ol>
+
+    <blockquote class="prose" style="border-inline-start:3px solid var(--c-border-strong);padding-inline-start:var(--sp-4);margin-block:var(--sp-6);color:var(--c-ink-soft);">
+      {rubric.task.guidance}
+    </blockquote>
+
+    <h2 style="font-size:var(--fs-400);margin-top:var(--sp-8);">The rules, and why each one</h2>
+    <div style="display:grid;gap:var(--sp-3);margin-top:var(--sp-3);">
+      <div class="card">
+        <strong>Open book.</strong>
+        <p class="prose" style="margin:var(--sp-1) 0 0;color:var(--c-ink-soft);">
+          Notes and lessons allowed. A closed-book test of verification would be
+          testing memory, which is not the skill.
+        </p>
+      </div>
+      <div class="card">
+        <strong>45 minutes, saved as you go.</strong>
+        <p class="prose" style="margin:var(--sp-1) 0 0;color:var(--c-ink-soft);">
+          If your connection drops you resume where you were. A dropped
+          connection is not a wrong answer.
+        </p>
+      </div>
+      <div class="card">
+        <strong>Unlimited attempts, 24 hours apart.</strong>
+        <p class="prose" style="margin:var(--sp-1) 0 0;color:var(--c-ink-soft);">
+          The gap is what makes a re-sit mean something. Nothing expires and
+          nothing is lost between attempts.
+        </p>
+      </div>
+      <div class="card">
+        <strong>Prefer to talk?</strong>
+        <p class="prose" style="margin:var(--sp-1) 0 0;color:var(--c-ink-soft);">
+          You can ask for an oral check instead of the written answer. Writing
+          fluently is not what is being assessed, and for some people it is a
+          barrier that has nothing to do with the skill.
+        </p>
+      </div>
+    </div>
+
+    <h2 style="font-size:var(--fs-400);margin-top:var(--sp-8);">If no reviewer is free</h2>
+    <p class="prose" style="color:var(--c-ink-soft);">
+      {rubric.ifNoReviewer}
+    </p>
+
+    <div style="display:flex;flex-wrap:wrap;gap:var(--sp-3);margin-top:var(--sp-8);">
+      <a class="btn btn--ghost" href={`/certification/${moduleId}`}>Back to requirements</a>
+      <a class="btn btn--ghost" href="/volunteer">Volunteer as a reviewer</a>
+    </div>
+  </section>
+</Base>

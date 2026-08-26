@@ -29,8 +29,13 @@ code under MIT.
 
 - Not a vendor, a reseller, or an affiliate of one.
 - Not an AI product. We teach about AI; we are a website with lessons.
-- Not a certification body — certification is designed but not built, and is
-  not yet a thing you can obtain.
+- Not a certification body. Certification is now built — the schema, the
+  assessment, the published rubric and the public verification page all exist —
+  but it is switched off, and no learner can obtain one yet. It opens when two
+  reviewers have agreed on twenty sample answers and the guardian-email path has
+  been tested with real families. Even once it opens, a Lrnon Certificate
+  records work we assessed against our own published standard. It does not
+  replace a school certificate or a board result, and it says so on its face.
 - Not a replacement for professional advice on health, money or law.
 
 ## The five commitments
