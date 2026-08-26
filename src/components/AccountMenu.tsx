@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useViewportClamp } from '../lib/use-viewport-clamp';
 import { isConfigured, supabase } from '../lib/supabase';
 import { summary } from '../lib/progress-store';
 
@@ -21,6 +22,10 @@ export default function AccountMenu() {
   const [stats, setStats] = useState({ xp: 0, level: 1, streak: 0, lessons: 0 });
   const box = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
+  const menu = useRef<HTMLDivElement>(null);
+  /* Same anchoring hazard as the accessibility panel: right-aligned to a
+     trigger that does not stay near the right edge once the nav wraps. */
+  useViewportClamp(menu, open);
 
   useEffect(() => {
     const update = () => setStats(summary());
@@ -96,11 +101,15 @@ export default function AccountMenu() {
       </button>
 
       {open && (
-        <div role="menu" style={{
+        <div ref={menu} role="menu" style={{
           position: 'absolute', insetInlineEnd: 0, top: 'calc(100% + 6px)', zIndex: 60,
           background: 'var(--c-surface)', border: '1px solid var(--c-border)',
           borderRadius: 'var(--r-m)', boxShadow: '0 10px 30px rgb(0 0 0 / 0.12)',
-          minWidth: '13rem', paddingBlock: 'var(--sp-2)',
+          minWidth: '13rem',
+          // Without this a 13rem minimum overflows a 320px phone on its own,
+          // before any anchoring question arises.
+          maxWidth: 'calc(100vw - var(--sp-4))',
+          paddingBlock: 'var(--sp-2)',
         }}>
           <p style={{ margin: 0, padding: 'var(--sp-1) var(--sp-4) var(--sp-3)',
             color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)',

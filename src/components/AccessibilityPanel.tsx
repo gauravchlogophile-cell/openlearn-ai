@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useViewportClamp } from '../lib/use-viewport-clamp';
 import {
   readerPrefs, setReaderPref, defaultReaderPrefs, applyReaderPrefs,
   readAloudEnabled, setReadAloud,
@@ -52,6 +53,10 @@ export default function AccessibilityPanel() {
   const [prefs, setPrefs] = useState<ReaderPrefs | null>(null);
   const [aloud, setAloud] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  /* Right-aligned to the trigger, which puts it off-screen once the nav wraps
+     and the trigger is no longer near the right edge. Measured at -213px on a
+     390px iPhone viewport. */
+  useViewportClamp(panelRef, open);
   const btnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
