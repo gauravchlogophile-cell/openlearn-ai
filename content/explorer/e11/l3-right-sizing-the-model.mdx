@@ -1,0 +1,157 @@
+---
+title: "Right-sizing the model"
+description: "Most work does not need the most capable model. How to tell which tasks do, and why the difference in price is far larger than the difference in output."
+track: explorer
+module: e11
+order: 3
+minutes: 8
+objectives:
+  - "Match model capability to task difficulty"
+  - "Test whether a cheaper model is good enough for a specific job"
+concepts: ["model tiers", "proportionality", "task difficulty"]
+flashcards:
+  - front: "Which tasks need the most capable model?"
+    back: "Multi-step reasoning, subtle judgement, long-context work, and anything where a small error is expensive."
+  - front: "Which tasks rarely need it?"
+    back: "Classification, extraction, formatting, tidying, simple rewriting — well-defined jobs with a checkable answer."
+  - front: "How do you decide?"
+    back: "Run the cheaper model against your evaluation set. If it passes, it is good enough for that task."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Providers offer several models at very different prices. The price gap between
+the cheapest and the most capable is frequently an order of magnitude or more.
+
+The output gap, on most everyday tasks, is much smaller than that — and on many
+tasks there is no gap at all.
+
+## The shape of a model range
+
+Names change constantly, so learn the tiers rather than the products.
+
+**Small and fast.** Cheap, quick, and entirely adequate for well-defined jobs.
+Classification, extraction, formatting, simple rewriting, tidying.
+
+**Mid-range.** The general-purpose workhorse. Most drafting, most summarising,
+most everyday questions.
+
+**Most capable.** Multi-step reasoning, subtle judgement, difficult code, long
+documents where the answer depends on connecting distant parts.
+
+Providers also ship **reasoning modes** that spend longer thinking before
+answering. Genuinely better on hard problems, and considerably more expensive —
+they are producing far more tokens internally to get there.
+
+## When capability actually matters
+
+Reach for the top tier when:
+
+- The task has **several dependent steps** and getting step two wrong ruins the
+  rest.
+- It needs **judgement between close options** rather than a lookup.
+- The input is **long** and the answer depends on relating distant parts.
+- A **small error is expensive** — E7·L2's triage, applied to model choice.
+
+Otherwise you are paying a premium for headroom you are not using.
+
+## When it does not
+
+For a well-specified job with a checkable answer, a small model is frequently
+indistinguishable — and it is faster, which matters more than people expect when
+something runs a thousand times.
+
+The tasks in P1·L3 — classify, rate, route, extract — are exactly this. It is
+why that lesson mentioned different models per step: splitting a prompt lets you
+buy capability only where it is needed.
+
+## Decide it by measurement
+
+Do not reason about this. Test it, because the answer is task-specific and
+frequently surprising.
+
+P1·L7's evaluation set is the tool. Run your twenty saved inputs against the
+cheaper model and compare the score.
+
+- **Same score** — use the cheaper one. That is the whole decision.
+- **Slightly worse** — is the difference material for this task? Often it is
+  not.
+- **Clearly worse** — you have found a task that needs the capability, and now
+  you know rather than assume.
+
+This takes fifteen minutes and frequently cuts the cost of a workflow by most
+of it.
+
+## The two-tier pattern
+
+The arrangement worth knowing, and the one that makes the trade-off disappear.
+
+**Cheap model first, capable model for the hard cases.** Run everything through
+the small one. Have it flag what it is unsure about — P1·L2's confidence field —
+and send only those to the capable model.
+
+If 85% of your cases are routine, you are paying the premium on 15% of them.
+Same quality where it matters, a fraction of the cost.
+
+## Not only about money
+
+Two other reasons to right-size, worth stating.
+
+**Speed.** Small models answer faster. In anything interactive, or anything
+running at volume, that is a real improvement rather than a consolation.
+
+**Energy.** E8·L5's argument. A larger model doing a small job costs more of
+everything, and choosing proportionately was named there as the most effective
+single action available to an individual.
+
+## Try it now (6 minutes)
+
+Take a task you run repeatedly on your usual model. Run the same five inputs
+through the cheapest model the provider offers.
+
+Compare honestly. If you cannot tell the difference, you have found a saving
+that costs you nothing.
+
+<Quiz client:visible items={[
+  {
+    q: "Which task most needs the most capable model?",
+    options: [
+      "Extracting a date from an email",
+      "A multi-step problem where getting step two wrong ruins the rest",
+      "Reformatting a list into a table"
+    ],
+    answer: 1,
+    explain: "Dependent steps, judgement between close options, long inputs and expensive errors are where capability earns its price."
+  },
+  {
+    q: "The right way to decide which model a task needs:",
+    options: [
+      "Use the most capable one to be safe",
+      "Run your evaluation set against the cheaper model and compare scores",
+      "Follow the provider's recommendation"
+    ],
+    answer: 1,
+    explain: "The answer is task-specific and frequently surprising. Fifteen minutes of measurement often removes most of a workflow's cost."
+  },
+  {
+    q: "The two-tier pattern means:",
+    options: [
+      "Alternating between two providers",
+      "Cheap model first, escalating only flagged uncertain cases to the capable one",
+      "Paying for two subscriptions"
+    ],
+    answer: 1,
+    explain: "If most cases are routine, you pay the premium only on the minority — same quality where it matters."
+  }
+]} />
+
+## Recap
+
+Learn the tiers rather than the product names, and reserve the top one for
+dependent steps, fine judgement, long inputs and expensive errors. Decide by
+running your evaluation set against a cheaper model rather than reasoning about
+it. Then use the two-tier pattern — cheap first, escalate the flagged cases —
+and take the speed and energy savings alongside the money.

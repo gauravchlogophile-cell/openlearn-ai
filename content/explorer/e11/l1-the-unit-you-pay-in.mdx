@@ -1,0 +1,157 @@
+---
+title: "The unit you pay in"
+description: "Tokens are not words, and that difference decides your bill. Why the same sentence costs more in Hindi than in English, and what follows from it."
+track: explorer
+module: e11
+order: 1
+minutes: 8
+objectives:
+  - "Explain what a token is and how it relates to text you write"
+  - "Recognise why non-Latin scripts cost more for the same meaning"
+concepts: ["tokens", "tokenisation", "script cost"]
+flashcards:
+  - front: "What is a token?"
+    back: "The chunk a model reads and writes in — roughly a short word or part of one, not a character and not a word."
+  - front: "Why does the same sentence cost more in Hindi than English?"
+    back: "Tokenisers were built mostly on English text, so other scripts split into many more tokens for the same meaning."
+  - front: "What are you charged for besides your question?"
+    back: "Everything in the context — the conversation so far, attached documents, and the answer produced."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+E2·L9 covered how to choose a tier. This module is about the mechanics
+underneath — what you are actually buying, why the amount changes, and how to
+stop being surprised.
+
+It starts with the unit, because almost every cost question resolves to it.
+
+## Tokens are chunks, not words
+
+Models do not read letters or words. They read **tokens** — chunks somewhere in
+between.
+
+In English a token is roughly three-quarters of a word. Common words are one
+token each. Longer or unusual words split: *unbelievable* might be three,
+*Bhattacharya* several. Spaces and punctuation count.
+
+A useful rough figure for English: **100 tokens ≈ 75 words**. A page is about
+500. This book-length article you are reading is a few thousand.
+
+You do not need precision. You need the shape, because the shape explains
+everything else in this module.
+
+## The part almost nobody is told
+
+Tokenisers were built largely from English text. So English packs efficiently,
+and **other scripts do not**.
+
+The same meaning, expressed in Hindi, Bengali, Tamil, Arabic, Thai, Korean or
+Amharic, frequently costs **several times more tokens** than in English.
+Non-Latin scripts fare worst; the effect is well documented and varies by
+language and by tokeniser.
+
+Three consequences follow, and they are not small:
+
+**You pay more for the same work.** Where billing is per token, writing in your
+own language costs a multiple of writing in English.
+
+**You hit limits sooner.** A document that fits comfortably in English may
+exceed the same context window in Bengali.
+
+**Free tiers run out faster** if they are metered by tokens rather than
+messages.
+
+Put beside E10, this is an equity problem with a mechanism: the people already
+getting lower-quality answers are also paying more for them. Worth knowing,
+worth naming, and it is improving as tokenisers get better — unevenly, and for
+the same commercial reasons E10 described.
+
+## You pay for the whole context, not your question
+
+The second thing people are surprised by.
+
+Every time you send a message in a conversation, the model is given **the entire
+conversation so far** — it has no memory between calls, so the history is
+re-sent each time. Add an attached document and that goes too.
+
+So a long thread does not cost the same each turn. It costs a little more every
+turn, because the context keeps growing. Message forty is substantially more
+expensive than message one, for the same length of question.
+
+L2 is what to do about that. For now, the rule: **cost tracks the whole
+context, not the thing you typed.**
+
+## Input and output are priced differently
+
+Most providers charge separately for tokens in and tokens out, and output is
+usually the more expensive of the two — often several times.
+
+That makes "give me a long detailed answer" a real cost decision rather than a
+free preference, and it makes *"answer in one paragraph"* a genuine saving
+rather than only a readability choice.
+
+## Where this does not apply
+
+Be clear about scope, because most readers are not on metered billing.
+
+A flat monthly subscription is not billed per token. There you are limited by
+message caps or usage limits instead, and the token mechanics matter indirectly
+— long contexts still consume your allowance faster.
+
+Per-token pricing applies when you use an API, most automation platforms, and
+some pay-as-you-go tiers. If you are building anything from the Practitioner
+track, that is you.
+
+## Try it now (5 minutes)
+
+Take a paragraph you wrote. Most providers publish a tokeniser tool — paste it
+in and see the count.
+
+If you work in a non-Latin script, paste the same meaning in both languages and
+compare. That ratio is your personal cost multiplier, and most people have never
+seen it.
+
+<Quiz client:visible items={[
+  {
+    q: "A token is:",
+    options: [
+      "One word",
+      "A chunk roughly three-quarters of an English word",
+      "A single character"
+    ],
+    answer: 1,
+    explain: "Common words are one token; longer or unusual ones split into several. About 100 tokens to 75 English words."
+  },
+  {
+    q: "The same meaning written in Hindi rather than English usually costs:",
+    options: [
+      "The same, since meaning is identical",
+      "Several times more tokens",
+      "Fewer tokens, as the script is denser"
+    ],
+    answer: 1,
+    explain: "Tokenisers were built largely on English text, so other scripts split into many more tokens — you pay more and hit limits sooner."
+  },
+  {
+    q: "Why does message forty in a thread cost more than message one?",
+    options: [
+      "Providers raise prices during long sessions",
+      "The whole conversation is re-sent each time, so the context keeps growing",
+      "Later answers are always longer"
+    ],
+    answer: 1,
+    explain: "Models have no memory between calls, so the history goes along with every new message."
+  }
+]} />
+
+## Recap
+
+Tokens are chunks between letters and words, roughly 100 to 75 English words —
+and considerably less efficient for non-Latin scripts, so the same meaning
+costs more in many languages. You pay for the whole context, which grows with
+every turn of a conversation, and output tokens usually cost more than input.
+Per-token billing applies to APIs and automation, not flat subscriptions.

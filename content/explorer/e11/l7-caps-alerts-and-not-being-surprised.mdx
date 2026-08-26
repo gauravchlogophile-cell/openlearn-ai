@@ -1,0 +1,151 @@
+---
+title: "Caps, alerts and not being surprised"
+description: "The invoice nobody expects comes from something automated running more than intended. Set the limits before you build, not after the bill arrives."
+track: explorer
+module: e11
+order: 7
+minutes: 8
+objectives:
+  - "Set spending limits and alerts before running anything unattended"
+  - "Recognise the automation patterns that produce runaway costs"
+concepts: ["spend caps", "alerts", "runaway loops"]
+flashcards:
+  - front: "When should a spending cap be set?"
+    back: "Before anything runs unattended. A cap added after the surprise did not prevent it."
+  - front: "Which automation patterns run away?"
+    back: "Retry loops with no limit, triggers that fire on their own output, and anything running per-item on an unbounded list."
+  - front: "What is the point of an alert, given a cap exists?"
+    back: "A cap stops the damage; an alert tells you something changed while there is still time to look."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Everything so far has been about steady cost. This lesson is about the other
+kind: the invoice with an unexpected number of digits.
+
+It almost never comes from a person using an assistant. It comes from something
+automated doing exactly what it was told, more times than anyone imagined.
+
+## Set the cap first
+
+The rule is simple and routinely skipped because it feels premature.
+
+**Before anything runs unattended, set a hard spending limit.** Most providers
+offer one. Set it to a number you would be annoyed but not damaged by.
+
+A cap set after the surprise is not a safeguard; it is a lesson. And the reason
+to do it before is that the runaway cases all happen fast — a loop does not
+gently drift over budget across a month.
+
+Set two levels where you can: a **soft alert** at a fraction of your expected
+spend, and a **hard stop** above it. The alert catches drift; the stop catches
+disaster.
+
+## The three patterns that run away
+
+**Unbounded retries.** A step fails, so it retries. It fails again, so it
+retries again. Without a maximum, a broken downstream service becomes an
+infinite paid loop. P1·L4 said define what happens on failure — this is the
+cost reason.
+
+**Output triggering input.** An automation that writes to the place it watches.
+It processes a row, writes a row, sees a new row, processes it. Rare, obvious in
+hindsight, and capable of enormous volume in minutes.
+
+**Per-item on an unbounded list.** "For every email", "for every row", "for
+every new file". Fine at ten. A backlog import of forty thousand is the same
+automation behaving identically.
+
+All three share a shape: **nothing in the design says how many times.**
+
+## Ask the question before you build
+
+One question, before anything unattended goes live:
+
+> **What is the maximum number of times this can run in an hour, and what does
+> that cost?**
+
+If you cannot answer it, you have not finished designing it. If the answer is
+"unlimited", add a limit — most automation platforms have a rate cap, and a
+counter that stops after N runs is trivial to add.
+
+This is the cost twin of P1·L4's validation. Same discipline, different failure.
+
+## Watch the rate, not just the total
+
+P1·L8 made this point about quality; it applies to money identically.
+
+A monthly total tells you after the fact. What you want is a signal that
+**today is different from last week** — spend per day, or runs per hour, with an
+alert on a step change.
+
+That is the difference between finding out on the 3rd and finding out on the
+30th.
+
+## Test on a small batch
+
+Before running an automation over everything, run it over ten items. Check the
+output and the cost.
+
+Multiply. If ten items cost more than you expected, ten thousand will cost very
+much more than you expected, and you have found that out for the price of ten.
+
+Obvious, and skipped constantly under deadline.
+
+## If you are on a subscription
+
+The same shapes apply, and the symptom is exhausting your allowance in an hour
+rather than a bill. Less alarming financially, equally disruptive — and
+frequently harder to diagnose, because nothing charged you.
+
+## Try it now (5 minutes)
+
+Open the billing settings of whatever you use for automation or API access.
+
+Find the spending limit. If there isn't one set, set it now — before you have a
+reason to. That is the entire lesson.
+
+<Quiz client:visible items={[
+  {
+    q: "A spending cap should be set:",
+    options: [
+      "After you understand your typical usage",
+      "Before anything runs unattended",
+      "Only when using an API rather than a subscription"
+    ],
+    answer: 1,
+    explain: "Runaway cases happen fast. A cap added after the surprise is a lesson rather than a safeguard."
+  },
+  {
+    q: "Which pattern most commonly causes a runaway cost?",
+    options: [
+      "A person asking many questions in one day",
+      "An unbounded retry loop, or a trigger that fires on its own output",
+      "Using the most capable model"
+    ],
+      answer: 1,
+    explain: "All the runaway shapes share one property: nothing in the design says how many times it can run."
+  },
+  {
+    q: "The question to answer before any unattended automation goes live:",
+    options: [
+      "How accurate is the output?",
+      "What is the maximum number of times this can run in an hour, and what does that cost?",
+      "Which model should it use?"
+    ],
+    answer: 1,
+    explain: "If you cannot answer it, the design is not finished. If the answer is 'unlimited', add a limit."
+  }
+]} />
+
+## Recap
+
+Set a hard cap and a soft alert before anything runs unattended, because the
+expensive failures happen in minutes rather than drifting over a month. Watch
+for the three runaway shapes — unbounded retries, output feeding input, and
+per-item work on an unbounded list — all of which share the property that
+nothing says how many times. Test on ten items and multiply before running on
+everything.
