@@ -4,6 +4,7 @@ import TryOneQuestion from '../components/TryOneQuestion.tsx';
 import { getCollection } from 'astro:content';
 import meta from '../../content/modules.json';
 import { BADGES } from '../lib/progress-core.js';
+import { CERTIFICATION_LIVE } from '../lib/certification';
 
 const all = await getCollection('lessons');
 
@@ -48,8 +49,17 @@ const tracks = meta.tracks.map((t) => {
       Learn AI.<br />Free.<br />Forever.
     </h1>
     <p class="prose" style="color:var(--c-ink-soft);margin:0 0 var(--sp-6);">
-      From zero to builder — an open-source curriculum with hands-on practice,
-      honest guidance, and free certificates. No paywalls. No tricks.
+      From zero to builder — an open-source curriculum with hands-on practice and
+      honest guidance. Finish a module and you earn a record of it.
+      {/* The design's wording for this line was "…and a certificate if you sit
+          the assessment", which reads as available now. Turn 10i's whole point
+          is that the site stop overclaiming "whether or not the build lands on
+          time" — so the second clause states the real state, and flips on its
+          own the day issuance ships. */}
+      {CERTIFICATION_LIVE
+        ? ' Sit its assessment and you earn a certificate.'
+        : ' Certificates add an assessment — designed, not open yet.'}
+      {' '}No paywalls. No tricks.
     </p>
 
     <div style="display:flex;flex-wrap:wrap;gap:var(--sp-3);">
@@ -89,7 +99,7 @@ const tracks = meta.tracks.map((t) => {
       Because knowledge about AI shouldn't depend on the size of your wallet.
       We're grant- and donation-funded, fully open source, and we publish our
       finances. Nothing you need is ever behind money — not lessons, not
-      practice, not certificates.
+      practice, not records, not certificates.
     </p>
     <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:var(--sp-6);">
       {[

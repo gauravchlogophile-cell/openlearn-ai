@@ -3,6 +3,12 @@
   "entries": [
     {
       "date": "2026-08-26",
+      "kind": "Content updated",
+      "where": "Whole site",
+      "what": "Corrected how the site describes certification, which it had been promising in more places than it could deliver. There are two things, and they were being said as one: a Module Record, earned by finishing every lesson, which is issued today; and a Lrnon Certificate, which additionally requires passing that module's assessment, and which nothing on the site can issue yet. The landing page said 'free certificates', E7 said it was 'compulsory for certification', and the achievements page listed the two together. All of that now names the tier and says what it takes. Two words are retired: 'compulsory', because nothing on Lrnon is, and 'certified' as a verb, because it implies an authority we are not. The entry below of 26 August is left as it was published, wrong claim included — a correction belongs in a new dated entry, not in a quiet edit to an old one. Anyone who finished E7 under the old wording will be told directly when the assessment opens, and will not be charged to sit it."
+    },
+    {
+      "date": "2026-08-26",
       "kind": "Accessibility",
       "where": "Whole site",
       "what": "Every lesson that names a tool now shows where the description came from and when it was last checked, with a warning when that is over 120 days old. A new About page states the position on brands and sources: no sponsorship ever, neutral rather than silent, and the vendor is always the authority over us."

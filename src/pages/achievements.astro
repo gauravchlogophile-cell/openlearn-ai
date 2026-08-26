@@ -2,10 +2,22 @@
 import Base from '../layouts/Base.astro';
 import BadgeGrid from '../components/BadgeGrid.tsx';
 import { getCollection } from 'astro:content';
+import modulesData from '../../content/modules.json';
+import { TIERS, ASSESSED_MODULES, assessedCount, CERTIFICATION_LIVE } from '../lib/certification';
 
 const lessons = await getCollection('lessons');
 const moduleTotals: Record<string, number> = {};
 for (const l of lessons) moduleTotals[l.data.module] = (moduleTotals[l.data.module] ?? 0) + 1;
+
+/* Turn 10i asks this page to stop saying "Certificates" over a list that mixes
+   two different things, and to show a count rather than a bare "none yet" — so
+   a learner can see how much is assessed at all. Both the names and the count
+   are derived from ASSESSED_MODULES, so neither can drift above reality. */
+const assessed = ASSESSED_MODULES
+  .map((id) => modulesData.modules.find((m) => m.id === id))
+  .filter((m): m is NonNullable<typeof m> => Boolean(m));
+const assessedNames = assessed.map((m) => m.title);
+const n = assessedCount();
 ---
 <Base title="Achievements — Lrnon"
   description="Your badges — every criterion public, nothing hidden. Earned through learning, never through spending, because coins can't buy credentials here.">
@@ -13,9 +25,40 @@ for (const l of lessons) moduleTotals[l.data.module] = (moduleTotals[l.data.modu
     <h1 style="font-size:var(--fs-500);">Achievements</h1>
     <p class="prose" style="color:var(--c-ink-soft);">
       Every badge's criterion is public — there are no hidden achievements and
-      nothing here can be bought. Badges celebrate habits; certificates (coming
-      with module quizzes) attest skills. The two are deliberately separate.
+      nothing here can be bought. Badges celebrate habits; records and
+      certificates attest skills. The three are deliberately separate.
     </p>
     <BadgeGrid client:load moduleTotals={moduleTotals} />
+
+    {/* Two labelled groups, never one list. A record and a certificate mean
+        different things — one says you finished, the other says you were
+        assessed — and merging them under a single "Certificates" heading was
+        how the site came to imply it awards more than it does. */}
+    <h2 style="font-size:var(--fs-400);margin-top:var(--sp-12);">Records &amp; certificates</h2>
+
+    <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:var(--sp-4);">
+      <div class="card">
+        <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">{TIERS.record.plural}</h3>
+        <p class="prose" style="color:var(--c-ink-soft);margin:0;">
+          Earned by {TIERS.record.earnedBy}. Every module issues one, and your
+          progress towards each is on <a href="/home">your dashboard</a>.
+        </p>
+      </div>
+
+      <div class="card">
+        <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">{TIERS.certificate.plural}</h3>
+        <p class="prose" style="color:var(--c-ink-soft);margin:0;">
+          Earned by {TIERS.certificate.earnedBy}.
+          {CERTIFICATION_LIVE
+            ? <>{n === 1 ? 'One module is' : `${n} modules are`} assessed
+                today — {assessedNames.join(', ')}.</>
+            : <>No certificates yet: assessments are designed and not yet open.
+                {' '}{n === 1 ? 'One module is' : `${n} modules are`} in the
+                first round — {assessedNames.join(', ')} — and anyone who has
+                already finished {n === 1 ? 'it' : 'them'} will be told when
+                the assessment opens.</>}
+        </p>
+      </div>
+    </div>
   </section>
 </Base>
