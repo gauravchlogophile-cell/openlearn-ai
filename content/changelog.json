@@ -2,6 +2,12 @@
   "_comment": "Every change to the learning content, dated — including the ones that make us look bad. A lesson that was wrong is more useful to a learner as a published correction than as a quiet edit. Hand-maintained on purpose: git history records what changed, not why it mattered or who caught it. Newest first. 'kind' must be one of the values scripts/validate-content.mjs allows.",
   "entries": [
     {
+      "date": "2026-08-26",
+      "kind": "New module",
+      "where": "Explorer · E4",
+      "what": "Everyday Productivity published — eight lessons on where AI actually fits in your day, email, reading long documents, research that cites its sources, meeting notes, planning, a twenty-minute routine, and what not to hand over."
+    },
+    {
       "date": "2026-08-22",
       "kind": "Accessibility",
       "where": "Whole site",

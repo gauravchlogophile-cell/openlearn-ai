@@ -1,0 +1,261 @@
+{
+  "module": "e4",
+  "title": "Everyday Productivity — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "e4-01",
+      "q": "The better question to ask about a task is:",
+      "options": [
+        "Can an assistant do this?",
+        "How often do I do it, and what does it cost me to check?",
+        "Is this task important?"
+      ],
+      "answer": 1,
+      "explain": "\"Can it?\" is almost always a qualified yes, which tells you nothing about whether you should. Frequency and verification cost do."
+    },
+    {
+      "id": "e4-02",
+      "q": "Verification cost is:",
+      "options": [
+        "The monthly price of the assistant",
+        "The time it takes you to confirm the output is right",
+        "How long the assistant takes to respond"
+      ],
+      "answer": 1,
+      "explain": "If checking takes as long as doing the task, you have moved the work rather than reduced it."
+    },
+    {
+      "id": "e4-03",
+      "q": "Which task sits in the box where the real gains are?",
+      "options": [
+        "A rare task where a mistake would be costly",
+        "A frequent task whose output you can check at a glance",
+        "A task you have never done before"
+      ],
+      "answer": 1,
+      "explain": "Frequent and cheap to check repays the setup. Rare tasks do not, and unverifiable ones transfer risk instead of saving time."
+    },
+    {
+      "id": "e4-04",
+      "q": "Asking for a \"professional tone\" tends to produce generic email because:",
+      "options": [
+        "The model cannot process tone instructions",
+        "An adjective selects the average of all business email it has seen",
+        "Professional email is inherently formulaic"
+      ],
+      "answer": 1,
+      "explain": "Supplying two of your own sent emails gives it specific evidence to match, instead of an average to reach for."
+    },
+    {
+      "id": "e4-05",
+      "q": "Which email should you always write yourself?",
+      "options": [
+        "Confirming a meeting time",
+        "An apology",
+        "Forwarding a document with a one-line note"
+      ],
+      "answer": 1,
+      "explain": "An apology you did not compose is not one. Where the effort is the message, delegating it removes the message."
+    },
+    {
+      "id": "e4-06",
+      "q": "A drafted email contains a deadline you never agreed to and you send it. This is:",
+      "options": [
+        "Your responsibility — it went out in your name",
+        "A vendor defect",
+        "Not a problem unless the recipient objects"
+      ],
+      "answer": 0,
+      "explain": "Sending is the act that makes it yours, which is why every name, number and commitment is read before it goes."
+    },
+    {
+      "id": "e4-07",
+      "q": "The safest use of a summary of a document you have not read is:",
+      "options": [
+        "As a map to decide which sections to read properly",
+        "As a replacement, provided the summary is detailed",
+        "As material to quote in your own work"
+      ],
+      "answer": 0,
+      "explain": "Repeating a summary's claims as your own knowledge asserts things you have not checked, in a form that sounds like you did."
+    },
+    {
+      "id": "e4-08",
+      "q": "Asking a summary to quote the source helps because:",
+      "options": [
+        "Quoting makes models more accurate",
+        "A quote is checkable, and paraphrase is where a hedge disappears",
+        "Quotes make the summary more complete"
+      ],
+      "answer": 1,
+      "explain": "You can search the document for a quote. \"May reduce costs in some settings\" becoming \"reduces costs\" is exactly what a quote exposes."
+    },
+    {
+      "id": "e4-09",
+      "q": "Summaries systematically lose:",
+      "options": [
+        "The central argument",
+        "Hedging, conditions and dissent",
+        "Dates and figures"
+      ],
+      "answer": 1,
+      "explain": "Summarising optimises for the main thrust, and qualifiers are not the main thrust — though in contracts and papers they are often the point."
+    },
+    {
+      "id": "e4-10",
+      "q": "An answer carrying four citations means:",
+      "options": [
+        "Four sources independently confirmed it",
+        "Four pages were retrieved and used while composing it",
+        "The claim has been fact-checked"
+      ],
+      "answer": 1,
+      "explain": "Citation records retrieval, not verification. The page may not contain the specific claim assembled around it."
+    },
+    {
+      "id": "e4-11",
+      "q": "The fastest way to catch a citation that does not support its claim:",
+      "options": [
+        "Count the citations",
+        "Search the linked page for the specific number or phrase",
+        "Ask the assistant how confident it is"
+      ],
+      "answer": 1,
+      "explain": "Searching for the exact claim rather than the topic is where most failures surface. A model's stated confidence is not evidence."
+    },
+    {
+      "id": "e4-12",
+      "q": "Why ask for the strongest evidence against a claim?",
+      "options": [
+        "Negative questions produce shorter answers",
+        "A question with the answer baked in retrieves agreeable material",
+        "It makes the assistant search more sources"
+      ],
+      "answer": 1,
+      "explain": "Supporting material exists for almost any position. Permitting a no, and permitting \"the evidence is mixed\", is what surfaces disagreement."
+    },
+    {
+      "id": "e4-13",
+      "q": "In a structured meeting summary, the most valuable section is usually:",
+      "options": [
+        "Decisions",
+        "The unclear and unresolved items",
+        "Attendees"
+      ],
+      "answer": 1,
+      "explain": "Decisions you already know. What nobody settled, and what has no owner, is the follow-up list a tidy summary hides."
+    },
+    {
+      "id": "e4-14",
+      "q": "A tidy meeting summary can be worse than messy notes because:",
+      "options": [
+        "It takes longer to read",
+        "Its cleanliness implies an agreement the meeting never reached",
+        "It leaves out the date"
+      ],
+      "answer": 1,
+      "explain": "Readable prose resolves ambiguity, producing a written record of a decision nobody made — which later becomes the authority."
+    },
+    {
+      "id": "e4-15",
+      "q": "Before transcribing a meeting you should:",
+      "options": [
+        "Confirm everyone present knows and agrees",
+        "Nothing — it is a standard tool feature",
+        "Mention it when you circulate the notes"
+      ],
+      "answer": 0,
+      "explain": "In many jurisdictions consent is a legal requirement rather than a courtesy, and automatic transcription counts."
+    },
+    {
+      "id": "e4-16",
+      "q": "In planning, assistants are genuinely reliable at:",
+      "options": [
+        "Estimating durations",
+        "Listing steps and dependencies you have forgotten",
+        "Deciding which milestones matter"
+      ],
+      "answer": 1,
+      "explain": "Decomposition draws on many descriptions of how work gets done. Durations and priorities depend on your situation, which it cannot see."
+    },
+    {
+      "id": "e4-17",
+      "q": "AI time estimates lean optimistic because:",
+      "options": [
+        "Models are tuned to be encouraging",
+        "Written accounts describe the intended path more than the delayed one",
+        "They assume you work on nothing else"
+      ],
+      "answer": 1,
+      "explain": "The estimate reflects how long tasks are described as taking, and descriptions skew towards the plan rather than the waiting."
+    },
+    {
+      "id": "e4-18",
+      "q": "A pre-mortem asks the assistant to:",
+      "options": [
+        "List general risks",
+        "Assume the plan failed and give specific likely reasons",
+        "Estimate each phase"
+      ],
+      "answer": 1,
+      "explain": "Assuming failure and demanding specifics surfaces preventable problems. \"Poor communication\" is not a reason you can act on."
+    },
+    {
+      "id": "e4-19",
+      "q": "A new routine should be sized so that:",
+      "options": [
+        "It fills the time you have on a good day",
+        "You can complete it on your worst realistic day",
+        "It covers every task you identified"
+      ],
+      "answer": 1,
+      "explain": "A routine is tested in the week you are ill and behind. One abandoned in week two saves nothing and cost you the setup."
+    },
+    {
+      "id": "e4-20",
+      "q": "The paste test asks whether:",
+      "options": [
+        "The assistant offers an enterprise tier",
+        "You would be comfortable if this text appeared in an email outside your organisation",
+        "The text fits in the context window"
+      ],
+      "answer": 1,
+      "explain": "It is a fast proxy for confidentiality that works without reading a policy. If the answer is no, the text does not go in."
+    },
+    {
+      "id": "e4-21",
+      "q": "An enterprise tier usually means:",
+      "options": [
+        "Your input is guaranteed private",
+        "Your text is not used for training, which is a narrower promise",
+        "Your text is never stored at all"
+      ],
+      "answer": 1,
+      "explain": "Not used for training says nothing about storage, processing location, or the obligations you personally are under."
+    },
+    {
+      "id": "e4-22",
+      "q": "Decisions about people should stay with a human because:",
+      "options": [
+        "The output is usually obviously poor",
+        "Accountability cannot move to a tool, and the person is owed a human judgement",
+        "Models are slower at these decisions"
+      ],
+      "answer": 1,
+      "explain": "The output often reads well, which is the danger. Someone must be answerable, and being sorted by something that cannot be argued with is its own harm."
+    },
+    {
+      "id": "e4-23",
+      "q": "\"The difficulty is the point\" describes work where:",
+      "options": [
+        "The task is unusually technical",
+        "The effort is the product — thinking it through is how you understand it",
+        "The deadline is tight"
+      ],
+      "answer": 1,
+      "explain": "Hand it over and you get the artefact without the understanding it was for, which is invisible now and expensive when you must defend it."
+    }
+  ]
+}

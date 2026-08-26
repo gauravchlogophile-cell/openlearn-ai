@@ -99,6 +99,42 @@ for (const file of lessonFiles) {
   const body = src.replace(/^---\n[\s\S]*?\n---/, '');
   if (!/##\s*Recap/i.test(body)) errors.push(`${rel}: missing "## Recap" section`);
   if (/<script/i.test(body)) errors.push(`${rel}: raw <script> is forbidden (FR-CONT-2)`);
+
+  /* Every lesson must carry an inline quiz.
+     This is not a style rule — lesson completion depends on it. A learner
+     only earns the tick and the XP for a lesson after answering its questions
+     at least once, so a lesson shipped without a quiz silently changes how
+     completion works for that lesson: CompleteButton falls back to unlocked,
+     the tick becomes a click rather than something earned, and the module's
+     progress bar starts counting a lesson nobody was checked on. The fallback
+     exists so a missing quiz cannot strand a learner; this rule exists so a
+     missing quiz cannot happen by accident in the first place. */
+  const quizTag = body.match(/<Quiz\b[\s\S]*?\/>/);
+  if (!quizTag) {
+    errors.push(`${rel}: no <Quiz> — every lesson needs one, because the completion tick depends on answering it`);
+  } else {
+    if (!/import\s+Quiz\s+from/.test(body))
+      errors.push(`${rel}: uses <Quiz> without importing it`);
+    if (!/client:visible/.test(quizTag[0]))
+      errors.push(`${rel}: <Quiz> must be client:visible or it never hydrates`);
+
+    /* Shape-check the questions. The module-quiz banks in content/quizzes are
+       already validated below; inline quizzes had no equivalent, so a typo in
+       an answer index would have shipped as a question that marks the correct
+       response wrong. */
+    const qs = [...quizTag[0].matchAll(/\bq:\s*["']/g)].length;
+    const opts = [...quizTag[0].matchAll(/\boptions:\s*\[/g)].length;
+    const answers = [...quizTag[0].matchAll(/\banswer:\s*(\d+)/g)];
+    const explains = [...quizTag[0].matchAll(/\bexplain:\s*["']/g)].length;
+    if (qs < 1) errors.push(`${rel}: <Quiz> has no questions`);
+    if (qs !== opts || qs !== answers.length || qs !== explains)
+      errors.push(`${rel}: <Quiz> malformed — ${qs} q, ${opts} options, ${answers.length} answer, ${explains} explain (each question needs all four)`);
+    // Options are shuffled at display time, so the stored index only has to be
+    // in range for the smallest option list we can see.
+    for (const a of answers)
+      if (Number(a[1]) > 3)
+        errors.push(`${rel}: <Quiz> answer index ${a[1]} looks out of range`);
+  }
   for (const w of ['revolutionary','game-changing','mind-blowing','superpower'])
     if (new RegExp(`\\b${w}`, 'i').test(body))
       warnings.push(`${rel}: hype word "${w}" — style guide asks for plain claims`);

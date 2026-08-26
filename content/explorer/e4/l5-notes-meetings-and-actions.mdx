@@ -1,0 +1,137 @@
+---
+title: "Notes, meetings and actions"
+description: "Turning messy notes into decisions and owned actions — and why the useful output is the list of things nobody agreed, not the tidy summary."
+track: explorer
+module: e4
+order: 5
+minutes: 8
+objectives:
+  - "Convert raw notes into decisions, owners and deadlines"
+  - "Surface ambiguity instead of letting a tidy summary conceal it"
+concepts: ["action items", "ownership", "ambiguity"]
+flashcards:
+  - front: "What is the most valuable part of a meeting summary?"
+    back: "The list of things discussed but not decided, and actions with no clear owner."
+  - front: "Why is a tidy meeting summary sometimes worse than messy notes?"
+    back: "Tidiness implies agreement. A summary that resolves an unresolved discussion records a decision nobody made."
+  - front: "What consent question comes before recording a meeting?"
+    back: "Whether everyone present has agreed — recording and transcription usually require it, and in many places by law."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+You leave a meeting with three pages of half-sentences. A week later nobody can
+remember who agreed to do what, and the notes do not say.
+
+This is a genuinely good use of an assistant, because the raw material is
+already yours and you can check the output instantly — L1's test, satisfied.
+There is one specific way it goes wrong, and it is worth the whole lesson.
+
+## Ask before you record
+
+Before any of this: if you are recording or transcribing a meeting, **everyone
+present needs to know and agree**. In many jurisdictions that is not a courtesy
+but a legal requirement, and it applies to the quiet automatic transcription
+your conferencing tool offers as much as to a phone on the table.
+
+Ask at the start. It takes five seconds and there is no version of this where
+finding out afterwards goes well.
+
+## Notes in, structure out
+
+The useful instruction separates three different kinds of thing that messy
+notes mix together:
+
+> *These are my raw notes from a meeting. Produce:*
+>
+> *DECISIONS — what was actually settled. Only include something if the notes
+> show agreement.*
+> *ACTIONS — one line each: owner — action — deadline.*
+> *OPEN — anything discussed but not resolved.*
+> *UNCLEAR — anything where you cannot tell whether it was decided, or who
+> owns it. Quote the note you are unsure about.*
+>
+> *Do not invent owners or deadlines. If the notes do not say, put it in
+> UNCLEAR.*
+
+That final instruction is the one that makes this work.
+
+## The tidy summary problem
+
+Left alone, a summariser resolves ambiguity. It is not being careless — it is
+producing readable prose, and readable prose does not say "somebody might do
+this, unclear who".
+
+So a genuinely unresolved discussion arrives as *"The team agreed to review the
+pricing in Q3"*, and now there is a written record of a decision that was never
+made. Six weeks later that sentence is the authority, and the person it
+implicitly assigned has no idea.
+
+This is worse than messy notes, because messy notes are visibly messy. A clean
+document implies a clarity the meeting did not have.
+
+Hence the UNCLEAR section. You are asking the assistant to **preserve** the
+ambiguity rather than smooth it, and to show you the note it could not read.
+Those items are your follow-up list, and they are the most valuable output.
+
+## Actions need a person
+
+An action without an owner is a wish. "We should update the docs" appears in
+every set of notes ever taken and is never done.
+
+Insist on the `owner — action — deadline` shape, and let anything missing a
+part fall into UNCLEAR rather than being quietly completed. Then, before
+circulating, do the one thing the assistant cannot: check that each named owner
+actually agreed. Being assigned a task by somebody else's meeting notes is a
+small daily indignity of working life, and you can avoid inflicting it.
+
+## Try it now (6 minutes)
+
+Take your most recent messy notes and run the structure above.
+
+Look only at UNCLEAR and OPEN. Those are the questions to ask before you
+circulate anything. If UNCLEAR came back empty on genuinely messy notes, be
+suspicious — the ambiguity did not vanish, it got resolved for you.
+
+<Quiz client:visible items={[
+  {
+    q: "The most valuable section of a structured meeting summary is usually:",
+    options: [
+      "The decisions list",
+      "The unclear and unresolved items",
+      "The attendee list"
+    ],
+    answer: 1,
+    explain: "Decisions you already know. What nobody settled, and what has no owner, is the follow-up list — and it is what a tidy summary hides."
+  },
+  {
+    q: "Why can a tidy summary be worse than messy notes?",
+    options: [
+      "It is longer",
+      "Its cleanliness implies an agreement the meeting did not reach",
+      "It omits the date"
+    ],
+    answer: 1,
+    explain: "Readable prose resolves ambiguity. That produces a written record of a decision nobody actually made, and it becomes the authority later."
+  },
+  {
+    q: "Before transcribing a meeting you should:",
+    options: [
+      "Check that everyone present knows and agrees",
+      "Nothing — transcription is a normal tool feature",
+      "Tell them afterwards when you circulate the notes"
+    ],
+    answer: 0,
+    explain: "Consent comes first, and in many jurisdictions it is a legal requirement rather than a courtesy. Automatic transcription counts."
+  }
+]} />
+
+## Recap
+
+Get consent before recording. Ask for decisions, actions, open items and an
+explicit unclear list, forbid invented owners and deadlines, and treat the
+unclear section as the real output. An action without a person is a wish, and a
+summary that tidies away disagreement has recorded a decision nobody made.

@@ -1,0 +1,137 @@
+---
+title: "Reading long things faster"
+description: "Summaries are useful and quietly risky. How to use one as a map into a document rather than a substitute for having read it."
+track: explorer
+module: e4
+order: 3
+minutes: 8
+objectives:
+  - "Use a summary as a map into a document rather than a replacement for it"
+  - "Ask for structure and quotes so claims stay traceable to the source"
+concepts: ["summarising", "traceability", "extractive vs abstractive"]
+flashcards:
+  - front: "What is the safest way to use a summary of something you have not read?"
+    back: "As a map — to decide which parts to read properly. Not as the thing you now know."
+  - front: "Why ask a summary to quote the source?"
+    back: "A quote is checkable. A paraphrase is not, and it is where a subtle distortion hides."
+  - front: "What does a summary systematically lose?"
+    back: "Hedging, conditions and dissent — the qualifiers that made the original accurate."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Summarising is the most-used feature in this entire module and the one most
+likely to quietly mislead you. Both things are true at once, and the difference
+comes down to what you do with the summary afterwards.
+
+## What a summary is for
+
+A summary is a **map**. It tells you the shape of a document and where the
+interesting parts are, so you can read those properly.
+
+It is not a replacement for having read the thing. The moment you start
+repeating a summary's claims as your own knowledge, you are asserting things
+you have not checked, in a form that sounds like you checked them.
+
+L1's rule applies exactly here. Summarising a thread you were in is cheap to
+verify — you were there. Summarising a report you have never opened is not, and
+that is the case where an error survives.
+
+## Ask for structure, not prose
+
+A paragraph summary invites you to accept it and move on. A structured one
+gives you somewhere to push back:
+
+> *Summarise the document below as:*
+> *1. The claim it is making, in one sentence.*
+> *2. The three pieces of evidence it leans on hardest.*
+> *3. Anything it explicitly says it is NOT claiming.*
+> *4. Any numbers, with their units and dates.*
+> *5. Questions a sceptical reader would ask that it does not answer.*
+
+Point three and point five are the valuable ones. Documents are careful about
+what they exclude, and a generic summary flattens exactly that care. Asking
+what the document declines to claim recovers it.
+
+## Make it quote
+
+Add one instruction and the reliability changes:
+
+> *For each point, include the sentence from the source it came from, in
+> quotation marks.*
+
+A quote is **checkable**. You can search the document for it. A paraphrase is
+not, and paraphrase is where a hedge quietly disappears — "may reduce costs in
+some settings" becomes "reduces costs", and the summary is now wrong in the
+direction you would most like it to be right.
+
+If a quote does not appear in the source when you search for it, you have
+learned something important about that summary and everything else in it.
+
+## What summaries lose
+
+Even a good summary systematically drops three things:
+
+- **Hedging.** *Preliminary*, *in this sample*, *further work is needed*.
+- **Conditions.** The circumstances under which the claim holds.
+- **Dissent.** Minority positions, dissenting notes, the paragraph that
+  disagrees with the rest.
+
+These are dropped because summarisation optimises for the main thrust, and
+qualifiers are not the main thrust. But in a report, a contract or a paper,
+those qualifiers are frequently the entire point.
+
+So when the stakes are real, read the original sections your map pointed at.
+The summary got you there in a tenth of the time. That was the win.
+
+## Try it now (6 minutes)
+
+Take a long document you actually need to read. Ask for the five-point
+structure above, with quotes.
+
+Then search the document for two of the quotes. Confirm they exist and that the
+surrounding sentence means what the summary implied. This check takes a minute
+and will tell you how much to trust the rest.
+
+<Quiz client:visible items={[
+  {
+    q: "The safest use of a summary of a document you have not read is:",
+    options: [
+      "As a map to decide which sections to read properly",
+      "As a replacement, if the summary looks thorough",
+      "As something to quote directly in your own work"
+    ],
+    answer: 0,
+    explain: "A summary tells you the shape of a document. Repeating its claims as your own asserts things you have not checked."
+  },
+  {
+    q: "Why ask a summary to include quotes from the source?",
+    options: [
+      "Quotes make the summary longer and more complete",
+      "A quote is checkable, and paraphrase is where a hedge disappears",
+      "Models are more accurate when quoting"
+    ],
+    answer: 1,
+    explain: "You can search the document for a quote. 'May reduce costs in some settings' becoming 'reduces costs' is exactly the distortion a quote exposes."
+  },
+  {
+    q: "Which does a summary systematically lose?",
+    options: [
+      "The document's main argument",
+      "Hedging, conditions and dissent",
+      "Names and dates"
+    ],
+    answer: 1,
+    explain: "Summarising optimises for the main thrust, and qualifiers are not the main thrust — although in contracts and papers they are often the point."
+  }
+]} />
+
+## Recap
+
+Treat a summary as a map into the document, ask for structure rather than
+prose, require quotes so claims stay traceable, and remember that hedging,
+conditions and dissent are the first things lost. Where the stakes are real,
+the summary tells you what to read — it does not tell you that you have read it.

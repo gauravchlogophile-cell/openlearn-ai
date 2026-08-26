@@ -1,0 +1,144 @@
+---
+title: "What not to hand over"
+description: "The boundary that makes the rest of this module safe: confidential material, decisions about people, and the work whose difficulty is the point."
+track: explorer
+module: e4
+order: 8
+minutes: 9
+objectives:
+  - "Apply a confidentiality test before pasting anything into an assistant"
+  - "Identify work whose difficulty is the point and should stay yours"
+concepts: ["confidentiality", "accountability", "judgement"]
+flashcards:
+  - front: "What is the paste test?"
+    back: "Would you be comfortable if this text appeared in an email to someone outside your organisation? If not, it does not go in."
+  - front: "Why should decisions about people not be delegated?"
+    back: "They require accountability a tool cannot hold, and the person affected is owed a human judgement."
+  - front: "What does 'the difficulty is the point' mean?"
+    back: "Some work — thinking a problem through, learning a subject — has the effort as the product. Removing it removes the benefit."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Every previous lesson expanded what you hand over. This one draws the line, and
+it is the most important lesson in the module — a productivity routine without
+a boundary is just a faster way to make a serious mistake.
+
+Three categories. They are not equally obvious.
+
+## What you paste
+
+The most common workplace incident with AI is not a dramatic one. It is
+somebody pasting something they should not have into a box, because it was the
+fastest way to get a task done.
+
+Use the **paste test**:
+
+> Would I be comfortable if this exact text appeared in an email to someone
+> outside my organisation?
+
+If not, it does not go in. That covers customer records, unreleased financials,
+anything under NDA, colleagues' personal details, medical or immigration
+information, credentials, and internal documents about people.
+
+Two things people get wrong here:
+
+**"It's just a summary."** The summary contains the confidential part, or you
+would not need it summarised.
+
+**"Enterprise means private."** Enterprise tiers usually mean your text is not
+used for training. Not that it is never stored, never processed elsewhere, or
+covered by whatever obligation you personally are under. Check your
+organisation's actual policy — and if there isn't one, that is not permission.
+
+Where the material is sensitive but the task is real, change the input: remove
+the names, replace the figures with plausible fakes, or describe the shape of
+the problem rather than pasting the thing.
+
+## Decisions about people
+
+Hiring, firing, promotion, discipline, grading, credit, benefit, suspicion.
+
+Not because a model produces obviously bad output on these — the output often
+reads well, which is the danger. Two reasons:
+
+**Accountability.** Somebody has to be answerable to the person affected. A
+tool cannot be, so the responsibility does not actually move — it just becomes
+easier to feel it has.
+
+**The person is owed a human judgement.** Being sorted by something that cannot
+be argued with is a specific kind of harm, distinct from being sorted wrongly.
+
+Assistants can still help around the edges: checking your written reasoning is
+clear, or asking what you might have missed. The judgement stays with you, and
+so does the conversation.
+
+## When the difficulty is the point
+
+The subtlest category, and the one that costs you slowly.
+
+Some work has effort as the product. Thinking through a hard problem is how you
+come to understand it. Writing an argument is how you find out whether you
+believe it. Struggling with a subject is how it gets learned — including, quite
+directly, this course.
+
+Hand those over and you get the artefact without the thing the artefact was for.
+The document exists. The understanding does not. That is invisible in the
+moment and expensive later, in the meeting where you have to defend it.
+
+A test that works: **will I need to defend, extend, or build on this?** If yes,
+do the thinking. Use the assistant to check it afterwards, which is a genuinely
+good use — one that strengthens your understanding rather than substituting for
+it.
+
+## Try it now (7 minutes)
+
+Look back at the routine you built in L7. For each step, ask the paste test.
+If any step involves material that would fail it, rewrite that step to remove
+the names and figures — or drop it.
+
+Then ask whether any step is doing thinking you will later have to defend.
+
+<Quiz client:visible items={[
+  {
+    q: "The paste test asks:",
+    options: [
+      "Whether the assistant has an enterprise tier",
+      "Whether you would be comfortable if this text appeared in an email outside your organisation",
+      "Whether the text is longer than a page"
+    ],
+    answer: 1,
+    explain: "It is a fast proxy for confidentiality that works without reading a policy. If the answer is no, the text does not go in."
+  },
+  {
+    q: "Does an enterprise tier mean your input is private?",
+    options: [
+      "Yes — enterprise agreements guarantee privacy",
+      "It usually means your text is not used for training, which is not the same thing",
+      "Only if you disable chat history"
+    ],
+    answer: 1,
+    explain: "Not used for training is a narrower promise than never stored or processed, and it says nothing about the obligations you personally are under."
+  },
+  {
+    q: "Why keep decisions about people out of an assistant?",
+    options: [
+      "The output is usually obviously poor",
+      "Accountability cannot move to a tool, and the person is owed a human judgement",
+      "It is slower than deciding yourself"
+    ],
+    answer: 1,
+    explain: "The output often reads well, which is the danger. Someone must remain answerable, and being sorted by something that cannot be argued with is its own harm."
+  }
+]} />
+
+## Recap
+
+Apply the paste test before anything goes in, keep decisions about people with
+the human who must answer for them, and do the thinking you will later have to
+defend. The boundary is what makes the rest of the module safe — and it
+completes E4: you now know where AI fits in your day, how to use it for email,
+reading, research, notes and planning, and where to stop.

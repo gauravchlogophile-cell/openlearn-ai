@@ -1,0 +1,138 @@
+---
+title: "Where AI actually fits in your day"
+description: "Not every task is worth handing over. A short audit of your own week that finds the few places AI genuinely pays, and the many where it does not."
+track: explorer
+module: e4
+order: 1
+minutes: 7
+objectives:
+  - "Audit your recurring tasks by frequency and stakes"
+  - "Identify the tasks where an assistant actually pays for itself"
+concepts: ["task audit", "stakes", "verification cost"]
+flashcards:
+  - front: "Which tasks are worth handing to an assistant?"
+    back: "Ones you repeat often, where the output is quick to check and a mistake is cheap to fix."
+  - front: "What is verification cost?"
+    back: "The time it takes you to confirm the output is right. If checking takes longer than doing, you have saved nothing."
+  - front: "Why is a rare, high-stakes task a poor candidate?"
+    back: "You get no practice benefit from automating it, and the cost of a missed error is high."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Most advice about AI at work starts from the tool and looks for a use. This
+module starts from your week and looks for the gaps.
+
+That order matters, because the honest answer is that an assistant is
+excellent at a handful of things you do constantly and mediocre-to-dangerous
+at others. Knowing which is which is the whole skill.
+
+## Two questions, not one
+
+The usual question is "can AI do this?" It is the wrong one, because the
+answer is almost always a qualified yes, and a qualified yes tells you
+nothing about whether you should.
+
+Ask two questions instead:
+
+**How often do I do this?** A task you do twice a year is not worth building a
+routine around, however tedious it is. A task you do six times a day is worth
+ten minutes of setup.
+
+**What does it cost me to check?** This is the one people skip. An assistant's
+output is a draft, and a draft has to be read before it goes anywhere. If
+verifying the answer takes as long as writing it yourself, you have moved the
+work rather than reduced it.
+
+## The grid
+
+Put your recurring tasks on two axes — how often, and how expensive a mistake
+is:
+
+> **Often, cheap to check** — reformatting notes, drafting a routine reply,
+> summarising a thread you were part of, turning a list into a table.
+> *This is where the time actually comes from.*
+>
+> **Often, expensive to check** — anything sent to a client under your name,
+> anything involving numbers you will be held to.
+> *Useful, but the draft is the start of the work, not the end.*
+>
+> **Rare, cheap to check** — a one-off rewrite, a quick explanation.
+> *Fine. Just don't build a system around it.*
+>
+> **Rare, expensive to check** — a legal question, a medical question, a
+> decision about a person.
+> *Do not. E1·L8 covered why the model's confidence is unrelated to whether
+> it is right, and here you have neither practice nor a cheap way to catch
+> the error.*
+
+Almost all the real gain sits in the first box. It is unglamorous, which is
+why it is under-sold.
+
+## Verification cost is the deciding number
+
+Here is the trap that catches careful people. You hand over a task, the output
+looks plausible, and checking it properly would mean re-reading the source
+material — so you skim instead, and ship something you have not actually
+verified.
+
+That is not a time saving. It is a risk transfer, from a task you controlled to
+one you didn't.
+
+So prefer tasks where checking is **structurally easy**: you already know the
+material, the output is short, or an error would be obvious rather than subtle.
+A summary of a meeting you attended is easy to check. A summary of a report you
+have never read is not, and it is precisely the case where a confident-sounding
+error survives.
+
+## Try it now (5 minutes)
+
+Write down the five things you did most often last week. For each one, mark how
+long it takes and how you would know if it were wrong.
+
+You are looking for the ones where that second answer is "immediately, at a
+glance". Those are your candidates. The rest of this module works on them:
+email, reading, research, notes and planning, in that order.
+
+<Quiz client:visible items={[
+  {
+    q: "Which task is the best candidate for an assistant?",
+    options: [
+      "A twice-yearly report where an error would be costly",
+      "A daily routine reply you could check at a glance",
+      "A one-off legal question you cannot verify"
+    ],
+    answer: 1,
+    explain: "Frequent and cheap to check is where the time actually comes from. Rare tasks do not repay setup, and unverifiable ones move risk rather than work."
+  },
+  {
+    q: "Verification cost means:",
+    options: [
+      "What the subscription costs each month",
+      "The time it takes you to confirm the output is right",
+      "How long the assistant takes to reply"
+    ],
+    answer: 1,
+    explain: "If checking takes as long as doing the task yourself, the work has been moved rather than reduced."
+  },
+  {
+    q: "Why is summarising a report you have never read riskier than summarising a meeting you attended?",
+    options: [
+      "Reports are longer than meetings",
+      "You have no basis to notice a confident error in the report",
+      "Assistants are worse at reading documents"
+    ],
+    answer: 1,
+    explain: "Checking is only cheap when you already know the material. Without that, a plausible-sounding mistake passes straight through."
+  }
+]} />
+
+## Recap
+
+Ask how often you do a task and how cheaply you can check it, not whether AI
+can do it. The gains cluster in frequent, low-stakes, easily verified work.
+Where checking is hard, an assistant moves risk rather than saving time — and
+the rest of this module stays firmly in the first box.
