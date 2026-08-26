@@ -11,8 +11,9 @@
  */
 import Admin from '../../layouts/Admin.astro';
 import AdminGate from '../../components/AdminGate.tsx';
+import AdminFixtures from '../../components/AdminFixtures.tsx';
+import ReviewQueue from '../../components/ReviewQueue.tsx';
 import rubricE7 from '../../../content/rubrics/e7.json';
-import { CERTIFICATION_LIVE } from '../../lib/certification';
 
 /* 10g's gates, as they actually stand. Written here rather than fetched so the
    page is honest with no database configured — and so the two that need people
@@ -62,13 +63,14 @@ const remaining = gates.filter((g) => !g.done).length;
 
     <h2 style="font-size:var(--fs-400);margin-top:var(--sp-10);">Awaiting review</h2>
     <p class="prose" style="color:var(--c-ink-soft);">
-      {CERTIFICATION_LIVE
-        ? 'Oldest first.'
-        : 'Nothing, and nothing can arrive here until an assessment opens.'}
-      {' '}Reviewers reach answers through <code>review_queue()</code>, which
-      does not select the learner's name — so a reviewer cannot see who wrote
-      what they are banding, whatever this page chooses to render.
+      Oldest first. Reviewers reach answers through <code>review_queue()</code>,
+      which does not select the learner's name — so a reviewer cannot see who
+      wrote what they are banding, whatever this page chooses to render.
     </p>
+    <ReviewQueue client:load />
+
+    <h2 id="fixtures" style="font-size:var(--fs-400);margin-top:var(--sp-10);">Test entries</h2>
+    <AdminFixtures client:load />
 
     <h2 style="font-size:var(--fs-400);margin-top:var(--sp-10);">The rubric reviewers band against</h2>
     <p class="prose" style="color:var(--c-ink-soft);">

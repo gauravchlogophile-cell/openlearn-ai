@@ -102,6 +102,9 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
       version: row.syllabus_version,
       issued_at: row.issued_at,
       state: row.state,
+      /* Seeded test data. Passed through so the page can say so — a fixture
+         that verifies exactly like a real certificate is a forgery. */
+      is_fixture: row.is_fixture === true,
     });
   }
 

@@ -29,7 +29,7 @@ const clean = code.trim().toUpperCase();
    /v. A page that quietly returned more would undo that. */
 type Status = {
   found: boolean; tier?: string; module?: string;
-  version?: number; issued_at?: string; state?: string;
+  version?: number; issued_at?: string; state?: string; is_fixture?: boolean;
 };
 
 let status: Status = { found: false };
@@ -85,6 +85,16 @@ const tierName = status.tier === 'record' ? TIERS.record.name : TIERS.certificat
     {status.found && (
       <>
         {/* ------------------------------------------------ the document */}
+        {/* Marked on the document, not only on the screen around it. This is
+            the artefact that gets printed and handed to someone, so the print
+            stylesheet keeps this band too. */}
+        {status.is_fixture && (
+          <p class="certificate__fixture">
+            TEST RECORD — NOT A REAL CERTIFICATE. Created by Lrnon to check
+            this page. No person is described by it.
+          </p>
+        )}
+
         <article class="certificate">
           <header class="certificate__head">
             <span class="certificate__brand" translate="no">Lrnon</span>
@@ -198,6 +208,13 @@ const tierName = status.tier === 'record' ? TIERS.record.name : TIERS.certificat
   }
   .certificate__url { font-size: var(--fs-100); color: var(--c-ink-faint); }
 
+  .certificate__fixture {
+    margin: 0 0 var(--sp-4); padding: var(--sp-3);
+    border: 2px solid var(--c-reward); border-radius: var(--r-m);
+    background: var(--c-reward-soft); font-weight: 600;
+    letter-spacing: 0.02em;
+  }
+
   .certificate__disclaimer {
     margin: var(--sp-6) 0 0; font-size: var(--fs-100);
     color: var(--c-ink-faint); max-width: 60ch;
@@ -222,5 +239,14 @@ const tierName = status.tier === 'record' ? TIERS.record.name : TIERS.certificat
     .certificate__code { font-size: 16pt; }
     .certificate__verify { border-top: 1pt solid #000; }
     .certificate__disclaimer { font-size: 8pt; }
+
+    /* The fixture band survives printing. A test certificate that prints
+       clean is indistinguishable from a real one on paper, which is exactly
+       where it would do damage. */
+    .certificate__fixture {
+      display: block !important; border: 2pt solid #000 !important;
+      background: transparent !important; color: #000 !important;
+      font-size: 11pt;
+    }
   }
 </style>

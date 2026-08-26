@@ -18,6 +18,7 @@ type Status = {
   version?: number;
   issued_at?: string;
   state?: 'valid' | 'superseded' | 'revoked' | 'withdrawn';
+  is_fixture?: boolean;
   reason?: string;
 };
 
@@ -168,6 +169,20 @@ export default function VerifyCertificate() {
       {/* ------------------------------------------------ status, no name */}
       {status?.found && (
         <div className="card" style={{ marginTop: 'var(--sp-6)' }}>
+          {/* Loudest thing on the card, and above the verdict rather than
+              below it. Fixtures live in the same database as real credentials,
+              so a seeded certificate that verified identically to a genuine one
+              would be a forgery we manufactured ourselves. */}
+          {status.is_fixture && (
+            <p style={{
+              margin: '0 0 var(--sp-3)', padding: 'var(--sp-2) var(--sp-3)',
+              border: '2px solid var(--c-reward)', borderRadius: 'var(--r-m)',
+              background: 'var(--c-reward-soft)', fontWeight: 600,
+            }}>
+              Test record — not a real certificate. This was created by Lrnon to
+              check that this page works, and no person is described by it.
+            </p>
+          )}
           <h2 style={{ fontSize: 'var(--fs-400)', margin: '0 0 var(--sp-3)' }}>
             {STATE_COPY[status.state ?? 'valid']?.heading ?? 'Found'}
           </h2>
