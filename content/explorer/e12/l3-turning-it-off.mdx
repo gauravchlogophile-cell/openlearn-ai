@@ -1,0 +1,163 @@
+---
+title: "Turning it off"
+description: "Where the switches hide, which ones actually stop the processing, and what to do when the only honest answer is that there is no off."
+track: explorer
+module: e12
+order: 3
+minutes: 8
+objectives:
+  - "Find and change AI-related settings across common tools"
+  - "Distinguish hiding a feature from stopping the processing"
+concepts: ["settings", "opt-out", "training data"]
+flashcards:
+  - front: "What is the difference between hiding a feature and disabling it?"
+    back: "Hiding removes it from view; disabling stops the processing. Many toggles only do the first."
+  - front: "Which opt-out is usually separate?"
+    back: "Whether your content trains future models — often a different setting from whether the feature is shown."
+  - front: "What should you do when there is no off switch?"
+    back: "Decide whether the tool is still appropriate for that content, and move the sensitive work elsewhere if not."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Having spotted a feature, you may want it gone — or you may want it and want to
+know what it does with your material. Either way, the switches.
+
+## Where they hide
+
+There is no standard. In practice, look in this order:
+
+**The feature's own menu.** The three dots beside the suggestion, or a small
+settings icon on the panel itself. Fastest when it exists.
+
+**Account or profile settings**, usually under Privacy, Data, or a section
+named after the feature family — "Smart features", "Intelligence", "Assistant".
+
+**A separate privacy dashboard.** Several large providers keep data controls
+somewhere entirely different from ordinary settings.
+
+**Per-document or per-conversation**, for some tools.
+
+**Nowhere.** This is a real answer, and the rest of the lesson deals with it.
+
+## Hiding is not disabling
+
+The distinction that matters most, and the one interfaces are vaguest about.
+
+**Hiding** removes the suggestion from your screen. The processing may continue
+— the content is still read, still sent, still analysed. You have changed your
+view, not the data flow.
+
+**Disabling** stops the processing.
+
+The wording is your only clue, and it is a weak one. *"Show suggestions"* is
+almost certainly a display toggle. *"Allow [product] to analyse your messages"*
+is closer to the real thing.
+
+When it matters, verify from the privacy documentation rather than the toggle
+label. And where only a display toggle exists, treat the processing as ongoing.
+
+## The training opt-out is a separate switch
+
+Frequently missed, because people reasonably assume one control covers it.
+
+Whether your content is used to **train future models** is usually a different
+setting from whether a feature appears. You can switch off suggestions and still
+be contributing text.
+
+Look for wording about *improving our services*, *model training*, *human
+review*, or *quality review*. That last one matters: some services allow staff
+to read samples of user content, and it is a distinct question from automated
+training.
+
+Business and enterprise tiers frequently exclude training by default, which is
+part of what the price buys — E2·L9's territory, and worth confirming rather
+than assuming for your specific plan.
+
+## When there is genuinely no off
+
+Increasingly common, and worth being straight about: some features cannot be
+disabled. AI summaries in search. Prediction baked into a keyboard. Vendor
+processing described as integral to the service.
+
+Your options are narrower and still real:
+
+**Use a different tool for that content.** The sensitive draft goes in a
+different editor; the private search goes to a search engine that does not
+generate answers.
+
+**Use a local-only option.** E11·L5's argument, arriving as a privacy answer
+rather than a cost one.
+
+**Change what you put in.** Names removed, figures altered, the shape of the
+problem rather than the thing itself.
+
+**Ask your organisation.** If work data is involved, this is not your decision
+alone, and someone is accountable for it.
+
+Choosing not to use a tool for certain content is a legitimate control, and
+sometimes the only one you have.
+
+## Do the sweep once
+
+Setting these individually as you meet them means you never finish. Do one pass:
+
+Phone keyboard. Phone assistant and photo features. Email. Documents. Messaging.
+Browser. Work tools. Account-level privacy dashboards for each major provider you
+use.
+
+An hour, once, then a quick check when something is redesigned — which is when
+settings quietly return to their defaults.
+
+## Try it now (6 minutes)
+
+Pick the tool holding your most sensitive material. Find its AI settings.
+
+Determine two things: whether the toggle hides or disables, and whether a
+separate training opt-out exists. Most people discover the second one exists and
+was on.
+
+<Quiz client:visible items={[
+  {
+    q: "A toggle labelled 'Show suggestions' most likely:",
+    options: [
+      "Stops the processing entirely",
+      "Only changes what you see, while the analysis continues",
+      "Deletes previously processed content"
+    ],
+    answer: 1,
+    explain: "Hiding is not disabling. Wording is your only clue, and when it matters you verify from the privacy documentation."
+  },
+  {
+    q: "Turning off an AI feature usually:",
+    options: [
+      "Also stops your content being used for training",
+      "Leaves the training question to a separate setting",
+      "Deletes your data from the provider"
+    ],
+    answer: 1,
+    explain: "You can switch off suggestions and still be contributing text. Look for wording about improving services, training, or human review."
+  },
+  {
+    q: "When a feature genuinely cannot be disabled, a legitimate control is:",
+    options: [
+      "Using a different tool for that particular content",
+      "Accepting it, since nothing can be done",
+      "Reporting the vendor"
+    ],
+    answer: 0,
+    explain: "Choosing not to use a tool for certain material is a real control, and sometimes the only one available."
+  }
+]} />
+
+## Recap
+
+Look in the feature's own menu, then account privacy settings, then a separate
+privacy dashboard. Distinguish hiding from disabling, because the wording is
+vague and only one stops the processing. Check separately whether your content
+trains future models — that is usually its own switch and often on. Where there
+is no off, changing what you put in or which tool you use is a legitimate
+control. Sweep once, then re-check after redesigns.

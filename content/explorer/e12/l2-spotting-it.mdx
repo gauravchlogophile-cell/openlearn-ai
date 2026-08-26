@@ -1,0 +1,154 @@
+---
+title: "Spotting it"
+description: "The words vendors use instead of AI, the visual tells, and the one question that settles it when the interface will not tell you."
+track: explorer
+module: e12
+order: 2
+minutes: 8
+objectives:
+  - "Recognise the vocabulary and visual cues that indicate AI features"
+  - "Find out whether a feature sends your data elsewhere"
+concepts: ["disclosure", "euphemism", "on-device versus cloud"]
+flashcards:
+  - front: "What words usually mean AI without saying so?"
+    back: "Smart, suggested, auto, intelligent, assist, magic, enhance, summary — plus a sparkle icon."
+  - front: "Which question matters most about an embedded feature?"
+    back: "Does my content leave the device, and where does it go?"
+  - front: "Where is that answered?"
+    back: "The privacy policy or a feature-specific help page — rarely in the interface itself."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+You cannot decide about something you have not noticed. This lesson is about
+noticing.
+
+## The vocabulary
+
+Vendors frequently avoid the word AI — sometimes because the feature predates
+the current wave, sometimes because "AI" now makes people wary.
+
+Words that usually mean it:
+
+**Smart** — smart reply, smart compose, smart sort.
+**Suggested** — suggested replies, suggested edits.
+**Auto** — autocomplete, auto-summary, auto-enhance.
+**Intelligent**, **assist**, **assistant**, **copilot**.
+**Magic** — magic eraser, magic write.
+**Enhance**, **generate**, **rewrite**, **summarise**.
+**Insights**, **highlights**, **for you**.
+
+None of these are lies. They are just not the word that would prompt you to
+think about it.
+
+## The visual tells
+
+**A sparkle icon.** Four-pointed stars, in some arrangement, have become the
+near-universal glyph for a generative feature. If you see one, that is what it
+is.
+
+**Text appearing before you type it.** Greyed-out completions ahead of the
+cursor.
+
+**A summary above the actual content** — search results, a document, a thread.
+
+**Something offering to write for you** anywhere at all.
+
+## The question that matters
+
+Once you have spotted it, one question ranks above all others:
+
+> **Does my content leave this device, and if so, where does it go?**
+
+That determines whether E4·L8's paste test applies. A keyboard prediction
+running entirely on your phone is a different proposition from a summariser
+uploading the whole thread to a server.
+
+Three broad answers:
+
+**On-device.** Processing happens locally. Nothing is transmitted. Common for
+keyboard prediction and increasingly for phone features, and vendors advertise
+it when it is true — because it is a selling point.
+
+**Cloud, provider only.** Sent to the vendor's servers, processed, returned.
+Usual for anything more capable.
+
+**Cloud, third party.** Sent onward to another company's model. Common when a
+smaller product bolts AI on, and the one people least expect.
+
+## Where the answer is
+
+Rarely in the interface. Usually in:
+
+**The privacy policy**, under processing or third parties.
+**A feature-specific help page** — often clearer than the policy.
+**The settings screen** for that feature, where a data toggle sometimes lives.
+
+For work software, your IT or data protection team will have asked this
+question already. They may be the fastest route to an answer.
+
+If you genuinely cannot find out, treat it as cloud and third party. That is the
+assumption that keeps you safe if you are wrong.
+
+## Ask the product itself
+
+Increasingly viable and worth trying: ask the assistant embedded in the product.
+
+> *Is this feature processed on my device or on a server? Is my content used for
+> training? Where is that documented?*
+
+Treat the answer as a pointer rather than an authority — E7's rules apply to a
+model describing its own product as much as anything else. But it frequently
+names the document you need, which is most of the work.
+
+## Try it now (5 minutes)
+
+Open your phone's keyboard settings and your email settings. Find every feature
+matching the vocabulary or the icons above.
+
+Pick the one handling the most sensitive content and find out where that content
+goes. If you cannot find out in five minutes, that itself is the finding.
+
+<Quiz client:visible items={[
+  {
+    q: "Which word most reliably signals an AI feature without saying 'AI'?",
+    options: [
+      "Advanced",
+      "Smart",
+      "Premium"
+    ],
+    answer: 1,
+    explain: "Smart, suggested, auto, intelligent, magic and enhance are the common vocabulary — usually alongside a sparkle icon."
+  },
+  {
+    q: "The most important question about an embedded feature:",
+    options: [
+      "Which model does it use?",
+      "Does my content leave the device, and where does it go?",
+      "How much does it cost?"
+    ],
+    answer: 1,
+    explain: "That determines whether the paste test applies. On-device prediction and a cloud summariser are different propositions."
+  },
+  {
+    q: "If you cannot determine where a feature sends your data, you should:",
+    options: [
+      "Assume on-device, since that is now common",
+      "Assume cloud and third party",
+      "Assume it is not AI at all"
+    ],
+    answer: 1,
+    explain: "That is the assumption that keeps you safe if you turn out to be wrong."
+  }
+]} />
+
+## Recap
+
+Learn the vocabulary — smart, suggested, auto, magic, enhance — and the sparkle
+icon, because vendors often avoid the word AI. Once spotted, the question that
+matters is whether your content leaves the device and where it goes. The answer
+lives in the privacy policy or a feature help page rather than the interface,
+and if you cannot find it, assume cloud and third party.
