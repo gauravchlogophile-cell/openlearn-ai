@@ -6,6 +6,7 @@
 import { readFileSync, readdirSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { tokens as skyTokens } from '../src/lib/sky-guard.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const errors = [];
@@ -134,6 +135,31 @@ for (const file of lessonFiles) {
     for (const a of answers)
       if (Number(a[1]) > 3)
         errors.push(`${rel}: <Quiz> answer index ${a[1]} looks out of range`);
+
+    /* A stem too short to defend.
+       sky-guard matches a question against Sky's index by its distinctive
+       words: it drops stop-words and anything under three characters, then
+       needs at least two words left to call something a quiz stem. A question
+       like "A token is:" reduces to one word, so the guard cannot recognise
+       it — and Sky would answer it for a learner sitting the quiz.
+       That exact stem shipped and was caught by the guard's own test in CI,
+       which is one layer too late: the author should hear it here, where the
+       fix is obvious. A stem this generic is a weak question anyway. */
+    /* The quote handling matters: a naive ["']([^"']+)["'] stops at the
+       apostrophe inside "Why doesn't a model know", captures "Why doesn", and
+       reports 23 confident false positives. Match to the matching closing
+       quote instead, allowing escapes. */
+    const stemRe = /\bq:\s*(?:"((?:[^"\\]|\\.)*)"|'((?:[^'\\]|\\.)*)')/g;
+    for (const m of quizTag[0].matchAll(stemRe)) {
+      const stem = m[1] ?? m[2];
+      // sky-guard exports the tokeniser it actually uses. Importing it beats
+      // copying its stop list, which would drift and silently stop this check
+      // matching the thing it protects. Still dependency-free: a local module,
+      // not a package, so a cold CI start needs no install.
+      const distinctive = skyTokens(stem);
+      if (new Set(distinctive).size < 2)
+        errors.push(`${rel}: quiz stem "${stem}" has fewer than two distinctive words — Sky's assessment guard cannot protect it, so make it more specific`);
+    }
   }
   for (const w of ['revolutionary','game-changing','mind-blowing','superpower'])
     if (new RegExp(`\\b${w}`, 'i').test(body))
