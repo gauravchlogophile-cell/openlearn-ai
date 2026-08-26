@@ -1,0 +1,142 @@
+---
+title: "Spreadsheet formulas you can check"
+description: "Assistants write formulas well and cannot see your data. How to describe a sheet properly, and how to test a formula before you trust a column."
+track: explorer
+module: e5
+order: 4
+minutes: 9
+objectives:
+  - "Describe a spreadsheet precisely enough to get a correct formula"
+  - "Test a formula on rows where you already know the answer"
+concepts: ["formulas", "test rows", "silent errors"]
+flashcards:
+  - front: "What must you supply for a formula request to work?"
+    back: "The actual column letters, header names, a few sample rows, and what the answer should be for those rows."
+  - front: "How do you test a generated formula?"
+    back: "Run it on rows where you already know the answer, including an empty one and an odd one."
+  - front: "Why are spreadsheet errors especially dangerous?"
+    back: "A wrong formula produces a plausible number silently, then gets copied down a thousand rows."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Spreadsheet formulas are one of the strongest uses in this module. The syntax
+is precise, well documented and heavily represented in everything a model has
+read, so `INDEX`/`MATCH`, nested `IFS` and the awkward date functions come back
+correct far more often than not.
+
+The danger is not the formula. It is that a spreadsheet error does not announce
+itself. Prose that is wrong usually reads oddly. A wrong formula returns a
+plausible number, and then you copy it down nine hundred rows.
+
+## Describe the sheet, not the wish
+
+The most common failure is a request the assistant cannot possibly answer:
+*"Write a formula to get the total for each customer."* It does not know your
+columns, your headers, whether dates are real dates or text, or what happens
+when a field is blank.
+
+Give it the sheet:
+
+> *Columns: A = Date (real dates), B = Customer (text), C = Region,
+> D = Amount (number, may be blank), E = Status ("open"/"paid"/"void").*
+>
+> *Sample rows:*
+> *2026-03-01 | Acme | North | 1200 | paid*
+> *2026-03-02 | Acme | North | (blank) | open*
+> *2026-03-04 | Beta | South | 400 | void*
+>
+> *In column G, for each row: the total paid Amount for that Customer in that
+> Region. Blanks count as zero. Void rows are excluded.*
+> *For the rows above the answers should be 1200, 1200, 0.*
+> *Google Sheets. Explain what each part does.*
+
+That last line before the platform — stating the expected answers — is the one
+most people skip and the one that does the most work. It turns a vague request
+into something with a right answer, and it catches a misunderstanding
+immediately rather than after you have built on it.
+
+## Say which spreadsheet
+
+`TEXTJOIN`, `XLOOKUP`, `ARRAYFORMULA`, `FILTER` and the `LAMBDA` family differ
+across Excel versions, Google Sheets, LibreOffice and Numbers. Name yours,
+including the version if it is an old Excel — otherwise you will get a function
+your installation does not have, which at least fails loudly.
+
+## Test before you trust
+
+Never accept a formula straight into a live column. Three tests, thirty
+seconds:
+
+**Rows you know.** Apply it where you can compute the answer in your head.
+
+**An empty row.** Blank inputs are where formulas quietly return `0`, `#N/A`,
+or worse, an answer that looks fine.
+
+**An odd row.** A negative number, a duplicate, a date in a different format,
+the customer whose name has a trailing space.
+
+If you cannot construct a row where you know the right answer, you cannot check
+the formula — and that is E4·L1 telling you this task has moved rather than
+reduced your work.
+
+## Ask it to explain itself
+
+Add *explain what each part does* to every formula request. Not because the
+explanation is authoritative, but because reading it is how you notice the
+assumption you did not intend — "this treats blanks as zero" when you needed
+them excluded.
+
+It also means you can maintain the sheet in six months, which the person who
+pasted an unexplained nested `IFS` cannot.
+
+## Try it now (7 minutes)
+
+Take a formula you already have that works. Describe its sheet properly and ask
+for the formula, including the expected answers for three rows.
+
+Compare. If they differ, one of you has misunderstood the data — and finding
+out which is the useful part.
+
+<Quiz client:visible items={[
+  {
+    q: "The most valuable thing to include in a formula request is:",
+    options: [
+      "A polite framing",
+      "Sample rows and the expected answers for them",
+      "The size of the spreadsheet"
+    ],
+    answer: 1,
+    explain: "Stating expected answers turns a vague request into one with a right answer, and catches a misunderstanding before you build on it."
+  },
+  {
+    q: "Which test most reliably catches a broken formula?",
+    options: [
+      "Running it on a row where you already know the answer",
+      "Checking the formula is under 100 characters",
+      "Asking the assistant if it is confident"
+    ],
+    answer: 0,
+    explain: "Known-answer rows, plus an empty one and an odd one, take thirty seconds. Stated confidence is not evidence."
+  },
+  {
+    q: "Spreadsheet errors are especially dangerous because:",
+    options: [
+      "Formulas are hard to read",
+      "A wrong formula returns a plausible number silently and then gets copied down",
+      "Spreadsheets do not support undo"
+    ],
+    answer: 1,
+    explain: "Wrong prose usually reads oddly. A wrong number looks exactly like a right one, and propagates."
+  }
+]} />
+
+## Recap
+
+Describe columns, types and sample rows, state what the answer should be for
+those rows, and name your spreadsheet application. Test on known, empty and odd
+rows before the formula touches a live column, and always ask it to explain
+itself — the explanation is where you catch the assumption you did not intend.

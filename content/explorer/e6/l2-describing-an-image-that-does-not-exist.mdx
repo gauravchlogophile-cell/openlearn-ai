@@ -1,0 +1,135 @@
+---
+title: "Describing an image that does not exist"
+description: "Five things every image prompt should specify, why adjectives are weak, and how to say what you want without writing a paragraph nobody can parse."
+track: explorer
+module: e6
+order: 2
+minutes: 8
+objectives:
+  - "Specify subject, setting, composition, light and medium in a prompt"
+  - "Replace vague quality words with concrete visual description"
+concepts: ["composition", "framing", "medium"]
+tools: ["midjourney"]
+flashcards:
+  - front: "What five things should an image prompt specify?"
+    back: "Subject, setting, composition or framing, lighting, and medium or finish."
+  - front: "Why are words like 'beautiful' weak in an image prompt?"
+    back: "They describe a judgement rather than anything visible, so they pull towards a generic average."
+  - front: "What does naming a medium do?"
+    back: "It constrains everything at once — 35mm photograph, watercolour and 3D render each carry a whole set of visual conventions."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The hardest part of image generation is not the tool. It is that you have to
+describe something you have only seen in your head, to a system with no way to
+ask what you meant.
+
+The good news is that five slots cover most of it.
+
+## The five slots
+
+**Subject.** What is in the picture, specifically. Not *a dog* — *an elderly
+greyhound, curled, asleep*.
+
+**Setting.** Where, and what surrounds it. *On a worn leather sofa by a window.*
+
+**Composition.** Where the camera is. *Close crop, from slightly above, subject
+filling two thirds of the frame.* This is the slot people skip and the one that
+most changes the result.
+
+**Lighting.** *Late afternoon light from the left, long shadows.* Light does
+more for mood than any adjective you could reach for.
+
+**Medium.** *35mm photograph, slight grain.* Or watercolour, or pencil study,
+or 3D render. Each of these carries an entire set of conventions with it.
+
+Assembled: *An elderly greyhound curled asleep on a worn leather sofa by a
+window. Close crop from slightly above. Late afternoon light from the left,
+long shadows. 35mm photograph, slight grain.*
+
+That is a sentence a person could draw from. That is the bar.
+
+## Adjectives of quality do nothing
+
+*Beautiful*, *amazing*, *high quality*, *masterpiece*, *stunning*, *8K*.
+
+These describe your reaction, not anything visible. They pull towards the
+average of whatever the model associates with praise — which is usually
+over-saturated, over-lit and slightly plastic.
+
+Replace each with something you could photograph. Not *dramatic* but *single
+light source, deep shadow on the right*. Not *high quality* but *sharp focus on
+the eyes, background falling off*.
+
+This is E3·L3's rule — context beats cleverness — arriving in visual form.
+
+## Medium is the strongest single word
+
+If you change one thing, change the medium.
+
+*Watercolour* brings soft edges, visible paper, colour bleeding. *Blueprint*
+brings line weight, annotation, a limited palette. *Polaroid* brings a specific
+colour cast, vignetting and a square frame. One word does the work of a
+paragraph, because each names a whole tradition with its own conventions.
+
+The corollary: if you do not name a medium, one gets chosen for you — usually a
+glossy digital-illustration look, because there is an enormous amount of it.
+
+## Say it once
+
+Long prompts are not stronger prompts. Repeating an idea in three ways
+(*moody, atmospheric, dramatic lighting*) does not triple its weight; it
+crowds out your other slots.
+
+Say each thing once, clearly, and use the space for a slot you have left empty.
+
+## Try it now (7 minutes)
+
+Write a prompt with all five slots filled. Generate it.
+
+Then change only the medium and generate again. The distance between those two
+images is the single most useful thing to see in this lesson.
+
+<Quiz client:visible items={[
+  {
+    q: "Which slot do people most often omit, with the biggest effect?",
+    options: [
+      "Subject",
+      "Composition and framing",
+      "Colour"
+    ],
+    answer: 1,
+    explain: "Where the camera is, and how the subject sits in the frame, changes the result more than almost anything else."
+  },
+  {
+    q: "Why do words like 'stunning' and 'high quality' weaken a prompt?",
+    options: [
+      "They are too long",
+      "They describe a judgement rather than anything visible",
+      "Models filter out praise words"
+    ],
+    answer: 1,
+    explain: "They pull towards the average of what the model associates with praise, which tends to be over-saturated and slightly plastic."
+  },
+  {
+    q: "Naming a medium such as 'watercolour' is powerful because:",
+    options: [
+      "It is a rare word in training data",
+      "It carries a whole set of visual conventions at once",
+      "It reduces the number of generations needed"
+    ],
+    answer: 1,
+    explain: "Soft edges, visible paper, colour bleeding — one word does the work of a paragraph. Omit it and a default glossy look is chosen for you."
+  }
+]} />
+
+## Recap
+
+Fill five slots — subject, setting, composition, lighting, medium — and say
+each thing once. Replace judgement words with things you could photograph, and
+name a medium, because otherwise one is chosen for you. Then change only the
+medium to see how much a single word carries.

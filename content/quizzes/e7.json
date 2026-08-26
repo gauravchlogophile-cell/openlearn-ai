@@ -1,0 +1,272 @@
+{
+  "module": "e7",
+  "title": "Truth, Verification & Critical Thinking — Module Quiz",
+  "drawCount": 10,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "e7-01",
+      "q": "Why does fluent text suppress scepticism?",
+      "options": [
+        "Fluent text is usually more accurate",
+        "Fluency has always signalled effort, and generated text breaks that link while keeping the signal",
+        "People do not read carefully enough"
+      ],
+      "answer": 1,
+      "explain": "Your reading instincts were built when effortful writing indicated an effortful writer. That correlation is now severed and will not update on its own."
+    },
+    {
+      "id": "e7-02",
+      "q": "Specificity — names, dates, percentages — indicates:",
+      "options": [
+        "That someone checked the claim",
+        "Nothing about accuracy; detail is as cheap to generate as vagueness",
+        "A more capable model was used"
+      ],
+      "answer": 1,
+      "explain": "Fabricated citations are specific by construction. Specificity feels like verification and is not."
+    },
+    {
+      "id": "e7-03",
+      "q": "The right response to unreliable fluency is:",
+      "options": [
+        "Doubt everything an assistant produces",
+        "Spend scepticism where being wrong costs something",
+        "Use assistants only for creative work"
+      ],
+      "answer": 1,
+      "explain": "Uniform doubt is exhausting and gets abandoned within days. A budget spent on consequential claims survives a working week."
+    },
+    {
+      "id": "e7-04",
+      "q": "The two triage questions are:",
+      "options": [
+        "Is it interesting, and is it well written?",
+        "What happens if it is wrong, and how easily could it be undone?",
+        "Is it recent, and is it detailed?"
+      ],
+      "answer": 1,
+      "explain": "Consequence and reversibility together identify the minority of claims worth a limited budget."
+    },
+    {
+      "id": "e7-05",
+      "q": "Which category should always be checked before use?",
+      "options": [
+        "General explanations of how something works",
+        "Citations and references",
+        "Suggestions for further reading"
+      ],
+      "answer": 1,
+      "explain": "A plausible author, journal and year with no such paper is the classic failure. Never repeat a citation you have not opened."
+    },
+    {
+      "id": "e7-06",
+      "q": "Why check an answer that is unusually convenient?",
+      "options": [
+        "Convenient answers are usually fabricated",
+        "It is the answer you will not scrutinise, so an error there travels furthest",
+        "Models are designed to flatter users"
+      ],
+      "answer": 1,
+      "explain": "The risk is in your own reaction rather than the model's intent — you stop looking when the answer suits you."
+    },
+    {
+      "id": "e7-07",
+      "q": "Why is asking 'are you sure?' not verification?",
+      "options": [
+        "Models cannot assess outputs at all",
+        "The same process produces both answer and reassurance, and models concede under pressure",
+        "It consumes another message"
+      ],
+      "answer": 1,
+      "explain": "Agreement is not confirmation, and pushing back on a correct answer often produces an apology and a wrong one."
+    },
+    {
+      "id": "e7-08",
+      "q": "Lateral reading means:",
+      "options": [
+        "Reading further down the same page",
+        "Leaving the page to see what other sources say about it",
+        "Comparing several claims side by side"
+      ],
+      "answer": 1,
+      "explain": "A professional-looking site is easy to produce, so reading more of it proves nothing. This is what fact-checkers actually do."
+    },
+    {
+      "id": "e7-09",
+      "q": "The most common verification failure is discovering that:",
+      "options": [
+        "The source was entirely fabricated",
+        "The source is real but the claim was detached from its conditions",
+        "The source is paywalled"
+      ],
+      "answer": 1,
+      "explain": "The study exists and covered a different population; the clause applies above a threshold. More common than invention and harder to notice."
+    },
+    {
+      "id": "e7-10",
+      "q": "Which property most reliably indicates a source cares about accuracy?",
+      "options": [
+        "Professional design and a recognised name",
+        "It publishes corrections",
+        "It is never seen to be wrong"
+      ],
+      "answer": 1,
+      "explain": "Everyone is sometimes wrong. A source that never appears to be is one that does not tell you."
+    },
+    {
+      "id": "e7-11",
+      "q": "\"Who benefits if I believe this?\" is asked to:",
+      "options": [
+        "Identify conspiracies",
+        "Make incentives visible, so a claim matching them gets a second source",
+        "Decide which sources can be dismissed"
+      ],
+      "answer": 1,
+      "explain": "Everyone has incentives, including good sources. The question is whether they are visible and whether the claim is what they would predict."
+    },
+    {
+      "id": "e7-12",
+      "q": "Institutional authority should be used to:",
+      "options": [
+        "Decide what is true",
+        "Decide where to look first",
+        "Rank sources definitively"
+      ],
+      "answer": 1,
+      "explain": "Authority is a weak signal. Signals point you somewhere; evidence decides what you conclude."
+    },
+    {
+      "id": "e7-13",
+      "q": "The most common reason two credible sources disagree:",
+      "options": [
+        "One of them is wrong",
+        "They measured different things",
+        "One is deliberately misleading"
+      ],
+      "answer": 1,
+      "explain": "\"Unemployment\" and \"users\" have several definitions. Two correct numbers can describe two different quantities."
+    },
+    {
+      "id": "e7-14",
+      "q": "False balance is:",
+      "options": [
+        "Declining to take a position",
+        "Presenting a lopsided disagreement as an even contest",
+        "Citing only one side of a debate"
+      ],
+      "answer": 1,
+      "explain": "Assistants default to it because they are trained to appear balanced. Ask about the distribution of support, not just the positions."
+    },
+    {
+      "id": "e7-15",
+      "q": "When a question is genuinely unsettled, the honest response is:",
+      "options": [
+        "Pick the better-supported side and state it plainly",
+        "Say it is unresolved and say what would settle it",
+        "Avoid the question entirely"
+      ],
+      "answer": 1,
+      "explain": "Manufacturing certainty to sound decisive is the failure. Naming what would resolve it is more useful than an invented conclusion."
+    },
+    {
+      "id": "e7-16",
+      "q": "Why is 'watch for bad grammar' obsolete scam advice?",
+      "options": [
+        "Attackers now hire proofreaders",
+        "Fluent text in any language is free to produce",
+        "Mail clients correct spelling automatically"
+      ],
+      "answer": 1,
+      "explain": "The tell existed because attackers often did not write your language natively. That is no longer a constraint."
+    },
+    {
+      "id": "e7-17",
+      "q": "An out-of-band check means:",
+      "options": [
+        "Asking the sender to confirm who they are",
+        "Contacting the real person through a channel and number you already had",
+        "Checking the sender's domain spelling"
+      ],
+      "answer": 1,
+      "explain": "It does not require judging the message, so it defeats even a perfect voice clone — the attacker does not control your address book."
+    },
+    {
+      "id": "e7-18",
+      "q": "Which pairing is the strongest warning sign?",
+      "options": [
+        "A long message with attachments",
+        "Urgency combined with secrecy",
+        "An unfamiliar sender address"
+      ],
+      "answer": 1,
+      "explain": "Urgency prevents you thinking and secrecy keeps you from the person who would notice. Both are structural, so better fakery does not remove them."
+    },
+    {
+      "id": "e7-19",
+      "q": "Asymmetric scrutiny is:",
+      "options": [
+        "Checking some sources more carefully than others",
+        "Checking claims you dislike thoroughly and claims you like barely at all",
+        "Applying different standards to different subjects"
+      ],
+      "answer": 1,
+      "explain": "Both feel like normal reading, yet two claims of identical reliability received completely different standards."
+    },
+    {
+      "id": "e7-20",
+      "q": "Why does knowing about confirmation bias not reduce it?",
+      "options": [
+        "It is not a genuine effect",
+        "It operates before you notice, so only changed procedure helps",
+        "It affects only untrained readers"
+      ],
+      "answer": 1,
+      "explain": "The feeling of being fair-minded is unrelated to whether you are. What helps is something that does not depend on catching yourself."
+    },
+    {
+      "id": "e7-21",
+      "q": "Deciding in advance what would change your mind works because:",
+      "options": [
+        "It commits you publicly",
+        "You set the standard before knowing which way the evidence went",
+        "It makes research faster"
+      ],
+      "answer": 1,
+      "explain": "Afterwards the standard moves — you find reasons the evidence you found is not quite the evidence you meant."
+    },
+    {
+      "id": "e7-22",
+      "q": "Which statement is strongest?",
+      "options": [
+        "\"It's about 15%, but don't quote me\"",
+        "\"15% for the UK in 2025 from the ONS release, which I checked; I have not confirmed the other markets\"",
+        "\"It's 15%\""
+      ],
+      "answer": 1,
+      "explain": "Naming what you checked and what you did not tells the reader how much weight to place on it. Vagueness is not humility."
+    },
+    {
+      "id": "e7-23",
+      "q": "E7 is compulsory for certification because:",
+      "options": [
+        "It is the longest module",
+        "Every other module assumes it — without it the curriculum makes you an efficient source of confident errors",
+        "Verification is a legal requirement"
+      ],
+      "answer": 1,
+      "explain": "Faster is only good if the output is right. E4's routine, E5's documents and E6's disclosure all assume you can check."
+    },
+    {
+      "id": "e7-24",
+      "q": "A primary source is:",
+      "options": [
+        "The most authoritative article about a subject",
+        "The thing itself — the paper, the legislation, the filing, the dataset",
+        "The first search result"
+      ],
+      "answer": 1,
+      "explain": "Every layer between you and the source is a layer where a qualifier was dropped."
+    }
+  ]
+}

@@ -1,0 +1,145 @@
+---
+title: "Labelling what you made"
+description: "When generated media needs a label, what provenance metadata does and does not prove, and why the honest default costs you almost nothing."
+track: explorer
+module: e6
+order: 7
+minutes: 8
+objectives:
+  - "Decide when generated media requires disclosure"
+  - "Explain what provenance metadata can and cannot establish"
+concepts: ["provenance", "disclosure", "C2PA"]
+flashcards:
+  - front: "What is the test for whether media needs a label?"
+    back: "Would someone reasonably take it as a record of something that happened? If so, say what it is."
+  - front: "What does provenance metadata like C2PA prove?"
+    back: "That a claim was attached and has not been altered since. It cannot prove untagged media is authentic."
+  - front: "Why is absent provenance not evidence of fakery?"
+    back: "Metadata is routinely stripped by ordinary uploading, resizing and screenshotting."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+You have made something. Does it need to say so?
+
+"Always" is the easy answer and it is not right — nobody labels a stock
+illustration on a slide. "Never" is obviously wrong. The line is more useful
+than either.
+
+## The test
+
+> Would a reasonable person take this as a record of something that actually
+> happened?
+
+If yes, say what it is. If no, you are usually fine.
+
+A generated illustration on a blog post: no label needed. It is decoration, and
+nobody thinks it is a photograph of a real event.
+
+A photorealistic image of a named place, a real person, or a specific
+occurrence: label it. That is the case where the medium's implicit promise —
+*this happened, and someone was there* — is being borrowed.
+
+This is why L5 flagged video specifically. Video carries that promise far more
+strongly than a still.
+
+## Four places the answer is always yes
+
+Regardless of the test:
+
+- **News, journalism, documentary.** Non-negotiable.
+- **Anything involving a real identifiable person**, including their voice.
+- **Evidence** — insurance, legal, workplace complaints, any record intended to
+  establish what occurred.
+- **Where a rule already applies.** Advertising standards, platform policies,
+  your employer, and in a growing number of jurisdictions, the law. The EU AI
+  Act's transparency obligations are the most cited example; more are arriving.
+
+## Provenance metadata, honestly
+
+There is a standard, **C2PA**, sometimes branded Content Credentials. It attaches
+signed information to a file — what made it, when, what happened to it since —
+and support is growing across cameras, editors and generation tools.
+
+It is worth using where your tools offer it. Two things it does not do, and
+both are commonly misunderstood.
+
+**It cannot prove an untagged file is authentic.** Absence of provenance is not
+evidence of anything, because metadata is stripped constantly by ordinary
+activity: uploading to most platforms, taking a screenshot, resizing, sending
+through a messaging app. Most honest media in circulation has no credentials
+attached.
+
+**It is not a detector.** It travels with files that carry it. It says nothing
+about the ones that do not.
+
+So treat it as a way of **signing your own work**, not as a way of checking
+other people's. E7 covers verification properly.
+
+## Label it visibly, not just in metadata
+
+Following from that: if disclosure matters, put it where a person will see it —
+a caption, a line in the credits, text in the corner.
+
+Metadata that survives your export and dies on upload has disclosed nothing to
+anyone. A visible caption survives a screenshot.
+
+## The cost is almost nothing
+
+The strongest argument for disclosing is not ethical, it is practical.
+
+The cost of labelling is a line of text. The cost of *not* labelling, and being
+found out, is that everything else you have published becomes questionable —
+including the parts that were real. That asymmetry is not close, and it does not
+require you to have settled any philosophical question.
+
+## Try it now (5 minutes)
+
+Take three pieces of generated media you have made or seen. Apply the test to
+each.
+
+For any that need a label, write the actual caption — the sentence you would
+use. It is shorter than you expect.
+
+<Quiz client:visible items={[
+  {
+    q: "The test for whether generated media needs a label:",
+    options: [
+      "Whether it took more than a few attempts to make",
+      "Whether a reasonable person would take it as a record of something that happened",
+      "Whether it is photorealistic"
+    ],
+    answer: 1,
+    explain: "A stylised illustration borrows no promise. A photorealistic image of a real place or person borrows the promise that someone was there."
+  },
+  {
+    q: "Provenance metadata such as C2PA can:",
+    options: [
+      "Prove that an untagged file is authentic",
+      "Show that a claim was attached and has not been altered since",
+      "Detect whether any image was AI-generated"
+    ],
+    answer: 1,
+    explain: "It travels only with files that carry it, and is routinely stripped by uploading, screenshotting and resizing — so absence proves nothing."
+  },
+  {
+    q: "Why put disclosure in a visible caption rather than only in metadata?",
+    options: [
+      "Metadata is difficult to write",
+      "Metadata is commonly stripped on upload, so it may disclose nothing to anyone",
+      "Captions rank better in search"
+    ],
+    answer: 1,
+    explain: "A caption survives a screenshot. Credentials that die on upload have not told the viewer anything."
+  }
+]} />
+
+## Recap
+
+Label anything a reasonable person would take as a record of what happened, and
+always for news, real people, evidence, or where a rule applies. Use provenance
+metadata to sign your own work, knowing it cannot authenticate anyone else's,
+and put the disclosure somewhere a person will actually see it.

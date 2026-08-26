@@ -1,0 +1,272 @@
+{
+  "module": "e6",
+  "title": "Creative AI: Image, Video & Voice — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "e6-01",
+      "q": "A diffusion model creates an image by:",
+      "options": [
+        "Drawing elements one at a time in order",
+        "Starting from noise and repeatedly removing what does not match the description",
+        "Assembling fragments of training images"
+      ],
+      "answer": 1,
+      "explain": "The whole picture is shaped at once at every step, which is why its parts emerge together rather than in sequence."
+    },
+    {
+      "id": "e6-02",
+      "q": "Image models struggle with exact counts because:",
+      "options": [
+        "Training images were poorly labelled",
+        "Nothing in the process counts — a number is a phrase shaping the whole image",
+        "Counting needs more computation than is available"
+      ],
+      "answer": 1,
+      "explain": "\"Three cats\" makes the image cat-ish in a three-ish way. There is no step at which objects are enumerated."
+    },
+    {
+      "id": "e6-03",
+      "q": "The most reliable way to keep text out of an image:",
+      "options": [
+        "Write 'no text' in the prompt",
+        "Describe what you do want, such as 'a blank wooden sign'",
+        "Generate at a lower resolution"
+      ],
+      "answer": 1,
+      "explain": "Words pull the image towards what they describe, so naming text can summon it. A dedicated negative-prompt field works differently."
+    },
+    {
+      "id": "e6-04",
+      "q": "Which prompt slot is most often omitted, with the largest effect?",
+      "options": [
+        "Subject",
+        "Composition and framing",
+        "Colour"
+      ],
+      "answer": 1,
+      "explain": "Where the camera sits and how the subject fills the frame changes the result more than almost anything else."
+    },
+    {
+      "id": "e6-05",
+      "q": "Words like 'stunning' and 'high quality' weaken a prompt because:",
+      "options": [
+        "They are too long",
+        "They describe a judgement rather than anything visible",
+        "Models filter praise words out"
+      ],
+      "answer": 1,
+      "explain": "They pull towards the average of what the model associates with praise — usually over-saturated and slightly plastic."
+    },
+    {
+      "id": "e6-06",
+      "q": "Naming a medium such as 'watercolour' is powerful because:",
+      "options": [
+        "It is rare in training data",
+        "It carries a whole set of visual conventions at once",
+        "It reduces the number of generations needed"
+      ],
+      "answer": 1,
+      "explain": "One word does the work of a paragraph. Omit it and a default glossy look is chosen for you."
+    },
+    {
+      "id": "e6-07",
+      "q": "Holding the seed constant while changing one word gives:",
+      "options": [
+        "A completely different image",
+        "The same image with that word's influence changed",
+        "A higher-resolution render"
+      ],
+      "answer": 1,
+      "explain": "The seed is the starting noise. Fixing it turns generation into steering rather than rerolling."
+    },
+    {
+      "id": "e6-08",
+      "q": "Why change one variable per iteration?",
+      "options": [
+        "Multiple changes render more slowly",
+        "Otherwise you cannot tell which change caused the improvement",
+        "Models ignore all but the first change"
+      ],
+      "answer": 1,
+      "explain": "You end up unable to reproduce a good result or reverse a bad one. Five deliberate iterations beat fifty rerolls."
+    },
+    {
+      "id": "e6-09",
+      "q": "When the composition is right but one small detail is wrong:",
+      "options": [
+        "Reroll until that detail is correct",
+        "Fix it in an editor or inpaint just that region",
+        "Add 'perfect hands' to the prompt"
+      ],
+      "answer": 1,
+      "explain": "Rerolling a whole image to fix a corner is the most common way to lose a good result."
+    },
+    {
+      "id": "e6-10",
+      "q": "Image models can imitate a specific living artist because:",
+      "options": [
+        "They retrieve that artist's work while generating",
+        "Their training data contained a great deal of that artist's work",
+        "Artists license styles to model providers"
+      ],
+      "answer": 1,
+      "explain": "Training collections were scraped from the public web and contained large amounts of copyrighted work, generally without consent or payment."
+    },
+    {
+      "id": "e6-11",
+      "q": "In most jurisdictions, copyright protects:",
+      "options": [
+        "Particular works, not styles",
+        "Styles as well as particular works",
+        "Nothing produced with machine assistance"
+      ],
+      "answer": 0,
+      "explain": "That is why imitation of style is mainly an ethical question rather than a settled legal one."
+    },
+    {
+      "id": "e6-12",
+      "q": "Describing a look rather than naming an artist is practically better because:",
+      "options": [
+        "It generates faster",
+        "It is more controllable, more distinctive, and survives model updates",
+        "It guarantees originality"
+      ],
+      "answer": 1,
+      "explain": "You adjust one property rather than hoping, and a name may silently stop working or work differently after an update."
+    },
+    {
+      "id": "e6-13",
+      "q": "Temporal consistency in video means:",
+      "options": [
+        "A steady frame rate",
+        "Objects staying the same from frame to frame",
+        "Predictable generation time"
+      ],
+      "answer": 1,
+      "explain": "Nothing guarantees the coat stays the same colour, which is why drift and morphing are the characteristic failures."
+    },
+    {
+      "id": "e6-14",
+      "q": "Why plan a shot list rather than request a finished sequence?",
+      "options": [
+        "Shot lists cost less to generate",
+        "Consistency degrades with length, and cuts hide drift",
+        "Models can only produce one shot at a time"
+      ],
+      "answer": 1,
+      "explain": "Short clips are cheap to reroll, and a deliberate sequence has a structure a generated 'video about X' lacks."
+    },
+    {
+      "id": "e6-15",
+      "q": "Which is most reliable with current video models?",
+      "options": [
+        "A person speaking to camera",
+        "Short atmospheric b-roll with no people or text",
+        "One character across several shots"
+      ],
+      "answer": 1,
+      "explain": "Faces in motion, speech, text and character continuity are all where generated video still falls apart."
+    },
+    {
+      "id": "e6-16",
+      "q": "The difference between synthetic voice and voice cloning:",
+      "options": [
+        "Cloning requires more computation",
+        "A synthetic voice belongs to nobody; a clone reproduces a specific identifiable person",
+        "Synthetic voices are lower quality"
+      ],
+      "answer": 1,
+      "explain": "The technology is similar. What differs is whether there is a real person on the other end of it."
+    },
+    {
+      "id": "e6-17",
+      "q": "Does a publicly available recording imply consent to clone that voice?",
+      "options": [
+        "Yes, public material may be used freely",
+        "No — consent must be explicit, informed and specific to the use",
+        "Only for non-commercial purposes"
+      ],
+      "answer": 1,
+      "explain": "A podcast or lecture is public and is not permission to be synthesised. Permission for one use is not permission for another."
+    },
+    {
+      "id": "e6-18",
+      "q": "A practical caution about cloning your own voice:",
+      "options": [
+        "It degrades the source recordings",
+        "It weakens voice authentication, and the samples act like credentials",
+        "Most providers prohibit it"
+      ],
+      "answer": 1,
+      "explain": "A good clone undermines systems that identify you by voice, so prefer another factor and protect the samples accordingly."
+    },
+    {
+      "id": "e6-19",
+      "q": "The test for whether generated media needs a label:",
+      "options": [
+        "Whether it took several attempts",
+        "Whether a reasonable person would take it as a record of something that happened",
+        "Whether it is photorealistic"
+      ],
+      "answer": 1,
+      "explain": "A stylised illustration borrows no promise. A realistic image of a real place or person borrows the promise that someone was there."
+    },
+    {
+      "id": "e6-20",
+      "q": "Provenance metadata such as C2PA can:",
+      "options": [
+        "Prove an untagged file is authentic",
+        "Show a claim was attached and has not been altered since",
+        "Detect whether any image was AI-generated"
+      ],
+      "answer": 1,
+      "explain": "It travels only with files carrying it and is routinely stripped by uploading and screenshotting, so absence proves nothing."
+    },
+    {
+      "id": "e6-21",
+      "q": "Disclosure belongs in a visible caption rather than only metadata because:",
+      "options": [
+        "Metadata is hard to author",
+        "Metadata is commonly stripped on upload, so it may disclose nothing to anyone",
+        "Captions improve search ranking"
+      ],
+      "answer": 1,
+      "explain": "A caption survives a screenshot. Credentials that die on upload have told the viewer nothing."
+    },
+    {
+      "id": "e6-22",
+      "q": "The likeness test asks:",
+      "options": [
+        "Whether the image is photorealistic",
+        "Whether they would recognise themselves, and agreed to this specific use",
+        "Whether the person is a public figure"
+      ],
+      "answer": 1,
+      "explain": "Both halves must hold, and recognition can come from a voice or a setting as much as a face."
+    },
+    {
+      "id": "e6-23",
+      "q": "Which of these is NOT a grey area?",
+      "options": [
+        "Historical reconstruction for teaching",
+        "Sexual imagery of a real person without their consent",
+        "Satirical cartoons of politicians"
+      ],
+      "answer": 1,
+      "explain": "It is the most common serious harm from these tools and criminal in many jurisdictions. \"Private\" and \"obviously fake\" are not defences."
+    },
+    {
+      "id": "e6-24",
+      "q": "For satire, the workable distinction is:",
+      "options": [
+        "Whether the subject is a public figure",
+        "Realism — obvious commentary differs from a realistic fabrication",
+        "Whether a label is attached"
+      ],
+      "answer": 1,
+      "explain": "A cartoon is unmistakably commentary. A photorealistic video is not, even labelled, because labels do not survive the third repost."
+    }
+  ]
+}

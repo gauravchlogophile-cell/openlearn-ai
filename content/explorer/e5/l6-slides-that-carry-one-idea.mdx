@@ -1,0 +1,139 @@
+---
+title: "Slides that carry one idea"
+description: "Ask for a deck and you get bullet points nobody reads. Ask for the argument first, then one assertion per slide, and the deck writes itself."
+track: explorer
+module: e5
+order: 6
+minutes: 8
+objectives:
+  - "Build a deck from an argument rather than from a topic list"
+  - "Write assertion headlines instead of topic labels"
+concepts: ["assertion headlines", "narrative", "slide design"]
+flashcards:
+  - front: "What is an assertion headline?"
+    back: "A slide title that states the point — 'Costs rose because volume doubled' — rather than labelling a topic like 'Costs'."
+  - front: "Why does asking for 'a deck about X' fail?"
+    back: "It returns topics as bullets. A deck is an argument in sequence, and topics have no sequence."
+  - front: "What should the slide body do?"
+    back: "Provide the single piece of evidence for the headline. If it needs three, it is three slides."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Ask for "a presentation about the Q3 results" and you will get eight slides
+with four bullets each, all grammatically parallel, none of which say anything.
+It is the most reliably disappointing output in this module.
+
+The problem is not the tool. It is that "about X" describes a topic, and a
+presentation is not a topic. It is an argument delivered in order.
+
+## Get the argument first
+
+Before any slides:
+
+> *I need to present [subject] to [audience] in [minutes] minutes.*
+>
+> *What I want them to do afterwards: [decision].*
+>
+> *Do not make slides yet. Give me the argument as a numbered sequence of
+> claims, where each one is needed for the next. Mark any claim I have not
+> given you evidence for.*
+
+That last instruction is doing the same job as L1's sceptical-reader line, and
+it is where decks usually fail — a step in the reasoning that everyone assumes
+and nobody has shown.
+
+Naming what you want the audience to *do* also disciplines everything
+downstream. A deck aimed at a decision is a different deck from one aimed at
+"sharing an update", and most bad decks are the second pretending to be the
+first.
+
+## One assertion per slide
+
+Now convert. The rule that does the most work:
+
+> *One slide per claim. The title must be the claim, as a full sentence — not
+> a topic label. The body carries the single piece of evidence for it. If a
+> slide needs two pieces of evidence, split it.*
+
+Compare:
+
+> *Regional performance* — a folder name.
+>
+> *North is the only region below plan, and it is 12% below* — a claim,
+> arguable and checkable.
+
+Assertion headlines have a useful side effect: a reader who only skims your
+titles still receives the whole argument. Given how decks actually get consumed
+— forwarded, half-read, skimmed on a phone — that is where most of the value
+lands.
+
+## What to do with the bullets
+
+Ask for prose, then cut. Bullets are the default because they look like slide
+content, but a bullet is a sentence with its verb removed and its logic hidden.
+
+If a slide genuinely holds a list, make it a list of *things* — regions,
+options, dates. If the items are ideas, they are separate slides or they are
+speaker notes.
+
+Speaker notes are the right home for most of what ends up on slides. Ask for
+them explicitly: *give me the two sentences I should say over this slide.*
+
+## The numbers rule still applies
+
+Every figure on a slide is subject to L5. Slides are the format where an
+unchecked number does most damage, because it is projected, screenshotted and
+quoted long after the deck's context is gone. Recompute anything you put in
+30-point type.
+
+## Try it now (7 minutes)
+
+Take a deck you need to build. Ask for the argument as numbered claims, with
+unevidenced steps marked.
+
+Then write assertion headlines for the first three. If you cannot state a slide
+as a claim, you have found a slide that does not need to exist.
+
+<Quiz client:visible items={[
+  {
+    q: "Why does asking for 'a deck about X' produce weak slides?",
+    options: [
+      "Presentation software formats badly",
+      "'About X' is a topic, and a presentation is an argument in sequence",
+      "Assistants cannot generate images"
+    ],
+    answer: 1,
+    explain: "Topics have no order and no claim, so you get parallel bullets that assert nothing. The argument has to come first."
+  },
+  {
+    q: "An assertion headline is:",
+    options: [
+      "A title stating the slide's claim as a full sentence",
+      "A short topic label like 'Regional performance'",
+      "The first bullet, promoted to the title"
+    ],
+    answer: 0,
+    explain: "\"North is the only region below plan, and it is 12% below\" is arguable and checkable. A folder name is neither."
+  },
+  {
+    q: "A slide needing two separate pieces of evidence should:",
+    options: [
+      "Use a two-column layout",
+      "Be split into two slides",
+      "Move one piece into a footnote"
+    ],
+    answer: 1,
+    explain: "One claim, one slide, one piece of evidence. Two pieces means two claims are hiding in one slide."
+  }
+]} />
+
+## Recap
+
+Get the argument as numbered claims before any slide exists, mark the steps you
+have not evidenced, and give every slide an assertion headline with a single
+piece of evidence under it. Push the rest into speaker notes, and recompute
+every number you put on screen.

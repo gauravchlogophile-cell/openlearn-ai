@@ -1,0 +1,142 @@
+---
+title: "Checking a claim in two minutes"
+description: "A method fast enough that you actually use it: find the primary source, read the claim in place, and never verify a model with the same model."
+track: explorer
+module: e7
+order: 3
+minutes: 8
+objectives:
+  - "Verify a claim against a primary source quickly"
+  - "Explain why asking the model to check itself proves nothing"
+concepts: ["primary sources", "lateral reading", "independence"]
+flashcards:
+  - front: "Why not ask an assistant whether its own answer is correct?"
+    back: "The same process produces both. Agreement is not confirmation, and it will often 'correct' a right answer if pushed."
+  - front: "What is lateral reading?"
+    back: "Leaving the page to see what other sources say about the claim, rather than reading further down the same page."
+  - front: "What counts as a primary source?"
+    back: "The thing itself — the paper, the legislation, the filing, the dataset — not an article describing it."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+A claim has passed the triage. Now what?
+
+The method has to be fast, because a slow one gets skipped when it matters
+most. Two minutes, four steps.
+
+## 1. State the claim precisely
+
+Write down the exact claim, in one sentence, with the numbers and qualifiers
+intact.
+
+This sounds like a formality and it is the most useful step. Half the time you
+discover you cannot state it precisely — which means you did not actually know
+what was being asserted, and *that* was the real problem.
+
+*"Remote work reduces productivity"* is not checkable. *"A 2023 study found a
+17% productivity drop among fully remote knowledge workers"* is, and stating it
+that way immediately raises the questions that matter: which study, which
+workers, measured how.
+
+## 2. Go to the primary source
+
+The **primary source** is the thing itself: the paper, the legislation, the
+company filing, the dataset, the original statement. Not an article about it,
+and not a summary of the article.
+
+Every layer between you and the source is a layer where a qualifier was dropped
+— E4·L3 and E5·L7 both showed that happening. By the third retelling, "in this
+sample, under these conditions" has become a general law.
+
+Search for the specific thing. If you cannot find a primary source at all, that
+is itself the answer: the claim may not have one.
+
+## 3. Read the claim in place
+
+Find the actual sentence and read what surrounds it.
+
+This is where most failures surface, and they are rarely dramatic. The study
+exists, and it covered a different population. The law exists, and the clause
+applies only above a threshold. The quote is real and was said about something
+else.
+
+The claim is not fabricated. It has been detached from the conditions that made
+it true, which is both more common and harder to notice than invention.
+
+## 4. Read laterally
+
+If a source is unfamiliar, do not evaluate it by reading more of it. A
+professional-looking site is trivially easy to produce.
+
+Open a new search and find out what *other* people say about that source. This
+is **lateral reading**, it is what fact-checkers actually do, and it takes about
+thirty seconds — far less than reading an About page written by the people you
+are assessing.
+
+## Never verify a model with the same model
+
+The most common mistake in this whole module.
+
+*"Are you sure?"* is not verification. The same process that produced the
+answer produces the reassurance, and agreement between them is not evidence of
+anything. Worse, models are agreeable under pressure — push back on a correct
+answer and it will frequently apologise and produce a wrong one.
+
+A different assistant is only slightly better: overlapping training data means
+correlated errors, not independent confirmation.
+
+Independence means a source that does not derive from a language model. That is
+the whole point.
+
+## Try it now (7 minutes)
+
+Take a claim you have seen recently. State it precisely, find the primary
+source, and read the sentence in context.
+
+Then ask an assistant "are you sure?" about something it told you correctly, and
+push back once. Watch what happens. That demonstration is worth more than this
+lesson.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is asking 'are you sure?' not verification?",
+    options: [
+      "Models cannot assess their own outputs at all",
+      "The same process produces both answer and reassurance, and models are agreeable under pressure",
+      "It uses another message from your allowance"
+    ],
+    answer: 1,
+    explain: "Agreement is not confirmation, and pushing back on a correct answer often produces an apology and a wrong one."
+  },
+  {
+    q: "Lateral reading means:",
+    options: [
+      "Reading further down the same page",
+      "Leaving the page to see what other sources say about it",
+      "Skimming several claims at once"
+    ],
+    answer: 1,
+    explain: "A professional-looking site is easy to produce, so evaluating it by reading more of it proves nothing. This is what fact-checkers do."
+  },
+  {
+    q: "The most common verification failure is finding that:",
+    options: [
+      "The source was entirely fabricated",
+      "The source is real but the claim was detached from its conditions",
+      "The source is behind a paywall"
+    ],
+    answer: 1,
+    explain: "The study exists and covered a different population; the clause applies above a threshold. Harder to notice than invention, and more common."
+  }
+]} />
+
+## Recap
+
+State the claim precisely — often that alone dissolves it — then find the
+primary source, read the sentence in its context, and read laterally about any
+source you do not know. Never ask the model that produced an answer to confirm
+it, and treat a second assistant as correlated rather than independent.

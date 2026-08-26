@@ -4,6 +4,30 @@
     {
       "date": "2026-08-26",
       "kind": "New module",
+      "where": "Explorer · E8",
+      "what": "AI Ethics & Responsible Use published — eight lessons on authorship, disclosing AI use, where bias comes from and lands, who answers when something goes wrong, the environmental and labour costs, automating work that belongs to colleagues, how to refuse, and writing your own code of conduct. This completes the Explorer track: 64 lessons across eight modules."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
+      "where": "Explorer · E7",
+      "what": "Truth, Verification & Critical Thinking published — eight lessons on why fluency defeats scepticism, triaging which claims to check, a two-minute verification method, judging sources, handling disagreement, how manipulation finds you, your own bias, and a habit small enough to survive. This module is compulsory for certification."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
+      "where": "Explorer · E6",
+      "what": "Creative AI: Image, Video & Voice published — eight lessons on how diffusion models actually work, describing an image, iterating with seeds, the artist-style question, the current limits of video, voice cloning and consent, labelling what you made, and the categories that are not grey areas."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
+      "where": "Explorer · E5",
+      "what": "Documents, Spreadsheets & Presentations published — eight lessons on outlining before prose, drafting in your own voice, using an assistant as a critic, spreadsheet formulas you can test, recomputing every number, assertion-headline slides, rewriting for a different reader, and the final consistency pass."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
       "where": "Explorer · E4",
       "what": "Everyday Productivity published — eight lessons on where AI actually fits in your day, email, reading long documents, research that cites its sources, meeting notes, planning, a twenty-minute routine, and what not to hand over."
     },

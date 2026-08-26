@@ -1,0 +1,140 @@
+---
+title: "Same content, different reader"
+description: "One document, several audiences. Rewriting for a different reader is a real strength — provided you change what is included, not just the vocabulary."
+track: explorer
+module: e5
+order: 7
+minutes: 7
+objectives:
+  - "Rewrite a document for a different audience without losing accuracy"
+  - "Distinguish simplifying from omitting something the reader needed"
+concepts: ["audience", "register", "omission"]
+flashcards:
+  - front: "What separates a good rewrite from a bad one?"
+    back: "A good one changes what is included and in what order. A bad one only swaps vocabulary."
+  - front: "What is the main risk when simplifying?"
+    back: "Dropping a caveat, so the simpler version says something stronger than the original."
+  - front: "How do you catch that risk?"
+    back: "Ask what the rewrite left out, and check each omission was safe to lose."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The same material almost always needs to reach more than one reader. The board
+wants a page; the team wants the detail; somebody outside the organisation
+wants a version with no internal names in it.
+
+Rewriting is a genuine strength here — the content already exists, and you know
+it, so checking is cheap. There is one specific way it goes wrong.
+
+## Change what is included, not just the words
+
+A weak rewrite substitutes vocabulary. Long words become short ones,
+`utilisation` becomes `use`, and the structure is untouched. It reads simpler
+and communicates no better, because the reason the board could not use the
+original was never the vocabulary.
+
+Different readers need **different content in a different order**:
+
+> *Rewrite the document below for [reader].*
+>
+> *They care about: [what].*
+> *They will decide: [decision].*
+> *They have: [two minutes / an hour].*
+> *They already know: [background].*
+>
+> *Change what is included and the order it appears in, not only the wording.
+> Lead with what they need to decide. Then list what you cut.*
+
+*They already know* is worth stating explicitly, because it prevents the most
+common waste — a rewrite that spends its first third re-explaining context the
+reader has lived through.
+
+## Ask what was cut
+
+That last instruction — *then list what you cut* — is the safety mechanism, and
+it exists because of one failure mode.
+
+When you simplify, caveats go first. They are the least essential-sounding part
+of any sentence and the easiest to drop. So:
+
+> *"The pilot reduced handling time by 18% in the two sites where staffing was
+> already at target."*
+
+becomes
+
+> *"The pilot reduced handling time by 18%."*
+
+Shorter, clearer, and now claiming something considerably stronger than the
+evidence supports. Nobody lied. A qualifier was tidied away, and the sentence
+that remains is one you will be held to.
+
+This is the same failure as E4·L3's summaries, arriving in a different costume.
+It is worth recognising, because it is the most frequent way careful work
+becomes an overstatement.
+
+## Read the omission list
+
+So read what it cut, and for each item ask: *was that load-bearing?*
+
+Most will not be. The one or two that are will be exactly the qualifiers that
+made the original defensible — and putting them back costs one sentence.
+
+## The version you cannot simply generate
+
+One boundary. A version for an external audience — regulators, press, a
+customer — is not a rewrite task you delegate and send. Someone accountable
+reads that one line by line, because the thing that makes it safe is judgement
+about what your organisation can be held to.
+
+Use the rewrite as the draft. Do not use it as the decision.
+
+## Try it now (6 minutes)
+
+Take something you have written. Rewrite it for a reader with two minutes and a
+decision to make, and ask for the list of what was cut.
+
+Check the list for caveats. Put back any that were doing work.
+
+<Quiz client:visible items={[
+  {
+    q: "A good rewrite for a different audience primarily changes:",
+    options: [
+      "The vocabulary",
+      "What is included and the order it appears in",
+      "The length only"
+    ],
+    answer: 1,
+    explain: "Vocabulary was rarely the barrier. Different readers need different content, led by what they must decide."
+  },
+  {
+    q: "The main risk when simplifying is:",
+    options: [
+      "The text becomes too short",
+      "A caveat is dropped, so the simpler version claims more than the evidence supports",
+      "Technical terms are lost"
+    ],
+    answer: 1,
+    explain: "Qualifiers sound least essential and go first. \"Reduced handling time by 18%\" without its conditions is a stronger claim than the original made."
+  },
+  {
+    q: "Asking the assistant to list what it cut is useful because:",
+    options: [
+      "It shows how much shorter the rewrite is",
+      "It lets you check each omission was safe rather than load-bearing",
+      "It proves the rewrite is faithful"
+    ],
+    answer: 1,
+    explain: "Most cuts are fine. The one or two that are not are usually the qualifiers that made the original defensible."
+  }
+]} />
+
+## Recap
+
+Tell the assistant who the reader is, what they must decide, how long they
+have, and what they already know — then require a list of what was cut. Read
+that list for caveats, because a tidied-away qualifier turns careful work into
+an overstatement you will be held to.

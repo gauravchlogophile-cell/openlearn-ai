@@ -9,10 +9,10 @@
     { "id": "e2", "track": "explorer", "title": "Meet Your AI Assistants", "tagline": "The major assistants, vendor-neutrally — and how to choose.", "status": "live" },
     { "id": "e3", "track": "explorer", "title": "Prompting Fundamentals", "tagline": "Clear requests, iteration, and reusable patterns.", "status": "live" },
     { "id": "e4", "track": "explorer", "title": "Everyday Productivity", "tagline": "Email, research, notes, planning — your daily AI routine.", "status": "live" },
-    { "id": "e5", "track": "explorer", "title": "Documents, Spreadsheets & Presentations", "tagline": "From blank page to finished draft, responsibly.", "status": "planned" },
-    { "id": "e6", "track": "explorer", "title": "Creative AI: Image, Video & Voice", "tagline": "Making media — and the ethics of it.", "status": "planned" },
-    { "id": "e7", "track": "explorer", "title": "Truth, Verification & Critical Thinking", "tagline": "The module that keeps you safe. Compulsory for certification.", "status": "planned" },
-    { "id": "e8", "track": "explorer", "title": "AI Ethics & Responsible Use", "tagline": "Integrity, disclosure, and your personal code of conduct.", "status": "planned" },
+    { "id": "e5", "track": "explorer", "title": "Documents, Spreadsheets & Presentations", "tagline": "From blank page to finished draft, responsibly.", "status": "live" },
+    { "id": "e6", "track": "explorer", "title": "Creative AI: Image, Video & Voice", "tagline": "Making media — and the ethics of it.", "status": "live" },
+    { "id": "e7", "track": "explorer", "title": "Truth, Verification & Critical Thinking", "tagline": "The module that keeps you safe. Compulsory for certification.", "status": "live" },
+    { "id": "e8", "track": "explorer", "title": "AI Ethics & Responsible Use", "tagline": "Integrity, disclosure, and your personal code of conduct.", "status": "live" },
     { "id": "p1", "track": "practitioner", "title": "Advanced Prompting", "tagline": "Few-shot, structure, chaining, templates.", "status": "planned" },
     { "id": "b1", "track": "builder", "title": "Python On-Ramp for AI", "tagline": "Just enough code to build.", "status": "planned" }
   ]

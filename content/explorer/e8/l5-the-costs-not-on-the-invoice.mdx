@@ -1,0 +1,155 @@
+---
+title: "The costs not on the invoice"
+description: "Energy, water and the people paid to label the worst of it. What is actually known, what is contested, and what proportionate use looks like."
+track: explorer
+module: e8
+order: 5
+minutes: 8
+objectives:
+  - "Describe the environmental and labour costs behind AI services"
+  - "Judge proportionate use without either panic or dismissal"
+concepts: ["externalities", "data labelling", "proportionality"]
+flashcards:
+  - front: "What are the main environmental costs?"
+    back: "Electricity for training and for every query, water for datacentre cooling, and hardware manufacture."
+  - front: "Who does data labelling?"
+    back: "Large workforces, often in lower-income countries, including content moderation work with documented psychological harm."
+  - front: "What is proportionate use?"
+    back: "Matching the size of the tool to the size of the task, rather than defaulting to the largest available."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+A query feels weightless. Nothing about the interface suggests otherwise, and
+the price is often zero.
+
+It is not weightless. This lesson is about what sits behind it — stated
+carefully, because the topic attracts both dismissal and exaggerated numbers,
+and neither helps you decide anything.
+
+## Energy and water
+
+Two distinct costs.
+
+**Training** a large model consumes a great deal of electricity, once, in
+concentrated fashion. Published figures for large models run to hundreds of
+megawatt-hours upward.
+
+**Inference** — running the model, every time anyone asks anything — is small
+per query and enormous in aggregate. At present scale, inference has overtaken
+training as the dominant ongoing cost for widely-used systems.
+
+**Water** is the one people miss. Datacentres use it for cooling, and unlike
+electricity it is drawn locally. A datacentre in a water-stressed region is a
+local issue regardless of the grid's carbon intensity.
+
+Two honest caveats. Per-query figures circulating online vary by orders of
+magnitude and many trace to poor sources — E7's rules apply to this topic as
+much as any other. And efficiency per query has improved substantially, while
+total consumption has risen, because usage grew faster. Both are true, and
+quoting only one is how this subject usually gets argued.
+
+## The people in the pipeline
+
+Less visible and, for many, the sharper issue.
+
+Models are shaped by large amounts of human work: labelling data, ranking
+outputs, writing demonstration responses, and reviewing material to train safety
+filters.
+
+That last category deserves naming. Making a model refuse to produce the worst
+things requires people to look at the worst things — violence, abuse, child
+sexual abuse material. This work is frequently outsourced to lower-income
+countries, sometimes at very low pay, with documented psychological harm and
+inadequate support. It has been the subject of investigative reporting and
+litigation.
+
+The comfort of a well-behaved assistant rests on that work. It is worth knowing
+whose.
+
+## Neither panic nor dismissal
+
+Two unhelpful responses.
+
+*"It's catastrophic, don't use it."* Not proportionate, and it ignores genuine
+value — including uses that reduce other consumption.
+
+*"It's trivial, a video stream uses more."* Sometimes true per query, and it
+skips aggregate growth entirely, plus water and labour, which are not
+comparable to streaming at all.
+
+The honest position: real costs, unevenly distributed, borne substantially by
+people who see none of the benefit. That does not mean stop. It means choose
+deliberately.
+
+## Proportionate use
+
+What that looks like in practice:
+
+**Match the tool to the task.** The largest model is not required to fix a
+sentence. Smaller and cheaper models handle most routine work, and choosing one
+is the single most effective thing an individual can do.
+
+**Do not loop pointlessly.** Twenty regenerations because you have not said what
+you want is E6·L3's problem and this one.
+
+**Prefer once to repeatedly.** Save the result. Reuse the prompt.
+
+**Weigh it against the alternative.** Sometimes the assistant replaces a flight,
+a print run, or three people's afternoon. Sometimes it replaces thinking for
+ten seconds. These are not the same trade.
+
+Small, undramatic, and it accumulates — the aggregate is exactly what the
+numbers say matters.
+
+## Try it now (5 minutes)
+
+Look at your recent use. Find one task you routinely give a large model that a
+smaller one would handle.
+
+Switch it. That is proportionality — not abstinence, just not defaulting to the
+biggest thing available for everything.
+
+<Quiz client:visible items={[
+  {
+    q: "Which is currently the dominant ongoing energy cost for widely-used models?",
+    options: [
+      "Training",
+      "Inference — running the model for every query",
+      "Storing the training data"
+    ],
+    answer: 1,
+    explain: "Training is large and happens once; inference is small per query and enormous in aggregate at present scale."
+  },
+  {
+    q: "Why does water deserve separate mention from electricity?",
+    options: [
+      "It costs more",
+      "It is drawn locally, so a datacentre in a water-stressed region is a local issue",
+      "It is used during training only"
+    ],
+    answer: 1,
+    explain: "Unlike grid electricity, cooling water is a local resource, independent of the grid's carbon intensity."
+  },
+  {
+    q: "The safety filters that make an assistant well-behaved depend on:",
+    options: [
+      "Automated detection alone",
+      "People reviewing harmful material, often outsourced, with documented psychological harm",
+      "Rules written by the model provider's lawyers"
+    ],
+    answer: 1,
+    explain: "Making a model refuse the worst things requires people to look at the worst things. That work has been the subject of reporting and litigation."
+  }
+]} />
+
+## Recap
+
+Training and especially inference consume significant energy, cooling water is
+a local resource, and safety filters rest on human review work that has caused
+documented harm. Reject both panic and dismissal: the costs are real and
+unevenly borne. Choose proportionately — match the model to the task, avoid
+pointless looping, and weigh each use against what it actually replaces.

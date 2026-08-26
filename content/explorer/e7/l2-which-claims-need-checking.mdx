@@ -1,0 +1,145 @@
+---
+title: "Which claims need checking"
+description: "You cannot verify everything, so verify the right things. A triage that takes seconds and directs your attention where being wrong actually costs."
+track: explorer
+module: e7
+order: 2
+minutes: 8
+objectives:
+  - "Triage claims by consequence and reversibility"
+  - "Recognise the claim types that fail most often"
+concepts: ["triage", "consequence", "reversibility"]
+flashcards:
+  - front: "What two questions triage a claim?"
+    back: "What happens if this is wrong, and how easily could it be undone?"
+  - front: "Which claim types fail most often?"
+    back: "Citations, numbers, quotations, attributions, legal and medical specifics, and anything recent."
+  - front: "Why does 'recent' matter?"
+    back: "Training data has a cutoff, and anything after it is either absent or retrieved — and retrieval can be stale or wrong."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+You cannot check everything, and L1 argued you should not try. So the skill is
+deciding, quickly, what earns the effort.
+
+Two questions and a short list of usual suspects will handle nearly all of it.
+
+## The two questions
+
+**If this is wrong, what happens?**
+
+Nothing — you were curious. Something small — a slightly worse decision.
+Something serious — money, health, a legal position, someone's reputation,
+your own credibility in front of people who matter.
+
+**How easily could it be undone?**
+
+A wrong fact in a draft you will revise is nearly free. A wrong figure in a
+board paper, a filed document, a published article or a message already sent is
+not.
+
+High consequence and hard to reverse is where your budget goes. That combination
+is rarer than it feels, which is exactly why this triage is worth doing rather
+than defaulting to anxiety.
+
+## The claims that fail most often
+
+Independently of consequence, some categories are simply less reliable. Treat
+these as needing a check whenever you intend to use them:
+
+**Citations and references.** The classic failure. A plausible author, a
+plausible journal, a plausible year, and no such paper. Never repeat a citation
+you have not opened.
+
+**Numbers.** E5·L5 covered why. Anything computed in prose, any statistic, any
+percentage without a stated base.
+
+**Quotations.** Who said what, in what words. Real people get given
+paraphrases, and paraphrases get sharpened into things that sound better than
+what was actually said.
+
+**Attributions.** Which company did what, which country passed which law, which
+study found which result. Adjacent-but-wrong is the common failure here.
+
+**Legal, medical, financial specifics.** Not general explanation — specifics.
+Notice periods, dosages, thresholds, deadlines, eligibility. These vary by
+jurisdiction and change, and confident wrongness is expensive.
+
+**Anything recent.** Training data ends somewhere. Beyond that, an assistant
+either lacks the information or retrieved it — and E4·L4 covered how retrieval
+goes wrong.
+
+## Being told what you wanted to hear
+
+One more trigger, and it is the one people skip.
+
+**If an answer is unusually convenient, check it.** It confirms your position,
+it says the difficult thing is unnecessary, it means the deadline is fine.
+
+This is not because models flatter you — although they somewhat do. It is
+because a convenient answer is the one you will not scrutinise, so an error
+there travels furthest before anyone catches it.
+
+## What "checking" costs
+
+Less than people assume, which is why the triage matters more than the
+technique.
+
+Opening a citation: thirty seconds. Confirming a number against a source: a
+minute. Checking a legal specific for your jurisdiction: a few minutes.
+
+Compare that to being wrong in public. The economics are not close for anything
+that passed the two questions.
+
+## Try it now (6 minutes)
+
+Take the last substantial answer you got from an assistant. List every distinct
+factual claim in it — there will be more than you expect.
+
+Mark each against the two questions. Check the ones that qualify. Note how few
+of them there were.
+
+<Quiz client:visible items={[
+  {
+    q: "The two triage questions are:",
+    options: [
+      "Is it interesting, and is it well written?",
+      "What happens if it is wrong, and how easily could it be undone?",
+      "Is it recent, and is it long?"
+    ],
+    answer: 1,
+    explain: "Consequence and reversibility together identify the minority of claims worth spending a limited budget on."
+  },
+  {
+    q: "Which category should always be checked before use?",
+    options: [
+      "General explanations of how something works",
+      "Citations and references",
+      "Suggestions for what to read next"
+    ],
+    answer: 1,
+    explain: "A plausible author, journal and year with no such paper is the classic failure. Never repeat a citation you have not opened."
+  },
+  {
+    q: "Why check an answer that is unusually convenient?",
+    options: [
+      "Convenient answers are usually fabricated",
+      "It is the answer you will not scrutinise, so an error there travels furthest",
+      "Models are programmed to flatter users"
+    ],
+    answer: 1,
+    explain: "The risk is in your own reaction rather than the model's intent — you stop looking when the answer suits you."
+  }
+]} />
+
+## Recap
+
+Ask what happens if a claim is wrong and how easily it could be undone, and
+spend your attention there. Always check citations, numbers, quotations,
+attributions, legal and medical specifics, and anything recent — plus any
+answer that is suspiciously convenient, because that is the one you will not
+question on your own.

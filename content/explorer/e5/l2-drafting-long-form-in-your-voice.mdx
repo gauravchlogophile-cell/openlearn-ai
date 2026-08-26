@@ -1,0 +1,130 @@
+---
+title: "Drafting long-form in your voice"
+description: "Section by section, with your own writing as the reference. How to get a long draft that still sounds like a person wrote it — because one did."
+track: explorer
+module: e5
+order: 2
+minutes: 8
+objectives:
+  - "Draft a long document in sections rather than in one request"
+  - "Supply your own writing as a voice reference instead of describing a tone"
+concepts: ["long-form", "voice", "sectioning"]
+flashcards:
+  - front: "Why draft section by section rather than all at once?"
+    back: "Short pieces stay readable and checkable, and the assistant cannot write confidently past a gap in your argument."
+  - front: "What is the best way to specify voice?"
+    back: "Paste 300–500 words you actually wrote and ask it to match. Evidence beats adjectives."
+  - front: "What are the tells of an undirected AI draft?"
+    back: "Tricolons, 'not only... but also', hedged conclusions, and a summary paragraph that repeats what was just said."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+You have an outline you believe in. Now the prose — and the goal is a draft
+that reads as though a specific person wrote it, because a specific person is
+going to put their name on it.
+
+## One section at a time
+
+Resist asking for the whole document. Three reasons, and the third is the one
+people miss.
+
+A long output is long to read, so you skim, and skimming is how unchecked
+claims get through. Sections keep each piece short enough to actually read.
+
+Corrections stay local. Change something in section two of a full draft and
+you are re-reading the whole thing to see what else moved.
+
+And a gap in your argument gets written past. Given the whole outline at once,
+an assistant will bridge a weak transition with confident connective prose —
+*Building on this, it follows that…* — and the weakness disappears under
+fluency instead of surfacing. Section by section, the gap is still a gap.
+
+## Give it your writing
+
+E4·L2 covered this for email; long-form makes it more important, because there
+is more surface area for a generic voice to show.
+
+Paste 300–500 words you actually wrote. Not your best writing — your *typical*
+writing, ideally on a related subject.
+
+> *Below is 400 words I wrote. Match its sentence length, its level of
+> formality, and how much it hedges.*
+>
+> *Now draft section 2 of the outline: [claim]. About 300 words.*
+> *Do not open with a topic sentence restating the heading.*
+> *Do not end with a summary of what you just said.*
+
+Those two constraints remove the most recognisable structural habits of
+undirected drafts.
+
+## Learn your assistant's tells
+
+Every assistant has verbal habits. Once you can see them, you can forbid them
+by name, which works far better than asking for "natural" writing.
+
+Common ones: things arriving in threes; *not only… but also*; conclusions that
+hedge in both directions so as to commit to nothing; a closing paragraph that
+restates the opening; the word *delve*; *it's worth noting that*.
+
+Keep a short list for whatever you use, and paste it in. Naming the specific
+habit is a concrete instruction, where "sound human" is an adjective the model
+has to interpret.
+
+## The draft is a draft
+
+Everything drafted this way still needs the pass in L3, and the numbers still
+need L5. What you have after this lesson is a document with your structure and
+approximately your voice — which is a real saving, and is not the same as
+something ready to send.
+
+## Try it now (7 minutes)
+
+Take your outline from L1. Paste 400 words of your own writing, then ask for
+one section only, with both structural constraints.
+
+Read it aloud. The sentences you would not have said out loud are the tells —
+add them to your list.
+
+<Quiz client:visible items={[
+  {
+    q: "The most important reason to draft section by section is:",
+    options: [
+      "It produces shorter documents overall",
+      "A gap in your argument gets bridged with confident prose if the whole thing is written at once",
+      "Assistants have a length limit"
+    ],
+    answer: 1,
+    explain: "Fluent connective writing hides weak transitions. Section by section, the gap stays visible instead of disappearing under a smooth sentence."
+  },
+  {
+    q: "The best voice reference is:",
+    options: [
+      "A description like 'warm but authoritative'",
+      "300–500 words of your own typical writing",
+      "A published author you admire"
+    ],
+    answer: 1,
+    explain: "Adjectives select an average. Your own typical writing — not your best — is evidence the model can actually match."
+  },
+  {
+    q: "Why keep a list of your assistant's verbal tells?",
+    options: [
+      "To report them to the vendor",
+      "So you can forbid specific habits by name rather than asking for 'natural' writing",
+      "Because tells indicate the model is malfunctioning"
+    ],
+    answer: 1,
+    explain: "A named habit is a concrete instruction. \"Sound human\" is another adjective for the model to interpret however it likes."
+  }
+]} />
+
+## Recap
+
+Draft one section at a time so gaps stay visible, supply 300–500 words of your
+own typical writing rather than describing a tone, and forbid your assistant's
+specific verbal habits by name. What comes out is a draft with your structure
+and roughly your voice — not a finished document.

@@ -1,0 +1,131 @@
+---
+title: "The last ten percent"
+description: "Finishing is a separate skill from drafting. The consistency checks worth automating, and the ones only a person who cares can do."
+track: explorer
+module: e5
+order: 8
+minutes: 8
+objectives:
+  - "Run a consistency pass that catches what drafting introduced"
+  - "Identify the finishing checks that must stay human"
+concepts: ["consistency", "proofreading", "final pass"]
+flashcards:
+  - front: "What errors does assembling a document from sections introduce?"
+    back: "Inconsistent terms, repeated points, contradictory figures, and headings that no longer match the content."
+  - front: "What is an assistant genuinely good at in a final pass?"
+    back: "Mechanical consistency — terminology, formats, numbers repeated in two places disagreeing."
+  - front: "Which final checks must stay human?"
+    back: "Whether it is true, whether it is fair to people named in it, and whether you are willing to sign it."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+You have a structure you argued for, sections drafted in your voice, criticism
+taken, numbers recomputed. What remains is the part that separates a document
+that reads as competent from one that does not — and it is a different skill
+from writing.
+
+## Section drafting has a specific cost
+
+L2 recommended drafting section by section, and it was the right advice. It has
+one predictable consequence: the sections do not quite agree.
+
+The same thing gets three names across four pages. Two sections make the same
+point in different words. A figure in the summary contradicts the same figure
+in the appendix. A heading survives from an outline you later reorganised and
+now describes something else.
+
+None of these are writing errors. They are *assembly* errors, and they are
+exactly what a machine is good at finding.
+
+## The consistency pass
+
+> *This is a complete document assembled from separately drafted sections.
+> Do not rewrite it. Report only:*
+>
+> *1. Terms used inconsistently — list each variant and where it appears.*
+> *2. Points made more than once, with locations.*
+> *3. Any number, date or name that appears twice with different values.*
+> *4. Headings that do not match the content beneath them.*
+> *5. Claims in the summary that no section supports.*
+
+*Do not rewrite it* keeps this a report you can act on rather than a new draft
+you have to re-read from the top.
+
+Item five earns its place. Summaries get written early, the document changes
+underneath them, and the summary keeps asserting the original plan. It is the
+part most likely to be read and the part most likely to be stale.
+
+## What it cannot check
+
+Then the pass that stays yours, and there are only three questions.
+
+**Is it true?** Not internally consistent — true. A document can be perfectly
+coherent and wrong throughout, and consistency checking will report nothing.
+
+**Is it fair to the people in it?** Anyone named, described or implied. Would
+they recognise themselves? Would you say it with them present? This one has no
+mechanical version at all.
+
+**Will I sign this?** Your name goes on it. Everything in it becomes something
+you said, and E4·L2's rule scales: the larger the document, the more of it you
+are quietly agreeing to.
+
+## Read it once on paper
+
+An unfashionable suggestion that keeps earning its place: print it, or at
+minimum read it in a different format from the one you wrote it in.
+
+You stop seeing the document you have been editing and start seeing the one
+that exists. Most people catch something in the first two pages, every time.
+
+## Try it now (7 minutes)
+
+Take a document assembled from parts. Run the five-point consistency report.
+
+Then read the summary against the sections. If the summary promises something
+no section delivers, you have found the most valuable defect in the document.
+
+<Quiz client:visible items={[
+  {
+    q: "Drafting section by section predictably introduces:",
+    options: [
+      "Spelling errors",
+      "Assembly errors — inconsistent terms, repeated points, contradictory figures",
+      "Overly short sections"
+    ],
+    answer: 1,
+    explain: "The sections are individually fine and do not quite agree with each other. That is precisely what a machine is good at finding."
+  },
+  {
+    q: "Why include 'do not rewrite it' in a consistency pass?",
+    options: [
+      "Rewriting costs more",
+      "You want a report you can act on, not a new draft to re-read from the top",
+      "Rewrites break formatting"
+    ],
+    answer: 1,
+    explain: "A returned rewrite means re-verifying the whole document. A list of located problems is directly actionable."
+  },
+  {
+    q: "Which final check has no mechanical version?",
+    options: [
+      "Whether numbers agree between sections",
+      "Whether the document is fair to the people named in it",
+      "Whether terminology is consistent"
+    ],
+    answer: 1,
+    explain: "Consistency and arithmetic can be checked. Whether someone would recognise themselves, and whether you would say it with them present, cannot."
+  }
+]} />
+
+## Recap
+
+Run a consistency report over the assembled document — terms, repetition,
+conflicting figures, stale headings, and summary claims no section supports —
+and forbid rewriting so the output stays actionable. Then ask the three
+questions no tool can: is it true, is it fair to the people in it, and will you
+sign it. That completes E5.

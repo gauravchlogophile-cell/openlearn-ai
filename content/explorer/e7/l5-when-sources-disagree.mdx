@@ -1,0 +1,141 @@
+---
+title: "When sources disagree"
+description: "Disagreement is information, not an obstacle. How to tell a real dispute from a false balance, and what to do when there is no clean answer."
+track: explorer
+module: e7
+order: 5
+minutes: 8
+objectives:
+  - "Diagnose why two sources disagree before choosing between them"
+  - "Distinguish genuine dispute from false balance"
+concepts: ["disagreement", "false balance", "uncertainty"]
+flashcards:
+  - front: "What are the four reasons sources disagree?"
+    back: "They measured different things, at different times, with different methods, or one is wrong."
+  - front: "What is false balance?"
+    back: "Presenting a lopsided disagreement as an even one, so a fringe position appears to have equal standing."
+  - front: "What should you do when a question is genuinely unsettled?"
+    back: "Say so, and state what would resolve it. Manufacturing certainty is the actual failure."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+You checked, and now you have two credible sources saying different things.
+
+This feels like failure. It is usually the most informative outcome available —
+you have found the exact spot where the question is harder than it looked, and
+most people never get there.
+
+## Four reasons, and only one is "someone is wrong"
+
+Before picking a side, work out which situation you are in.
+
+**They measured different things.** "Unemployment" has several definitions.
+"Users" might mean accounts, monthly actives, or devices. Two correct numbers,
+two different quantities. This is the most common case by a wide margin.
+
+**They measured at different times.** Both were right. One is older. Especially
+common with anything about technology, pricing or regulation.
+
+**They used different methods.** Different populations, different sample sizes,
+different controls. Both may be sound and describe different slices of reality.
+
+**One is actually wrong.** Real, and considerably rarer than the first three.
+
+Diagnosing which of the four you are in usually resolves the disagreement
+without either source having to lose.
+
+## The question that does the work
+
+> **What would have to be true for both to be right?**
+
+Ask it before deciding who to believe. Most of the time there is an answer, and
+finding it teaches you more about the subject than picking a winner would.
+
+When there genuinely is no such answer, you have established a real conflict —
+and now it is worth spending time on.
+
+## False balance
+
+The opposite failure, and the more damaging one.
+
+Not every disagreement is an even contest. When a large, well-evidenced body of
+work is set against a small contrarian position, presenting them as "two sides"
+misrepresents the state of knowledge.
+
+Assistants are prone to this. Trained to be balanced and to avoid appearing
+partisan, they will often present a lopsided question as a debate, giving each
+"side" a comparable paragraph. That is a stylistic default, not a finding about
+the evidence.
+
+So ask about the **distribution**, not just the positions:
+
+> *How much support does each position have? Is this an even split among people
+> who study it, or a strong consensus with a minority objection? Say which.*
+
+"Some say X, others say Y" is not neutrality. It is a claim about the balance of
+evidence, usually made without checking.
+
+## When it is genuinely unsettled
+
+Some questions do not have an answer yet. Long-term effects of recent
+technologies. Most contested policy. Anything actively being researched.
+
+The honest move is to say so — and to say what *would* settle it. "This is
+unresolved; the studies that would answer it are running now" is a stronger,
+more useful position than a manufactured conclusion.
+
+Manufacturing certainty to sound decisive is the actual failure here, and it is
+one people commit to avoid seeming unsure. E6·L4 did this deliberately on the
+artist-style question, and E7·L8 will ask you to do it in your own work.
+
+## Try it now (6 minutes)
+
+Find two sources disagreeing on something in your field. Work out which of the
+four reasons applies.
+
+Then ask what would have to be true for both to be right. Note whether the
+disagreement survives that question.
+
+<Quiz client:visible items={[
+  {
+    q: "The most common reason two credible sources disagree:",
+    options: [
+      "One of them is wrong",
+      "They measured different things",
+      "One is deliberately misleading"
+    ],
+    answer: 1,
+    explain: "\"Unemployment\" and \"users\" have several definitions. Two correct numbers can describe two different quantities."
+  },
+  {
+    q: "False balance is:",
+    options: [
+      "Refusing to take a position",
+      "Presenting a lopsided disagreement as an even contest",
+      "Citing only one side"
+    ],
+    answer: 1,
+    explain: "Assistants default to it because they are trained to appear balanced. Ask about the distribution of support, not just the positions."
+  },
+  {
+    q: "When a question is genuinely unsettled, the honest response is:",
+    options: [
+      "Pick the better-supported side and state it plainly",
+      "Say it is unresolved and say what would settle it",
+      "Avoid the question"
+    ],
+    answer: 1,
+    explain: "Manufacturing certainty to sound decisive is the failure. Naming what would resolve it is more useful than a conclusion you invented."
+  }
+]} />
+
+## Recap
+
+Diagnose disagreement before resolving it — different things, different times,
+different methods, or someone wrong — and ask what would have to be true for
+both to hold. Watch for false balance, which assistants produce by default, and
+when a question is genuinely open, say so and say what would close it.

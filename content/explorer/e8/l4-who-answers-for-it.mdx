@@ -1,0 +1,149 @@
+---
+title: "Who answers for it?"
+description: "Accountability does not transfer to a tool. What happens when AI sits in a decision chain, and why 'the system said so' is never an answer."
+track: explorer
+module: e8
+order: 4
+minutes: 8
+objectives:
+  - "Explain why accountability cannot move to a tool"
+  - "Identify the conditions that make human oversight real rather than nominal"
+concepts: ["accountability", "meaningful oversight", "automation bias"]
+flashcards:
+  - front: "Why can accountability not transfer to a tool?"
+    back: "A tool cannot be answerable to the person affected, cannot explain itself under challenge, and cannot make it right."
+  - front: "What makes human oversight meaningful?"
+    back: "Time to review, information to judge with, authority to overrule, and no penalty for using it."
+  - front: "What is automation bias?"
+    back: "The tendency to defer to a system's output, especially under time pressure, even when you had grounds to disagree."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Something goes wrong. A decision was unfair, a figure was incorrect, someone
+was harmed. And somewhere in the chain there was an assistant.
+
+Who answers?
+
+## Responsibility does not move
+
+The short answer is that it stays exactly where it was. Not as a legal
+technicality — for three practical reasons.
+
+**A tool cannot be answerable.** The person affected needs someone to explain
+it to them, and a model cannot be asked what it was thinking. There is no
+"thinking" to recount.
+
+**It cannot be challenged.** Appeal, disagreement, "you have not understood my
+situation" — all require someone who can reconsider. That has to be a person
+with the standing to change the outcome.
+
+**It cannot put it right.** Apology, correction, compensation. Only somebody
+with authority can do any of it.
+
+"The system flagged it" is not an answer. It is a description of how the wrong
+answer arrived, and the question was who is responsible for it having arrived.
+
+## Nominal oversight
+
+The comfortable arrangement is a human "in the loop" who reviews the output.
+This satisfies most policies and frequently means nothing.
+
+Oversight is real only when four things hold:
+
+**Time.** Forty applications an hour is not review; it is confirmation.
+
+**Information.** The reviewer can see why the system produced this, and what
+would count as it being wrong.
+
+**Authority.** They can overrule it, and that overruling stands.
+
+**Safety.** Overruling does not require an explanation nobody else has to give,
+and does not count against them.
+
+Remove any one and you have a person absorbing responsibility for a decision
+they did not meaningfully make. That is worse than automation without oversight,
+because it produces an accountable human who was never actually in control.
+
+## Automation bias
+
+The psychological half, and it is well documented across aviation, medicine and
+navigation long before this technology existed.
+
+People defer to system output. Under time pressure they defer more. When the
+system is usually right, they defer almost entirely — which is precisely when a
+rare error passes through unexamined.
+
+E7·L1 explains why this is sharper now: the output is fluent and confident, and
+disagreeing with it requires you to back your own judgement against something
+that sounds certain.
+
+So if you are the human in the loop, the question is not "does this look right?"
+It is: *what would I have concluded if I had not seen this first?* Where it
+matters, form your own view before you look.
+
+## If you are building the process
+
+You may be the one deciding where a tool sits. Two questions worth resolving
+before it ships:
+
+**Who is named?** Not a team — a person, who knows they are it.
+
+**What does the affected person get?** Are they told a system was involved? Can
+they ask for review by a human who can actually change it?
+
+If those have no answers, the process is not ready, whatever it does for
+throughput.
+
+## Try it now (5 minutes)
+
+Think of a process near you where AI output feeds a decision affecting someone.
+
+Name the person accountable. Check whether they have time, information,
+authority and safety. If any is missing, you have found a real gap — and you
+now know something worth raising.
+
+<Quiz client:visible items={[
+  {
+    q: "Why can accountability not transfer to a tool?",
+    options: [
+      "Current law forbids it",
+      "It cannot be answerable, cannot be challenged, and cannot put things right",
+      "Tools are not reliable enough yet"
+    ],
+    answer: 1,
+    explain: "The affected person needs someone who can explain, reconsider and remedy. None of those are things a model can do."
+  },
+  {
+    q: "Nominal oversight — a reviewer without time or authority — is:",
+    options: [
+      "Better than no oversight",
+      "Worse, because it produces an accountable human who was never in control",
+      "Equivalent to real oversight if the policy requires it"
+    ],
+    answer: 1,
+    explain: "Someone absorbs responsibility for a decision they did not meaningfully make, while the process appears supervised."
+  },
+  {
+    q: "The most useful question for a human in the loop:",
+    options: [
+      "Does this output look right?",
+      "What would I have concluded if I had not seen this first?",
+      "Is the model's confidence high?"
+    ],
+    answer: 1,
+    explain: "Automation bias means you defer most when the system is usually right — exactly when a rare error passes unexamined."
+  }
+]} />
+
+## Recap
+
+Responsibility stays with people because only people can explain, be
+challenged, and put things right. Oversight is real only with time,
+information, authority and safety — without all four it manufactures an
+accountable human who was never in control. Form your own view before you look
+at the output, and if you are building the process, name the person and say
+what the affected party gets.

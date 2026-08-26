@@ -1,0 +1,272 @@
+{
+  "module": "e8",
+  "title": "AI Ethics & Responsible Use — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "e8-01",
+      "q": "The defensibility test asks:",
+      "options": [
+        "How much of the text you typed yourself",
+        "Whether you can explain and defend every significant choice",
+        "Whether the tool is on an approved list"
+      ],
+      "answer": 1,
+      "explain": "Tool lists are arbitrary and blur constantly. What matters is whether you hold the understanding, not what helped you write it down."
+    },
+    {
+      "id": "e8-02",
+      "q": "Why is substituting for assessed work self-defeating?",
+      "options": [
+        "Detection tools are highly accurate",
+        "The work is evidence of your understanding, and you end up without it",
+        "It always breaches copyright"
+      ],
+      "answer": 1,
+      "explain": "Rules aside, the point of assessment is that you acquire the understanding. Substitution removes the thing you were there for."
+    },
+    {
+      "id": "e8-03",
+      "q": "The disclosure test is:",
+      "options": [
+        "Whether an assistant was used at all",
+        "Whether the reader would change how they weigh it if they knew",
+        "Whether more than half the text was generated"
+      ],
+      "answer": 1,
+      "explain": "Nobody discloses spellcheck because it changes nothing. An assessor weighing your understanding is affected entirely."
+    },
+    {
+      "id": "e8-04",
+      "q": "Why is \"AI was used in preparing this document\" a poor disclosure?",
+      "options": [
+        "It is unnecessarily long",
+        "It invites suspicion about everything without saying what to distrust",
+        "It admits more than is required"
+      ],
+      "answer": 1,
+      "explain": "Specificity — what was assisted, what you verified — reads as competence and tells the reader where to place weight."
+    },
+    {
+      "id": "e8-05",
+      "q": "The argument for disclosing even when nobody requires it:",
+      "options": [
+        "It is always legally safer",
+        "The cost is a line; being found out later damages everything else you produced",
+        "Readers prefer AI-assisted work"
+      ],
+      "answer": 1,
+      "explain": "The asymmetry does not require professional norms to settle first, and they are genuinely unsettled."
+    },
+    {
+      "id": "e8-06",
+      "q": "Why can bias not simply be removed from a model?",
+      "options": [
+        "Providers have not prioritised it",
+        "It is entangled with useful patterns, and fairness criteria conflict mathematically",
+        "The training data is proprietary"
+      ],
+      "answer": 1,
+      "explain": "Equal error rates, equal predictive value and equal treatment cannot generally all hold at once, so 'make it fair' is underspecified."
+    },
+    {
+      "id": "e8-07",
+      "q": "Where does bias most often reach real people in ordinary work?",
+      "options": [
+        "In dramatic, high-profile decisions",
+        "In routine sorting, screening and summarising of text about people",
+        "Only in image generation"
+      ],
+      "answer": 1,
+      "explain": "Which details survive a summary of a person is a judgement, and it is not made neutrally."
+    },
+    {
+      "id": "e8-08",
+      "q": "The most practical bias test for an evaluative task:",
+      "options": [
+        "Ask the model whether it is being fair",
+        "Run the same content twice with one identifying detail changed",
+        "Use a larger model"
+      ],
+      "answer": 1,
+      "explain": "If the assessment moves when only a name or institution changes, you have learned something essential before relying on it."
+    },
+    {
+      "id": "e8-09",
+      "q": "Why can accountability not transfer to a tool?",
+      "options": [
+        "Current law forbids it",
+        "It cannot be answerable, cannot be challenged, and cannot put things right",
+        "Tools are not yet reliable enough"
+      ],
+      "answer": 1,
+      "explain": "The affected person needs someone who can explain, reconsider and remedy. A model can do none of those."
+    },
+    {
+      "id": "e8-10",
+      "q": "Nominal oversight — a reviewer without time or authority — is:",
+      "options": [
+        "Better than no oversight",
+        "Worse, because it produces an accountable human who was never in control",
+        "Equivalent to real oversight if policy requires it"
+      ],
+      "answer": 1,
+      "explain": "Someone absorbs responsibility for a decision they did not meaningfully make, while the process appears supervised."
+    },
+    {
+      "id": "e8-11",
+      "q": "The most useful question for a human reviewing AI output in a decision:",
+      "options": [
+        "Does this output look right?",
+        "What would I have concluded if I had not seen this first?",
+        "How confident is the model?"
+      ],
+      "answer": 1,
+      "explain": "Automation bias means you defer most when the system is usually right — exactly when a rare error passes unexamined."
+    },
+    {
+      "id": "e8-12",
+      "q": "Which is currently the dominant ongoing energy cost for widely-used models?",
+      "options": [
+        "Training",
+        "Inference — running the model for every query",
+        "Storing training data"
+      ],
+      "answer": 1,
+      "explain": "Training is large and happens once; inference is small per query and enormous in aggregate at present scale."
+    },
+    {
+      "id": "e8-13",
+      "q": "Why does cooling water deserve separate mention from electricity?",
+      "options": [
+        "It is more expensive",
+        "It is drawn locally, so a datacentre in a water-stressed region is a local issue",
+        "It is only used during training"
+      ],
+      "answer": 1,
+      "explain": "Unlike grid electricity, water is a local resource, independent of the grid's carbon intensity."
+    },
+    {
+      "id": "e8-14",
+      "q": "The safety filters that make an assistant well-behaved depend on:",
+      "options": [
+        "Automated detection alone",
+        "People reviewing harmful material, often outsourced, with documented psychological harm",
+        "Rules written by the provider's legal team"
+      ],
+      "answer": 1,
+      "explain": "Making a model refuse the worst things requires people to look at the worst things. That work has been the subject of reporting and litigation."
+    },
+    {
+      "id": "e8-15",
+      "q": "Proportionate use means:",
+      "options": [
+        "Using AI as little as possible",
+        "Matching the size of the tool to the size of the task",
+        "Only using free tiers"
+      ],
+      "answer": 1,
+      "explain": "The largest model is not required to fix a sentence, and choosing a smaller one is the most effective individual action available."
+    },
+    {
+      "id": "e8-16",
+      "q": "How does a role usually get hollowed out by automation?",
+      "options": [
+        "Through a formal restructure",
+        "Through a series of individually reasonable choices nobody decided together",
+        "Through deliberate cost-cutting"
+      ],
+      "answer": 1,
+      "explain": "Each step is sensible on its own, which is why the cumulative effect goes unnoticed until it is finished."
+    },
+    {
+      "id": "e8-17",
+      "q": "A task that looks like drudgery from outside may also carry:",
+      "options": [
+        "Only inefficiency",
+        "Judgement, relationships, visibility and learning",
+        "Nothing worth preserving"
+      ],
+      "answer": 1,
+      "explain": "The person 'just formatting the report' is often catching errors in it, and junior roles are partly how the next senior person is made."
+    },
+    {
+      "id": "e8-18",
+      "q": "Why is hiding your own automation a problem?",
+      "options": [
+        "It usually breaches employment terms",
+        "The raised output becomes a permanent expectation, and you may never learn the task",
+        "Colleagues will find out regardless"
+      ],
+      "answer": 1,
+      "explain": "The new level becomes the baseline, including on the day the tool changes or breaks — and then the knowledge does not exist."
+    },
+    {
+      "id": "e8-19",
+      "q": "Why do clear lines collapse in practice?",
+      "options": [
+        "People forget what they decided",
+        "The request arrives small, urgent and from someone reasonable, so refusing feels disproportionate",
+        "Most such requests are actually fine"
+      ],
+      "answer": 1,
+      "explain": "It never arrives as a proposal to do something wrong. The framing is what makes 'no' feel like an overreaction."
+    },
+    {
+      "id": "e8-20",
+      "q": "Which refusal is strongest?",
+      "options": [
+        "\"I'm not comfortable with this\"",
+        "\"I can't put unverified figures in a board document — I can have checked ones by Thursday\"",
+        "\"This is against my principles\""
+      ],
+      "answer": 1,
+      "explain": "Comfort is negotiable and sounds like a preference. A specific reason plus the nearest thing you can do separates refusal from obstruction."
+    },
+    {
+      "id": "e8-21",
+      "q": "Putting a refusal in writing is primarily:",
+      "options": [
+        "An escalation against the person asking",
+        "A record — and often what they need to push back on pressure from elsewhere",
+        "A legal requirement"
+      ],
+      "answer": 1,
+      "explain": "A refusal in a searchable channel is a fact; one in a corridor is a disagreement about what was said."
+    },
+    {
+      "id": "e8-22",
+      "q": "Why write a personal code in advance rather than deciding case by case?",
+      "options": [
+        "Cases are too varied to judge individually",
+        "At the moment of decision you are rushed and want a particular answer",
+        "Written rules carry legal weight"
+      ],
+      "answer": 1,
+      "explain": "Consulting a code written calmly honours a judgement you already made under better conditions."
+    },
+    {
+      "id": "e8-23",
+      "q": "Which line belongs in a usable code of conduct?",
+      "options": [
+        "\"I will use AI responsibly and ethically\"",
+        "\"I will not put a citation in anything I publish unless I have opened it\"",
+        "\"I will be transparent about my methods\""
+      ],
+      "answer": 1,
+      "explain": "The test is whether a line can settle an actual decision. Values commit you to nothing at three in the afternoon."
+    },
+    {
+      "id": "e8-24",
+      "q": "Why does a personal code need a review date?",
+      "options": [
+        "To demonstrate compliance",
+        "Tools and norms change; unreviewed rules get ignored or obeyed past sense",
+        "Codes expire after a year"
+      ],
+      "answer": 1,
+      "explain": "Some rules will look over-cautious later and some naive. Neither gets caught without a date in the calendar."
+    }
+  ]
+}
