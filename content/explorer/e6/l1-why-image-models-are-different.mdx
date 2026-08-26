@@ -1,0 +1,127 @@
+---
+title: "Why image models are different"
+description: "Image generators do not work like the assistants you have been using. Understanding what they actually do explains almost every odd result."
+track: explorer
+module: e6
+order: 1
+minutes: 8
+objectives:
+  - "Describe how a diffusion model builds an image"
+  - "Explain why image models cannot count, spell or follow negatives reliably"
+concepts: ["diffusion", "denoising", "prompt weighting"]
+tools: ["midjourney", "stable-diffusion"]
+flashcards:
+  - front: "How does a diffusion model make an image?"
+    back: "It starts from noise and repeatedly removes what does not look like the description, until an image remains."
+  - front: "Why do image models struggle with counts and text?"
+    back: "They shape a whole image at once towards a description. Nothing in that process counts objects or spells words."
+  - front: "Why does 'no text' often produce text?"
+    back: "The words in your prompt pull the image towards what they describe. Naming a thing summons it."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Everything so far in Explorer has been about models that continue text. Image
+generators work on a completely different principle, and almost every
+frustrating result makes sense once you know what it is.
+
+## Sculpture, not writing
+
+An assistant writes left to right, choosing each next word. An image model does
+nothing like that.
+
+It starts with **pure noise** — a rectangle of random static. Then, over
+several passes, it repeatedly removes whatever least resembles your
+description. Noise, slightly less noise, a vague arrangement of shapes, a
+recognisable scene, a finished image.
+
+The whole picture is being shaped **at once**, at every step. There is no
+moment where it draws the hand and then the fingers. The fingers and the sky
+and the coat emerge together, out of the same fog.
+
+## What that explains
+
+Almost every well-known limitation follows directly.
+
+**Counting.** *Three cats* is not a quantity to the model — it is a phrase that
+makes the image cat-ish in a three-ish way. Nothing counts. You may get three,
+often two or four, sometimes one cat with an unsettling number of legs.
+
+**Text in images.** Letters are shapes that must be exactly right in exactly
+one order. A process shaping everything simultaneously towards "looks like a
+sign" produces sign-shaped marks. Newer models are markedly better at this,
+because it was worth fixing specifically — but the underlying difficulty is
+structural, not a bug.
+
+**Negatives.** Say *no text* and you may well get text. Every word you write
+pulls the image towards what it describes, and *text* is one of your words.
+Some tools accept a separate negative prompt, which works because it is applied
+as a distinct signal rather than as words in your description. Where there is no
+such field, describe what you *do* want: *a blank wooden sign*, not *a sign
+with no writing*.
+
+**Hands.** The famous one. Hands are small, highly variable, and frequently
+overlapping — the hardest possible case for a process that resolves an entire
+image together. Also markedly improved, and still where you look first.
+
+## What this means for you
+
+Two working habits fall out.
+
+Describe the **finished image**, not the process. *A weathered wooden sign,
+blank, morning light* — a scene, not an instruction to an artist.
+
+And expect to **generate several**. The randomness is not a defect to be
+prompted away; it is how the process works. Four images and picking one is the
+normal loop, not a sign you asked badly.
+
+## Try it now (6 minutes)
+
+Ask any image generator for *five red apples on a plain table, no leaves*.
+
+Count the apples. Look for leaves. Neither result is a failure of your prompt —
+both are the mechanism, and recognising it here will save you an hour of
+rephrasing later.
+
+<Quiz client:visible items={[
+  {
+    q: "A diffusion model creates an image by:",
+    options: [
+      "Drawing elements one at a time in order",
+      "Starting from noise and repeatedly removing what does not match the description",
+      "Assembling pieces of images from its training data"
+    ],
+    answer: 1,
+    explain: "The whole picture is shaped at once at every step, which is why parts of it emerge together rather than in sequence."
+  },
+  {
+    q: "Image models struggle with exact counts because:",
+    options: [
+      "Their training images were poorly labelled",
+      "Nothing in the process counts — a number is a phrase shaping the whole image",
+      "Counting requires more computation than is available"
+    ],
+    answer: 1,
+    explain: "\"Three cats\" makes the image cat-ish in a three-ish way. There is no step at which objects are enumerated."
+  },
+  {
+    q: "The best way to avoid text appearing in an image:",
+    options: [
+      "Write 'no text' in the prompt",
+      "Describe what you do want — 'a blank wooden sign'",
+      "Request a lower resolution"
+    ],
+    answer: 1,
+    explain: "Words pull the image towards what they describe, so naming text can summon it. A dedicated negative-prompt field is applied differently."
+  }
+]} />
+
+## Recap
+
+Image models start from noise and shape the whole picture at once towards your
+description. That single fact explains the trouble with counts, spelling,
+negatives and hands. Describe the finished scene rather than instructing an
+artist, and generate several — the variation is the mechanism, not your mistake.

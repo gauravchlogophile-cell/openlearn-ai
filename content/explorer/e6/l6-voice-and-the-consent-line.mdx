@@ -1,0 +1,145 @@
+---
+title: "Voice and the consent line"
+description: "Synthetic speech is genuinely useful for accessibility and narration. Cloning a specific person's voice is a different act, and needs their permission."
+track: explorer
+module: e6
+order: 6
+minutes: 8
+objectives:
+  - "Distinguish synthetic voice from cloning a specific person"
+  - "Apply a consent standard before using anyone's voice"
+concepts: ["speech synthesis", "voice cloning", "consent"]
+tools: ["elevenlabs"]
+flashcards:
+  - front: "What separates synthetic voice from voice cloning?"
+    back: "A synthetic voice belongs to nobody. A clone reproduces a specific identifiable person."
+  - front: "What consent does cloning a voice require?"
+    back: "Explicit, informed and specific — that person, knowing what it will be used for, agreeing to that use."
+  - front: "Why is a voice treated differently from a photograph?"
+    back: "It carries identity and authority. Hearing someone say something is close to evidence they said it."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Synthetic speech has become genuinely good, and much of what it enables is
+straightforwardly positive. It also contains the sharpest ethical line in this
+module, and the line is easy to state.
+
+## Two different things
+
+**Synthetic voice** is a voice belonging to nobody — built to sound human,
+matching no particular person. Use it freely. It is what narrates a video,
+reads a document aloud, or gives a product an audio interface.
+
+**Voice cloning** reproduces a *specific, identifiable* person from samples of
+their speech. This is a different act, and it requires their permission.
+
+The distinction is not about the technology, which is similar. It is about
+whether there is a person on the other end of it.
+
+## Where synthetic voice earns its place
+
+Worth stating plainly, because the cloning conversation tends to swallow the
+whole subject.
+
+**Accessibility.** People who cannot read a screen, or read comfortably, or at
+all. Lrnon has read-aloud for exactly this reason.
+
+**Narration** for material that would otherwise have none, because studio time
+was never in the budget.
+
+**Multiple languages** for material that would otherwise reach one.
+
+**Voice restoration** for people losing the ability to speak — banked from
+their own recordings, with their consent, and one of the clearest goods in the
+whole field.
+
+None of these need anyone else's voice.
+
+## The consent standard
+
+If a voice is identifiably a real person's, you need that person's permission.
+Not implied, not assumed, not inferred from a public recording existing.
+
+**Explicit** — they said yes.
+**Informed** — they know it is a synthetic reproduction, not a recording.
+**Specific** — for this use. Permission to narrate a training video is not
+permission to make them endorse a product.
+
+A recording being public does not grant this. A podcast, a lecture, an
+interview — all publicly available, none of them consent to be synthesised.
+
+And note that impersonating a real person can be unlawful quite apart from
+ethics: fraud, defamation, and in a growing number of jurisdictions specific
+likeness and synthetic-media provisions. "It was just a demo" is not a defence
+once it is distributed.
+
+## Your own voice, and the family case
+
+Cloning your own voice is fine, and useful — narrate once, correct typos in
+text rather than re-recording.
+
+Two cautions worth having in advance. A clone of your voice is a credential
+someone else could misuse, so treat the samples and the account like
+credentials. And **voice authentication** systems that identify you by voice are
+weakened by a good clone existing. Prefer another factor where your bank offers
+one.
+
+The case that comes up most often, and deserves a real answer: recreating the
+voice of someone who has died, from old recordings. There is no clean rule. It
+can be tender and it can be distressing, sometimes for different people in the
+same family. The person cannot consent, so the question is who is being served —
+and if the answer is anyone other than the people grieving, it is the wrong
+project. Ask them first, and accept a no.
+
+## Try it now (6 minutes)
+
+Generate a short narration with a synthetic voice — a paragraph of your own
+writing.
+
+Then write down, in one sentence, the rule you will apply before ever using a
+real person's voice. Having decided in advance is the whole point.
+
+<Quiz client:visible items={[
+  {
+    q: "The difference between synthetic voice and voice cloning is:",
+    options: [
+      "Cloning uses more computation",
+      "A synthetic voice belongs to nobody; a clone reproduces a specific identifiable person",
+      "Synthetic voices are lower quality"
+    ],
+    answer: 1,
+    explain: "The technology is similar. What differs is whether there is a real person on the other end of it."
+  },
+  {
+    q: "Does a publicly available recording of someone's voice imply consent to clone it?",
+    options: [
+      "Yes — public material may be used freely",
+      "No — consent must be explicit, informed and specific to the use",
+      "Only if the recording is more than five years old"
+    ],
+    answer: 1,
+    explain: "A podcast or lecture is publicly available and is not permission to be synthesised. Permission for one use is not permission for another."
+  },
+  {
+    q: "One practical caution about cloning your own voice:",
+    options: [
+      "It degrades the original recordings",
+      "It weakens voice authentication and the samples act like credentials",
+      "It is prohibited by most providers"
+    ],
+    answer: 1,
+    explain: "A good clone undermines systems that identify you by voice, so prefer another factor and protect the samples and account accordingly."
+  }
+]} />
+
+## Recap
+
+Synthetic voice belongs to nobody and is genuinely valuable, especially for
+accessibility. Cloning a real person needs explicit, informed, specific consent,
+which a public recording does not supply — and impersonation can be unlawful
+regardless. Your own voice is yours to clone, with the caution that it is also a
+credential.

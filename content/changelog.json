@@ -4,6 +4,12 @@
     {
       "date": "2026-08-26",
       "kind": "New module",
+      "where": "Explorer · E6",
+      "what": "Creative AI: Image, Video & Voice published — eight lessons on how diffusion models actually work, describing an image, iterating with seeds, the artist-style question, the current limits of video, voice cloning and consent, labelling what you made, and the categories that are not grey areas."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
       "where": "Explorer · E5",
       "what": "Documents, Spreadsheets & Presentations published — eight lessons on outlining before prose, drafting in your own voice, using an assistant as a critic, spreadsheet formulas you can test, recomputing every number, assertion-headline slides, rewriting for a different reader, and the final consistency pass."
     },

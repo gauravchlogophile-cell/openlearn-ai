@@ -1,0 +1,131 @@
+---
+title: "Iterating without starting over"
+description: "Change one thing at a time, keep what worked, and understand seeds. The difference between steering an image and rerolling a dice."
+track: explorer
+module: e6
+order: 3
+minutes: 7
+objectives:
+  - "Iterate by changing one variable at a time"
+  - "Use seeds and variations to keep a result you liked"
+concepts: ["seeds", "variations", "one-variable iteration"]
+tools: ["stable-diffusion"]
+flashcards:
+  - front: "What is a seed?"
+    back: "The starting noise, as a number. The same seed, prompt and settings reproduce the same image."
+  - front: "Why change one thing at a time?"
+    back: "Change three and you cannot tell which one caused the improvement, so you learn nothing you can reuse."
+  - front: "Why does 'make it better' fail?"
+    back: "It names no visual change, so you get a different image rather than an improved one."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+You have four images. One is nearly right. What happens next separates people
+who get what they wanted from people who generate ninety images and settle.
+
+## The seed is the starting noise
+
+L1 said every image begins as random static. That randomness comes from a
+**seed** — a number. Same seed, same prompt, same settings, same image, every
+time.
+
+That makes the seed the difference between steering and rerolling. Keep the
+seed and change one word, and you get *the same image with that word changed*.
+Change the seed and you get a fresh roll that happens to match your description.
+
+Most tools expose this somewhere: a seed field, a "vary" button, an
+image-to-image mode, or a reference-image option. It is worth ten minutes
+finding where yours keeps it, because it converts the whole process from
+gambling into editing.
+
+## One variable at a time
+
+The temptation with a nearly-right image is to fix everything at once: change
+the light, adjust the crop, add an object, switch the medium.
+
+Then it improves, and you have no idea why — so you cannot do it again, and if
+it gets worse you cannot get back.
+
+Change one thing. Keep a note of what you changed and whether it helped. Five
+deliberate iterations beat fifty rerolls, and at the end you have something more
+useful than an image: a list of what actually moves this model.
+
+## "Make it better" does nothing
+
+An assistant can act on *make this clearer* because clarity has textual
+correlates. An image model cannot act on *better*, because it is not editing —
+it is generating from a description, and *better* describes no visual property.
+
+Say the visible change:
+
+> *…but shot from lower down.*
+> *…but the light coming from behind the subject.*
+> *…but in winter, bare branches.*
+
+If you cannot name what is wrong, look at the image and ask what you would tell
+a photographer to do differently. That sentence is your next prompt.
+
+## Know when to stop
+
+Sometimes the composition is right and one detail is wrong — a hand, an object,
+a bit of text.
+
+At that point stop generating. An image editor fixes a small defect in thirty
+seconds, where twenty more generations trying to prompt around it will change
+everything else you liked. Inpainting tools sit between the two: you mask the
+broken region and regenerate only that.
+
+Rerolling a whole image to fix a corner of it is the most common way to lose a
+good result.
+
+## Try it now (6 minutes)
+
+Generate an image you nearly like. Fix the seed if your tool allows it.
+
+Now make three versions changing only the lighting. Then three changing only
+the camera position. Notice which axis moved the image more — that tells you
+where your attention belongs next time.
+
+<Quiz client:visible items={[
+  {
+    q: "Holding the seed constant while changing one word gives you:",
+    options: [
+      "A completely different image",
+      "The same image with that word's influence changed",
+      "A higher-resolution version"
+    ],
+    answer: 1,
+    explain: "The seed is the starting noise. Fixing it turns generation into steering rather than rerolling."
+  },
+  {
+    q: "Why change only one variable per iteration?",
+    options: [
+      "Multiple changes take longer to generate",
+      "Otherwise you cannot tell which change caused the improvement",
+      "Models ignore all but the first change"
+    ],
+    answer: 1,
+    explain: "You end up unable to reproduce a good result or reverse a bad one. Five deliberate iterations beat fifty rerolls."
+  },
+  {
+    q: "When one small detail is wrong but the composition is right, you should:",
+    options: [
+      "Reroll until that detail comes out correctly",
+      "Fix it in an editor, or inpaint just that region",
+      "Add 'perfect hands' to the prompt"
+    ],
+    answer: 1,
+    explain: "Rerolling a whole image to fix a corner is the most common way to lose a good result."
+  }
+]} />
+
+## Recap
+
+Find where your tool keeps the seed, then change one variable at a time and
+note what moved. Name the visible change rather than asking for better, and
+when only a small region is wrong, edit or inpaint it instead of rerolling
+everything you already liked.

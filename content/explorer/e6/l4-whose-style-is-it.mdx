@@ -1,0 +1,143 @@
+---
+title: "Whose style is it?"
+description: "Where the training images came from, why naming a living artist is different from naming a movement, and the questions that have no settled answer yet."
+track: explorer
+module: e6
+order: 4
+minutes: 9
+objectives:
+  - "Explain why prompting a named living artist's style is contested"
+  - "Describe a look without naming a person"
+concepts: ["training data", "style", "attribution"]
+flashcards:
+  - front: "Why is naming a living artist in a prompt contested?"
+    back: "Their work was likely used to train the model, without payment or consent, and the output competes with them."
+  - front: "Is style itself protected by copyright?"
+    back: "Generally no in most jurisdictions — which is why this is largely an ethical question rather than a settled legal one."
+  - front: "How do you get a look without naming a person?"
+    back: "Describe the visual properties — palette, line weight, light, materials, era — which is more controllable anyway."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Type *in the style of* and any living illustrator's name, and you will get
+something close. That capability came from somewhere, and where it came from is
+the most contested question in this module.
+
+This lesson does not resolve it. It gives you the facts and a defensible
+position.
+
+## Where the ability comes from
+
+Image models are trained on very large collections of images scraped from the
+public web. Those collections contained enormous amounts of copyrighted work —
+illustrators, photographers, painters — generally without their knowledge,
+consent or payment.
+
+That is not a fringe allegation. It is broadly acknowledged, it is the subject
+of active litigation in several countries, and the legal position genuinely
+differs by jurisdiction and is not settled.
+
+So a model can produce work resembling a specific artist because it was shown a
+great deal of that artist's work.
+
+## Style is usually not the thing copyright covers
+
+Here is where people talk past each other.
+
+In most jurisdictions, **copyright protects particular works, not styles**. You
+may lawfully paint in the manner of a living painter. Human artists have always
+learned by imitation, and a rule against style would make art impossible.
+
+So the argument that "it is just learning like a person does" has real force —
+and it is incomplete, for three reasons that are about scale rather than
+principle:
+
+- **Speed.** A career's worth of visual identity, reproducible in seconds, by
+  anyone, without study.
+- **Provenance.** A human influenced by an artist rarely displaces them in the
+  market. An imitation produced instantly and at volume can.
+- **Consent.** The artist did not choose to be a training input, and in most
+  cases could not have opted out.
+
+None of that is settled by pointing at either "it's theft" or "it's just
+learning". Both slogans skip the part that is actually hard.
+
+## A defensible position
+
+You will have to decide for yourself. The position most working professionals
+have converged on is narrow and holds up:
+
+**Do not name a living artist in a prompt for work you publish or sell.**
+
+It costs you very little, it avoids the case where harm is most direct and most
+identifiable, and it does not require you to have resolved the philosophy.
+
+Movements, eras and techniques are a different matter — *art nouveau*, *bauhaus*,
+*ukiyo-e*, *cyanotype*. No individual is displaced, and much of it is long out
+of copyright.
+
+## Describe the look instead
+
+The practical replacement is better anyway.
+
+Instead of *in the style of [illustrator]*, name what you are actually seeing in
+their work: *flat colour, heavy black outlines, limited palette of ochre and
+teal, slightly off-register printing*.
+
+Three reasons this wins. It is more controllable — you can adjust one property
+instead of hoping. It is more distinctive, because you are combining properties
+rather than converging on someone else's finished look. And it survives model
+updates, where a name may silently stop working or start working differently.
+
+## Try it now (7 minutes)
+
+Pick a visual style you like. Write down five concrete properties of it —
+palette, line, light, texture, composition — without naming anyone.
+
+Generate from those properties. Then decide, deliberately, what your own rule
+is going to be. Writing it down now is easier than deciding under deadline.
+
+<Quiz client:visible items={[
+  {
+    q: "Image models can imitate a specific living artist because:",
+    options: [
+      "They look up the artist's work when generating",
+      "Their training data contained a great deal of that artist's work",
+      "Artists license their styles to model providers"
+    ],
+    answer: 1,
+    explain: "Training collections were scraped from the public web and contained enormous amounts of copyrighted work, generally without consent or payment."
+  },
+  {
+    q: "In most jurisdictions, copyright protects:",
+    options: [
+      "Particular works, not styles",
+      "Styles as well as works",
+      "Nothing produced by a machine"
+    ],
+    answer: 0,
+    explain: "That is why this is largely an ethical question rather than a settled legal one, and why 'it's just learning' has real force without being complete."
+  },
+  {
+    q: "The practical advantage of describing a look rather than naming an artist:",
+    options: [
+      "It generates faster",
+      "It is more controllable, more distinctive, and survives model updates",
+      "It guarantees the output is original"
+    ],
+    answer: 1,
+    explain: "You can adjust one property rather than hoping, you combine properties instead of converging on someone's finished look, and a name may silently stop working."
+  }
+]} />
+
+## Recap
+
+The ability to imitate an artist came from their work being used as training
+data without consent. Style is generally not what copyright covers, so this is
+mainly an ethical call — and the defensible one is to avoid naming living
+artists in published work. Describing the visual properties instead is more
+controllable and more your own.

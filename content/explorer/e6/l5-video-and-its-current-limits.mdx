@@ -1,0 +1,136 @@
+---
+title: "Video and its current limits"
+description: "What AI video can genuinely do today, where it still falls apart, and why a shot list beats asking for a finished film."
+track: explorer
+module: e6
+order: 5
+minutes: 8
+objectives:
+  - "Describe what AI video handles well and where it currently fails"
+  - "Plan in short shots rather than requesting a finished sequence"
+concepts: ["temporal consistency", "shot planning", "b-roll"]
+flashcards:
+  - front: "What is temporal consistency?"
+    back: "Objects staying the same from frame to frame. It is the central difficulty in generated video."
+  - front: "Why work in short shots?"
+    back: "Consistency degrades with length, and short clips are cheap to reroll and easy to cut around."
+  - front: "Which video use is most reliable today?"
+    back: "Short atmospheric b-roll with no people, no text and no dialogue."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Video is the fastest-moving area in this module, which makes anything written
+about it age quickly. So this lesson is about the *shape* of the problem, which
+changes far more slowly than the capability.
+
+Read the specifics here as an example, and check the current state yourself
+before relying on it.
+
+## Consistency across time is the hard part
+
+An image has to be coherent in space. A video has to be coherent in space **and
+across time** — the coat stays the same colour, the room keeps the same
+furniture, the face remains the same face.
+
+Nothing in the generation process guarantees that. So the characteristic
+failures are drift and morphing: details that change between frames, objects
+that quietly become other objects, a background that reorganises itself when
+the camera moves.
+
+Longer clips are worse, because there is more time to drift. That single fact
+determines how you should work.
+
+## Where it is genuinely useful now
+
+Honestly assessed, and biased towards what holds up:
+
+- **Short atmospheric b-roll.** Clouds, water, a street at night, abstract
+  texture. No people, no text, no dialogue. This works well.
+- **Simple camera moves** over a scene — a slow push, a drift.
+- **Animating a still image** you already have and like, for a few seconds.
+
+## Where it still falls apart
+
+- **Anything longer than a few seconds** without a visible cut.
+- **Hands and faces in motion**, especially speech.
+- **Text**, for all of L1's reasons plus the requirement that it stay stable.
+- **Physical cause and effect** — pouring, cutting, breaking. The result often
+  looks correct frame by frame and impossible as a sequence.
+- **A specific character across multiple shots.**
+
+## Work in shots, not films
+
+The practical consequence: do not ask for a finished sequence. Plan like an
+editor.
+
+Write a **shot list** — four seconds each, one idea per shot. Generate each
+separately, several times. Assemble in an editor.
+
+This is how the work survives contact with the limitations. Cuts hide drift.
+Short clips are cheap to reroll. And a sequence assembled from deliberate shots
+has a structure, where a generated "video about X" has none — the same argument
+E5·L6 made about slides.
+
+## The disclosure question arrives here
+
+Video crosses a line images mostly do not. A still can be obviously stylised; a
+few seconds of realistic video of a place or a person reads as *footage*, and
+footage is treated as evidence.
+
+That makes labelling more important here than anywhere else in the module, and
+L7 deals with it properly. For now: if it could be mistaken for a recording of
+something real, it needs to say what it is.
+
+## Try it now (6 minutes)
+
+Write a four-shot list for a fifteen-second sequence. One idea per shot, no
+people, no text.
+
+Generate the easiest shot. Then generate the hardest and compare — the gap
+between them is the current state of the technology, measured by you rather
+than by a marketing page.
+
+<Quiz client:visible items={[
+  {
+    q: "Temporal consistency means:",
+    options: [
+      "Clips rendering at a steady frame rate",
+      "Objects staying the same from frame to frame",
+      "Generation finishing in predictable time"
+    ],
+    answer: 1,
+    explain: "Nothing in the process guarantees the coat stays the same colour, which is why drift and morphing are the characteristic failures."
+  },
+  {
+    q: "Why plan a shot list rather than request a finished sequence?",
+    options: [
+      "Shot lists are cheaper to generate",
+      "Consistency degrades with length, and cuts hide drift",
+      "Models cannot produce more than one shot"
+    ],
+    answer: 1,
+    explain: "Short clips are cheap to reroll and easy to cut around, and a deliberate sequence has structure that a generated 'video about X' lacks."
+  },
+  {
+    q: "Which is most reliable with current video models?",
+    options: [
+      "A person speaking to camera",
+      "Short atmospheric b-roll with no people or text",
+      "A character appearing across several shots"
+    ],
+    answer: 1,
+    explain: "Faces in motion, speech, text and character continuity are all where generated video still falls apart."
+  }
+]} />
+
+## Recap
+
+Video must hold together across time as well as space, and nothing guarantees
+it, so drift grows with length. Work in four-second shots, assemble in an
+editor, and stay with atmospheric material rather than faces and speech. And
+because video reads as footage, anything that could pass for a recording needs
+to say what it is.
