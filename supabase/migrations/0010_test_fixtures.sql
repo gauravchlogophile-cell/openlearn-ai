@@ -1,5 +1,9 @@
 -- 0010 · Certification test fixtures.
 --
+-- APPLIED TO PRODUCTION 2026-08-26, project ertmoznjrjrveidnhonj.
+-- Applying it seeded NOTHING. seed_test_fixtures() is owner-only and has to be
+-- run deliberately from /admin/certification.
+--
 -- Turn 10 was built against no data. Three of its frames — the three results
 -- (10c), the certificate itself (10d), and four of 10e's five verification
 -- answers — cannot be seen at all until credentials exist in each state, and a

@@ -1,5 +1,9 @@
 -- 0011 · Reading a result back.
 --
+-- APPLIED TO PRODUCTION 2026-08-26, project ertmoznjrjrveidnhonj.
+-- Verified after applying: /v on lrnon.org returns a real {found:false} from the
+-- database rather than the not-yet-migrated fallback.
+--
 -- 10c is three results — secure, nearly, not yet — and it was the one frame of
 -- turn 10 left unbuilt, because a results page with no results is a mock-up.
 -- 0010's fixtures fixed that, so this is the query behind the page.

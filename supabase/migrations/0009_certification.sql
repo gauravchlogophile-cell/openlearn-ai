@@ -1,5 +1,10 @@
 -- 0009 · Certification: records, assessments, credentials, verification.
 --
+-- APPLIED TO PRODUCTION 2026-08-26, project ertmoznjrjrveidnhonj.
+-- Verified after applying: certification_open('e7') is false, 0 credentials
+-- exist, and the two real learner profiles with their 18 progress rows are
+-- untouched.
+--
 -- Design turn 10. Two things a learner can earn, and the site had been saying
 -- them as one:
 --
