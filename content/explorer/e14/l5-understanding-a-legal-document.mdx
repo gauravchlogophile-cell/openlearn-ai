@@ -1,0 +1,168 @@
+---
+title: "Understanding a legal document"
+description: "Reading a contract is not the same as getting advice on it. What an assistant can do with legal text, and the specific ways it invents law."
+track: explorer
+module: e14
+order: 5
+minutes: 9
+objectives:
+  - "Use an assistant to understand a document you have been given"
+  - "Recognise invented statutes, wrong jurisdictions and fabricated citations"
+concepts: ["legal comprehension", "jurisdiction", "fabricated citation"]
+flashcards:
+  - front: "What can an assistant do with a legal document?"
+    back: "Explain what clauses mean, list obligations and deadlines, and generate questions for a real adviser."
+  - front: "What is its most notorious legal failure?"
+    back: "Fabricating case citations that look entirely real — a mistake that has reached actual courtrooms."
+  - front: "Why does jurisdiction matter so much here?"
+    back: "Law differs by country and often within one, and answers drift towards the jurisdiction best represented in training data."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Legal documents are written to be precise, and precision reads as
+impenetrability to almost everybody. That gap is real, and it is the gap this
+lesson works in.
+
+## Understanding is not advice
+
+The distinction that governs everything here.
+
+**Understanding** — what does this clause mean, what am I agreeing to, what are
+my obligations, when are the deadlines. This is reading comprehension of a
+document you already have.
+
+**Advice** — should I sign this, do I have a case, what should I do, what are my
+chances. This requires knowing the law, the facts, and how tribunals actually
+behave, and carries professional responsibility.
+
+An assistant is genuinely useful for the first and unreliable for the second in
+ways that have become notorious.
+
+## What works
+
+> *Here is a contract. For each clause, tell me in plain language what it means
+> and what it obliges me to do.*
+>
+> *Then list: every deadline, every payment, everything that could end the
+> agreement, and every clause that only benefits one party.*
+>
+> *Then give me the questions I should ask before signing.*
+
+That last instruction turns it into preparation rather than a verdict — L2's
+technique applied to paperwork, and the safest shape available in this domain.
+
+Also useful: **explaining a letter you have received** (E9·L2, with the
+conditions list), and **defining terms** you have nodded past.
+
+## The three ways it invents law
+
+**Fabricated citations.** The famous one. Models produce case names, citations
+and quotations that look entirely real and do not exist. This has reached actual
+courtrooms and produced sanctions against lawyers.
+
+Never repeat a case name, statute section or quotation you have not looked up in
+an official source. E7's rule about unopened citations is nowhere more literal.
+
+**Wrong jurisdiction.** Law differs between countries and frequently within them
+— state, province, or the differences within the UK. Answers drift towards
+whatever is best represented in the training data, usually American.
+
+State your jurisdiction explicitly in every legal question, and treat an answer
+that does not mention jurisdiction as untrustworthy on that basis alone.
+
+**Stale law.** Statutes are amended, cases are overturned, limits change. Same
+problem as L4's rates, with a longer tail.
+
+## The confident-and-wrong pattern
+
+Legal questions produce some of the most authoritative-sounding wrong answers
+available, because legal writing *is* authoritative in register. The model has
+learned that voice thoroughly.
+
+So an invented statutory section arrives in the same tone as a real one, with a
+plausible number, phrased exactly as legislation is phrased. There is no tell.
+
+For anything with consequences, the citation gets looked up. Not skimmed —
+looked up.
+
+## When you cannot afford a lawyer
+
+The real situation for most people, and the one L1 refused to skip.
+
+**Free legal advice services** exist in most countries — law centres, citizens'
+advice organisations, university clinics, charity helplines for specific issues
+like housing, employment, immigration and debt.
+
+**Many solicitors offer a free initial consultation**, and a prepared client
+gets far more from thirty minutes than an unprepared one. That is precisely what
+L2's technique is for.
+
+**Some issues have an ombudsman or regulator** who will look at your case for
+free — employment tribunals, financial ombudsmen, housing regulators. That route
+is frequently the correct one and frequently unknown.
+
+Using an assistant to *understand your document and prepare your questions*
+makes all three of those more effective. That is the honest role for it here.
+
+## Never do these
+
+- Do not file a document containing a citation you have not verified.
+- Do not sign something because an assistant said it seemed standard.
+- Do not rely on it for a deadline. Limitation periods are unforgiving and a
+  missed one usually cannot be recovered.
+- Do not paste someone else's confidential legal material into it (E4·L8).
+
+## Try it now (6 minutes)
+
+Take an agreement you have actually signed — a tenancy, a subscription, an
+employment contract.
+
+Ask for the obligations, deadlines and one-sided clauses. Most people find at
+least one thing they did not know they had agreed to, which is the argument for
+doing this before signing rather than after.
+
+<Quiz client:visible items={[
+  {
+    q: "The safe use of an assistant with a legal document is:",
+    options: [
+      "Deciding whether to sign it",
+      "Understanding what it means and preparing questions for an adviser",
+      "Estimating your chances in a dispute"
+    ],
+    answer: 1,
+    explain: "Comprehension of a document you already have is reading; advice requires the law, the facts and professional responsibility."
+  },
+  {
+    q: "The most notorious legal failure mode is:",
+    options: [
+      "Overly cautious answers",
+      "Fabricated case citations that look entirely real",
+      "Refusing to answer legal questions"
+    ],
+    answer: 1,
+    explain: "It has reached actual courtrooms and produced sanctions. Never repeat a citation you have not looked up officially."
+  },
+  {
+    q: "An answer to a legal question that does not mention jurisdiction should be:",
+    options: [
+      "Treated as generally applicable",
+      "Treated as untrustworthy on that basis alone",
+      "Assumed to cover your country"
+    ],
+    answer: 1,
+    explain: "Law differs between and within countries, and answers drift towards whatever dominates the training data."
+  }
+]} />
+
+## Recap
+
+Use it to understand a document and prepare questions, never to decide whether
+to sign or whether you have a case. Guard against its three legal failures:
+fabricated citations that have reached real courtrooms, jurisdiction drift, and
+stale law. State your jurisdiction every time and look up every citation. Where
+a lawyer is unaffordable, free services, free initial consultations and
+ombudsmen exist — and a prepared client gets far more from each.

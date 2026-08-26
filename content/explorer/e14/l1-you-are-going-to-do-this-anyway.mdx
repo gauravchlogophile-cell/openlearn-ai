@@ -1,0 +1,155 @@
+---
+title: "You are going to do this anyway"
+description: "Telling people never to ask AI about health, money or law does not work. What does: knowing which questions are safe, and which are the ones that hurt."
+track: explorer
+module: e14
+order: 1
+minutes: 8
+objectives:
+  - "Separate questions that are reasonable to ask from ones that are not"
+  - "Explain why 'just see a professional' fails as complete advice"
+concepts: ["harm reduction", "access", "question types"]
+flashcards:
+  - front: "Which questions are reasonable in these domains?"
+    back: "Understanding terms, preparing for an appointment, learning how something works in general."
+  - front: "Which are not?"
+    back: "Anything that decides your specific case — a diagnosis, a dose, an investment, whether to sign."
+  - front: "Why is 'just see a professional' incomplete advice?"
+    back: "Many people cannot afford one, cannot get an appointment, or are already waiting. Refusing to help them help themselves changes nothing."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+E7·L2 listed legal, medical and financial specifics among the things that most
+need checking. E4·L1 put unverifiable high-stakes questions in the box marked
+do not.
+
+Both were right, and people ask anyway — in enormous numbers, every day,
+including people who have read advice not to.
+
+This module takes that seriously rather than repeating the instruction.
+
+## Why the standard advice fails
+
+"Consult a qualified professional" is correct and, for a large share of the
+people reading it, not actionable.
+
+They cannot afford one. The appointment is in eleven weeks. It is two in the
+morning and they are frightened. The professional they saw did not explain
+anything and they are trying to understand what was said. They live somewhere
+the specialist does not.
+
+Telling that person only "see a doctor" leaves them exactly where they were,
+and they will ask an assistant anyway — just without any of the framing that
+would make it safer.
+
+**Access is the real reason people ask, and refusing to engage does not create
+access.** So the useful thing is to be specific about which questions are
+reasonable and which are dangerous, rather than putting the whole domain out of
+bounds.
+
+## The line that matters
+
+Not the topic. The **kind of question**.
+
+**Reasonable** — questions about how things work in general:
+
+- What does this term in my diagnosis mean?
+- How does an index fund differ from a managed fund?
+- What is a break clause, in general?
+- What questions should I ask at this appointment?
+- What does this letter actually say? (E9·L2)
+
+These are **educational**. Answering them makes you a better-informed
+participant in your own situation, and being better informed is protective.
+
+**Not reasonable** — questions that decide your specific case:
+
+- What is wrong with me?
+- Should I take this medication, at this dose?
+- Should I invest in this?
+- Should I sign this?
+- Do I have a case?
+
+These require facts about you the model does not have, professional
+responsibility it cannot hold (E8·L4), and consequences it will not bear.
+
+The difference is not how technical the question is. It is whether answering it
+**substitutes for a decision that needs a person who is accountable**.
+
+## Why this module exists at the end
+
+Everything in Explorer feeds this.
+
+E7 gave you verification, and here it is not optional. E9 covered reading
+documents you cannot easily read, which is most official correspondence in these
+domains. E12·L6 covered decisions made about you, which is what an insurance
+refusal or a benefits decision is. E8 covered what cannot be delegated.
+
+This module is those tools applied where the stakes are highest.
+
+## What it will not do
+
+Stated plainly.
+
+This module does not give medical, legal or financial advice, and nor does the
+rest of Lrnon. It will not tell you what is wrong with you or what to do with
+your money.
+
+What it will do is help you ask better questions, understand what you are told,
+prepare for the conversations that matter, and recognise the small number of
+situations where using AI at all is the wrong move.
+
+## Try it now (5 minutes)
+
+Think of a question you have asked, or wanted to ask, in one of these three
+areas.
+
+Sort it: is it about how something works in general, or does it decide your
+specific case? Most people find their real question is a mixture — and
+separating the two halves is what the rest of this module teaches.
+
+<Quiz client:visible items={[
+  {
+    q: "The line between safe and unsafe questions is:",
+    options: [
+      "How technical the subject is",
+      "Whether answering substitutes for a decision needing an accountable person",
+      "Whether the topic is medical or financial"
+    ],
+    answer: 1,
+    explain: "Understanding a term is educational; deciding your case requires facts the model lacks and responsibility it cannot hold."
+  },
+  {
+    q: "Why is 'just consult a professional' incomplete advice?",
+    options: [
+      "Professionals are often wrong",
+      "Many people cannot afford or access one, and will ask anyway without safer framing",
+      "AI answers are usually better"
+    ],
+    answer: 1,
+    explain: "Access is the real reason people ask, and refusing to engage does not create access."
+  },
+  {
+    q: "Which is a reasonable question in these domains?",
+    options: [
+      "Should I take this medication?",
+      "What does this term in my diagnosis mean?",
+      "Do I have a legal case?"
+    ],
+    answer: 1,
+    explain: "Understanding what you have been told makes you a better-informed participant, which is protective."
+  }
+]} />
+
+## Recap
+
+People ask about health, money and law regardless of advice not to, usually
+because a professional is unaffordable, unavailable or months away. So the
+useful distinction is not the topic but the question type: understanding how
+something works in general is educational and protective; deciding your specific
+case requires facts and accountability that no model has. This module teaches
+the first and marks the second clearly.
