@@ -1,0 +1,255 @@
+{
+  "_comment": [
+    "The auto-marked half of E7's assessment. Twenty questions across two",
+    "sections, plus the written answer described in content/rubrics/e7.json.",
+    "",
+    "Open book, on purpose. 10b: 'Notes and the lessons are allowed. Questions",
+    "ask you to apply a method, not recall a fact.' So none of these can be",
+    "answered by finding a sentence — every one puts the learner in a situation",
+    "and asks what they would do. Having E7 open in another tab is no help if you",
+    "did not understand it, which is the property a closed-book test of",
+    "verification could never have.",
+    "",
+    "These are NOT the lesson quizzes. A learner who memorised every lesson quiz",
+    "would still have to think here, and the stems are deliberately unlike the",
+    "quiz stems so that the Sky assessment guard treats them as distinct.",
+    "",
+    "They are indexed by scripts/build-sky-index.mjs into the assessment guard,",
+    "so the site assistant refuses to answer them. That matters more here than",
+    "for a lesson quiz: a lesson quiz getting spoiled costs a learner some",
+    "practice, and this getting spoiled costs a certificate its meaning."
+  ],
+
+  "module": "e7",
+  "syllabusVersion": 1,
+  "lastVerified": "2026-08-26",
+  "sections": [
+    { "id": 1, "title": "Deciding what to check", "draw": 10 },
+    { "id": 2, "title": "Doing the checking", "draw": 10 }
+  ],
+  "passMark": { "not_yet": 0, "nearly": 60, "secure": 80 },
+
+  "items": [
+    {
+      "id": "e7a-01", "section": 1,
+      "q": "Your team's slide deck says a competitor grew 40% last year. The figure came from a colleague who read it somewhere. The deck goes to the board tomorrow. What does the first of the three standing questions tell you to do?",
+      "options": [
+        "Check it, because every number in a board deck must be verified",
+        "Ask whether anything changes if the number is wrong, and check only if something does",
+        "Remove the number, since its source is unknown"
+      ],
+      "answer": 1,
+      "explain": "Question one is the volume control: does this matter if it is wrong? A board deck usually means yes — but the habit is to ask first, not to check reflexively. Checking everything is how people stop checking anything."
+    },
+    {
+      "id": "e7a-02", "section": 1,
+      "q": "Which of these claims most needs checking before you repeat it?",
+      "options": [
+        "A friend says the new café on the corner opens at eight",
+        "A post says a medicine you are about to give your child interacts badly with another",
+        "A colleague says the meeting room is on the third floor"
+      ],
+      "answer": 1,
+      "explain": "Triage is about consequence, not confidence. The first two are self-correcting within minutes at trivial cost; the third could harm someone before you find out it was wrong."
+    },
+    {
+      "id": "e7a-03", "section": 1,
+      "q": "You notice you are about to check a statistic only because it contradicts what you already believe. What does that tell you?",
+      "options": [
+        "That your instinct is working — contradictory claims are more often wrong",
+        "That you should also check the last claim you accepted because it agreed with you",
+        "That you should check it more carefully than usual"
+      ],
+      "answer": 1,
+      "explain": "The asymmetry is the signal. If disagreement is what triggers scrutiny, then everything you agreed with went through unchecked — and that is where your errors are accumulating, unnoticed."
+    },
+    {
+      "id": "e7a-04", "section": 1,
+      "q": "An assistant gives you a fluent, well-organised, confidently written summary of a report. What have you learned about whether the summary is accurate?",
+      "options": [
+        "Nothing — fluency and accuracy are produced by different things",
+        "That it is probably accurate, since errors usually show as hedging",
+        "That it is accurate on the main points but may be wrong on details"
+      ],
+      "answer": 0,
+      "explain": "Fluency is what the system optimises for. Accuracy is not, and the two come apart without any visible signal — which is why a confident wrong answer looks exactly like a confident right one."
+    },
+    {
+      "id": "e7a-05", "section": 1,
+      "q": "You have twenty claims in a document and forty minutes. What is the best use of the time?",
+      "options": [
+        "Check every claim briefly so nothing is unexamined",
+        "Check the two or three that the argument actually rests on, properly",
+        "Check the ones you are least sure about"
+      ],
+      "answer": 1,
+      "explain": "A shallow pass over twenty claims verifies nothing and feels like diligence. Load-bearing claims get real checks; decorative ones can be dropped instead."
+    },
+    {
+      "id": "e7a-06", "section": 1,
+      "q": "A message from your manager's address asks you to urgently move a payment to a new account. Which feature of it should decide your response?",
+      "options": [
+        "Whether the writing style matches how they usually write",
+        "That it asks for money or access, regardless of how convincing it is",
+        "Whether the email address is exactly right"
+      ],
+      "answer": 1,
+      "explain": "Style and address are both cheap to forge, so neither can carry the decision. The category of the request is what triggers out-of-band confirmation — you verify by a channel you chose, not one they supplied."
+    },
+    {
+      "id": "e7a-07", "section": 1,
+      "q": "Which situation most reliably produces a verification failure?",
+      "options": [
+        "A complicated claim you do not have expertise in",
+        "A deadline, plus a claim that says what you were hoping it would say",
+        "A source you have never heard of"
+      ],
+      "answer": 1,
+      "explain": "Unfamiliar sources and hard claims make you cautious. Pressure plus a welcome answer removes the impulse to check at exactly the moment checking matters, which is why the habit has to be small enough to run anyway."
+    },
+    {
+      "id": "e7a-08", "section": 1,
+      "q": "You are told a claim came from 'a government report'. What is the least useful next step?",
+      "options": [
+        "Asking which report, from which department, and when",
+        "Searching for other articles that mention the same figure",
+        "Finding the report and reading the relevant sentence"
+      ],
+      "answer": 1,
+      "explain": "Other articles repeating a figure are not independent confirmation — they usually share one origin. Ten restatements of one unchecked claim is still one unchecked claim."
+    },
+    {
+      "id": "e7a-09", "section": 1,
+      "q": "When is it correct to decide not to check something at all?",
+      "options": [
+        "When the source is one you have trusted before",
+        "When nothing you do would change if the claim turned out to be false",
+        "When checking would take longer than the task is worth"
+      ],
+      "answer": 1,
+      "explain": "You are allowed to not check things, and the criterion is consequence rather than convenience or familiarity. Cost is a real constraint, but it is not what makes a claim safe to skip."
+    },
+    {
+      "id": "e7a-10", "section": 1,
+      "q": "A striking claim spreads quickly and makes you feel strongly. What does the strength of that reaction suggest about the claim's origin?",
+      "options": [
+        "Nothing about its truth, but it is evidence the claim was selected for reaction",
+        "That it is likely false, since true claims are usually boring",
+        "That it is probably true, since fabrications are rarely this specific"
+      ],
+      "answer": 0,
+      "explain": "Whatever produces a strong reaction spreads further, so the things that reach you are filtered for reaction rather than accuracy. That says nothing about truth and a great deal about why this one arrived."
+    },
+
+    {
+      "id": "e7a-11", "section": 2,
+      "q": "You open a cited source and the sentence it supposedly supports is not there — but a similar sentence is, about a different country. What is the correct conclusion?",
+      "options": [
+        "The claim is supported, since the mechanism is likely the same elsewhere",
+        "The citation does not support the claim, and repeating it would be a misuse of the source",
+        "The claim is false"
+      ],
+      "answer": 1,
+      "explain": "The claim may still be true — but this source does not establish it, and that is the finding. Treating a near-match as support is how a figure about one place ends up cited for another."
+    },
+    {
+      "id": "e7a-12", "section": 2,
+      "q": "An assistant produces a citation with a plausible author, journal and year. You cannot find the paper. What is the most likely explanation?",
+      "options": [
+        "The paper exists but is not indexed where you searched",
+        "The citation was assembled from the shape of real citations and does not refer to anything",
+        "The paper has been retracted"
+      ],
+      "answer": 1,
+      "explain": "A citation is a pattern like any other, and a system that produces plausible text produces plausible citations. The rule that follows is absolute: never repeat a citation you have not opened."
+    },
+    {
+      "id": "e7a-13", "section": 2,
+      "q": "You ask an assistant whether its previous answer was correct and it says yes. What has that established?",
+      "options": [
+        "Nothing — the same system is not an independent check on itself",
+        "That the answer is likely correct, since it had a chance to reconsider",
+        "That the answer is internally consistent"
+      ],
+      "answer": 0,
+      "explain": "'Are you sure?' is not a check. Confirmation from the same source is one source twice, and the agreement is produced by the same process that produced the original answer."
+    },
+    {
+      "id": "e7a-14", "section": 2,
+      "q": "Two reputable sources give different figures for the same quantity. What should you look at first?",
+      "options": [
+        "Which source is more recent",
+        "Whether they are measuring the same thing over the same period and population",
+        "Which source is generally more reliable"
+      ],
+      "answer": 1,
+      "explain": "Most apparent disagreements are definitional. Before deciding who is wrong, establish whether they are answering the same question — often neither is wrong and the comparison was never valid."
+    },
+    {
+      "id": "e7a-15", "section": 2,
+      "q": "You have two minutes to check a claim. What gets you furthest?",
+      "options": [
+        "Reading three articles about it",
+        "Finding who originally said it and reading that sentence in place",
+        "Asking an assistant to verify it"
+      ],
+      "answer": 1,
+      "explain": "Two minutes is enough to reach an origin, and reaching the origin is the whole method. Reading around a claim can be done indefinitely without ever testing it."
+    },
+    {
+      "id": "e7a-16", "section": 2,
+      "q": "A source is a well-designed site with citations, an about page and an editorial policy. How much does that tell you?",
+      "options": [
+        "A great deal — those signals are expensive to produce",
+        "Little on its own, since all of it is cheap to imitate and none of it is a check on the content",
+        "Enough to treat it as reliable for uncontroversial claims"
+      ],
+      "answer": 1,
+      "explain": "Every one of those signals is presentation. What matters is whether the claims resolve to sources that say what they are said to say — which you find by following one, not by admiring the layout."
+    },
+    {
+      "id": "e7a-17", "section": 2,
+      "q": "You verified a figure last year and it is still being quoted. What is the risk in repeating it now?",
+      "options": [
+        "None — a verified figure stays verified",
+        "The figure may be accurate for its period and misleading as a description of today",
+        "The original source may have been withdrawn"
+      ],
+      "answer": 1,
+      "explain": "Verification is anchored to a date, which is why anything published with a figure should carry when it was checked. A correct 2025 number presented as current is a false claim made out of true material."
+    },
+    {
+      "id": "e7a-18", "section": 2,
+      "q": "Which statement would you most trust from a colleague?",
+      "options": [
+        "\"It's 12% — I checked the ONS release, though I have not confirmed it uses our definition\"",
+        "\"It's around 12%, but don't quote me on that\"",
+        "\"It's 12%.\""
+      ],
+      "answer": 0,
+      "explain": "The first claims less and is worth more: it tells you exactly what was established, what was not, and where it might fail. Vagueness is not humility — it gives the reader nothing to weigh."
+    },
+    {
+      "id": "e7a-19", "section": 2,
+      "q": "You find that a claim you published last month was wrong. What is the best response?",
+      "options": [
+        "Quietly correct it, since drawing attention to it spreads the error further",
+        "Correct it visibly and dated, so anyone who relied on it can see what changed",
+        "Leave it and correct it in the next piece"
+      ],
+      "answer": 1,
+      "explain": "The people who need the correction are the ones who already took the claim away with them, and a silent edit reaches none of them. A dated correction is also what makes the rest of your record worth trusting."
+    },
+    {
+      "id": "e7a-20", "section": 2,
+      "q": "After running all three standing questions you are less certain than you were before. What has happened?",
+      "options": [
+        "You checked badly — good verification increases confidence",
+        "The method worked: your confidence has moved towards what the evidence supports",
+        "The claim is probably false"
+      ],
+      "answer": 1,
+      "explain": "Verification calibrates rather than reassures. Ending up less sure, and able to say exactly why, is a better position than the confidence you started with — and it is the point of the whole module."
+    }
+  ]
+}

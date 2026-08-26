@@ -91,6 +91,43 @@ ok(!/assessedCount[^=]*=\s*\d/.test(src),
 ok(/CERTIFICATION_LIVE = false/.test(src),
    'certification ships switched off');
 
+// ------------------------------------------------- the assessment guard
+/* A spoiled lesson quiz costs a learner some practice. A spoiled assessment
+   question costs a certificate its meaning, and the certificate is the thing
+   someone might show an employer — so these stems being in the guard is worth
+   asserting rather than assuming.
+
+   Behavioural, not structural: it is not enough that the items are indexed,
+   the guard has to actually refuse them. And it has to keep answering a real
+   paraphrase, because teaching the idea is the entire point of the site. */
+const bankPath = ROOT + 'content/assessments/e7.json';
+const assessment = JSON.parse(readFileSync(bankPath, 'utf8'));
+
+ok(assessment.items.length === 20, 'the E7 assessment has twenty auto-marked items');
+ok(assessment.items.every((i) => i.explain?.length > 20),
+   'every item explains itself, so a wrong answer teaches something');
+ok(new Set(assessment.items.map((i) => i.id)).size === assessment.items.length,
+   'no duplicate item ids');
+
+const guard = await import('../src/lib/sky-guard.js');
+const indexed = JSON.parse(readFileSync(ROOT + 'src/generated/sky-quizbank.json', 'utf8'));
+
+ok(indexed.quiz.filter((q) => q.source === 'assessment').length === assessment.items.length,
+   'every assessment item is indexed into the Sky guard');
+
+const prepared = guard.prepareQuiz(indexed.quiz);
+const limits = { quizOverlap: 0.9, quizOverlapOnQuiz: 0.6 };
+const onAssess = '/certification/e7/assess';
+
+const pasted = assessment.items[11].q;
+ok(Boolean(guard.quizMatch(pasted, onAssess, prepared, limits)),
+   'pasting an assessment question verbatim is refused');
+ok(Boolean(guard.quizMatch('hey quick one — ' + pasted + ' thanks!', onAssess, prepared, limits)),
+   'wrapping it in chatter does not get past the guard');
+ok(!guard.quizMatch('why might an AI invent a source that does not exist?',
+                    onAssess, prepared, limits),
+   'a genuine paraphrase of the concept is still answered — teaching is the point');
+
 // ---------------------------------------------------------------------- run
 if (fail.length) {
   console.error('\ncertification: FAILED\n' + fail.map((f) => '  ✗ ' + f).join('\n') + '\n');
