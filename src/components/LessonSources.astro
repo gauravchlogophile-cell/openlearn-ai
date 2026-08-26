@@ -1,0 +1,72 @@
+---
+/** Sources block: every tool a lesson names, with where the claim came from
+ *  and when it was last checked.
+ *
+ *  Lrnon's position on brands is that it is neutral rather than silent. It
+ *  names products, describes them from the vendor's own published material or
+ *  from what the market has openly tried and reported, and leaves the choice
+ *  to the reader. That position only holds if the reader can SEE the source
+ *  and the date — otherwise "we are neutral and sourced" is a claim about
+ *  ourselves rather than something anyone can check.
+ *
+ *  Before this existed, 25 lessons declared `tools:` in frontmatter and only 8
+ *  embedded a RegistryCard, so 17 lessons named products with no link and no
+ *  date. Rendering from the frontmatter closes that by construction: an author
+ *  cannot name a tool in `tools:` and forget to source it, because the sourcing
+ *  is not a thing they do.
+ *
+ *  RegistryCard remains for the in-body case where a tool IS the subject of a
+ *  section. This is the lighter, always-present bibliography.
+ */
+interface Props { ids: string[]; }
+const { ids } = Astro.props;
+
+const files = import.meta.glob('../../registry/*.json', { eager: true });
+const all = Object.values(files).map((m: any) => m.default);
+
+const cards = ids
+  .map((id) => all.find((c: any) => c?.id === id))
+  .filter(Boolean) as any[];
+
+/* CUR-7's threshold, shown to the reader rather than only enforced in CI. A
+   learner deciding whether to rely on a description should know it is four
+   months old. */
+const STALE_DAYS = 120;
+const age = (d: string) => Math.floor((Date.now() - new Date(d).getTime()) / 86400000);
+---
+{cards.length > 0 && (
+  <section aria-labelledby="sources-h"
+    style="border-top:1px solid var(--c-border);margin-block-start:var(--sp-8);padding-block-start:var(--sp-4);">
+    <h2 id="sources-h" style="font-size:var(--fs-200);font-family:var(--font-body);
+      text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-3);">
+      Tools named in this lesson
+    </h2>
+
+    <p style="color:var(--c-ink-soft);font-size:var(--fs-100);margin:0 0 var(--sp-3);">
+      Lrnon takes no sponsorship and favours no vendor. Each description below is
+      drawn from the vendor's own published material or from openly reported use,
+      on the date shown. Follow the link for the current position — it is the
+      authority, not us.
+    </p>
+
+    <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
+      {cards.map((c) => {
+        const days = age(c.lastVerified);
+        const stale = days > STALE_DAYS;
+        return (
+          <li style="display:flex;flex-wrap:wrap;gap:var(--sp-2);align-items:baseline;
+            font-size:var(--fs-100);">
+            <strong>{c.name}</strong>
+            <span style="color:var(--c-ink-soft);">{c.vendor}</span>
+            <a href={c.docsUrl} rel="noopener">Official source ↗</a>
+            <span style={'color:' + (stale ? 'var(--c-alert)' : 'var(--c-ink-faint)') + ';'}>
+              {stale
+                ? `⚠ checked ${c.lastVerified} — ${days} days ago, may have changed`
+                : `checked ${c.lastVerified}`}
+            </span>
+          </li>
+        );
+      })}
+    </ul>
+  </section>
+)}

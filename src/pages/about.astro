@@ -1,0 +1,133 @@
+---
+import Base from '../layouts/Base.astro';
+import { CONTACT_EMAIL } from '../lib/site-config';
+
+/* The public statement of the brand philosophy recorded in
+   docs/brand/philosophy.md. It exists as a page rather than a line in the
+   footer because the commitments below are the ones a learner would want to
+   check before trusting anything else here — and a commitment nobody can find
+   is a commitment nobody can hold you to. */
+
+const commitments = [
+  {
+    title: 'No sponsorship, ever',
+    body: 'No vendor pays for placement, ranking or inclusion. There are no affiliate links and no paid reviews. If that ever changes, it will be stated here first and on every page it affects.',
+  },
+  {
+    title: 'Neutral, not silent',
+    body: 'We name real products, because teaching about AI without naming what people actually use would be useless. Naming a tool is not endorsing it. We describe what exists and teach you a method for choosing — the right answer depends on your language, budget, jurisdiction and work, and we do not know those.',
+  },
+  {
+    title: 'Sourced and dated',
+    body: 'Descriptions come from the vendor’s own published material, or from what the market has openly tried and reported. Every tool named in a lesson shows a link to that source and the date we last checked it.',
+  },
+  {
+    title: 'The vendor is the authority',
+    body: 'Where our description and a vendor’s current documentation disagree, theirs is right and ours is out of date. The link is always there so you can reach the authority directly rather than relying on us.',
+  },
+  {
+    title: 'Staleness is a build failure',
+    body: 'A tool description older than 120 days fails our build, and shows you a warning banner before it gets that far. A script checks vendors’ documentation for changes. This is enforced by the software rather than promised by us.',
+  },
+  {
+    title: 'We say what we do not know',
+    body: 'Where a question is unsettled, the lessons say so and say what would settle it. Where a limitation may since have been fixed, they tell you to test it yourself. Manufactured certainty is the failure we work hardest to avoid.',
+  },
+];
+---
+<Base title="About Lrnon — what we stand for"
+  description="How Lrnon treats brands, vendors and sources: no sponsorship, no favourites, everything dated and linked to the vendor's own material so you can check it.">
+
+  <section class="container" style="padding-block:var(--sp-12) var(--sp-8);">
+    <h1 style="font-size:var(--fs-600);margin:0 0 var(--sp-4);">About Lrnon</h1>
+    <p class="prose" style="color:var(--c-ink-soft);font-size:var(--fs-300);">
+      Lrnon teaches people to use AI well — free, without ads, and without
+      anyone paying us to recommend anything. This page is the part worth
+      reading before you trust the rest.
+    </p>
+  </section>
+
+  <section class="container" style="padding-block:0 var(--sp-8);">
+    <div class="note note--aim">
+      <p style="margin-top:0;"><strong>Trust is the whole product.</strong></p>
+      <p style="margin-bottom:0;color:var(--c-ink-soft);">
+        A learning platform is worth exactly what its readers believe it. One
+        instance of undisclosed favouritism would cost more than any commercial
+        arrangement could pay us. Every commitment below exists to protect that,
+        and most of them are enforced by our own software rather than left to
+        good intentions.
+      </p>
+    </div>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8);">
+    <h2 style="font-size:var(--fs-400);">What we commit to</h2>
+    <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(300px,1fr));margin-top:var(--sp-4);">
+      {commitments.map((c) => (
+        <article class="card">
+          <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">{c.title}</h3>
+          <p style="color:var(--c-ink-soft);margin:0;">{c.body}</p>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8);">
+    <h2 style="font-size:var(--fs-400);">Why we name specific products</h2>
+    <div class="prose">
+      <p>
+        Some courses avoid naming tools, on the theory that it looks impartial.
+        We think that fails the reader twice: it makes the teaching abstract,
+        and it hides real differences behind a pretence of even-handedness.
+      </p>
+      <p>
+        Our own module on verification argues that presenting a lopsided
+        situation as an even one <em>misrepresents the state of knowledge</em>.
+        We hold ourselves to that. If one tool is genuinely better for a task,
+        saying so with the evidence and the date is honesty, not favouritism.
+        What we will not do is prefer anything we have not shown you the reason
+        for — or anything anyone has paid us to prefer, which will never happen.
+      </p>
+      <p>
+        The choice stays yours. We describe the field and teach you how to run
+        your own comparison, because your language, your budget and your work
+        decide the answer, and we cannot see any of them.
+      </p>
+    </div>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8);">
+    <h2 style="font-size:var(--fs-400);">Keeping up with a fast-moving field</h2>
+    <div class="prose">
+      <p>
+        AI changes faster than any curriculum can. Our answer is structural
+        rather than aspirational: lessons teach mechanisms, which do not change
+        when a vendor ships a release, and volatile facts live in a tool
+        registry that is dated, checked, and fails our build when it goes stale.
+      </p>
+      <p>
+        Content is captured on a date, from a source we show you. If a vendor
+        changes something afterwards, the link takes you to their current
+        position — which is the authority. As Lrnon grows, keeping that
+        current stays a first-order priority rather than a backlog item.
+      </p>
+      <p>
+        Found something out of date or wrong? <a href="/feedback">Tell us</a> —
+        corrections are published in <a href="/whats-new">what's new</a> rather
+        than made quietly.
+      </p>
+    </div>
+  </section>
+
+  <section class="container" style="padding-block:var(--sp-8) var(--sp-12);">
+    <div class="note note--try">
+      <h2 style="font-size:var(--fs-300);margin-top:0;">Questions about any of this</h2>
+      <p style="margin-bottom:0;">
+        One person answers, within two working days:
+        <a href={'mailto:' + CONTACT_EMAIL}>{CONTACT_EMAIL}</a>.
+        See also <a href="/privacy">privacy</a>, <a href="/terms">terms</a> and
+        <a href="/safeguarding">child safety</a>.
+      </p>
+    </div>
+  </section>
+</Base>
