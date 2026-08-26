@@ -1,0 +1,157 @@
+---
+title: "Chaining steps together"
+description: "Once one prompt feeds the next, errors stop staying put. What compounds, where to put a checkpoint, and why chains fail quietly rather than loudly."
+track: practitioner
+module: p1
+order: 4
+minutes: 9
+objectives:
+  - "Pass output between steps without compounding errors"
+  - "Place validation and human checkpoints where they pay"
+concepts: ["chaining", "error propagation", "checkpoints"]
+flashcards:
+  - front: "Why do chains fail quietly?"
+    back: "Each step produces plausible output from whatever it received, so a wrong value is processed confidently rather than rejected."
+  - front: "How does accuracy compound across steps?"
+    back: "It multiplies. Four steps at 95% is about 81% end to end, not 95%."
+  - front: "Where does a checkpoint belong?"
+    back: "Before anything irreversible, and after any step whose output the following steps cannot sanity-check."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+L3 split one prompt into four. Now they have to work together, and connecting
+them introduces a problem neither had alone.
+
+## Errors do not stay put
+
+Step one misclassifies an email as *billing*. Step two rates urgency **for a
+billing issue**. Step three drafts a billing reply. Step four routes it to the
+billing team.
+
+Nothing after step one had any way to notice. Each step did its job correctly on
+the input it received. The output is fluent, internally consistent, entirely
+wrong, and — this is the part that matters — it does not look wrong.
+
+That is the characteristic failure of a chain. Not a crash. A confident,
+coherent, incorrect result that passes every glance.
+
+## The arithmetic
+
+Accuracy multiplies. It does not average.
+
+Four steps that are each right 95% of the time give you roughly **81%** end to
+end. Six steps at 95% gives about 74%. A step at 90% in the middle of a chain
+drags everything after it.
+
+This is why L3's advice to split has a limit. More steps mean each is more
+reliable individually and there are more places to go wrong collectively.
+Somewhere between "one prompt does everything" and "twelve micro-steps" is the
+right answer for your task, and the way to find it is to measure rather than
+reason about it.
+
+## Pass structured data, not prose
+
+The single most effective fix. Between steps, pass the JSON from L2 — not a
+paragraph.
+
+Prose between steps means every step re-parses natural language, and every
+re-parse is another chance to misread. Structured data is unambiguous by
+construction, and it lets you validate at the boundary rather than discovering
+the problem three steps later.
+
+Also pass **only what the next step needs**. Sending everything invites the next
+prompt to be influenced by material irrelevant to its job — the contamination
+from L3, reintroduced through the back door.
+
+## Validate at the boundaries
+
+Between steps, check three things. Most automation platforms do this without
+code.
+
+**Is it the right shape?** Parses, expected keys, expected types.
+
+**Is the value allowed?** If the category must be one of four, check it is one
+of four. Models produce reasonable-sounding categories you never defined.
+
+**Is it plausible?** A date in 1902. A negative invoice. An amount three orders
+of magnitude off. Cheap range checks catch a surprising share of real failures.
+
+## Checkpoints where they pay
+
+You cannot check everything without losing the point of automating. Two rules
+place the checks where they are worth it.
+
+**Before anything irreversible.** Sending, paying, deleting, publishing,
+filing. Whatever happens before that point, a person sees it.
+
+**After any step later steps cannot sanity-check.** The classifier above is the
+example: nothing downstream can detect a wrong category, so that is where a
+confidence field (L2) earns its place — route the low-confidence ones to a
+person, let the rest through.
+
+That is the pattern worth taking from this lesson. Not "a human checks
+everything", which does not scale, but "a human checks the cases the machine
+flagged, plus everything irreversible".
+
+## Keep the record
+
+When a chain runs unattended, keep the intermediate outputs, not just the final
+one.
+
+Without them, debugging a bad result means re-running everything and hoping it
+misbehaves the same way. With them, you look at where the values first went
+wrong, and you have your failing example — which becomes a test case in L7.
+
+## Try it now (7 minutes)
+
+Take a two-step chain you have or could build. Write down what step two assumes
+about step one's output.
+
+Now write the check that confirms it, and decide what happens when it fails.
+That decision is the chain's actual design.
+
+<Quiz client:visible items={[
+  {
+    q: "Four chained steps, each 95% accurate, are roughly:",
+    options: [
+      "95% accurate end to end",
+      "81% accurate end to end",
+      "99% accurate end to end"
+    ],
+    answer: 1,
+    explain: "Accuracy multiplies rather than averaging, so adding steps costs reliability even when each step is individually good."
+  },
+  {
+    q: "Chains fail quietly because:",
+    options: [
+      "Errors are logged but not displayed",
+      "Each step produces plausible output from whatever it received",
+      "Models suppress error messages"
+    ],
+    answer: 1,
+    explain: "A misclassification at step one is processed confidently by every later step. The result is coherent, wrong, and does not look wrong."
+  },
+  {
+    q: "A human checkpoint belongs:",
+    options: [
+      "After every step",
+      "Before anything irreversible, and after steps later ones cannot sanity-check",
+      "Only at the very end"
+    ],
+    answer: 1,
+    explain: "Checking everything defeats the purpose. Checking flagged cases plus everything irreversible is what actually scales."
+  }
+]} />
+
+## Recap
+
+In a chain, errors propagate confidently and accuracy multiplies — four steps
+at 95% is about 81%. Pass structured data rather than prose, pass only what the
+next step needs, and validate shape, allowed values and plausibility at each
+boundary. Put people before irreversible actions and after steps nothing
+downstream can check, and keep the intermediate outputs so failures are
+diagnosable.

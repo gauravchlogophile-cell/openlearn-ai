@@ -1,0 +1,152 @@
+---
+title: "Long inputs and what gets used"
+description: "A large context window is not the same as reading everything carefully. Where to put your instruction, and why more material often gets you less."
+track: practitioner
+module: p1
+order: 6
+minutes: 8
+objectives:
+  - "Position instructions and material for reliable attention"
+  - "Reduce input to what the task needs rather than what is available"
+concepts: ["context window", "position effects", "relevance"]
+flashcards:
+  - front: "Does a large context window mean everything is used equally?"
+    back: "No. Material in the middle of a long input is attended to less reliably than material at the start or end."
+  - front: "Where should the instruction go with a long document?"
+    back: "After the document, or in both places — the end of the input is attended to reliably."
+  - front: "Why does adding more material often reduce quality?"
+    back: "Relevant passages get diluted by irrelevant ones, and the model has more opportunity to draw on the wrong part."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Context windows have grown enormously. It is tempting to read that as "I can
+paste everything now", and for many tasks that produces worse results than
+pasting less.
+
+## Capacity is not attention
+
+A large window means a large amount of text can be *supplied*. It does not mean
+every part is weighted equally when producing the answer.
+
+The well-documented pattern is that material at the **beginning** and **end** of
+a long input is used more reliably than material in the **middle**. A fact
+buried halfway through a long document is measurably more likely to be missed
+than the same fact near either edge.
+
+This has been demonstrated repeatedly across models, and while each generation
+improves, the shape persists. Design around it rather than hoping.
+
+## Put the instruction where it will be read
+
+Practical consequence, and the highest-value thing in this lesson.
+
+With a long document, do **not** lead with a short instruction and follow with
+forty pages. The instruction is then a small thing a long way from where the
+answer gets produced.
+
+Better:
+
+> *[document]*
+>
+> *---*
+>
+> *Using only the document above: [instruction]*
+
+Or, for anything important, put it in **both** places — a brief framing before
+so the material is read with purpose, and the full instruction after so it is
+the last thing in the context.
+
+The repetition feels inelegant and measurably helps.
+
+## Less material, better answers
+
+The counter-intuitive one.
+
+Given a document and a question about section 4, supplying only section 4 and
+its surrounding context usually beats supplying the whole document. Relevant
+material is not diluted, and there is less opportunity to draw on the wrong
+part.
+
+So before pasting everything, ask what the task actually needs. Often it is one
+section, one table, one thread — and cutting is faster than the rerun you would
+otherwise do.
+
+This also applies inside a chain (L4): pass forward only what the next step
+requires.
+
+## When you must supply a lot
+
+Sometimes the whole thing genuinely is the input. Three things that help.
+
+**Chunk and combine.** Process in sections, then combine the results in a second
+pass. Slower, more reliable, and each chunk is small enough to be read
+properly.
+
+**Label the parts.** Give each section a clear marker — `[SECTION 3: PRICING]` —
+so the model can locate material and you can ask about it by name.
+
+**Ask for location.** *"Quote the sentence you used and give its section."* This
+is E4·L3's traceability rule and it doubles as a check: an answer that cannot
+point at where it came from often did not come from there.
+
+## Watch the cost
+
+Long inputs cost more per call, and in a chain they cost more at every step
+that carries them.
+
+Trimming the input is usually the largest single cost reduction available in an
+automated workflow, and it typically improves quality at the same time. That
+combination is rare enough to be worth checking for deliberately.
+
+## Try it now (6 minutes)
+
+Take a long document and a specific question about it. Ask twice: once with the
+instruction first, once with the document first and the instruction last.
+
+Then ask a third time with only the relevant section. Compare all three — most
+people are surprised by the third.
+
+<Quiz client:visible items={[
+  {
+    q: "In a long input, material is used least reliably when it sits:",
+    options: [
+      "At the beginning",
+      "In the middle",
+      "At the end"
+    ],
+    answer: 1,
+    explain: "The beginning and end are attended to more reliably. A fact buried halfway through is measurably more likely to be missed."
+  },
+  {
+    q: "With a forty-page document, the instruction is best placed:",
+    options: [
+      "Before the document, kept brief",
+      "After the document, or in both places",
+      "In the system prompt only"
+    ],
+    answer: 1,
+    explain: "The end of the input is attended to reliably. Repeating it before and after feels inelegant and measurably helps."
+  },
+  {
+    q: "Supplying only the relevant section rather than the whole document:",
+    options: [
+      "Usually produces worse answers due to missing context",
+      "Usually produces better answers and costs less",
+      "Makes no measurable difference"
+    ],
+    answer: 1,
+    explain: "Relevant material is not diluted and there is less opportunity to draw on the wrong part — one of the few changes that improves quality and cost together."
+  }
+]} />
+
+## Recap
+
+A big context window supplies text; it does not guarantee even attention, and
+the middle of a long input is the weak spot. Put your instruction after the
+material, or in both places, and prefer supplying only what the task needs.
+Where the whole thing really is the input, chunk it, label the sections, and
+require answers to cite where they came from.

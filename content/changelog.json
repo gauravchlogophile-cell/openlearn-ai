@@ -4,6 +4,12 @@
     {
       "date": "2026-08-26",
       "kind": "New module",
+      "where": "Practitioner · P1",
+      "what": "Advanced Prompting published — the first Practitioner module. Eight lessons on few-shot examples, structured output, splitting a prompt into single-purpose steps, chaining without compounding errors, persistent instructions, long inputs, testing a prompt against a saved evaluation set, and building prompts that survive a model update."
+    },
+    {
+      "date": "2026-08-26",
+      "kind": "New module",
       "where": "Explorer · E8",
       "what": "AI Ethics & Responsible Use published — eight lessons on authorship, disclosing AI use, where bias comes from and lands, who answers when something goes wrong, the environmental and labour costs, automating work that belongs to colleagues, how to refuse, and writing your own code of conduct. This completes the Explorer track: 64 lessons across eight modules."
     },

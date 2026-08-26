@@ -1,0 +1,158 @@
+---
+title: "Instructions that persist"
+description: "System prompts, custom instructions and project settings put rules above the conversation. What belongs there, what does not, and why they drift."
+track: practitioner
+module: p1
+order: 5
+minutes: 8
+objectives:
+  - "Decide what belongs in persistent instructions versus each request"
+  - "Recognise why persistent rules weaken over a long conversation"
+concepts: ["system prompts", "custom instructions", "instruction drift"]
+flashcards:
+  - front: "What belongs in a system prompt?"
+    back: "Stable things — role, audience, format, tone, hard constraints. Anything that would otherwise be retyped every time."
+  - front: "What does not belong there?"
+    back: "The specific task, and anything that changes between requests."
+  - front: "Why do persistent instructions weaken?"
+    back: "They sit far back in a long conversation, competing with everything since, so their influence fades as the exchange grows."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Every assistant offers somewhere to put standing instructions — a system prompt,
+custom instructions, project or workspace settings, a persona configuration.
+The names differ; the idea is the same.
+
+Rules that apply to every request, so you stop retyping them.
+
+## What goes in
+
+The test is simple: **would you write this every time?**
+
+**Role and audience.** *You are helping a UK secondary school teacher. Readers
+are 14-year-olds.*
+
+**Standing format rules.** *Always British English. Dates as DD Month YYYY.
+Never use bullet points unless asked.*
+
+**Hard constraints.** *Never invent a citation. If you do not know, say so.
+Never give legal or medical advice; suggest consulting a professional.*
+
+**Your voice reference.** E5·L2's 300 words of your own writing, if the tool
+allows something that long.
+
+**Things to avoid.** The verbal tells from E5·L2 — *never open with "It's worth
+noting"; never end with a summary paragraph.*
+
+## What stays out
+
+**The task.** *"Summarise this document"* is per-request. Putting it in
+persistent instructions makes every unrelated conversation try to summarise
+something.
+
+**Anything that varies.** This week's project name, the current client, today's
+priority. It goes stale, you forget it is there, and it starts contradicting
+what you are actually asking for.
+
+That last failure is worth watching for. Stale persistent instructions produce
+behaviour you cannot explain from the conversation in front of you, because the
+cause is a setting you configured months ago and stopped seeing.
+
+## Write them as behaviour
+
+Same rule as E8·L8: describable actions, not qualities.
+
+Weak — *Be concise and professional.*
+Strong — *Default to under 200 words unless I ask for more. No opening
+pleasantry. Do not restate my question back to me.*
+
+Adjectives get averaged (E6·L2 made this point about images; it is the same
+mechanism). Behaviours can be followed and can be checked.
+
+## Why they fade
+
+Something practitioners need to know and casual users never notice.
+
+Persistent instructions sit at the very start of the context. As a conversation
+grows, everything since competes with them, and their influence weakens. By
+message forty, a system prompt saying *always British English* is a long way
+back, and *color* starts appearing.
+
+This is **instruction drift**, and it is not a bug you can configure away.
+Three practical responses:
+
+**Restate critical rules in the request itself** when it matters, however
+redundant that feels.
+
+**Start a new conversation** rather than continuing an old one. Long threads
+degrade instruction-following generally, not only here.
+
+**For automation, do not rely on conversation at all.** Send every request
+fresh with its full instructions. A chain (L4) should not depend on a
+conversational history it did not control.
+
+## Layer them
+
+Where your tool supports several levels — global custom instructions, plus
+per-project settings — layer them deliberately.
+
+Global gets what is true for everything you do: language, honesty rules, tone.
+Project gets what is true for that body of work: audience, subject constraints,
+terminology.
+
+Then check they do not conflict. When they do, the behaviour is not reliably
+predictable, and you will spend an afternoon debugging a prompt that was never
+the problem.
+
+## Try it now (6 minutes)
+
+Open your assistant's custom instructions. Read what is there — most people
+find something stale.
+
+Rewrite one vague line as a specific behaviour. Then delete anything that has
+stopped being true.
+
+<Quiz client:visible items={[
+  {
+    q: "Which belongs in persistent instructions?",
+    options: [
+      "The specific task you want done",
+      "Standing format and language rules you would otherwise retype",
+      "This week's project name"
+    ],
+    answer: 1,
+    explain: "The test is whether you would write it every time. Tasks and anything that varies go in the request instead."
+  },
+  {
+    q: "Instruction drift means:",
+    options: [
+      "The model updates and behaves differently",
+      "Persistent rules weaken as a conversation grows and competes with them",
+      "Instructions get corrupted in storage"
+    ],
+    answer: 1,
+    explain: "A system prompt sits at the very start of the context. By message forty it is a long way back, and its influence fades."
+  },
+  {
+    q: "For an automated chain, you should:",
+    options: [
+      "Rely on a long-running conversation for context",
+      "Send every request fresh with its full instructions",
+      "Put the task in the system prompt"
+    ],
+    answer: 1,
+    explain: "A chain should not depend on conversational history it did not control, and fresh requests avoid drift entirely."
+  }
+]} />
+
+## Recap
+
+Put the stable things in persistent instructions — role, audience, format,
+hard constraints, voice — and keep the task and anything that varies out.
+Write behaviours rather than adjectives, expect instructions to fade as a
+conversation lengthens, and for automation send every request fresh rather than
+trusting a thread.
