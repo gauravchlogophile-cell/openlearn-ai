@@ -1,0 +1,136 @@
+---
+title: "Planning and breaking work down"
+description: "Assistants are good at decomposing work and bad at estimating it. Use them for the steps you forgot, and keep the timings for yourself."
+track: explorer
+module: e4
+order: 6
+minutes: 8
+objectives:
+  - "Use an assistant to find the steps you have forgotten"
+  - "Recognise why its time estimates are unreliable for your situation"
+concepts: ["decomposition", "estimation", "dependencies"]
+flashcards:
+  - front: "What are assistants genuinely good at in planning?"
+    back: "Decomposition — listing the steps and dependencies a plan is missing, including the boring ones people forget."
+  - front: "Why are AI time estimates unreliable?"
+    back: "They reflect typical durations in text, not your team, your approvals or your interruptions. They are also systematically optimistic."
+  - front: "What is the most useful planning question to ask?"
+    back: "What has to be true before step one can start — the dependencies and approvals that sit outside the plan."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Ask for a project plan and you will get one: neat phases, tidy durations,
+sensible-looking milestones. It will be genuinely useful in one respect and
+quietly misleading in another, and the two are easy to confuse because they
+arrive in the same table.
+
+## Good at steps
+
+Decomposition is a real strength. A model has read an enormous number of
+descriptions of how work gets done, so it is good at listing the steps
+something involves — including the unglamorous ones people forget.
+
+Ask for the plan you have not thought of:
+
+> *I need to [goal] by [date]. Here is what I have already thought of: [list].*
+>
+> *What steps am I missing? Include the boring ones — approvals, access,
+> waiting on other people, things that must happen before step one can start.
+> Do not give me timings.*
+
+Two parts do the work. Telling it what you already have stops it repeating your
+own list back. And *do not give me timings* keeps the output in the area where
+it is reliable.
+
+The answer to "what has to be true before step one can start" is where most
+plans actually fail. Access not granted. A form nobody knew existed. A person
+on leave.
+
+## Bad at durations
+
+Now the part to distrust.
+
+A duration in a plan looks like a measurement. It is not — it is a plausible
+number, drawn from how long tasks like this are *described* as taking, in
+general, by people writing on the internet.
+
+It knows nothing about your approval chain, your team's other commitments, how
+long your organisation takes to answer an email, or the fortnight in December
+when nothing moves. It is also systematically optimistic, because written
+accounts of work are optimistic; people describe the intended path far more
+often than the one with three weeks of waiting in it.
+
+So take the steps and put your own numbers against them. You know things the
+model structurally cannot.
+
+## Ask what would go wrong
+
+The other genuinely strong move is inverting the plan:
+
+> *Assume this plan failed. It is [date] and we missed it. Give the five most
+> likely reasons, most likely first. Be specific — "poor communication" is not
+> a reason.*
+
+This is a pre-mortem, and it works well because failure modes are heavily
+documented. Named specifically, several will be things you can cheaply prevent
+now: a dependency nobody owns, an approval with a two-week queue, one person
+holding three critical steps.
+
+## Keep the plan yours
+
+A plan is a commitment you will be held to, which puts it firmly in L1's
+expensive-to-check column. Use the assistant for the shape — steps,
+dependencies, failure modes — and own the judgement: what matters, what can
+slip, what you will actually do when it does.
+
+## Try it now (6 minutes)
+
+Take something you are planning. List the steps you have thought of, then ask
+what is missing, explicitly excluding timings.
+
+Then run the pre-mortem. Pick the one failure reason that made you wince and
+deal with it today.
+
+<Quiz client:visible items={[
+  {
+    q: "What are assistants genuinely reliable at in planning?",
+    options: [
+      "Estimating how long each step will take",
+      "Listing steps and dependencies you have forgotten",
+      "Deciding which milestones matter most"
+    ],
+    answer: 1,
+    explain: "Decomposition draws on a huge number of descriptions of how work gets done. Durations and priorities depend on your situation, which it cannot see."
+  },
+  {
+    q: "Why are AI time estimates systematically optimistic?",
+    options: [
+      "Models are designed to be encouraging",
+      "Written accounts of work describe the intended path more often than the delayed one",
+      "They assume you work full time on the task"
+    ],
+    answer: 1,
+    explain: "The estimate reflects how long tasks are described as taking, and descriptions skew towards the plan rather than the three weeks of waiting."
+  },
+  {
+    q: "A pre-mortem asks:",
+    options: [
+      "What could go wrong, in general terms",
+      "Assume it failed — what are the most likely specific reasons",
+      "How long each phase should take"
+    ],
+    answer: 1,
+    explain: "Assuming failure and demanding specific causes surfaces preventable problems. 'Poor communication' is not a reason you can act on."
+  }
+]} />
+
+## Recap
+
+Use an assistant to find the steps and dependencies you missed, and to run a
+pre-mortem on a plan you already have. Do not take its durations — they are
+plausible numbers, not measurements of your situation, and they lean
+optimistic. The steps can be borrowed; the commitment stays yours.

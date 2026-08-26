@@ -1,0 +1,140 @@
+---
+title: "Research that cites its sources"
+description: "Answer engines cite as they go, which is genuinely useful and not the same as being right. How to check a citation in under a minute."
+track: explorer
+module: e4
+order: 4
+minutes: 9
+objectives:
+  - "Tell the difference between a cited answer and a verified one"
+  - "Check a citation quickly enough that you actually do it"
+concepts: ["answer engines", "citations", "verification"]
+tools: ["perplexity", "gemini"]
+flashcards:
+  - front: "Does a citation mean the claim is correct?"
+    back: "No. It means a source was retrieved. The source may not say what the answer claims, or may not be reliable."
+  - front: "What are the three fast citation checks?"
+    back: "Does the link open, does the page actually say it, and is the source one you would cite yourself?"
+  - front: "Why start research with the question rather than the answer?"
+    back: "Asking for the strongest case against a claim surfaces disagreement that a confirmation-shaped question hides."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+E2·L6 introduced answer engines — tools that search first and then write, with
+citations attached. For research they are a real improvement on an assistant
+answering from memory, because there is something to check.
+
+The improvement is that checking became *possible*. It did not become
+*automatic*, and the footnotes are persuasive enough that most people stop
+there.
+
+## A citation is a receipt, not a proof
+
+When an answer arrives with four superscript numbers, it is easy to read that
+as four independent confirmations. It is not. It means four pages were
+retrieved and used while composing.
+
+Three things can go wrong, and all three are common:
+
+- **The source does not say it.** The page was retrieved for topical overlap
+  and the specific claim was assembled around it.
+- **The source is weak.** A press release, a vendor's own marketing, a forum
+  post, a summary of a summary.
+- **The source is stale.** True in 2023, superseded since — a particular
+  problem for anything about model capabilities or pricing.
+
+None of these look different from a correct citation until you open it.
+
+## The one-minute check
+
+Do this for any claim you intend to repeat, act on, or put your name near:
+
+**Does the link open?** A dead or redirecting link is a bad sign on its own.
+
+**Does the page actually say it?** Search the page for the specific number or
+phrase. Not the topic — the claim. This is where most failures surface.
+
+**Would you cite this source yourself?** If the answer rests on a vendor's own
+blog post, you have a marketing claim with a footnote.
+
+Under a minute for the ones that matter. Skipping it means you have outsourced
+not the searching but the judging, which was the part that needed you.
+
+## Ask questions that can fail
+
+How you ask shapes what comes back. A question with an answer baked in gets
+that answer confirmed, because agreeable material exists for almost every
+position.
+
+> *Why is [approach] better than [alternative]?*
+
+...retrieves the case for it. Instead, ask in a way that permits a no:
+
+> *What is the strongest evidence AGAINST [claim]? Who disagrees, and on what
+> grounds? If the evidence is mixed, say so rather than picking a side.*
+
+That last clause matters. Without permission to report uncertainty, a model
+will usually resolve it for you, and you will never see that it was there.
+
+## Where this leads
+
+You are doing a light version of something E7 covers properly — that module is
+compulsory for certification and goes considerably deeper into verification and
+manipulation.
+
+For now, one habit: **the citation tells you where to look, not what is true.**
+Same shape as the previous lesson. A summary is a map to a document; a citation
+is a map to a source. Neither is the destination.
+
+## Try it now (7 minutes)
+
+Ask an answer engine a factual question in your own field where you already
+know the answer — that is the point, since it lets you grade the result.
+
+Open every citation. Check whether each page contains the specific claim. Then
+ask the same question in the "strongest evidence against" form and see whether
+anything appears that the first answer left out.
+
+<Quiz client:visible items={[
+  {
+    q: "An answer with four citations means:",
+    options: [
+      "Four sources independently confirmed the claim",
+      "Four pages were retrieved and used while composing the answer",
+      "The answer has been fact-checked"
+    ],
+    answer: 1,
+    explain: "Citation is a record of retrieval, not of verification. The page may not contain the specific claim built around it."
+  },
+  {
+    q: "The fastest way to catch a citation that does not support its claim:",
+    options: [
+      "Count how many citations the answer has",
+      "Search the linked page for the specific number or phrase",
+      "Ask the assistant whether it is confident"
+    ],
+    answer: 1,
+    explain: "Searching for the exact claim rather than the topic is where most failures surface — and asking a model about its own confidence tells you nothing reliable."
+  },
+  {
+    q: "Why ask for 'the strongest evidence against' a claim?",
+    options: [
+      "It makes the assistant work harder",
+      "A question with the answer baked in retrieves agreeable material",
+      "Negative questions produce shorter answers"
+    ],
+    answer: 1,
+    explain: "Supporting material exists for almost any position. Permitting a no, and permitting 'the evidence is mixed', is what surfaces disagreement."
+  }
+]} />
+
+## Recap
+
+Answer engines make checking possible rather than unnecessary. Open the links,
+search for the specific claim, and judge whether the source is one you would
+cite. Ask questions that allow a no, and let the answer say the evidence is
+mixed — a citation points at a source, it does not vouch for it.

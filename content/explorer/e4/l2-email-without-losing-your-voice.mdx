@@ -1,0 +1,138 @@
+---
+title: "Email without losing your voice"
+description: "Drafting replies with an assistant without sounding like one. Where email genuinely saves time, and the two sentences you must always write yourself."
+track: explorer
+module: e4
+order: 2
+minutes: 8
+objectives:
+  - "Draft routine replies without adopting a generic assistant tone"
+  - "Recognise which emails should never be drafted for you"
+concepts: ["tone", "voice", "routine correspondence"]
+flashcards:
+  - front: "How do you stop a drafted email sounding generic?"
+    back: "Give the assistant a sample of your own writing and ask it to match length and directness, rather than asking for a 'professional' tone."
+  - front: "Which emails should you write yourself?"
+    back: "Anything carrying bad news, apology, disagreement or praise for a person — the ones where the effort is the message."
+  - front: "What must you always check before sending?"
+    back: "Every fact, name, date and commitment. A drafted email is written in your name and lands as your word."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Email is the obvious first candidate. It is frequent, it is formulaic, and you
+can usually tell at a glance whether a reply is right.
+
+It is also where AI-assisted writing is most recognisable, and where being
+recognised costs you something. So this lesson is as much about restraint as
+about drafting.
+
+## Ask for your voice, not a professional one
+
+The single most common mistake is asking for a "professional" or "polished"
+email. Both words push the model towards the average of all business
+correspondence it has ever seen — which is why the output arrives padded with
+*I hope this email finds you well*, *I wanted to reach out*, and *Please don't
+hesitate*.
+
+Nobody writes like that. Everybody recognises it.
+
+The fix is the one E3·L3 taught: supply context instead of adjectives. Paste
+two emails you actually sent, and ask for a reply that matches them.
+
+> *Below are two emails I've sent. Match their length, directness and level of
+> formality. No opening pleasantry — I don't use them.*
+>
+> *Reply to the message below: agree to the Thursday meeting, ask them to send
+> the figures beforehand.*
+
+The difference is immediate, because you have replaced a vague quality word
+with evidence.
+
+## Say what the email must do
+
+A reply has a job. Say what it is, in the imperative, before anything else:
+decline without closing the door; confirm and add one condition; ask for the
+thing they forgot.
+
+Then name what must not happen. *Do not apologise.* *Do not commit to a date.*
+*Do not repeat their message back to them.* Negative constraints work well here
+because email has strong conventions the model will otherwise follow by
+default.
+
+## Two sentences you write yourself
+
+Some emails should never be drafted for you. Not because it would not work, but
+because the effort **is** the message:
+
+- **Bad news.** Redundancy, rejection, a project cancelled. The recipient will
+  read it several times.
+- **An apology.** An apology you did not compose is not one.
+- **Disagreement with a person**, as opposed to a position.
+- **Praise.** Specific, personal praise is worth more than fluent praise, and
+  the difference is audible.
+
+A useful test: if the recipient would feel worse on learning it was drafted,
+write it yourself. That test is doing real work, because they may well find
+out — and increasingly, they will guess.
+
+## Check before you send, every time
+
+A drafted email is written **in your name**. If it invents a date, misspells a
+person's name, or agrees to something you did not intend, none of that is the
+assistant's problem — it lands as your word.
+
+So read it as the recipient, not as the author. Every name, every number, every
+commitment. This takes twenty seconds and it is not optional.
+
+## Try it now (6 minutes)
+
+Find a routine email you sent recently. Paste two of your own sent messages,
+then ask for a reply to it in your voice with the pleasantries removed.
+
+Compare it with what you actually sent. Note the specific words the assistant
+reached for that you never would — those are the ones to name and forbid next
+time.
+
+<Quiz client:visible items={[
+  {
+    q: "Why does asking for a 'professional tone' produce generic email?",
+    options: [
+      "The model does not understand tone",
+      "It pushes towards the average of all business email it has seen",
+      "Professional email is always long"
+    ],
+    answer: 1,
+    explain: "An adjective selects an average. Supplying two of your own emails as evidence gives it something specific to match instead."
+  },
+  {
+    q: "Which of these should you write yourself?",
+    options: [
+      "Confirming a meeting time",
+      "An apology",
+      "Forwarding a file with a one-line note"
+    ],
+    answer: 1,
+    explain: "An apology you did not compose is not one. Where the effort is the message, delegating it removes the message."
+  },
+  {
+    q: "A drafted email invents a deadline you never agreed to. Whose problem is it?",
+    options: [
+      "Yours — it goes out in your name and lands as your word",
+      "The assistant vendor's",
+      "Nobody's, if the recipient does not notice"
+    ],
+    answer: 0,
+    explain: "Sending is the act that makes it yours. That is why every name, number and commitment gets read before it goes."
+  }
+]} />
+
+## Recap
+
+Give the assistant your own emails rather than an adjective, state what the
+reply must do and must not do, and never delegate bad news, apologies,
+disagreement or praise. Then read every draft as the recipient before it goes
+out in your name.
