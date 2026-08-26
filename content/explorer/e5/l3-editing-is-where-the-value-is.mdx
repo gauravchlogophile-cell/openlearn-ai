@@ -1,0 +1,132 @@
+---
+title: "Editing is where the value is"
+description: "The most reliable use of an assistant on writing is the opposite direction: you write, it attacks. Criticism is cheaper to check than prose."
+track: explorer
+module: e5
+order: 3
+minutes: 8
+objectives:
+  - "Use an assistant as a critic of your own writing"
+  - "Ask for criticism specific enough to act on"
+concepts: ["critique", "revision", "reader simulation"]
+flashcards:
+  - front: "Why is critique a safer use than drafting?"
+    back: "You know the material, so you can judge each criticism instantly. Verification cost is near zero."
+  - front: "What makes a critique request useful?"
+    back: "Asking for specific objections tied to specific sentences, not a general assessment."
+  - front: "Why ask what a reader would misunderstand?"
+    back: "You cannot un-know your own argument, so you cannot see where it is unclear. That blind spot is exactly what to outsource."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Most people point assistants at writing they have not done. Point one at
+writing you *have* done and the whole risk profile inverts.
+
+You wrote it, so you know whether a criticism lands. Checking costs seconds.
+By E4·L1's test this is close to the ideal case, and it is the use most likely
+to make you better at the job rather than just faster.
+
+## Ask for objections, not an assessment
+
+"What do you think of this?" produces praise followed by three mild
+suggestions. It is the least useful question available.
+
+Ask for something specific and adversarial:
+
+> *Below is a draft. You are a sceptical reader who disagrees with its
+> conclusion.*
+>
+> *Give me the five strongest objections. For each: quote the sentence that
+> invites it, state the objection in one line, and say what would answer it.*
+>
+> *Do not comment on style. Do not tell me what works.*
+
+Forbidding praise matters. Left open, a model will balance criticism with
+reassurance, and the reassurance dilutes the part you needed.
+
+## The question you cannot ask yourself
+
+Here is the one that earns its place permanently:
+
+> *Where will a reader misunderstand this? Quote the sentence and say what
+> they will think it means.*
+
+You cannot answer this about your own writing. You know what you meant, so you
+read your meaning into your sentences automatically. That is not carelessness —
+it is a structural blind spot, and it is the thing a fresh reader is for.
+
+An assistant is not a fresh reader in any deep sense, but it *is* a system
+producing the most likely reading of your words, which is exactly the
+approximation you want.
+
+## Reader-specific critique
+
+Generic critique is generic. Name the reader:
+
+> *Critique this as: a finance director who will only read the first
+> paragraph and the numbers.*
+>
+> *Critique this as: someone who was in the meeting and disagreed.*
+
+The second is uncomfortable and useful. Documents circulate to people whose
+objections you have been avoiding, and it is better to meet them at your desk.
+
+## Take the objections, not the rewrites
+
+When a critique lands, resist asking for a fixed version. Fix it yourself.
+
+Rewriting is where your judgement is, and it is also where the understanding
+gets built. Hand that back and you are in E4·L8's third category — the artefact
+improves and you do not. Use the criticism; keep the pen.
+
+## Try it now (7 minutes)
+
+Take something you have already written. Ask for the five strongest objections
+with quoted sentences and no style comments.
+
+Then ask where a reader will misunderstand it. Fix the one that made you wince,
+in your own words.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is critiquing your own writing a safer use than drafting?",
+    options: [
+      "Models are better at criticism than composition",
+      "You know the material, so verification costs almost nothing",
+      "Criticism is shorter to read"
+    ],
+    answer: 1,
+    explain: "You wrote it, so you can judge each objection instantly. That is E4·L1's ideal case: frequent, useful and cheap to check."
+  },
+  {
+    q: "Why forbid the assistant from saying what works?",
+    options: [
+      "Praise wastes output length",
+      "Balancing criticism with reassurance dilutes the part you needed",
+      "Positive feedback is usually inaccurate"
+    ],
+    answer: 1,
+    explain: "Left open, a model softens criticism with encouragement. You asked for objections; reassurance is not one."
+  },
+  {
+    q: "\"Where will a reader misunderstand this?\" is valuable because:",
+    options: [
+      "It is a question you structurally cannot answer about your own writing",
+      "Models are trained on reader feedback",
+      "It produces shorter documents"
+    ],
+    answer: 0,
+    explain: "You know what you meant, so you read your meaning into your own sentences. A system producing the most likely reading is the approximation you want."
+  }
+]} />
+
+## Recap
+
+Point the assistant at writing you have already done. Ask for the strongest
+objections with quoted sentences, forbid praise, name the specific reader, and
+ask where you will be misunderstood. Then do the rewriting yourself — the
+criticism is the product, not the replacement text.

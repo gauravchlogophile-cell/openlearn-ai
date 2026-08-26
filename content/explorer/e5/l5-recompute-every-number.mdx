@@ -1,0 +1,134 @@
+---
+title: "Recompute every number"
+description: "Assistants describing data will produce totals, averages and trends that look right. Why arithmetic is the one output you must always check yourself."
+track: explorer
+module: e5
+order: 5
+minutes: 8
+objectives:
+  - "Explain why numbers produced in prose are unreliable"
+  - "Use an assistant for the method and the spreadsheet for the arithmetic"
+concepts: ["arithmetic", "analysis", "provenance"]
+flashcards:
+  - front: "Why not trust a total produced in prose?"
+    back: "It is generated as likely text, not computed. It will look plausible and can be wrong by any amount."
+  - front: "What is the safe division of labour with data?"
+    back: "The assistant supplies the method or formula; the spreadsheet does the arithmetic."
+  - front: "Which numbers get checked?"
+    back: "All of them — but especially any you will quote, act on, or that appear in a conclusion."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Paste a table, ask what it shows, and you will get a fluent paragraph: the
+total, the average, which region grew, where the outlier is.
+
+Some of those numbers will be right. Some will not. And nothing in how they are
+presented distinguishes the two — which makes this the single most dangerous
+output in the module.
+
+## Why prose arithmetic fails
+
+E1 covered the mechanism: a model produces likely continuations. When it writes
+*"total revenue was £847,200"*, it is generating text that fits the pattern of
+a total, not performing addition and reporting the result.
+
+Sometimes that lands exactly. Sometimes it is close — which is worse than being
+wildly wrong, because a number that is nearly right survives a sanity check.
+
+Some tools now run real code to compute results, and where they do, this is
+genuinely better. But you have to *know* that happened for your specific
+answer, and the prose reads identically either way. If you cannot see the
+computation, assume there wasn't one.
+
+## Method from the assistant, arithmetic from the sheet
+
+The safe division:
+
+> **The assistant** — which comparison answers my question, what would make
+> this misleading, what is the formula.
+>
+> **The spreadsheet** — the actual number.
+
+That keeps the model where it is strong, which is knowing *how* to analyse
+something, and keeps computation where results are reproducible and auditable.
+It also means the number in your document traces to a cell somebody can open,
+which is what anyone challenging it will ask for.
+
+## Ask about shape, not values
+
+Framed well, this is genuinely useful:
+
+> *Below are the column headers and 10 of 400 rows. Do not calculate anything.*
+>
+> *What comparisons would answer "is the North region underperforming"? For
+> each, give the formula and say what would make it misleading.*
+
+*Do not calculate anything* is the key instruction. You are asking for
+analytical judgement — which comparison, which confound, which denominator —
+and that is a question about method, where a model's breadth genuinely helps.
+
+Then you compute it, and you have both the reasoning and a number you can
+defend.
+
+## Percentages and the base rate
+
+One specific trap. Percentage changes are where confident errors cluster,
+because they need a base you may not have stated.
+
+*"Up 40%"* against what — last month, last year, budget, the same month last
+year? A model asked for growth will pick something reasonable-sounding and not
+tell you which. Always specify the base yourself, and always state it in the
+output. A percentage without a stated base is not a fact.
+
+## Try it now (6 minutes)
+
+Take a table you have and ask for a summary of what it shows, arithmetic
+included.
+
+Then check every number against the sheet. Note not just whether each is right,
+but whether a wrong one would have caught your eye. That second answer is why
+this lesson exists.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is a total produced in prose unreliable?",
+    options: [
+      "Models round aggressively",
+      "It is generated as likely text rather than computed",
+      "Tables lose precision when pasted"
+    ],
+    answer: 1,
+    explain: "The model produces text fitting the pattern of a total. Sometimes that is exactly right; nothing in the prose tells you when it is not."
+  },
+  {
+    q: "The safe division of labour with data is:",
+    options: [
+      "Assistant for the method, spreadsheet for the arithmetic",
+      "Assistant for both, spreadsheet as a backup",
+      "Spreadsheet for the method, assistant for the arithmetic"
+    ],
+    answer: 0,
+    explain: "It keeps the model where it is strong — knowing how to analyse — and keeps computation reproducible, auditable and traceable to a cell."
+  },
+  {
+    q: "A percentage change quoted without a stated base is:",
+    options: [
+      "Fine if the direction is right",
+      "Not a fact — the base determines what it means",
+      "Acceptable in summaries but not in reports"
+    ],
+    answer: 1,
+    explain: "Against last month, last year, or budget are different claims. A model asked for growth picks a plausible base and does not say which."
+  }
+]} />
+
+## Recap
+
+Numbers in prose are generated, not computed, and a nearly-right figure is more
+dangerous than an absurd one. Ask the assistant which comparison and which
+formula, do the arithmetic in the sheet, and never quote a percentage without
+stating its base.

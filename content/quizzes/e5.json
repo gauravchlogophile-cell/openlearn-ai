@@ -1,0 +1,272 @@
+{
+  "module": "e5",
+  "title": "Documents, Spreadsheets & Presentations — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "e5-01",
+      "q": "Why ask for an outline before prose?",
+      "options": [
+        "Outlines generate faster",
+        "Structure is cheap to change; finished prose invites wording edits instead of structural ones",
+        "Prose consumes more of a usage allowance"
+      ],
+      "answer": 1,
+      "explain": "Once text reads well you tighten sentences rather than asking whether a section should exist — sunk cost on something that cost you nothing."
+    },
+    {
+      "id": "e5-02",
+      "q": "An outline section should state:",
+      "options": [
+        "The topic it covers",
+        "The claim it makes",
+        "Its approximate word count"
+      ],
+      "answer": 1,
+      "explain": "\"Background\" tells you nothing. A claim can be agreed with, disagreed with, or evidenced."
+    },
+    {
+      "id": "e5-03",
+      "q": "Requesting an outline on a subject you know nothing about produces:",
+      "options": [
+        "A reliable structure drawn from wide reading",
+        "A plausible-shaped outline reflecting convention rather than your situation",
+        "Nothing of value"
+      ],
+      "answer": 1,
+      "explain": "It mirrors how such documents usually look. Useful as a prompt for your own thinking, not as an answer."
+    },
+    {
+      "id": "e5-04",
+      "q": "The strongest reason to draft one section at a time:",
+      "options": [
+        "Shorter outputs are cheaper",
+        "A gap in your argument gets bridged with confident prose when the whole thing is written at once",
+        "Assistants have strict length limits"
+      ],
+      "answer": 1,
+      "explain": "Fluent connective writing hides weak transitions. Section by section, the gap stays visible."
+    },
+    {
+      "id": "e5-05",
+      "q": "The best way to specify your writing voice:",
+      "options": [
+        "Describe it as 'warm but authoritative'",
+        "Paste 300–500 words of your own typical writing",
+        "Name an author you admire"
+      ],
+      "answer": 1,
+      "explain": "Adjectives select an average. Your own typical writing is evidence the model can match."
+    },
+    {
+      "id": "e5-06",
+      "q": "Keeping a list of your assistant's verbal tells lets you:",
+      "options": [
+        "Report them to the vendor",
+        "Forbid specific habits by name rather than asking for 'natural' writing",
+        "Detect when the model has been updated"
+      ],
+      "answer": 1,
+      "explain": "A named habit is a concrete instruction; \"sound human\" is another adjective to interpret."
+    },
+    {
+      "id": "e5-07",
+      "q": "Critiquing writing you have already done is safer than drafting because:",
+      "options": [
+        "Models are better at criticism",
+        "You know the material, so verification costs almost nothing",
+        "Critiques are shorter"
+      ],
+      "answer": 1,
+      "explain": "You can judge each objection instantly — the ideal case from E4·L1."
+    },
+    {
+      "id": "e5-08",
+      "q": "Why forbid the assistant from saying what works in a critique?",
+      "options": [
+        "Praise wastes output length",
+        "Balancing criticism with reassurance dilutes the part you needed",
+        "Positive feedback is usually wrong"
+      ],
+      "answer": 1,
+      "explain": "Left open, a model softens criticism with encouragement. You asked for objections."
+    },
+    {
+      "id": "e5-09",
+      "q": "\"Where will a reader misunderstand this?\" is valuable because:",
+      "options": [
+        "It is a question you structurally cannot answer about your own writing",
+        "Models are trained on reader feedback",
+        "It shortens documents"
+      ],
+      "answer": 0,
+      "explain": "You read your own meaning into your sentences. A system producing the most likely reading is the approximation you need."
+    },
+    {
+      "id": "e5-10",
+      "q": "When a critique lands, you should:",
+      "options": [
+        "Ask for a corrected version",
+        "Take the objection and rewrite it yourself",
+        "Ask for three alternative phrasings"
+      ],
+      "answer": 1,
+      "explain": "Rewriting is where your judgement and understanding are built. Hand it back and the artefact improves while you do not."
+    },
+    {
+      "id": "e5-11",
+      "q": "The most valuable element of a spreadsheet formula request:",
+      "options": [
+        "The size of the dataset",
+        "Sample rows plus the expected answers for them",
+        "A polite framing"
+      ],
+      "answer": 1,
+      "explain": "Stating expected answers gives the request a right answer and surfaces a misunderstanding before you build on it."
+    },
+    {
+      "id": "e5-12",
+      "q": "Which test most reliably catches a broken formula?",
+      "options": [
+        "Running it on rows where you already know the answer",
+        "Checking its length",
+        "Asking whether the assistant is confident"
+      ],
+      "answer": 0,
+      "explain": "Known-answer rows, plus an empty one and an odd one, take about thirty seconds. Stated confidence is not evidence."
+    },
+    {
+      "id": "e5-13",
+      "q": "Spreadsheet errors are especially dangerous because:",
+      "options": [
+        "Formulas are hard to read",
+        "A wrong formula returns a plausible number silently and is then copied down",
+        "Spreadsheets lack undo"
+      ],
+      "answer": 1,
+      "explain": "Wrong prose usually reads oddly; a wrong number looks exactly like a right one, and propagates."
+    },
+    {
+      "id": "e5-14",
+      "q": "Why should you always ask a formula to explain itself?",
+      "options": [
+        "The explanation is authoritative",
+        "Reading it is how you notice an assumption you did not intend",
+        "It is required by most spreadsheet applications"
+      ],
+      "answer": 1,
+      "explain": "\"This treats blanks as zero\" is how you catch a mismatch with what you needed — and it makes the sheet maintainable later."
+    },
+    {
+      "id": "e5-15",
+      "q": "A total produced in prose is unreliable because:",
+      "options": [
+        "Models round aggressively",
+        "It is generated as likely text rather than computed",
+        "Pasted tables lose precision"
+      ],
+      "answer": 1,
+      "explain": "The model produces text fitting the pattern of a total. Nothing in the prose distinguishes a correct one from a near-miss."
+    },
+    {
+      "id": "e5-16",
+      "q": "The safe division of labour with data:",
+      "options": [
+        "Assistant for the method, spreadsheet for the arithmetic",
+        "Assistant for both",
+        "Spreadsheet for the method, assistant for the arithmetic"
+      ],
+      "answer": 0,
+      "explain": "It keeps the model where it is strong and keeps computation reproducible and traceable to a cell someone can open."
+    },
+    {
+      "id": "e5-17",
+      "q": "A percentage change quoted without a stated base is:",
+      "options": [
+        "Acceptable if the direction is right",
+        "Not a fact — the base determines what it means",
+        "Fine in summaries but not reports"
+      ],
+      "answer": 1,
+      "explain": "Against last month, last year, or budget are different claims, and a model will pick a plausible base without telling you."
+    },
+    {
+      "id": "e5-18",
+      "q": "Asking for 'a deck about X' produces weak slides because:",
+      "options": [
+        "Presentation software formats poorly",
+        "A topic has no order or claim, and a presentation is an argument in sequence",
+        "Assistants cannot make images"
+      ],
+      "answer": 1,
+      "explain": "Topics yield parallel bullets that assert nothing. The argument has to exist before any slide does."
+    },
+    {
+      "id": "e5-19",
+      "q": "An assertion headline is:",
+      "options": [
+        "A title stating the slide's claim as a full sentence",
+        "A short topic label",
+        "The first bullet promoted to the title"
+      ],
+      "answer": 0,
+      "explain": "A claim is arguable and checkable, and a reader skimming only your titles still receives the whole argument."
+    },
+    {
+      "id": "e5-20",
+      "q": "A slide requiring two separate pieces of evidence should be:",
+      "options": [
+        "Given a two-column layout",
+        "Split into two slides",
+        "Reduced to one piece with the other in a footnote"
+      ],
+      "answer": 1,
+      "explain": "Two pieces of evidence means two claims are hiding in one slide."
+    },
+    {
+      "id": "e5-21",
+      "q": "A good rewrite for a different audience changes:",
+      "options": [
+        "The vocabulary",
+        "What is included and the order it appears in",
+        "Only the length"
+      ],
+      "answer": 1,
+      "explain": "Vocabulary was rarely the barrier. Different readers need different content, led by what they must decide."
+    },
+    {
+      "id": "e5-22",
+      "q": "The main risk when simplifying a document:",
+      "options": [
+        "It becomes too short",
+        "A caveat is dropped, so the simpler version claims more than the evidence supports",
+        "Technical terms are lost"
+      ],
+      "answer": 1,
+      "explain": "Qualifiers sound least essential and go first — and the remaining sentence is one you will be held to."
+    },
+    {
+      "id": "e5-23",
+      "q": "Drafting a document section by section predictably introduces:",
+      "options": [
+        "Spelling mistakes",
+        "Assembly errors — inconsistent terms, repeated points, conflicting figures",
+        "Sections that are too short"
+      ],
+      "answer": 1,
+      "explain": "Individually fine sections that do not quite agree. That is exactly what a mechanical pass is good at finding."
+    },
+    {
+      "id": "e5-24",
+      "q": "Which final check has no mechanical version?",
+      "options": [
+        "Whether figures agree between sections",
+        "Whether the document is fair to the people named in it",
+        "Whether terminology is consistent"
+      ],
+      "answer": 1,
+      "explain": "Consistency and arithmetic can be checked. Whether someone would recognise themselves, and whether you would say it with them present, cannot."
+    }
+  ]
+}

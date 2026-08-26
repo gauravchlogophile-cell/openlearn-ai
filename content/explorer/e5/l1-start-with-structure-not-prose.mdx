@@ -1,0 +1,130 @@
+---
+title: "Start with structure, not prose"
+description: "Asking for a finished document gets you fluent text you then have to argue with. Asking for an outline first keeps the thinking where it belongs."
+track: explorer
+module: e5
+order: 1
+minutes: 7
+objectives:
+  - "Get an outline agreed before any prose is written"
+  - "Recognise why fluent early drafts are hard to change"
+concepts: ["outlining", "structure", "sunk cost"]
+flashcards:
+  - front: "Why ask for an outline before prose?"
+    back: "Structure is cheap to change and prose is not — once text reads well, you edit it rather than question it."
+  - front: "What should an outline contain?"
+    back: "The claim each section makes, not just its heading. A heading hides whether the argument works."
+  - front: "What is the risk of a fluent first draft?"
+    back: "Fluency reads as correctness, so you argue with the wording instead of noticing the structure is wrong."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Ask for a report and you will get one. Complete, confident, well-organised,
+and almost impossible to fix — because by the time you are reading finished
+prose, the decisions that mattered have already been made without you.
+
+## Fluent text is hard to argue with
+
+There is a specific trap here worth naming, because careful people fall into
+it and do not notice.
+
+When text reads well, you edit at the level of wording. You tighten a
+sentence, swap a word, cut a paragraph that repeats. What you do not do is
+ask whether the third section should exist at all, because the third section
+is *written*, and written things have a weight that outlines do not.
+
+That is sunk cost operating on something that cost you nothing. You did not
+write it. It still feels expensive to throw away.
+
+## Ask for the skeleton
+
+So stop earlier. Ask for the structure and nothing else:
+
+> *I need to write [document] for [audience]. Give me an outline only — no
+> prose.*
+>
+> *For each section: the heading, and one sentence stating the claim that
+> section makes. Not what it is "about" — what it asserts.*
+>
+> *Then list what a sceptical reader would need to see before believing it.*
+
+The "claim, not topic" instruction is doing the work. A heading like
+*Background* tells you nothing. *Background: the current process was designed
+for a team half this size* is a claim — and you can immediately tell whether
+you believe it, whether you can evidence it, and whether it belongs.
+
+## Argue with the outline
+
+Now the cheap part. Delete sections. Reorder them. Notice that two make the
+same point, or that the one you care about is fourth when it should be first.
+
+This is where the document is actually written. Fifteen minutes here saves an
+hour of rewriting fluent prose that was arguing for the wrong shape.
+
+When the outline is right, ask for prose one section at a time — not the whole
+thing. Section by section keeps each piece short enough to actually read, and
+stops the assistant smoothing over a gap in your argument by writing
+confidently past it.
+
+## Where the outline comes from matters
+
+One caution. If you ask for an outline on a subject you know nothing about,
+you get a plausible-shaped outline, which is not the same as a good one. It
+will reflect how such documents are usually organised, not what your
+particular situation needs.
+
+Use it as a prompt for your own thinking — *have I considered this section?* —
+rather than as an answer. E4·L1's rule again: this works best where you can
+check it, and you can check an outline in your own field at a glance.
+
+## Try it now (6 minutes)
+
+Take a document you need to write. Ask for an outline with one claim per
+section, plus what a sceptic would need.
+
+Then cut a section. There is almost always one that exists because documents
+like this usually have one.
+
+<Quiz client:visible items={[
+  {
+    q: "Why ask for an outline before prose?",
+    options: [
+      "Outlines are faster to generate",
+      "Structure is cheap to change, and finished prose invites wording edits instead of structural ones",
+      "Prose uses more of your monthly quota"
+    ],
+    answer: 1,
+    explain: "Once text reads well you edit sentences rather than asking whether a section should exist at all — sunk cost on something that cost you nothing."
+  },
+  {
+    q: "An outline section should state:",
+    options: [
+      "The topic the section covers",
+      "The claim the section makes",
+      "The number of words it will need"
+    ],
+    answer: 1,
+    explain: "\"Background\" tells you nothing. \"The current process was designed for a team half this size\" is something you can agree or disagree with."
+  },
+  {
+    q: "Asking for an outline on a subject you know nothing about gives you:",
+    options: [
+      "A reliable structure, since the model has read widely",
+      "A plausible-shaped outline reflecting how such documents usually look",
+      "Nothing useful at all"
+    ],
+    answer: 1,
+    explain: "It reflects convention rather than your situation. It is a prompt for your own thinking, best used where you can judge it."
+  }
+]} />
+
+## Recap
+
+Ask for structure before prose, insist each section states a claim rather than
+a topic, and do your arguing at the outline stage where changes are cheap.
+Then write section by section. Fluent early drafts are not a head start — they
+are a decision made without you.
