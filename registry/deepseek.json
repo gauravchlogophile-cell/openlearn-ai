@@ -1,0 +1,15 @@
+{
+  "id": "deepseek",
+  "name": "DeepSeek",
+  "vendor": "DeepSeek",
+  "category": "open-model",
+  "summary": "A Chinese lab publishing open-weight models with strong reasoning at markedly lower cost than the large Western hosted services, usable via its own API or self-hosted.",
+  "capabilities": { "chat": true, "vision": false, "files": false, "voice": false, "webSearch": false, "api": true },
+  "freeTierNotes": "Web chat is free to use; API is paid but priced well below the major Western providers. Weights are downloadable for self-hosting.",
+  "docsUrl": "https://api-docs.deepseek.com/",
+  "tosNotes": "Check the current terms and, for organisational use, where data is processed — this differs from Western providers and matters for some compliance regimes.",
+  "lastVerified": "2026-08-26",
+  "verifier": "core-team",
+  "tier": "B",
+  "status": "active"
+}

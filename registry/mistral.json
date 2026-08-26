@@ -1,0 +1,15 @@
+{
+  "id": "mistral",
+  "name": "Mistral",
+  "vendor": "Mistral AI",
+  "category": "open-model",
+  "summary": "A French lab publishing both open-weight and hosted models, notable for European data residency options and comparatively strong performance in European languages.",
+  "capabilities": { "chat": true, "vision": true, "files": true, "voice": false, "webSearch": true, "api": true },
+  "freeTierNotes": "Free chat tier available; several models have downloadable weights for self-hosting.",
+  "docsUrl": "https://docs.mistral.ai/",
+  "tosNotes": "EU-based processing options exist and may matter for GDPR-sensitive work. Confirm which apply to the specific product before relying on it.",
+  "lastVerified": "2026-08-26",
+  "verifier": "core-team",
+  "tier": "B",
+  "status": "active"
+}

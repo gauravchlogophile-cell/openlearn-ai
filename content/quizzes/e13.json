@@ -267,6 +267,39 @@
       ],
       "answer": 1,
       "explain": "An assistant has no stake in whether you continue, so the fixed time, the thing that expects you and the visible record must come from you."
+    },
+    {
+      "id": "e13-25",
+      "q": "\"Is this cheating?\" contains two separate questions:",
+      "options": [
+        "Is it detectable, and is it common?",
+        "Does it break the rules I am under, and does it defeat the point of the work?",
+        "Is it allowed, and is it useful?"
+      ],
+      "answer": 1,
+      "explain": "You can break rules while learning a great deal, and follow every rule while learning nothing."
+    },
+    {
+      "id": "e13-26",
+      "q": "The test for whether AI use defeats the purpose of a task:",
+      "options": [
+        "How much of the text you produced",
+        "Whether the thing the task was designed to produce in you actually happened",
+        "Whether the tool was approved"
+      ],
+      "answer": 1,
+      "explain": "Adding a check to your own thinking is safe; replacing your thinking with output is not."
+    },
+    {
+      "id": "e13-27",
+      "q": "AI-detection tools are unreliable in a specific way:",
+      "options": [
+        "They miss most AI text",
+        "They produce false positives disproportionately for non-native English writers",
+        "They only work on long documents"
+      ],
+      "answer": 1,
+      "explain": "A plainer, more regular register gets flagged for being plain — so keep drafts and version history."
     }
   ]
 }

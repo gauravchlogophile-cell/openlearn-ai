@@ -3,6 +3,12 @@
   "entries": [
     {
       "date": "2026-08-26",
+      "kind": "Content updated",
+      "where": "Explorer · E2 and E13",
+      "what": "Market review of the whole Explorer track. Added E2·L11 on open-weight and regional assistants — DeepSeek, Llama, Mistral and Qwen now have registry cards, closing a gap where E10 and E11 both referenced a tier the landscape module never covered. Added E13·L9 on whether AI use counts as cheating, which research showed is the question learners actually ask."
+    },
+    {
+      "date": "2026-08-26",
       "kind": "New module",
       "where": "Explorer · E14",
       "what": "Health, Money and Legal published, completing the Explorer track at 14 modules and 112 lessons. Eight lessons on preparing for appointments, why symptom questions spiral, financial concepts versus financial advice, understanding legal documents, the four hard stops where AI is the wrong tool entirely, getting to a real person, and six rules for high-stakes questions."

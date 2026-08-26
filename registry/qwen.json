@@ -1,0 +1,15 @@
+{
+  "id": "qwen",
+  "name": "Qwen",
+  "vendor": "Alibaba Cloud",
+  "category": "open-model",
+  "summary": "Alibaba's open-weight model family, widely used across Asia and notable for coverage of Chinese and several other Asian languages that Western models handle less well.",
+  "capabilities": { "chat": true, "vision": true, "files": false, "voice": false, "webSearch": false, "api": true },
+  "freeTierNotes": "Weights are downloadable for self-hosting; hosted API access is available through Alibaba Cloud.",
+  "docsUrl": "https://qwen.readthedocs.io/en/latest/",
+  "tosNotes": "Licence terms vary by model in the family. Check the specific model's licence, and consider where hosted processing occurs.",
+  "lastVerified": "2026-08-26",
+  "verifier": "core-team",
+  "tier": "B",
+  "status": "active"
+}

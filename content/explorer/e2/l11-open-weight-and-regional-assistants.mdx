@@ -1,0 +1,161 @@
+---
+title: "Open-weight and regional assistants"
+description: "The tier most courses skip: models you can download and run yourself, and providers built for regions the big Western services serve least well."
+track: explorer
+module: e2
+order: 11
+minutes: 9
+objectives:
+  - "Explain what an open-weight model is and when it is the right choice"
+  - "Consider regional providers where language, cost or data residency matter"
+concepts: ["open weights", "self-hosting", "regional providers"]
+tools: ["deepseek", "llama", "mistral", "qwen"]
+flashcards:
+  - front: "What does open-weight mean?"
+    back: "The trained model itself can be downloaded and run on your own hardware, rather than only accessed through someone's service."
+  - front: "Is open-weight the same as open-source?"
+    back: "No. The weights are published, but the licence may restrict use and the training data is usually not released."
+  - front: "When is a regional provider the better choice?"
+    back: "When your language is served better, when local payment methods matter, or when data must stay in a particular jurisdiction."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The previous lessons covered the assistants most people meet first, and they
+share two properties: they are hosted services, and they are made by large
+American companies.
+
+There is a third category that most introductory courses skip entirely, and it
+matters most to exactly the people those courses serve least.
+
+## Open-weight models
+
+A hosted assistant keeps the model on the company's servers. You send text, you
+get text back, and you never have the model itself.
+
+An **open-weight** model publishes the trained model — you can download it and
+run it on your own hardware. Several labs publish these, including **Meta**
+(Llama), **DeepSeek**, **Mistral** and **Alibaba** (Qwen).
+
+Three consequences, and they are the reasons to care:
+
+**Nothing has to leave your device.** E11·L5 made the cost argument and E12·L2
+the privacy one. For confidential material, or where policy forbids external
+services, this is frequently the only compliant option.
+
+**No subscription and no per-token charge.** You pay in hardware, electricity
+and setup effort instead.
+
+**Nobody can withdraw it.** A downloaded model keeps working when a company
+changes its pricing, its terms, or its mind. E-P1·L8's point about the ground
+moving under your prompt does not apply the same way.
+
+The trade is capability: the best open-weight models sit somewhat behind the
+best hosted ones on hard reasoning, and comfortably ahead of what most everyday
+tasks require.
+
+## Open weights are not open source
+
+Worth stating precisely, because the terms get used loosely and it has practical
+consequences.
+
+**Open weights** means the trained parameters are published. **Open source**, in
+its usual sense, would also mean the training data and full freedom to use it.
+
+Most of these releases publish weights under a **custom licence with
+conditions** — restrictions on commercial scale, on using outputs to train
+competing models, or on particular applications. The training data is almost
+never released.
+
+So: free to download, not free of terms. Read the licence before building a
+business on one, and do not assume it works like an MIT-licensed library.
+
+## Regional providers
+
+The other omission, and it connects two later modules.
+
+E10·L1 noted that region-specific models frequently outperform general Western
+ones on their target languages. E11·L6 noted that local providers often price in
+local currency and accept local payment methods, which matters when an
+international card is declined.
+
+Both point at a category the landscape lessons never showed you.
+
+**When a regional provider is worth checking:**
+
+- **Language.** If you work mainly in a language the big services handle
+  indifferently, test a provider built for it. DeepSeek and Qwen for Chinese,
+  Mistral for European languages, and several national initiatives elsewhere.
+- **Payment.** Local currency, local methods, no foreign transaction fees.
+- **Data residency.** Where processing happens is a legal question in some
+  sectors, and an EU-hosted or India-hosted option may be the one that
+  satisfies it.
+- **Cost.** Some are markedly cheaper for comparable work.
+
+**What to check before relying on one:** who operates it, where data is
+processed, what the terms say about training on your input, and how long it has
+been running. E7·L4's source questions apply to vendors as much as to claims.
+
+## How to decide
+
+Use E2·L2's method — the same five tasks, run on a shortlist, judged on your own
+work. Add a hosted mainstream option, a regional or open-weight option, and
+compare honestly.
+
+Most people never test the third category and assume it is worse. Sometimes it
+is. For a particular language, a particular budget, or a particular
+confidentiality requirement, it is frequently better — and you can only find
+that out by running your own tasks through it.
+
+## Try it now (7 minutes)
+
+Take the five-task benchmark from L2. Run two of the tasks on an open-weight or
+regional option — the hosted chat interfaces are free to try.
+
+Judge the result against your usual assistant. If the gap is small on the work
+you actually do, you have found either a cheaper or a more private way to do it.
+
+<Quiz client:visible items={[
+  {
+    q: "An open-weight model is one where:",
+    options: [
+      "The source code of the company's website is public",
+      "The trained model can be downloaded and run on your own hardware",
+      "The training data has been published"
+    ],
+    answer: 1,
+    explain: "That is what makes local running, no per-token cost, and nothing leaving your device possible."
+  },
+  {
+    q: "Open weights and open source are:",
+    options: [
+      "The same thing",
+      "Different — weights are published, but the licence may restrict use and training data is usually withheld",
+      "Different, but only in academic contexts"
+    ],
+    answer: 1,
+    explain: "Free to download is not free of terms. Read the licence before building a business on one."
+  },
+  {
+    q: "A regional provider is most worth checking when:",
+    options: [
+      "You want the strongest possible reasoning",
+      "Your language, payment methods or data residency requirements are poorly served",
+      "You need the largest context window"
+    ],
+    answer: 1,
+    explain: "Region-specific models often outperform general ones on their target languages, and local payment matters when an international card is declined."
+  }
+]} />
+
+## Recap
+
+Beyond the hosted Western assistants sits a tier most courses omit: open-weight
+models you can download and run yourself, and regional providers built for
+languages, currencies and jurisdictions the large services serve least well.
+Open weights are not open source — the licence has conditions. Test them with
+the same five tasks you used in L2, because assuming they are worse is how
+people miss a cheaper or more private option that would have suited them.
