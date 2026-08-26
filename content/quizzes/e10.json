@@ -1,0 +1,272 @@
+{
+  "module": "e10",
+  "title": "Working in Your Own Language — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "e10-01",
+      "q": "Models answer better in English mainly because:",
+      "options": [
+        "English grammar is simpler to model",
+        "Far more English text was available to train on",
+        "They are developed in English-speaking countries"
+      ],
+      "answer": 1,
+      "explain": "More text means more phrasing, more subject matter, and more of the world discussed through that language."
+    },
+    {
+      "id": "e10-02",
+      "q": "Speaker count and resource level are:",
+      "options": [
+        "Closely correlated",
+        "Only loosely related — languages with tens of millions of speakers can be low-resource",
+        "Inversely related"
+      ],
+      "answer": 1,
+      "explain": "The languages served worst are not the smallest ones, which is the injustice worth naming."
+    },
+    {
+      "id": "e10-03",
+      "q": "Which symptom of a lower-resource language is most often missed?",
+      "options": [
+        "Stiff, translated-sounding phrasing",
+        "A higher rate of factual errors about the world",
+        "Shorter answers"
+      ],
+      "answer": 1,
+      "explain": "Awkward phrasing is obvious; degraded facts about local law, history and institutions are not."
+    },
+    {
+      "id": "e10-04",
+      "q": "Published multilingual benchmarks are insufficient because:",
+      "options": [
+        "They are usually out of date",
+        "They average across languages, tasks and subjects — yours is one of each",
+        "They only measure translation"
+      ],
+      "answer": 1,
+      "explain": "A model can be strong at conversational Hindi and weak at Hindi legal vocabulary. The average tells you neither."
+    },
+    {
+      "id": "e10-05",
+      "q": "In a personal language test, the most important and most skipped item is:",
+      "options": [
+        "A factual question about your own region",
+        "A formal writing task",
+        "A constrained instruction"
+      ],
+      "answer": 0,
+      "explain": "Awkward phrasing is easy to spot; degraded regional facts are not."
+    },
+    {
+      "id": "e10-06",
+      "q": "Why test the same prompts on a second assistant?",
+      "options": [
+        "To identify the generally best assistant",
+        "The gap between assistants is often larger than between languages, and varies by language",
+        "In case one becomes unavailable"
+      ],
+      "answer": 1,
+      "explain": "There is no general winner in your language — only a winner for your language and your tasks."
+    },
+    {
+      "id": "e10-07",
+      "q": "Back-translation must use a fresh conversation because:",
+      "options": [
+        "It is faster",
+        "Otherwise the model has your original in context and reproduces it rather than re-translating",
+        "The context window would overflow"
+      ],
+      "answer": 1,
+      "explain": "In the same thread you get a comforting match that tested nothing."
+    },
+    {
+      "id": "e10-08",
+      "q": "Which error does back-translation reliably fail to catch?",
+      "options": [
+        "A changed number",
+        "A politeness level that is grammatically perfect and insultingly informal",
+        "A dropped qualifier"
+      ],
+      "answer": 1,
+      "explain": "It checks meaning, not appropriateness. A rude translation back-translates perfectly."
+    },
+    {
+      "id": "e10-09",
+      "q": "Fluent modern translation is more dangerous than older clumsy translation because:",
+      "options": [
+        "It is wrong more often",
+        "Clumsiness was a free warning signal, and fluency removed it",
+        "It is harder to reverse"
+      ],
+      "answer": 1,
+      "explain": "The error rate fell but did not vanish, while the signal telling you to be careful disappeared."
+    },
+    {
+      "id": "e10-10",
+      "q": "Mixing languages in a prompt usually causes problems with:",
+      "options": [
+        "The model understanding you",
+        "The output language, which defaults to English when unspecified",
+        "Response length"
+      ],
+      "answer": 1,
+      "explain": "Models handle code-switched input well; the ambiguity is about what comes back."
+    },
+    {
+      "id": "e10-11",
+      "q": "The most effective instruction for professional writing in your language:",
+      "options": [
+        "Ask for simpler vocabulary",
+        "List the terms that must stay in English",
+        "Request a longer answer"
+      ],
+      "answer": 1,
+      "explain": "A doctor writing in Bengali does not want 'hypertension' rendered into classical Bengali."
+    },
+    {
+      "id": "e10-12",
+      "q": "'Reason in English, answer in my language' is the wrong approach when:",
+      "options": [
+        "The task is analytical",
+        "Local context is the substance — local law, convention, what is normal where you are",
+        "The answer must be long"
+      ],
+      "answer": 1,
+      "explain": "You receive a translation of English-shaped reasoning, which may not know those things."
+    },
+    {
+      "id": "e10-13",
+      "q": "The assumption that breaks most name handling:",
+      "options": [
+        "That names are short",
+        "One given name plus one family name, in Latin script",
+        "That names are unique"
+      ],
+      "answer": 1,
+      "explain": "Mononyms, patronymics, family-name-first ordering and multiple family names all fall outside it."
+    },
+    {
+      "id": "e10-14",
+      "q": "Why is inconsistent transliteration more than cosmetic?",
+      "options": [
+        "It looks unprofessional",
+        "The same person becomes two records, and searching for them fails",
+        "It lengthens documents"
+      ],
+      "answer": 1,
+      "explain": "Names are identifiers, not just words."
+    },
+    {
+      "id": "e10-15",
+      "q": "In a form you build, names should be:",
+      "options": [
+        "Split into first and last name fields",
+        "One field, full character range, editable later, never auto-corrected",
+        "Validated against a list of known names"
+      ],
+      "answer": 1,
+      "explain": "Ask separately for a sort key or greeting if you genuinely need one."
+    },
+    {
+      "id": "e10-16",
+      "q": "Register failure is more serious than phrasing failure because:",
+      "options": [
+        "It is harder to correct",
+        "Awkward phrasing reads as effort; wrong register reads as disrespect",
+        "It affects more languages"
+      ],
+      "answer": 1,
+      "explain": "In many languages politeness is grammar, and native speakers hear the wrong choice immediately."
+    },
+    {
+      "id": "e10-17",
+      "q": "Rather than asking a model to 'be polite', you should:",
+      "options": [
+        "Ask for formal language",
+        "State who you are, who they are, the relationship, and the form to use",
+        "Ask for a shorter message"
+      ],
+      "answer": 1,
+      "explain": "\"Polite\" means nothing across honorific systems; the relationship is the information that matters."
+    },
+    {
+      "id": "e10-18",
+      "q": "Back-translation cannot verify register because:",
+      "options": [
+        "It only works between related languages",
+        "English flattens the distinction, so plain and honorific forms return the same English",
+        "Register is not part of meaning"
+      ],
+      "answer": 1,
+      "explain": "The check passes while the message is still wrong. Only a speaker can verify it."
+    },
+    {
+      "id": "e10-19",
+      "q": "The central trap in learning a language with an assistant:",
+      "options": [
+        "It is too slow for real practice",
+        "You cannot evaluate its errors — if you could, you would not be learning",
+        "It refuses to use other languages"
+      ],
+      "answer": 1,
+      "explain": "Verification assumes you can verify. Here that assumption fails by construction."
+    },
+    {
+      "id": "e10-20",
+      "q": "Asking 'would a native speaker say this?' produces:",
+      "options": [
+        "A reliable report from the speech community",
+        "A plausibility judgement that is frequently wrong",
+        "A refusal"
+      ],
+      "answer": 1,
+      "explain": "It knows what is grammatical far better than what is actually said."
+    },
+    {
+      "id": "e10-21",
+      "q": "Why is this especially suited to a half-known heritage language?",
+      "options": [
+        "Heritage languages are usually high-resource",
+        "You already have the ear, so you can catch what a beginner cannot; only production is missing",
+        "Translation between related languages is more accurate"
+      ],
+      "answer": 1,
+      "explain": "Unlimited low-stakes practice supplies production, and your instinct is the check a beginner lacks."
+    },
+    {
+      "id": "e10-22",
+      "q": "Which task favours working in your own language?",
+      "options": [
+        "Complex multi-step analysis",
+        "Anything involving local law, register, or a local reader",
+        "Generating a long list of options"
+      ],
+      "answer": 1,
+      "explain": "English tends to win where you judge quality yourself; your language wins where local context or register is the substance."
+    },
+    {
+      "id": "e10-23",
+      "q": "The best way to avoid doing the work twice:",
+      "options": [
+        "Compose separately in both languages",
+        "Draft once in whichever language suits the task, then convert",
+        "Always draft in English first"
+      ],
+      "answer": 1,
+      "explain": "One piece of thinking, one conversion, one check — unless register carries the meaning."
+    },
+    {
+      "id": "e10-24",
+      "q": "A personal glossary is valuable because it:",
+      "options": [
+        "Removes the need for back-translation",
+        "Fixes in one line most of what back-translation cannot catch",
+        "Speeds up generation"
+      ],
+      "answer": 1,
+      "explain": "Untranslated terms, agreed renderings, name spellings and register instructions are exactly the round trip's blind spots."
+    }
+  ]
+}

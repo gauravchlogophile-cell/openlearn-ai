@@ -1,0 +1,164 @@
+---
+title: "Why English gets the better answer"
+description: "The quality gap between languages is real, has a cause, and is not your fault. What it means practically, and why it is narrowing unevenly."
+track: explorer
+module: e10
+order: 1
+minutes: 8
+objectives:
+  - "Explain why model quality varies by language"
+  - "Recognise the practical symptoms of a lower-resource language"
+concepts: ["training data", "high-resource languages", "quality gap"]
+flashcards:
+  - front: "Why do models answer better in English?"
+    back: "Far more of their training text was English, so there was more to learn from — about the language and about the world through it."
+  - front: "What are the symptoms of a lower-resource language?"
+    back: "Stiffer phrasing, more factual errors, weaker instruction-following, and answers that read as translated."
+  - front: "Is the gap the same for every non-English language?"
+    back: "No. It tracks how much digitised text exists, so Spanish and Mandarin fare very differently from Amharic or Bhojpuri."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Every lesson in this curriculum so far has assumed you were working in English.
+Most people on earth are not, and this module is about what changes when you
+are not.
+
+It starts with an uncomfortable fact, stated plainly rather than apologised
+for.
+
+## The gap is real
+
+Models generally answer better in English than in other languages. Not
+marginally, and not uniformly.
+
+The cause is simple. These systems learn from text, and the text available to
+train on is enormously skewed. English is heavily over-represented relative to
+the number of people who speak it, because of who put the internet together and
+what got digitised first.
+
+A model has therefore seen far more English — more phrasing, more subject
+matter, more argument, more of the world discussed *through* English. So it is
+better at English, and also better at **everything else, in English**.
+
+## It is not one gap, it is a gradient
+
+Treating this as "English versus the rest" is wrong and unhelpful.
+
+**High-resource languages** — Spanish, French, German, Mandarin, Portuguese,
+Russian, Japanese. Large digitised corpora. The gap is real but often modest,
+and narrowing.
+
+**Mid-resource** — Hindi, Bengali, Turkish, Vietnamese, Indonesian, Arabic,
+Swahili. Hundreds of millions of speakers, far less digitised text than that
+would suggest. Usable, with more errors.
+
+**Low-resource** — thousands of languages including many with tens of millions
+of speakers: Bhojpuri, Sylheti, Hausa, Quechua, most of Africa's and India's
+languages. Output ranges from stilted to unreliable to unusable.
+
+Notice that speaker count and resource level are only loosely related. That
+mismatch is the injustice in this, and it is worth naming: the languages served
+worst are not the smallest ones.
+
+## What the gap looks like in practice
+
+Recognising the symptoms matters more than knowing the theory, because they
+tell you when to switch strategies.
+
+**Stiff, translated-sounding phrasing.** Grammatically fine, nobody talks like
+that.
+
+**More factual errors.** Not only about language — about the world. Ask about
+local law, local history, local institutions in a lower-resource language and
+error rates rise noticeably.
+
+**Weaker instruction-following.** Your format request, your word limit, your
+"do not include X" get dropped more often. Complex instructions degrade first.
+
+**Register collapse.** Formality distinctions your language marks carefully
+come out flattened or wrong — a real problem in languages where getting this
+wrong is rude rather than merely odd.
+
+**Silent switching.** It answers in English, or drifts into it midway.
+
+## It is improving, unevenly
+
+Worth saying, because the picture is not static.
+
+Model providers have invested in multilingual capability and each generation is
+better. There are also excellent region-specific models, several from Indian
+and African research groups, which outperform general models on their target
+languages.
+
+But improvement follows commercial attention, which follows markets. Languages
+with buying power improve fastest. That is a prediction about the next few
+years, not a complaint — and it means the answer to "how good is this in my
+language?" changes, and is worth re-testing rather than assuming.
+
+L2 is how you test it for yourself, which is the only measurement that applies
+to your actual work.
+
+## None of this is your fault
+
+Stated because it needs stating.
+
+If output in your language is worse, that is a property of what the system was
+trained on. It is not a signal that you should switch to English to be taken
+seriously, or that your language is less suited to the work.
+
+The rest of this module is about getting good results anyway — which is
+frequently possible, and sometimes involves using English deliberately as a
+tool rather than as a concession.
+
+## Try it now (6 minutes)
+
+Ask the same substantive question twice — once in English, once in your
+language. Something you can judge, ideally about your own field or region.
+
+Compare not just the language quality but the *facts*. That difference is the
+one people miss, and it is the one that matters.
+
+<Quiz client:visible items={[
+  {
+    q: "Models answer better in English mainly because:",
+    options: [
+      "English grammar is simpler to model",
+      "Far more English text was available to train on",
+      "They are developed in English-speaking countries"
+    ],
+    answer: 1,
+    explain: "More text means more phrasing, more subject matter, and more of the world discussed through that language."
+  },
+  {
+    q: "Speaker count and resource level are:",
+    options: [
+      "Closely correlated",
+      "Only loosely related — some languages with tens of millions of speakers are low-resource",
+      "Inversely related"
+    ],
+    answer: 1,
+    explain: "The languages served worst are not the smallest ones, which is the injustice worth naming."
+  },
+  {
+    q: "Which symptom of a lower-resource language do people most often miss?",
+    options: [
+      "Stiff, translated-sounding phrasing",
+      "A higher rate of factual errors about the world",
+      "Answers being too short"
+    ],
+    answer: 1,
+    explain: "It is easy to notice awkward phrasing and easy to miss that the facts themselves — local law, history, institutions — degrade too."
+  }
+]} />
+
+## Recap
+
+Models answer better in English because far more English text existed to learn
+from, and the gap is a gradient rather than a binary — tracking digitised text
+rather than speaker numbers. Learn the symptoms: stiff phrasing, more factual
+errors, weaker instruction-following, flattened register and silent switching.
+It is improving unevenly, it is worth re-testing, and it is not your fault.

@@ -1,0 +1,164 @@
+---
+title: "Register, politeness and getting it wrong"
+description: "Many languages grammatically encode respect. Models flatten it, and the failure is not awkward but rude — with no warning in the output."
+track: explorer
+module: e10
+order: 6
+minutes: 8
+objectives:
+  - "Specify politeness level and relationship in a prompt"
+  - "Check register in a language where getting it wrong causes offence"
+concepts: ["register", "honorifics", "T-V distinction"]
+flashcards:
+  - front: "Why is register failure worse than phrasing failure?"
+    back: "Awkward phrasing reads as a non-native speaker trying. Wrong register reads as disrespect."
+  - front: "What must a prompt state for languages with honorifics?"
+    back: "Who is writing, who is receiving, the relationship, and the required politeness level."
+  - front: "Why can you not check register by back-translation?"
+    back: "English flattens most of these distinctions, so a rude sentence back-translates as a neutral one."
+lastVerified: "2026-08-26"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+In English, politeness is mostly vocabulary and phrasing — you can be casual or
+formal, and getting it slightly wrong is a small mistake.
+
+In a great many languages it is **grammar**. The verb form changes, the pronoun
+changes, whole registers are marked. Choosing wrong is not a stylistic slip; it
+is an insult, or an embarrassing display of deference, and native speakers hear
+it immediately.
+
+## Where this applies
+
+Not an exhaustive list, but the shape of the problem:
+
+**T-V distinctions** — *tu/vous*, *tú/usted*, *du/Sie*, *ты/вы*. Two ways to
+say "you", and picking the wrong one is a statement about the relationship.
+
+**Honorific systems** — Japanese *keigo* with its distinct humble and respectful
+registers; Korean speech levels; Javanese with entirely different vocabulary
+sets by register.
+
+**Grammatical respect** — Hindi *आप/तुम/तू*; Tamil, Bengali and most South
+Asian languages marking respect in verb forms and pronouns.
+
+**Age and status marking** — many languages where address depends on relative
+age, and getting it wrong is a real breach.
+
+## What models do with this
+
+Two failure patterns, both quiet.
+
+**Flattening.** The output picks a middle register and stays there, losing
+distinctions the language requires you to make. It reads as translated, because
+it is — English-shaped politeness rendered into a language that marks more.
+
+**Defaulting to formal.** Frequently the safer choice and frequently wrong.
+Excessive formality with a close friend or a younger sibling is not neutral; it
+reads as cold, sarcastic, or as distance being deliberately created.
+
+Neither announces itself. The sentence is grammatical, and the register is
+wrong.
+
+## Say the relationship, not the tone
+
+The fix is E3·L3's rule in this specific setting: supply context rather than an
+adjective.
+
+Not *"be polite"*, which means nothing across these systems. Instead:
+
+> *Write this in Japanese. I am a junior employee writing to a client's senior
+> manager, whom I have not met. Use appropriate keigo.*
+
+> *Write this in Hindi. I am writing to my mother-in-law. Use आप throughout.*
+
+> *Write this in German. A colleague I have worked with for years and address
+> as du.*
+
+Who you are, who they are, the relationship, and — where you know it — the
+specific form to use. That last clause is worth adding whenever you are sure,
+because it removes the guess entirely.
+
+## Back-translation will not save you
+
+L3's warning, stated again because this is exactly where it bites.
+
+English does not mark most of these distinctions. A Japanese sentence in plain
+form and the same sentence in keigo both back-translate to the same English.
+The check passes and the message is still wrong.
+
+**Register can only be checked by someone who speaks the language.** For
+anything sent to a person who matters — a client, an official, a relative, an
+in-law — that check is the one worth asking for, and it takes a speaker ten
+seconds.
+
+## When you are not sure yourself
+
+Common and worth addressing. People writing in a heritage language, or a
+language they learned as an adult, often know the vocabulary and not the social
+rules.
+
+Two useful moves:
+
+> *Explain which politeness level you used and why, before the translation.*
+
+You learn the rule rather than just receiving output, which compounds over time.
+
+> *Give me the same message at two politeness levels, and tell me which
+> relationships each suits.*
+
+Choosing between two labelled options is far more reliable than judging one, and
+it teaches you the distinction.
+
+## Try it now (6 minutes)
+
+Write a short message in a language with honorifics or a T-V distinction. Ask
+for it twice — once with no relationship specified, once with the full context.
+
+If you can, show both to a speaker and ask which they would send. That answer is
+the lesson.
+
+<Quiz client:visible items={[
+  {
+    q: "Register failure is more serious than phrasing failure because:",
+    options: [
+      "It is harder to correct",
+      "Awkward phrasing reads as effort; wrong register reads as disrespect",
+      "It affects more languages"
+    ],
+    answer: 1,
+    explain: "In many languages politeness is grammar rather than vocabulary, and native speakers hear the wrong choice immediately."
+  },
+  {
+    q: "Instead of asking the model to 'be polite', you should:",
+    options: [
+      "Ask for formal language",
+      "State who you are, who they are, the relationship, and the form to use",
+      "Ask for a shorter message"
+    ],
+    answer: 1,
+    explain: "\"Polite\" means nothing across these systems. Supplying the relationship is E3·L3's rule applied here."
+  },
+  {
+    q: "Back-translation cannot verify register because:",
+    options: [
+      "It only works between related languages",
+      "English flattens the distinction, so plain and honorific forms return the same English",
+      "Register is not part of meaning"
+    ],
+    answer: 1,
+    explain: "The check passes while the message is still wrong. Only a speaker can verify this."
+  }
+]} />
+
+## Recap
+
+Many languages encode respect grammatically, and models either flatten the
+distinction or default to formal — both quietly. State who is writing, to whom,
+in what relationship, and name the form when you know it. Back-translation is
+blind here because English does not mark these, so have a speaker check anything
+that matters. When unsure yourself, ask for two labelled levels and learn the
+rule.
