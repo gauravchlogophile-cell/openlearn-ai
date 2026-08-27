@@ -23,12 +23,14 @@ type Role = { owner: boolean; admin: boolean } | null;
 export default function AdminGate({ children }: { children: ReactNode }) {
   const [state, setState] = useState<'checking' | 'anon' | 'denied' | 'ok'>('checking');
   const [role, setRole] = useState<Role>(null);
+  const [signedInAs, setSignedInAs] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isConfigured) { setState('denied'); return; }
     (async () => {
       const { data } = await supabase().auth.getUser();
       if (!data.user) { setState('anon'); return; }
+      setSignedInAs(data.user.email ?? null);
       // Ask the database, never the client, what this person is allowed to be.
       const [{ data: owner }, { data: admin }] = await Promise.all([
         supabase().rpc('is_owner'),

@@ -24,6 +24,9 @@ export default function AdminFixtures() {
   const [error, setError] = useState<string | null>(null);
   const [confirming, setConfirming] = useState<string | null>(null);
   const [attempts, setAttempts] = useState<Attempt[]>([]);
+  /* Bulk selection. One Delete per row does not scale to fifteen scenarios,
+     and "delete everything" is too blunt when you want to clear four. */
+  const [picked, setPicked] = useState<Set<string>>(new Set());
 
   async function refresh() {
     if (!isConfigured) return;
@@ -56,6 +59,31 @@ export default function AdminFixtures() {
     setSeeded((data ?? []) as SeedRow[]);
     await refresh();
   }
+
+  async function removeMany() {
+    setBusy('bulk'); setError(null);
+    let skipped = 0;
+    for (const scenario of picked) {
+      const { data, error } = await supabase()
+        .rpc('delete_test_fixtures', { p_scenario: scenario });
+      if (error) { setError(error.message); break; }
+      const res = Array.isArray(data) ? data[0] : data;
+      skipped += res?.skipped_not_fixture ?? 0;
+    }
+    setBusy(null); setPicked(new Set()); setSeeded(null);
+    if (skipped > 0) {
+      setError(`${skipped} row(s) were listed as fixtures but are not marked as `
+             + `test data, so they were left alone. This should not happen — `
+             + `check what created them before deleting anything by hand.`);
+    }
+    await refresh();
+  }
+
+  const toggle = (scenario: string) => setPicked((prev) => {
+    const next = new Set(prev);
+    next.has(scenario) ? next.delete(scenario) : next.add(scenario);
+    return next;
+  });
 
   async function remove(scenario: string | null) {
     setBusy(scenario ?? 'all'); setError(null);
@@ -109,8 +137,20 @@ export default function AdminFixtures() {
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--sp-3)', margin: 'var(--sp-6) 0' }}>
         <button className="btn" onClick={() => void seed()} disabled={busy !== null}>
-          {busy === 'seed' ? 'Seeding…' : total > 0 ? 'Re-seed (replaces all)' : 'Seed test entries'}
+          {busy === 'seed' ? 'Seeding…' : 'Seed test entries'}
         </button>
+        {total > 0 && (
+          <span style={{ alignSelf: 'center', color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>
+            {total} rows across {rows?.length ?? 0} scenarios are seeded.
+            Seeding again replaces them.
+          </span>
+        )}
+        {picked.size > 0 && (
+          <button className="btn" style={{ background: 'var(--c-reward)' }}
+            disabled={busy !== null} onClick={() => void removeMany()}>
+            {busy === 'bulk' ? 'Deleting…' : `Delete ${picked.size} selected`}
+          </button>
+        )}
         {total > 0 && (
           confirming === 'all'
             ? (
@@ -160,6 +200,12 @@ export default function AdminFixtures() {
           <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '620px' }}>
             <thead>
               <tr style={{ textAlign: 'left', borderBottom: '2px solid var(--c-border-strong)' }}>
+                <th style={{ padding: 'var(--sp-2)', width: '2.5rem' }}>
+                  <input type="checkbox" aria-label="Select every scenario"
+                    checked={rows.length > 0 && picked.size === rows.length}
+                    onChange={(e) => setPicked(e.target.checked
+                      ? new Set(rows.map((r) => r.scenario_id)) : new Set())} />
+                </th>
                 <th style={{ padding: 'var(--sp-2)' }}>Scenario</th>
                 <th style={{ padding: 'var(--sp-2)' }}>Rows</th>
                 <th style={{ padding: 'var(--sp-2)' }}>Codes to try on /v</th>
@@ -169,6 +215,11 @@ export default function AdminFixtures() {
             <tbody>
               {rows.map((r) => (
                 <tr key={r.scenario_id} style={{ borderBottom: '1px solid var(--c-border)' }}>
+                  <td style={{ padding: 'var(--sp-2)' }}>
+                    <input type="checkbox" aria-label={`Select ${r.scenario_id}`}
+                      checked={picked.has(r.scenario_id)}
+                      onChange={() => toggle(r.scenario_id)} />
+                  </td>
                   <td style={{ padding: 'var(--sp-2)' }}><code>{r.scenario_id}</code></td>
                   <td style={{ padding: 'var(--sp-2)', fontVariantNumeric: 'tabular-nums' }}>{r.row_count}</td>
                   <td style={{ padding: 'var(--sp-2)' }}>

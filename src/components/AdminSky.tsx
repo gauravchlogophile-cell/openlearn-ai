@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { SKY_MODE } from '../lib/sky-config';
 
 /** /admin/sky — the master switch, the staged rollout and the kill switch.
  *
@@ -29,6 +30,7 @@ const GATES = [
 export default function AdminSky() {
   const [log, setLog] = useState<LogRow[]>([]);
   const [msg, setMsg] = useState('');
+  const [ok, setOk] = useState('');
   const [busy, setBusy] = useState(false);
 
   async function load() {
@@ -39,13 +41,27 @@ export default function AdminSky() {
   }
   useEffect(() => { void load(); }, []);
 
+  /* Success used to be silent: msg was set to '' and the only visible change
+     was the "current" marker moving. Pressing the kill switch while Sky was
+     already off therefore produced NO feedback of any kind, which reads as a
+     dead button — and the rollout log shows exactly that, three presses inside
+     three seconds. The RPC had worked all three times.
+
+     So every outcome now says something, and the log is stamped so the row
+     that proves it can be pointed at. */
   async function setMode(mode: string, kill = false) {
-    setBusy(true);
+    setBusy(true); setMsg(''); setOk('');
     const { error } = await supabase().rpc('set_sky_mode', {
       p_mode: mode, p_reason: kill ? 'kill switch' : null, p_kill: kill,
     });
     setBusy(false);
-    setMsg(error ? error.message : '');
+    if (error) { setMsg(error.message); return; }
+    const label = MODES.find((m) => m.id === mode)?.label ?? mode;
+    setOk(kill
+      ? 'Kill switch recorded. Sky is off, and the change is in the log below.'
+      : `Recorded: ${label}. The change is in the log below.`
+        + (mode !== 'off' ? ' Sky still will not reach anyone while the hard'
+            + ' switch in sky-config.ts is off — see the note above.' : ''));
     await load();
   }
 
@@ -55,11 +71,25 @@ export default function AdminSky() {
   return (
     <div style={{ display: 'grid', gap: 'var(--sp-8)' }}>
       {msg && <p className="note note--try" role="status">{msg}</p>}
+      {ok && <p className="note note--ok" role="status">{ok}</p>}
 
       <section aria-label="Current state">
         <div className="note note--aim">
           <p style={{ marginTop: 0 }}>
-            <strong>Sky is currently: {MODES.find((m) => m.id === current)?.label ?? current}</strong>
+            <strong>
+              In effect right now: {SKY_MODE === 'off'
+                ? 'Off — nobody can reach Sky'
+                : MODES.find((m) => m.id === SKY_MODE)?.label ?? SKY_MODE}
+            </strong>
+          </p>
+          <p style={{ margin: 'var(--sp-1) 0 var(--sp-2)', color: 'var(--c-ink-soft)' }}>
+            Set on this console: <strong>{MODES.find((m) => m.id === current)?.label ?? current}</strong>
+            {SKY_MODE === 'off' && current !== 'off' && (
+              <> — recorded, but not in effect. The two are allowed to disagree,
+              and this shows you both: a console reporting the database value as
+              the live state would be telling you Sky is on when no learner can
+              reach it.</>
+            )}
           </p>
           <p style={{ marginBottom: 0, color: 'var(--c-ink-soft)' }}>
             The build also ships a hard <code>SKY_MODE</code> in <code>src/lib/sky-config.ts</code>.

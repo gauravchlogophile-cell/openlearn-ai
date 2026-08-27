@@ -17,7 +17,17 @@ export default function AccountPanel() {
     if (!isConfigured) return;
     supabase().auth.getUser().then(({ data }) => {
       setUser(data.user ?? null);
-      if (data.user) void doSync();   // auto pull+push on load if already signed in
+      if (data.user) {
+        void doSync();   // auto pull+push on load if already signed in
+        /* Already signed in and sent here by a gated page — go straight back.
+           Until this existed, ?next only affected the OAuth redirect, so
+           someone signed in as the WRONG account clicked "Sign in" on the admin
+           gate, landed on their learner account, and got no indication that
+           anything was expected of them. Nothing looked broken, and nothing
+           worked. */
+        const next = returnPath();
+        if (next !== '/account') location.replace(next);
+      }
     });
     const { data: sub } = supabase().auth.onAuthStateChange((_event, session) => {
       setUser(session?.user ?? null);

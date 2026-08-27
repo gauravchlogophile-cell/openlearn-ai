@@ -97,7 +97,16 @@ const tierName = status.tier === 'record' ? TIERS.record.name : TIERS.certificat
 
         <article class="certificate">
           <header class="certificate__head">
-            <span class="certificate__brand" translate="no">Lrnon</span>
+            <span class="certificate__wordmark">
+              <svg class="certificate__mark" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"
+                   role="img" aria-label="Lrnon" focusable="false">
+                <path d="M14.93 6.92A12 12 0 0 0 14.93 28.68" fill="none"
+                      stroke="currentColor" stroke-width="6" stroke-linecap="round"></path>
+                <path d="M25.07 33.08A12 12 0 0 0 25.07 11.32" fill="none"
+                      stroke="currentColor" stroke-width="6" stroke-linecap="round"></path>
+              </svg>
+              <span class="certificate__brand" translate="no">Lrnon</span>
+            </span>
             <span class="certificate__state" data-state={status.state}>
               {status.state === 'valid' ? 'Valid'
                 : status.state === 'superseded' ? 'Valid · earlier syllabus'
@@ -170,6 +179,10 @@ const tierName = status.tier === 'record' ? TIERS.record.name : TIERS.certificat
     display: flex; justify-content: space-between; align-items: center;
     gap: var(--sp-4); margin-bottom: var(--sp-8);
   }
+  .certificate__wordmark {
+    display: inline-flex; align-items: center; gap: var(--sp-2);
+  }
+  .certificate__mark { width: 1.6em; height: 1.6em; color: var(--c-primary); }
   .certificate__brand { font-family: var(--font-display); font-size: var(--fs-400); }
   .certificate__state {
     font-size: var(--fs-100); letter-spacing: 0.08em; text-transform: uppercase;
@@ -239,6 +252,10 @@ const tierName = status.tier === 'record' ? TIERS.record.name : TIERS.certificat
     .certificate__code { font-size: 16pt; }
     .certificate__verify { border-top: 1pt solid #000; }
     .certificate__disclaimer { font-size: 8pt; }
+
+    /* Strokes are currentColor, so the mark turns black with the rest of the
+       document and costs no colour ink — 10d's whole constraint. */
+    .certificate__mark { color: #000 !important; width: 14mm; height: 14mm; }
 
     /* The fixture band survives printing. A test certificate that prints
        clean is indistinguishable from a real one on paper, which is exactly
