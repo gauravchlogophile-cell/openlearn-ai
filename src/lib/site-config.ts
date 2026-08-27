@@ -20,7 +20,22 @@
  *  These appear on /feedback, /volunteer, /support and in the site footer.
  *  The design promises "a reply within two working days" against them, so put
  *  an address a human actually reads. */
-export const CONTACT_EMAIL = 'gaurav.ch.logophile@gmail.com';
+export const CONTACT_EMAIL = 'lrnon.org@gmail.com';
+
+/* There is deliberately no second address here.
+ *
+ * Everything the site says publicly, and everything an administrator answers,
+ * goes to CONTACT_EMAIL — including child-safety reports on /safeguarding.
+ * One published address is what makes the work handable over: an admin
+ * volunteer can be given the inbox and cover operations without anything on
+ * the site changing, and without a learner's report following a person who has
+ * moved on.
+ *
+ * The founder's own address is a SUPER-ADMIN ACCOUNT, not a contact route. It
+ * holds the super_admin role in the database and grants the permissions an
+ * admin works under; it is not printed anywhere and does not belong in this
+ * file. Who holds which role, and how a new admin is onboarded, is recorded in
+ * docs/ops/roles.md. */
 
 /** Shown as "Call or WhatsApp. Please keep to reasonable hours, IST."
  *  Set to an empty string to hide every phone row on the site — the layouts
@@ -31,8 +46,14 @@ export const CONTACT_EMAIL = 'gaurav.ch.logophile@gmail.com';
  *  true and narrows the guarded branch to `never` — which broke the phone
  *  rows in Base.astro, /feedback and /volunteer the moment typechecking was
  *  switched on, and would have kept them broken on the day a number was
- *  finally filled in. */
-export const CONTACT_PHONE: string = '';
+ *  finally filled in. That day is today, and the rows came up correctly —
+ *  which is the whole reason the annotation was worth adding before there was
+ *  a number to put in it.
+ *
+ *  Spaced for reading aloud and copying off a screen; every `tel:` link strips
+ *  the spaces itself, so the display form and the dial form are the same
+ *  value. */
+export const CONTACT_PHONE: string = '+91 81782 31945';
 
 /* ------------------------------------------------------------------ funding */
 
