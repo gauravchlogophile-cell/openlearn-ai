@@ -12,6 +12,7 @@ import { SKY_MODE } from '../lib/sky-config';
  */
 
 type LogRow = { id: number; at: string; mode: string; reason: string | null; kill_switch: boolean };
+type SpendRow = { day: string; calls: number; input_tokens: number; output_tokens: number; failures: number };
 
 const MODES = [
   { id: 'off', label: 'Off', blurb: 'Dock button hidden; the route returns 503.' },
@@ -32,6 +33,7 @@ export default function AdminSky() {
   const [msg, setMsg] = useState('');
   const [ok, setOk] = useState('');
   const [busy, setBusy] = useState(false);
+  const [spend, setSpend] = useState<SpendRow[]>([]);
 
   async function load() {
     const { data, error } = await supabase()
@@ -142,6 +144,47 @@ export default function AdminSky() {
           onClick={() => setMode('off', true)}>
           Turn Sky off now
         </button>
+      </section>
+
+      <section aria-label="Spend">
+        <h2 style={{ fontSize: 'var(--fs-400)' }}>What Sky has cost</h2>
+        <p style={{ color: 'var(--c-ink-soft)' }}>
+          The daily ceiling is enforced in the database, not here — the check
+          and the increment happen in one statement under a row lock, so a
+          burst of requests cannot all pass it at once. A refused call never
+          reaches the provider, which is the only moment refusing is free.
+        </p>
+        {spend.length === 0 ? (
+          <p style={{ color: 'var(--c-ink-faint)' }}>
+            No provider calls in the last seven days. Sky has never spent anything.
+          </p>
+        ) : (
+          <div style={{ overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '420px' }}>
+              <thead>
+                <tr style={{ textAlign: 'left', borderBottom: '1px solid var(--c-border)' }}>
+                  {['Day', 'Calls', 'In', 'Out', 'Failed'].map((h) => (
+                    <th key={h} style={{ padding: 'var(--sp-2)', color: 'var(--c-ink-faint)',
+                      fontSize: 'var(--fs-100)', textTransform: 'uppercase',
+                      letterSpacing: '0.08em' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {spend.map((r) => (
+                  <tr key={r.day} style={{ borderBottom: '1px solid var(--c-border)' }}>
+                    <td style={{ padding: 'var(--sp-2)' }}>{r.day}</td>
+                    <td style={{ padding: 'var(--sp-2)', fontVariantNumeric: 'tabular-nums' }}>{r.calls}</td>
+                    <td style={{ padding: 'var(--sp-2)', fontVariantNumeric: 'tabular-nums' }}>{r.input_tokens}</td>
+                    <td style={{ padding: 'var(--sp-2)', fontVariantNumeric: 'tabular-nums' }}>{r.output_tokens}</td>
+                    <td style={{ padding: 'var(--sp-2)', fontVariantNumeric: 'tabular-nums',
+                      color: r.failures > 0 ? 'var(--c-alert)' : 'inherit' }}>{r.failures}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
       </section>
 
       <section aria-label="Gates before the next stage">

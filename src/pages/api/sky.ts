@@ -3,6 +3,10 @@ import { SKY_MODE, SKY_LIMITS, SKY_COPY, SKY_REFUSE_PATTERNS } from '../../lib/s
 import index from '../../generated/sky-index.json';
 import quizbank from '../../generated/sky-quizbank.json';
 import { prepareQuiz, quizMatch, wantsAnswerKey } from '../../lib/sky-guard.js';
+import {
+  callModel, parseProvider, buildUserTurn, citesASource, SKY_SYSTEM,
+} from '../../lib/sky-providers';
+import { createClient } from '@supabase/supabase-js';
 
 /* This route must run per-request; the rest of the site is prerendered. */
 export const prerender = false;
@@ -128,6 +132,55 @@ async function rateLimit(env: any, key: string, limit: number): Promise<boolean>
   if (used >= limit) return false;
   await kv.put(bucket, String(used + 1), { expirationTtl: 3900 });
   return true;
+}
+
+/** The Worker's own database client, holding the SERVICE key.
+ *
+ *  Not the anon key. sky_reserve() is granted to service_role alone, because a
+ *  budget counter that a signed-in learner could call in a loop is not a
+ *  budget. The service key lives in the Worker environment and never reaches
+ *  a browser.
+ */
+function serviceDb(env: any) {
+  const url = env?.PUBLIC_SUPABASE_URL;
+  const key = env?.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key, { auth: { persistSession: false } });
+}
+
+/** Reserve worst-case budget before calling a provider.
+ *
+ *  Fails CLOSED on every path: no database, no client, an error, a refusal —
+ *  all of them mean "do not spend". The KV limiter above is a soft ceiling by
+ *  its own admission; this is the hard one, and a hard cap that fails open is
+ *  a soft cap with extra steps.
+ */
+async function reserveBudget(env: any, maxTokens: number):
+    Promise<{ allowed: boolean; reservation: number | null }> {
+  const db = serviceDb(env);
+  if (!db) return { allowed: false, reservation: null };
+  const { data, error } = await db.rpc('sky_reserve', { p_max_tokens: maxTokens });
+  if (error) return { allowed: false, reservation: null };
+  const row = Array.isArray(data) ? data[0] : data;
+  return { allowed: row?.allowed === true, reservation: row?.reservation ?? null };
+}
+
+/** Correct the reservation to actual usage. Best-effort: a failure here
+ *  over-counts the day's spend, which is the safe direction to be wrong in. */
+async function settleBudget(env: any, reservation: number | null,
+    input: number, output: number, provider: string, model: string, ok: boolean) {
+  if (reservation == null) return;
+  const db = serviceDb(env);
+  if (!db) return;
+  /* try/catch, not .catch(): the query builder is a thenable, not a Promise,
+     so it has no .catch to call. Accounting must never break an answer the
+     learner has already paid for. */
+  try {
+    await db.rpc('sky_settle', {
+      p_reservation: reservation, p_input: input, p_output: output,
+      p_provider: provider, p_model: model, p_ok: ok,
+    });
+  } catch { /* over-counts the day, which is the safe direction */ }
 }
 
 export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
@@ -260,11 +313,89 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     return json({ error: 'not_configured', message: SKY_COPY.unavailable, sources }, 503);
   }
 
+  const provider = parseProvider(env?.SKY_PROVIDER);
+  if (!provider) {
+    /* Not inferred from the key's shape. Guessing the vendor from a secret's
+       prefix means a misconfiguration posts the key to the WRONG vendor's
+       endpoint, which is a credential disclosure rather than a failed call. */
+    return json({ error: 'not_configured', message: SKY_COPY.unavailable, sources }, 503);
+  }
+  const model = env?.SKY_MODEL;
+  if (!model) {
+    return json({ error: 'not_configured', message: SKY_COPY.unavailable, sources }, 503);
+  }
+
+  /* 9. Money. Reserved BEFORE the call, from Postgres, under a row lock.
+   *
+   *    The KV limiter above shapes traffic and cannot bound spend — its own
+   *    comment says so. This is the hard cap that comment demanded, and it
+   *    fails CLOSED: if the budget cannot be reached, Sky does not answer.
+   *    An assistant that cannot count what it is spending should not spend. */
+  const budget = await reserveBudget(env, SKY_LIMITS.maxAnswerTokens);
+  if (!budget.allowed) {
+    return json({ error: 'budget', message: SKY_COPY.unavailable, sources }, 503);
+  }
+
+  /* 10. The call. Redaction happens on this line and not before, because this
+   *     is the moment the question stops being ours — learners volunteer
+   *     emails and phone numbers into free-text boxes even when never asked. */
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), SKY_LIMITS.providerTimeoutMs);
+
+  let result;
+  try {
+    result = await callModel({
+      provider, apiKey, model,
+      baseUrl: env?.SKY_BASE_URL,
+      system: SKY_SYSTEM,
+      user: buildUserTurn(redactForProvider(q),
+        hits.map((h) => ({
+          label: h.chunk.heading ? `${h.chunk.title} — ${h.chunk.heading}` : h.chunk.title,
+          text: h.chunk.text,
+        }))),
+      maxTokens: SKY_LIMITS.maxAnswerTokens,
+      signal: controller.signal,
+    });
+  } finally {
+    clearTimeout(timer);
+  }
+
+  await settleBudget(env, budget.reservation,
+    result.ok ? result.inputTokens : 0,
+    result.ok ? result.outputTokens : 0,
+    provider, model, result.ok);
+
+  if (!result.ok) {
+    return json({ error: 'provider', message: SKY_COPY.unavailable, sources }, 502);
+  }
+
+  /* 11. The promise, enforced. "Never guesses" is not a prompt instruction we
+   *     hope was followed — an answer citing nothing is discarded here, before
+   *     the learner sees it, and they get the out-of-scope handoff instead.
+   *
+   *     This is the guard for the measured failure noted above: asked "what is
+   *     the capital of France?", retrieval legitimately surfaces E1·L6 because
+   *     that lesson contains the phrase as a word-prediction example. The
+   *     passage does not answer the question, the model is told to say so, and
+   *     if it answers anyway without a citation this discards it. */
+  if (!result.text || !citesASource(result.text, hits.length)) {
+    return json({
+      verdict: 'out_of_scope',
+      title: SKY_COPY.outOfScopeTitle,
+      message: SKY_COPY.outOfScope,
+      handoff: [
+        { label: 'Send this to a person', href: '/feedback' },
+        { label: 'Search the site', href: '/roadmap' },
+      ],
+    });
+  }
+
   return json({
-    error: 'provider_not_implemented',
-    message: SKY_COPY.unavailable,
+    verdict: 'answer',
+    answer: result.text,
     sources,
-  }, 503);
+    disclaimer: SKY_COPY.disclaimer,
+  });
 };
 
 /** Anything other than POST is a mistake or a probe. */

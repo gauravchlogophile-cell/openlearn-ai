@@ -9,7 +9,7 @@
     "preview": "npm run build && wrangler dev",
     "validate": "node scripts/validate-content.mjs",
     "typecheck": "astro sync && astro check",
-    "test": "node scripts/validate-content.mjs && node scripts/build-sky-index.mjs && node scripts/test-progress.mjs && node scripts/test-week.mjs && node scripts/test-clamp.mjs && node scripts/test-certification.mjs && node scripts/check-brand-claims.mjs && npm run typecheck",
+    "test": "node scripts/validate-content.mjs && node scripts/build-sky-index.mjs && node scripts/test-progress.mjs && node scripts/test-week.mjs && node scripts/test-clamp.mjs && node scripts/test-certification.mjs && node scripts/test-sky-provider.mjs && node scripts/check-brand-claims.mjs && npm run typecheck",
     "deploy": "npm run build && wrangler deploy",
     "cf-typegen": "wrangler types"
   },

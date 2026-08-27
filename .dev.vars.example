@@ -20,6 +20,28 @@
 # answer from retrieved passages without a model.
 SKY_API_KEY=
 
-# Optional. Which model to call. Kept server-side with the key so the browser
+# WHICH VENDOR the key belongs to. Required — there is no default, and it is
+# never guessed from the key's prefix: guessing wrong would post your secret to
+# another vendor's endpoint, which is a credential disclosure rather than a
+# failed request.
+#
+#   anthropic  Claude — POST /v1/messages
+#   openai     anything speaking the OpenAI chat-completions shape: OpenAI,
+#              Groq, Together, DeepSeek, Fireworks, OpenRouter, vLLM, Ollama.
+#              Set SKY_BASE_URL for anything except OpenAI itself.
+SKY_PROVIDER=
+
+# Required. Which model to call. Kept server-side with the key so the browser
 # never learns it.
 SKY_MODEL=
+
+# Optional. Only for an OpenAI-compatible endpoint that is not OpenAI —
+# including a model you host yourself, which matters in places where sending a
+# child's question to a foreign API is a real objection. No trailing slash.
+#   e.g. https://api.groq.com/openai   or   http://localhost:11434/v1
+SKY_BASE_URL=
+
+# NOTE: the daily spend ceiling is NOT here. It lives in the sky_budget table
+# so the check and the increment happen in one statement under a row lock — a
+# limit in a config file cannot stop two concurrent requests both passing it.
+# Adjust it from /admin/sky, or in the database directly.

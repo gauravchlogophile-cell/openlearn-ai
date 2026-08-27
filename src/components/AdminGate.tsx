@@ -70,7 +70,19 @@ export default function AdminGate({ children }: { children: ReactNode }) {
           This area is for people who maintain Lrnon. There is nothing here for a learner,
           and nothing you are missing.
         </p>
+        {signedInAs && (
+          <p style={{ color: 'var(--c-ink-soft)' }}>
+            You are signed in as <strong>{signedInAs}</strong>, which holds no
+            admin role. If you maintain Lrnon and have more than one account,
+            this is usually the wrong one — holding the shared inbox is not the
+            same as holding the role.
+          </p>
+        )}
         <a className="btn" href="/home">Back to learning</a>
+        {signedInAs && (
+          <a className="btn btn--ghost" style={{ marginInlineStart: 'var(--sp-2)' }}
+            href="/account?next=/admin">Switch account</a>
+        )}
       </div>
     );
   }

@@ -49,6 +49,18 @@ export const SKY_LIMITS = {
   maxPerSessionPerHour: 20,
   maxPerIpPerHour: 60,
 
+  /* The ceiling on one answer. Two or three sentences is the house style, so
+     this is generous rather than tight — but it is also the number reserved
+     against the daily budget BEFORE the call, so raising it directly reduces
+     how many questions a day's money buys. */
+  maxAnswerTokens: 800,
+
+  /* A provider that has not answered in this long is a provider that has not
+     answered. Sky says so rather than holding the request open — and the
+     reservation settles as a failure, so a hung provider cannot quietly drain
+     the budget. */
+  providerTimeoutMs: 20000,
+
   /* Retrieval gate. Both must be cleared, because either alone is fooled.
    *
    * Measured against the real index: in-scope questions score 3.5-4.2 with
