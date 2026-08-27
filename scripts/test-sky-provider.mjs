@@ -30,12 +30,17 @@ const fail = [];
 const ok = (c, what) => c ? pass++ : fail.push(what);
 
 // ------------------------------------------------------------- the vendor
-const parseProvider = (raw) => {
-  const v = typeof raw === 'string' ? raw.trim().toLowerCase() : '';
-  if (v === 'anthropic' || v === 'claude') return 'anthropic';
-  if (v === 'openai' || v === 'openai-compatible' || v === 'compatible') return 'openai';
-  return null;
-};
+/* Lifted OUT of the source rather than retyped. A hand-copied duplicate can
+   pass while the real function differs, which is the one thing a test of this
+   function must not do — so the body is extracted and evaluated. */
+const parseProvider = (() => {
+  const body = src.match(/export function parseProvider[\s\S]*?\n\}/)?.[0];
+  if (!body) throw new Error('parseProvider not found in source');
+  // Only the signature carries type annotations; the body is plain JS.
+  const js = body.replace(/^export function parseProvider\([^)]*\)[^{]*\{/,
+                          'function parseProvider(raw) {');
+  return new Function(`${js}; return parseProvider;`)();
+})();
 
 ok(parseProvider('anthropic') === 'anthropic', 'anthropic is recognised');
 ok(parseProvider('  Claude ') === 'anthropic', 'whitespace and case are tolerated');
@@ -43,7 +48,11 @@ ok(parseProvider('openai') === 'openai', 'openai is recognised');
 ok(parseProvider('openai-compatible') === 'openai', 'an OpenAI-compatible endpoint is recognised');
 ok(parseProvider('') === null, 'an unset provider is null, never a default');
 ok(parseProvider('sk-ant-api03-xxxx') === null, 'a KEY is never accepted as a provider name');
-ok(parseProvider('gemini') === null, 'an unsupported vendor is refused rather than guessed');
+ok(parseProvider('gemini') === 'gemini', 'gemini is recognised');
+ok(parseProvider('Google') === 'gemini', 'google is an alias for gemini');
+ok(parseProvider('mistral') === null, 'an unsupported vendor is refused rather than guessed');
+ok(/'gemini'/.test(src) && /'google'/.test(src),
+   'the source itself maps both gemini names, not just the test');
 
 /* The route must refuse to call anything when the vendor is unset. A default
    would send the key somewhere nobody chose. */
@@ -53,6 +62,34 @@ ok(/if \(!provider\)[\s\S]{0,400}not_configured/.test(route),
    'an unset vendor stops the request before any call is made');
 ok(!/SKY_PROVIDER[^)]*\|\|\s*['"]/.test(route),
    'there is no fallback vendor string anywhere in the route');
+
+// ---------------------------------------------------------------- gemini
+/* Gemini differs from the other two in ways that each cause a distinct bug if
+   missed, so each is asserted rather than assumed. */
+ok(/generateContent/.test(src), 'gemini posts to :generateContent');
+ok(src.includes('encodeURIComponent(c.model)'),
+   'the model is escaped into the PATH — gemini names it in the URL, not the body');
+ok(/x-goog-api-key/.test(src), 'gemini authenticates by header');
+/* Checked against comment-stripped source. The phrase appears in a comment
+   explaining why it is not done, and a test that cannot tell an explanation
+   from an implementation would fail on its own documentation. */
+const code = src.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+ok(!code.includes('key=') && !code.includes('key%3D'),
+   'the key is NEVER a query parameter — a secret in a URL reaches history, '
+   + 'proxy logs, Referer headers and error reports');
+ok(/systemInstruction/.test(src),
+   'the system prompt is its own field, not folded in with the lesson text');
+ok(src.includes('promptFeedback?.blockReason'),
+   'a blocked PROMPT is detected — gemini returns 200 with no candidate');
+ok(/finishReason/.test(src), 'a withheld ANSWER is detected');
+ok(src.includes('usageMetadata?.promptTokenCount'),
+   'gemini token counts are read from usageMetadata, not usage');
+
+/* The one that matters most: HTTP 200 with no text must be a FAILURE, not an
+   empty string falling through to the citation check — which would settle the
+   reservation as a success and show the learner a blank reply. */
+ok(/if \(!text\.trim\(\)\)[\s\S]{0,180}ok: false/.test(src),
+   'a 200 with no text is reported as a provider failure, not an empty answer');
 
 // ---------------------------------------------------------- the citation
 const citesASource = (text, n) =>

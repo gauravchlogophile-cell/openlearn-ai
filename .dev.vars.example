@@ -26,6 +26,8 @@ SKY_API_KEY=
 # failed request.
 #
 #   anthropic  Claude — POST /v1/messages
+#   gemini     Google Gemini, natively — not through Google's OpenAI-compat
+#              shim, so usage counts and block reasons arrive intact
 #   openai     anything speaking the OpenAI chat-completions shape: OpenAI,
 #              Groq, Together, DeepSeek, Fireworks, OpenRouter, vLLM, Ollama.
 #              Set SKY_BASE_URL for anything except OpenAI itself.
@@ -33,6 +35,11 @@ SKY_PROVIDER=
 
 # Required. Which model to call. Kept server-side with the key so the browser
 # never learns it.
+#
+#   gemini  e.g. gemini-2.5-flash. Check Google's current list before setting
+#           it: model names are retired and an unknown one is a 404 from the
+#           provider, which Sky reports as unavailable rather than guessing a
+#           substitute.
 SKY_MODEL=
 
 # Optional. Only for an OpenAI-compatible endpoint that is not OpenAI —

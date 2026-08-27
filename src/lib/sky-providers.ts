@@ -6,16 +6,24 @@
  *  it would actually cost something to change later. So the route says "answer
  *  this from these passages" and this file knows how each vendor is asked.
  *
- *  Two request shapes cover almost the entire market:
+ *  Three request shapes cover almost the entire market:
  *
  *    anthropic  POST /v1/messages, x-api-key, system as a top-level field
+ *    gemini     POST /v1beta/models/{model}:generateContent, x-goog-api-key,
+ *               systemInstruction as its own field, model in the PATH
  *    openai     POST /v1/chat/completions, Bearer, system as the first message
  *
- *  The second is the de-facto standard: OpenAI, Groq, Together, DeepSeek,
+ *  The last is the de-facto standard: OpenAI, Groq, Together, DeepSeek,
  *  Fireworks, OpenRouter, vLLM and Ollama all speak it, so SKY_BASE_URL is
  *  enough to reach any of them — including a model you host yourself, which
  *  matters for a project whose learners are in places where sending a child's
  *  question to a foreign API is a real objection.
+ *
+ *  Gemini is supported natively rather than through Google's OpenAI-compatible
+ *  endpoint. That shim exists and works, but it is a beta translation layer,
+ *  and routing a site's only assistant through one means a field it does not
+ *  carry — usage counts, a block reason — degrades into silence. Native is
+ *  fifteen lines and does not lag the vendor.
  *
  *  Nothing here reaches the browser. The key, the model name, the base URL and
  *  the system prompt are all read from the Worker's environment inside the
@@ -23,7 +31,7 @@
  *  ever reaches the browser."
  */
 
-export type Provider = 'anthropic' | 'openai';
+export type Provider = 'anthropic' | 'openai' | 'gemini';
 
 export type ModelCall = {
   provider: Provider;
@@ -43,6 +51,7 @@ export type ModelResult =
 const DEFAULT_BASE: Record<Provider, string> = {
   anthropic: 'https://api.anthropic.com',
   openai: 'https://api.openai.com',
+  gemini: 'https://generativelanguage.googleapis.com',
 };
 
 /** Parse SKY_PROVIDER. Returns null rather than guessing.
@@ -54,20 +63,30 @@ export function parseProvider(raw: unknown): Provider | null {
   const v = typeof raw === 'string' ? raw.trim().toLowerCase() : '';
   if (v === 'anthropic' || v === 'claude') return 'anthropic';
   if (v === 'openai' || v === 'openai-compatible' || v === 'compatible') return 'openai';
+  if (v === 'gemini' || v === 'google') return 'gemini';
   return null;
 }
 
 export async function callModel(c: ModelCall): Promise<ModelResult> {
   const base = (c.baseUrl || DEFAULT_BASE[c.provider]).replace(/\/+$/, '');
 
+  /* Gemini names the model in the PATH rather than the body, so the URL is
+     built per call. The key goes in a header, never the ?key= query parameter
+     Google's quick-start suggests: a secret in a URL ends up in browser
+     history, proxy logs, Referer headers and error reports, and none of those
+     are places to keep one. */
   const url = c.provider === 'anthropic'
     ? `${base}/v1/messages`
-    : `${base}/v1/chat/completions`;
+    : c.provider === 'gemini'
+      ? `${base}/v1beta/models/${encodeURIComponent(c.model)}:generateContent`
+      : `${base}/v1/chat/completions`;
 
   const headers: Record<string, string> = { 'content-type': 'application/json' };
   if (c.provider === 'anthropic') {
     headers['x-api-key'] = c.apiKey;
     headers['anthropic-version'] = '2023-06-01';
+  } else if (c.provider === 'gemini') {
+    headers['x-goog-api-key'] = c.apiKey;
   } else {
     headers.authorization = `Bearer ${c.apiKey}`;
   }
@@ -80,9 +99,16 @@ export async function callModel(c: ModelCall): Promise<ModelResult> {
   const body = c.provider === 'anthropic'
     ? { model: c.model, max_tokens: c.maxTokens, system: c.system,
         messages: [{ role: 'user', content: c.user }] }
-    : { model: c.model, max_tokens: c.maxTokens,
-        messages: [{ role: 'system', content: c.system },
-                   { role: 'user', content: c.user }] };
+    : c.provider === 'gemini'
+      /* systemInstruction is a separate field from contents, which is the
+         same separation the other two shapes give us: our instructions and
+         the learner's lesson text never share a channel. */
+      ? { systemInstruction: { parts: [{ text: c.system }] },
+          contents: [{ role: 'user', parts: [{ text: c.user }] }],
+          generationConfig: { maxOutputTokens: c.maxTokens, temperature: 0.2 } }
+      : { model: c.model, max_tokens: c.maxTokens,
+          messages: [{ role: 'system', content: c.system },
+                     { role: 'user', content: c.user }] };
 
   let res: Response;
   try {
@@ -114,6 +140,35 @@ export async function callModel(c: ModelCall): Promise<ModelResult> {
     return { ok: true, text: text.trim(),
       inputTokens: data?.usage?.input_tokens ?? 0,
       outputTokens: data?.usage?.output_tokens ?? 0 };
+  }
+
+  if (c.provider === 'gemini') {
+    /* Gemini answers 200 with no candidate when its own safety filters fire,
+       so a successful HTTP status is not a successful answer. Two distinct
+       cases, and both must be failures rather than an empty string falling
+       through to the citation check:
+
+         promptFeedback.blockReason  the QUESTION was blocked
+         finishReason SAFETY/RECITATION  the ANSWER was withheld
+
+       Reported as a provider failure so the reservation settles as one and the
+       learner gets the honest "unavailable", not a blank reply. */
+    const blocked = data?.promptFeedback?.blockReason;
+    if (blocked) {
+      return { ok: false, status: 502, reason: `provider blocked the prompt (${blocked})` };
+    }
+    const cand = data?.candidates?.[0];
+    const finish = cand?.finishReason;
+    const text = Array.isArray(cand?.content?.parts)
+      ? cand.content.parts.map((p: any) => p?.text ?? '').join('')
+      : '';
+    if (!text.trim()) {
+      return { ok: false, status: 502,
+        reason: `provider returned no text${finish ? ` (${finish})` : ''}` };
+    }
+    return { ok: true, text: text.trim(),
+      inputTokens: data?.usageMetadata?.promptTokenCount ?? 0,
+      outputTokens: data?.usageMetadata?.candidatesTokenCount ?? 0 };
   }
 
   const text = data?.choices?.[0]?.message?.content ?? '';
