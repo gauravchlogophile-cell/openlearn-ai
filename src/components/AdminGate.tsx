@@ -47,7 +47,16 @@ export default function AdminGate({ children }: { children: ReactNode }) {
     return (
       <div className="note note--aim">
         <p style={{ marginTop: 0 }}>You need to be signed in to see this.</p>
-        <a className="btn" href="/account">Sign in</a>
+        {/* Carries where to come back to. Without it, signing in from here
+            landed on /account — and since /admin is linked from nowhere, that
+            was a dead end for the one person entitled to be here. */}
+        <a className="btn" href="/account?next=/admin">Sign in</a>
+        <p style={{ marginBottom: 0, marginTop: 'var(--sp-3)',
+          color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>
+          Sign in with the account that holds the role. Holding the inbox is not
+          the same as holding the role, so if you have more than one account,
+          it is worth checking which one you are using.
+        </p>
       </div>
     );
   }

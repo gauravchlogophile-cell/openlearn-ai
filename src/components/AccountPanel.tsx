@@ -38,8 +38,27 @@ export default function AccountPanel() {
     );
   }
 
+  /** Where to land after signing in.
+   *
+   *  Defaults to this page. `?next=` lets a gated page send someone here and
+   *  get them back — /admin does, because it is linked from nowhere and
+   *  returning to /account left the one person entitled to be there with no
+   *  way onward.
+   *
+   *  Only a same-origin path is honoured, and it must start with a single
+   *  slash. `//evil.example` is a protocol-relative URL that browsers treat as
+   *  another origin, so the second character is checked too: an open redirect
+   *  on a sign-in flow is how a phishing page borrows a real domain's
+   *  credibility. */
+  function returnPath(): string {
+    const raw = new URLSearchParams(location.search).get('next');
+    return raw && raw.startsWith('/') && !raw.startsWith('//') ? raw : '/account';
+  }
+
   async function oauth(provider: 'google' | 'github') {
-    await supabase().auth.signInWithOAuth({ provider, options: { redirectTo: location.origin + '/account' } });
+    await supabase().auth.signInWithOAuth({
+      provider, options: { redirectTo: location.origin + returnPath() },
+    });
   }
   async function magicLink() {
     const { error } = await supabase().auth.signInWithOtp({ email });

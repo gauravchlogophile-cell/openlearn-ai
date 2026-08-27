@@ -20,12 +20,46 @@ export default function AccountMenu() {
   const [handle, setHandle] = useState<string | null>(null);
   const [signedIn, setSignedIn] = useState(false);
   const [stats, setStats] = useState({ xp: 0, level: 1, streak: 0, lessons: 0 });
+
+  /* Whether to offer the maintainer console.
+   *
+   *  /admin is linked from nowhere on purpose — it is not a learner surface and
+   *  putting it in the footer would advertise it to everyone. But "linked from
+   *  nowhere" left the people who DO hold a role with no route to it either:
+   *  the gate's sign-in button lands on /account, and from there the console is
+   *  unreachable without remembering the URL. That is not security, it is a
+   *  dead end.
+   *
+   *  So the entry appears here, and only for someone the database says holds a
+   *  role. Checked lazily on first open rather than on mount: this chip renders
+   *  on every page for every visitor, and two RPCs per page load to decide
+   *  whether to show one menu item nobody else can use is not a trade worth
+   *  making. */
+  const [isStaff, setIsStaff] = useState(false);
+  const staffChecked = useRef(false);
   const box = useRef<HTMLDivElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const menu = useRef<HTMLDivElement>(null);
   /* Same anchoring hazard as the accessibility panel: right-aligned to a
      trigger that does not stay near the right edge once the nav wraps. */
   useViewportClamp(menu, open);
+
+  /** Asks the database what this person is, once per page. Never the client:
+   *  a menu item is cosmetic, and the console behind it is gated again by
+   *  AdminGate and again by every function it calls. */
+  async function checkStaff() {
+    if (staffChecked.current || !isConfigured) return;
+    staffChecked.current = true;
+    try {
+      const { data: { user } } = await supabase().auth.getUser();
+      if (!user) return;
+      const [{ data: owner }, { data: admin }] = await Promise.all([
+        supabase().rpc('is_owner'),
+        supabase().rpc('has_role', { wanted: 'admin' }),
+      ]);
+      setIsStaff(Boolean(owner) || Boolean(admin));
+    } catch { /* a menu that cannot decide simply does not offer the entry */ }
+  }
 
   useEffect(() => {
     const update = () => setStats(summary());
@@ -80,7 +114,7 @@ export default function AccountMenu() {
 
   return (
     <div ref={box} style={{ position: 'relative' }}>
-      <button ref={trigger} type="button" onClick={() => setOpen((o) => !o)}
+      <button ref={trigger} type="button" onClick={() => { setOpen((o) => !o); void checkStaff(); }}
         aria-expanded={open} aria-haspopup="menu"
         style={{
           display: 'inline-flex', alignItems: 'center', gap: 'var(--sp-2)',
@@ -121,6 +155,13 @@ export default function AccountMenu() {
           <a role="menuitem" style={item} href="/achievements">Badges</a>
           <a role="menuitem" style={item} href="/account">Your account</a>
           <a role="menuitem" style={item} href="/reading">Reading preferences</a>
+          {isStaff && (
+            <a role="menuitem" href="/admin"
+              style={{ ...item, borderTop: '1px solid var(--c-border)',
+                marginTop: 'var(--sp-2)', paddingTop: 'var(--sp-3)' }}>
+              Admin
+            </a>
+          )}
           {signedIn && (
             <button role="menuitem" type="button" onClick={signOut}
               style={{ ...item, width: '100%', textAlign: 'start', background: 'transparent',
