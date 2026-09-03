@@ -1,0 +1,146 @@
+---
+title: "Cutting documents into useful pieces"
+description: "Whole documents are too big to send and too coarse to search. How to split text so each piece still makes sense alone."
+track: practitioner
+module: p2
+order: 2
+minutes: 9
+objectives:
+  - "Split a document so each passage is independently understandable"
+  - "Spot the two failures — pieces too small to mean anything, too large to be precise"
+concepts: ["chunking", "context window", "overlap", "structure"]
+flashcards:
+  - front: "Why not supply a whole document?"
+    back: "Cost and precision. Everything you send is paid for, and burying the relevant sentence among thirty pages makes it harder to find, not easier."
+  - front: "What makes a good passage boundary?"
+    back: "The document's own structure — a heading, a clause, a section. Structure marks where a topic actually changes; a character count does not."
+  - front: "What is the test of a well-cut passage?"
+    back: "Read it with nothing around it. If you cannot tell what it is about, neither can retrieval."
+lastVerified: "2026-08-27"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+You cannot send the whole handbook with every question. Even where the context
+window allows it, you pay for every token and you make the relevant sentence
+harder to locate rather than easier.
+
+So documents get cut into passages. How you cut them decides almost everything
+about how well the finished thing works, and it is the step people spend the
+least time on.
+
+## The two failures
+
+**Too small.** A passage of one sentence often cannot be understood alone.
+
+> *"This does not apply to orders placed before that date."*
+
+Which date? What does not apply? Retrieved on its own, this is noise — and
+worse, it is *confident-looking* noise that a model will happily build an
+answer on.
+
+**Too large.** A passage of thirty pages technically contains the answer, and
+also contains four other things that look similar. Precision collapses, cost
+rises, and you have moved the needle-in-a-haystack problem rather than solved
+it.
+
+The useful size is usually a few hundred words: one idea, stated completely.
+
+## Cut on structure, not on length
+
+The common first attempt is to split every 1,000 characters. It is easy, and
+it is wrong for a reason worth understanding: 1,000 characters lands wherever
+it lands. Mid-sentence, mid-table, between a heading and the paragraph it
+introduces.
+
+Documents already tell you where topics change. Headings, sections, clause
+numbers, list items — these are the author marking the boundaries for you.
+
+> **Cut at the structure the document already has.** Then, if a section is
+> still too long, split it at paragraph boundaries and repeat its heading at
+> the top of each piece.
+
+That last part matters more than it sounds. A passage lifted from under
+"Section 4 — Refunds" loses the word "refunds" the moment it is separated. Carry
+the heading down into the piece and the passage keeps its subject.
+
+## Overlap, and when it is not a fix
+
+A common technique is to overlap consecutive passages by a sentence or two, so
+an idea straddling a boundary appears whole in at least one of them.
+
+It helps. It is also frequently reached for to paper over cutting at the wrong
+places to begin with — if your boundaries follow the document's structure, an
+idea rarely straddles one. Use overlap for genuine spillover, not as a
+substitute for cutting well.
+
+## The test
+
+There is one test, and it takes ten seconds per passage:
+
+> **Read the passage with nothing around it. Can you tell what it is about?**
+
+If you cannot, retrieval cannot either, because retrieval sees exactly what you
+just saw. A passage that only makes sense in context will be matched on the
+wrong questions and will mislead the model when it is supplied.
+
+## A worked cut
+
+Lrnon's own index is built this way, and the choice is visible in what it
+stores. Each lesson is split at its `##` headings, and each piece carries three
+things: the lesson title, the heading it came from, and the text.
+
+That is not decoration. The title and heading are what let a retrieved passage
+be labelled honestly when it is shown to a learner as a source — and a passage
+you cannot label is a passage you cannot cite.
+
+## Try it now (6 minutes)
+
+Take a document you would want an assistant to answer from.
+
+Cut it at its headings. Then pick the three passages you would expect to be
+retrieved most often and read each one cold, out of order. Fix any that fail
+the test — usually by carrying the heading down, or by pulling in the sentence
+that defines the term the passage keeps using.
+
+<Quiz client:visible items={[
+  {
+    q: "Splitting a document every 1,000 characters is a poor default mainly because:",
+    options: [
+      "It produces passages that are too short to be useful",
+      "The boundary lands wherever it lands — mid-sentence, mid-table, between a heading and its paragraph",
+      "It is computationally expensive"
+    ],
+    answer: 1,
+    explain: "The length is not the problem; the arbitrariness is. Structure marks where a topic actually changes, and a character count knows nothing about topics."
+  },
+  {
+    q: "You lift a paragraph out from under the heading \"Section 4 — Refunds\". What should you do?",
+    options: [
+      "Nothing — the surrounding document still has the heading",
+      "Repeat the heading inside the passage, so it keeps its subject",
+      "Merge it back into one passage with every other section"
+    ],
+    answer: 1,
+    explain: "Retrieval sees the passage alone. Whatever context stays behind in the document is context the passage does not have."
+  },
+  {
+    q: "The test of a well-cut passage is:",
+    options: [
+      "It is close to the target character count",
+      "Read alone with nothing around it, you can still tell what it is about",
+      "It contains at least one keyword from an expected question"
+    ],
+    answer: 1,
+    explain: "Retrieval sees exactly what you see when you read it cold. If it is ambiguous to you it will be matched on the wrong questions."
+  }
+]} />
+
+## Recap
+
+Cut on the document's own structure, not on a character count, and carry
+headings down into the pieces they cover. Aim for one complete idea per
+passage. Then read each candidate cold: if you cannot tell what it is about,
+neither can retrieval, and the passage will do more harm than good.

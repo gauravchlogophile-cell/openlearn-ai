@@ -2,6 +2,12 @@
   "_comment": "Every change to the learning content, dated — including the ones that make us look bad. A lesson that was wrong is more useful to a learner as a published correction than as a quiet edit. Hand-maintained on purpose: git history records what changed, not why it mattered or who caught it. Newest first. 'kind' must be one of the values scripts/validate-content.mjs allows.",
   "entries": [
     {
+      "date": "2026-09-03",
+      "kind": "New module",
+      "where": "Practitioner · P2",
+      "what": "Your Own Documents and Sources published — eight lessons on grounding an answer in material you control: why supplying the passage beats relying on training, cutting documents so each piece still means something alone, keyword against meaning-based retrieval and why rare words carry the weight, building a twenty-question set that catches retrieval failures before users do, assembling a request that keeps your instructions and the retrieved text in separate channels, keeping an index current when documents are withdrawn, refusing when the passages fall short, and deciding what belongs in an index at all. Several lessons use Lrnon's own assistant as the worked example, including the measured case where \"What is the capital of France?\" scored higher than any genuine question because a lesson contains that phrase as a word-prediction example. Practitioner is now two modules of twelve."
+    },
+    {
       "date": "2026-08-26",
       "kind": "Content updated",
       "where": "Whole site",

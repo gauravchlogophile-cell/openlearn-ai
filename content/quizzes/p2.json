@@ -1,0 +1,272 @@
+{
+  "module": "p2",
+  "title": "Your Own Documents and Sources — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "p2-01",
+      "q": "Grounding an answer means:",
+      "options": [
+        "Asking the model to be more careful before answering",
+        "Supplying the source passage in the request so the model reads rather than recalls",
+        "Restricting the model to shorter answers"
+      ],
+      "answer": 1,
+      "explain": "The task changes from recall to comprehension, and comprehension is what these systems are genuinely good at."
+    },
+    {
+      "id": "p2-02",
+      "q": "The most useful property a grounded answer gains is that it:",
+      "options": [
+        "Costs fewer tokens",
+        "Can be checked against a source you control",
+        "Is guaranteed to be factually correct"
+      ],
+      "answer": 1,
+      "explain": "Grounding usually costs more, not less — passages are tokens. What it buys is a place to look, which is what makes E7's two-minute check possible."
+    },
+    {
+      "id": "p2-03",
+      "q": "A retrieved passage mentions the topic but does not contain the answer. A well-built system should:",
+      "options": [
+        "Answer from it anyway, since it was the best match",
+        "State that the passage does not answer the question, and stop",
+        "Quietly fall back on the model's general knowledge"
+      ],
+      "answer": 1,
+      "explain": "Falling back un-grounds the answer while keeping every appearance of a grounded one, which is worse than never claiming to be checkable."
+    },
+    {
+      "id": "p2-04",
+      "q": "Why is a one-sentence passage often a poor unit of retrieval?",
+      "options": [
+        "It uses too few tokens to be worth sending",
+        "It frequently cannot be understood alone, so it becomes confident-looking noise",
+        "Short passages always score lower in ranking"
+      ],
+      "answer": 1,
+      "explain": "\"This does not apply to orders placed before that date\" retrieves cleanly and means nothing without its surroundings."
+    },
+    {
+      "id": "p2-05",
+      "q": "Splitting a document every 1,000 characters is a weak default because:",
+      "options": [
+        "The passages end up too large for most context windows",
+        "The boundary lands arbitrarily — mid-sentence, mid-table, between a heading and its paragraph",
+        "It makes embeddings more expensive to compute"
+      ],
+      "answer": 1,
+      "explain": "The length is not the issue; the arbitrariness is. A document's own headings mark where topics genuinely change."
+    },
+    {
+      "id": "p2-06",
+      "q": "When you lift a paragraph out from under a heading, you should:",
+      "options": [
+        "Leave it as it is — the document still has the heading",
+        "Repeat the heading inside the passage so it keeps its subject",
+        "Merge it with the next section to preserve context"
+      ],
+      "answer": 1,
+      "explain": "Retrieval sees only the passage. Context left behind in the document is context the passage does not have."
+    },
+    {
+      "id": "p2-07",
+      "q": "The test of a well-cut passage is:",
+      "options": [
+        "It falls within the target character range",
+        "Read cold, with nothing around it, you can still tell what it is about",
+        "It contains at least one likely search keyword"
+      ],
+      "answer": 1,
+      "explain": "Retrieval sees exactly what you see reading it cold, so anything ambiguous to you will be matched on the wrong questions."
+    },
+    {
+      "id": "p2-08",
+      "q": "Keyword matching beats meaning-based search when the question involves:",
+      "options": [
+        "A concept the document describes in different words",
+        "An exact string like a product code, error number or clause reference",
+        "A long, conversationally phrased request"
+      ],
+      "answer": 1,
+      "explain": "Nobody paraphrases ERR_5521. Meaning-based search may return passages about errors generally, which is precisely not what was asked."
+    },
+    {
+      "id": "p2-09",
+      "q": "A user asks \"can I send this back?\" of a policy that only says \"returns\". This is handled by:",
+      "options": [
+        "Keyword matching, since the words are simple",
+        "Meaning-based matching, since the phrasings sit near each other despite sharing no words",
+        "Increasing the number of passages retrieved"
+      ],
+      "answer": 1,
+      "explain": "This is the vocabulary gap embeddings exist to close, and exactly where keyword matching returns nothing at all."
+    },
+    {
+      "id": "p2-10",
+      "q": "Why should a word appearing in nearly every passage be weighted down?",
+      "options": [
+        "Common words are usually less meaningful",
+        "It cannot discriminate — matching it does not narrow the field at all",
+        "It inflates the cost of the retrieval step"
+      ],
+      "answer": 1,
+      "explain": "Retrieval is discrimination. A term shared by everything separates nothing, however meaningful it is in ordinary use."
+    },
+    {
+      "id": "p2-11",
+      "q": "On Lrnon's index, \"What is the capital of France?\" scored higher than any genuine in-scope question. What does that demonstrate?",
+      "options": [
+        "The scoring formula contained a bug",
+        "A rare word appearing incidentally can outrank a common word appearing meaningfully",
+        "Out-of-scope questions need a keyword blocklist"
+      ],
+      "answer": 1,
+      "explain": "The score was computed correctly, which is what makes it instructive. A second gate on how much of the question is covered catches this class."
+    },
+    {
+      "id": "p2-12",
+      "q": "Why is a single relevance score insufficient to decide whether anything relevant was found?",
+      "options": [
+        "Scores vary between models and cannot be compared",
+        "A ranked list always has a top item, even when everything in it is irrelevant",
+        "Scores are too slow to compute for large collections"
+      ],
+      "answer": 1,
+      "explain": "Ranking answers \"which is most relevant\", never \"is anything relevant at all\". Those are different questions and only the second gates a refusal."
+    },
+    {
+      "id": "p2-13",
+      "q": "The minimum useful evaluation set for retrieval is:",
+      "options": [
+        "A published benchmark for your document type",
+        "Around twenty real questions, each with the passage that should be found written down",
+        "One question per document in the collection"
+      ],
+      "answer": 1,
+      "explain": "An hour's work, and enough to tell whether a change improved things or broke them."
+    },
+    {
+      "id": "p2-14",
+      "q": "Why write down the expected passage before running the question?",
+      "options": [
+        "It speeds up the evaluation",
+        "Judging afterwards whether the result seems good enough will rationalise almost anything",
+        "It is needed to compute a recall score"
+      ],
+      "answer": 1,
+      "explain": "Deciding first makes the outcome binary. Deciding after seeing the output is an opinion, and a degraded system keeps passing it."
+    },
+    {
+      "id": "p2-15",
+      "q": "An answer is wrong. The first thing to check is:",
+      "options": [
+        "Whether the prompt could be phrased more clearly",
+        "Whether the right passage was retrieved at all",
+        "Whether a larger model would perform better"
+      ],
+      "answer": 1,
+      "explain": "If the passage never arrived, no prompt or model change can help — and that is where hours disappear, tuning the half that was working."
+    },
+    {
+      "id": "p2-16",
+      "q": "Your evaluation questions should mostly come from:",
+      "options": [
+        "Questions you thought of while testing the system",
+        "Questions real users actually ask, in their own words",
+        "Questions with a single unambiguous keyword match"
+      ],
+      "answer": 1,
+      "explain": "Questions you invent are shaped by knowing what the system can do, which is exactly the bias that conceals its failures."
+    },
+    {
+      "id": "p2-17",
+      "q": "Your instructions and the retrieved passages must occupy separate channels because:",
+      "options": [
+        "It reduces the token count of the request",
+        "Otherwise text inside a document is structurally indistinguishable from your own instructions",
+        "Most APIs reject requests that combine them"
+      ],
+      "answer": 1,
+      "explain": "Documents can be edited, sometimes by strangers. A separate system field is what lets the model see the boundary at all."
+    },
+    {
+      "id": "p2-18",
+      "q": "An answer cites [7] but only four passages were supplied. This should be treated as:",
+      "options": [
+        "A valid citation using the model's own numbering",
+        "A fabricated citation, equivalent to citing nothing",
+        "Evidence a fifth passage was retrieved but not displayed"
+      ],
+      "answer": 1,
+      "explain": "It is the shape of a citation without the substance. A range check is what turns \"cites its sources\" into a property rather than a hope."
+    },
+    {
+      "id": "p2-19",
+      "q": "Supplying ten passages instead of four to compensate for weak ranking is a problem because:",
+      "options": [
+        "There is no problem — more context is always better",
+        "You pay for the workaround on every request, and burying the good passage makes it harder to use",
+        "Models cannot process more than five passages reliably"
+      ],
+      "answer": 1,
+      "explain": "Volume compensating for ranking is a recurring cost and a precision loss. Fixing the ranking is cheaper on every call thereafter."
+    },
+    {
+      "id": "p2-20",
+      "q": "A policy is withdrawn and its file deleted, but its passages remain indexed. The consequence is:",
+      "options": [
+        "Retrieval fails for that topic, which is noticeable",
+        "The system keeps answering confidently from retracted guidance, with nothing visible to reveal it",
+        "Answers become slower but remain correct"
+      ],
+      "answer": 1,
+      "explain": "The index is what retrieval reads, not the folder — and there is no stale document on screen to notice, only an answer."
+    },
+    {
+      "id": "p2-21",
+      "q": "Rebuilding the whole index on a schedule has one underrated advantage over incremental updates:",
+      "options": [
+        "It is faster on large collections",
+        "It handles deletion for free, because the new index contains only what currently exists",
+        "It produces more accurate embeddings"
+      ],
+      "answer": 1,
+      "explain": "Deletion is the case incremental pipelines forget, precisely because skipping it fails silently."
+    },
+    {
+      "id": "p2-22",
+      "q": "Instructing a model to refuse when the passages fall short is:",
+      "options": [
+        "Sufficient on its own with a capable model",
+        "Worth doing, but not a guarantee — something after the answer must be able to reject it",
+        "Unnecessary once a retrieval threshold exists"
+      ],
+      "answer": 1,
+      "explain": "A prompt is a request; a return statement is not. If refusing is the point of the system, enforce it where it cannot be talked out of."
+    },
+    {
+      "id": "p2-23",
+      "q": "What happens to a document's access controls when it is indexed into a shared retrieval system?",
+      "options": [
+        "The index preserves them automatically",
+        "They stop applying unless you rebuild them — any asker can reach any passage",
+        "They apply to answers but not to retrieval"
+      ],
+      "answer": 1,
+      "explain": "The index has one rule: reachable by anyone who can ask. The salary review in the same folder as the handbook is now answerable to everyone."
+    },
+    {
+      "id": "p2-24",
+      "q": "You are unsure whether a document should be indexed. The safer default is:",
+      "options": [
+        "Include it — an unanswered question is worse than an over-broad answer",
+        "Leave it out — a gap gets reported, while a leak produces correct-looking answers and no visible failure",
+        "Include it with a reduced relevance weight"
+      ],
+      "answer": 1,
+      "explain": "The two errors are not symmetrical. One is self-reporting and recoverable; the other cannot be un-answered afterwards."
+    }
+  ]
+}

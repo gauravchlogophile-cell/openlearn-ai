@@ -1,0 +1,162 @@
+---
+title: "Refusing when the passages fall short"
+description: "The hardest part of a grounded system is the answer it declines to give. Why an instruction is not enough, and what a refusal has to offer to be acceptable."
+track: practitioner
+module: p2
+order: 7
+minutes: 9
+objectives:
+  - "Enforce a refusal in code rather than requesting it in a prompt"
+  - "Write a refusal that leaves the person better off than silence"
+concepts: ["refusal", "verification", "graceful failure", "handoff"]
+flashcards:
+  - front: "Why is a prompt instruction to refuse not enough?"
+    back: "A prompt is a request, not a guarantee. If refusing matters, something after the answer has to be able to reject it."
+  - front: "What is the cheapest enforceable check on a grounded answer?"
+    back: "Whether it cites a passage you actually supplied. No valid citation means no grounded answer, whatever the text says."
+  - front: "What must a refusal include?"
+    back: "What was searched, why it fell short, and where to go next. A bare 'I don't know' hands the problem back with nothing added."
+lastVerified: "2026-08-27"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Everything so far has been about producing an answer. This lesson is about the
+answer you do not produce, which is the part that decides whether anyone should
+trust the rest.
+
+## The failure this exists for
+
+L1 named it and L3 measured it. Retrieval **narrows**; it does not
+**adjudicate**. A passage can be the most relevant thing you have and still not
+contain the answer.
+
+Lrnon's own case is the clean example: *"What is the capital of France?"*
+retrieves E1·L6, because that lesson contains the phrase as a
+next-word-prediction example. Retrieval did its job correctly. The passage does
+not answer the question. Something else has to notice.
+
+## An instruction is a request
+
+The obvious move is to tell the model:
+
+> *"If the passages do not contain the answer, say so and stop."*
+
+Write it. It genuinely helps. But understand what it is: a request, complied
+with most of the time, and most of the time is not a property you can build on.
+The pull toward being helpful is strong, and a model that has read four
+passages about a topic will often produce something.
+
+> **A prompt is a request. A return statement is not.**
+
+If refusing matters — and in a grounded system it is the whole point — then
+something after the answer has to be able to throw it away.
+
+## The check that costs almost nothing
+
+You already asked for citations in L5. Use them:
+
+> **Discard any answer that does not cite a passage you actually supplied.**
+
+Two properties make this good. It is cheap — a regular expression and a range
+check. And it is *aligned with the failure*: an answer built from general
+knowledge rather than the passages has nothing legitimate to cite, so it
+either cites nothing or fabricates a reference, and both are caught.
+
+This is what Lrnon's assistant does. An answer citing nothing, or citing `[7]`
+when four passages were supplied, never reaches the learner — they get the
+out-of-scope response instead. The promise "never guesses" stops depending on
+the model's cooperation.
+
+## Refuse before spending, where you can
+
+Not every refusal needs a model. If retrieval returns nothing above threshold,
+you already know the answer is not there. Refuse then — before the call, which
+is the only moment refusing is free.
+
+The order is worth stating generally: **cheapest and most decisive checks
+first.** Out of scope, refuse. Nothing retrieved, refuse. Only then spend.
+
+## What a refusal owes the person
+
+A refusal that leaves someone worse off than silence is a bad refusal. "I don't
+know" hands the problem straight back with nothing added.
+
+A good one carries three things:
+
+> **What was searched.** "I only read Lrnon's own pages" tells them the shape
+> of the gap — this is not a knowledge failure, it is a scope boundary.
+>
+> **Why it fell short.** Not covered here, versus covered but too old, versus
+> a question that needs a person, are three different situations.
+>
+> **Where to go next.** A search box, a contact route, a related page. Somebody
+> stuck needs a next step more than an apology.
+
+Notice what is absent: apology, hedging, and any suggestion the person asked
+badly.
+
+## Do not fall back to general knowledge
+
+The most tempting mistake in this whole module: when the passages fall short,
+let the model answer from what it knows anyway.
+
+This un-grounds the answer while keeping every visual signal of a grounded one
+— the same interface, the same confident tone, often the same source links
+sitting underneath text those sources do not support. You have built something
+that looks checkable and is not, which is worse than something that never
+claimed to be.
+
+If you want an ungrounded mode, label it loudly as a different thing.
+
+## Try it now (7 minutes)
+
+Ask your grounded system three questions your documents definitely do not
+answer — adjacent topics work best, because they retrieve *something*.
+
+For each, check: did it refuse, or did it construct an answer from marginally
+related passages? If it answered, you have found the gap this lesson exists for,
+and the citation check is the cheapest thing that closes it.
+
+<Quiz client:visible items={[
+  {
+    q: "Instructing the model to refuse when passages fall short is:",
+    options: [
+      "Sufficient — modern models follow instructions reliably",
+      "Helpful but not a guarantee; something after the answer must be able to reject it",
+      "Unnecessary if retrieval has a threshold"
+    ],
+    answer: 1,
+    explain: "A prompt is a request. If refusing is the point of the system, enforce it where it cannot be talked out of — after the answer, in code."
+  },
+  {
+    q: "Why does the citation check catch ungrounded answers specifically?",
+    options: [
+      "It measures how confident the answer sounds",
+      "An answer built from general knowledge has nothing legitimate to cite, so it cites nothing or fabricates",
+      "It compares the answer against the model's training data"
+    ],
+    answer: 1,
+    explain: "The check is aligned with the failure. Both outcomes — no citation and an out-of-range one — are detectable with a regular expression."
+  },
+  {
+    q: "When the passages fall short, falling back on the model's general knowledge is dangerous because:",
+    options: [
+      "It costs more tokens",
+      "It un-grounds the answer while keeping every appearance of a grounded one",
+      "The model refuses to answer without passages"
+    ],
+    answer: 1,
+    explain: "Same interface, same confident tone, often the same source links under text they do not support. Looking checkable without being checkable is worse than not claiming it."
+  }
+]} />
+
+## Recap
+
+Retrieval narrows but never adjudicates, so something must decide when the
+passages fall short. Instruct the refusal, then enforce it: discard any answer
+that does not cite a passage you supplied. Refuse before spending where you
+can. And make the refusal useful — what was searched, why it fell short, where
+to go next — while never quietly falling back on general knowledge.

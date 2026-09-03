@@ -1,0 +1,148 @@
+---
+title: "Finding the right passages"
+description: "Keyword and meaning-based search fail in opposite directions. Why rare words count for more, and why combining beats choosing."
+track: practitioner
+module: p2
+order: 3
+minutes: 9
+objectives:
+  - "Say where keyword matching wins and where meaning-based matching wins"
+  - "Explain why a word common to every document should count for little"
+concepts: ["keyword search", "embeddings", "semantic search", "hybrid retrieval", "IDF"]
+flashcards:
+  - front: "Where does keyword search beat meaning-based search?"
+    back: "Exact strings — product codes, error numbers, names, clause references. The things nobody paraphrases."
+  - front: "Where does meaning-based search win?"
+    back: "When the asker's words and the document's words differ. 'Can I send this back' should find a passage titled 'Returns'."
+  - front: "Why weight rare words more heavily?"
+    back: "A word appearing in every document distinguishes nothing. The rare word is the one carrying the question's actual subject."
+lastVerified: "2026-08-27"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+You have passages. A question arrives. Which three or four do you supply?
+
+## Keyword matching
+
+Score each passage by the question's words that appear in it. Simple, fast, and
+better than its reputation.
+
+Its strength is exactness. Product codes, error numbers, clause references,
+surnames — nobody paraphrases `ERR_5521`, and a meaning-based search may
+happily return something *about* errors instead of the one you named.
+
+Its weakness is vocabulary. Ask *"can I send this back?"* of a policy that says
+"returns" and never says "send back", and keyword matching finds nothing.
+
+### Rare words count for more
+
+One refinement does most of the work, and it is worth understanding rather than
+importing.
+
+On a site about AI, the word "AI" appears in nearly every passage. Matching it
+tells you almost nothing. A word appearing in three passages out of nine
+hundred tells you a great deal.
+
+> **Weight each matching word by how rare it is across the collection.**
+
+That single idea is what stops every question returning the introduction. It is
+usually called IDF — inverse document frequency — and the intuition is the
+whole of it: common words distinguish nothing, rare words distinguish a lot.
+
+## Meaning-based matching
+
+Convert each passage into a list of numbers — an *embedding* — positioned so
+that texts about similar things sit near each other. Convert the question the
+same way, and return the nearest passages.
+
+Now "can I send this back" lands near "returns" without sharing a word. This is
+genuinely powerful and it is why the technique took over.
+
+Its weakness is the mirror image: it is fuzzy where you need exact. Ask for
+`ERR_5521` and you may get passages about error handling generally, because in
+meaning-space those are close. It also needs a model to produce the embeddings,
+which is a dependency, a cost, and a thing that changes underneath you.
+
+## The honest answer is both
+
+Neither is a strategy. Run both, combine the rankings, and you cover each one's
+blind spot with the other's strength. This is usually called *hybrid retrieval*
+and it is the default worth starting from.
+
+## Two gates, not one score
+
+Ranking tells you which passages are *most* relevant. It does not tell you
+whether the best one is relevant **at all** — a ranked list always has a top
+item, even when everything in it is nonsense.
+
+So a threshold is needed. And a single score is not enough, for a reason
+measured directly on Lrnon's own index:
+
+> Asked *"What is the capital of France?"*, the highest-scoring passage on the
+> whole site scored **6.28** — higher than any genuinely in-scope question. It
+> matched because E1·L6 contains the sentence *"The capital of France is ___"*
+> as a next-word-prediction example, and "capital" and "France" are rare enough
+> here to carry enormous weight.
+
+Score alone was actively misleading. The fix was a second, independent gate:
+what fraction of the question's distinctive words appear at all. Genuine
+questions covered 50–100% of theirs; that one covered a third. **Both** gates
+must pass.
+
+The general lesson is worth more than the specific numbers: a rare word
+appearing incidentally outranks a common word appearing meaningfully, so any
+system relying on a single relevance number will eventually be confidently
+wrong in exactly this way.
+
+## Try it now (6 minutes)
+
+Write down five questions people actually ask about your document, in their
+words rather than the document's.
+
+For each, note whether a keyword search would find the right passage. Where it
+would not, you have found the vocabulary gap that meaning-based search exists
+to close — and a list of terms worth adding to the document itself, which is
+often the cheaper fix.
+
+<Quiz client:visible items={[
+  {
+    q: "A user asks \"can I send this back?\" about a policy that only ever says \"returns\". Which retrieval approach handles this?",
+    options: [
+      "Keyword matching, because the words are simple",
+      "Meaning-based matching, because the phrasings sit near each other despite sharing no words",
+      "Neither can handle a vocabulary difference"
+    ],
+    answer: 1,
+    explain: "This is exactly the vocabulary gap embeddings close, and exactly where keyword matching returns nothing at all."
+  },
+  {
+    q: "Why should a word that appears in nearly every passage count for less?",
+    options: [
+      "It is usually a spelling mistake",
+      "It distinguishes nothing — matching it does not narrow the field",
+      "Common words are less important to the meaning of a question"
+    ],
+    answer: 1,
+    explain: "Retrieval is about discrimination. A term shared by everything cannot separate anything, however meaningful it is."
+  },
+  {
+    q: "Lrnon's index scored \"What is the capital of France?\" higher than any genuine question. What does this show?",
+    options: [
+      "The scoring was miscalculated",
+      "A rare word appearing incidentally can outrank a common word appearing meaningfully, so one score is not enough",
+      "Out-of-scope questions should be blocked by a keyword list"
+    ],
+    answer: 1,
+    explain: "The score was computed correctly — that was the problem. A second gate on how much of the question is actually covered is what catches this class."
+  }
+]} />
+
+## Recap
+
+Keyword search is exact and vocabulary-bound; meaning-based search is flexible
+and imprecise. Run both. Weight rare words heavily so common ones stop
+dominating. And never trust a single relevance score to decide whether anything
+was found at all — a ranked list always has a winner.

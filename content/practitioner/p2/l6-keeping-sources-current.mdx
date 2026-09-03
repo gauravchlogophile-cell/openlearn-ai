@@ -1,0 +1,136 @@
+---
+title: "Keeping sources current"
+description: "A grounded system inherits the staleness of what it reads. Re-indexing, deletion that deletes, and dates a reader can judge."
+track: practitioner
+module: p2
+order: 6
+minutes: 8
+objectives:
+  - "Keep an index in step with documents that change, including ones that are withdrawn"
+  - "Show the date of the source so a reader can judge currency themselves"
+concepts: ["re-indexing", "staleness", "deletion", "provenance"]
+flashcards:
+  - front: "What happens when a document is deleted but not un-indexed?"
+    back: "The system keeps answering from it. Withdrawn guidance stays in circulation, stated confidently, with nothing on screen to reveal it."
+  - front: "Why show the source's date alongside an answer?"
+    back: "Currency is a judgement the reader can make instantly if you give them the date, and cannot make at all if you do not."
+  - front: "Which is worse — no answer, or a confidently outdated one?"
+    back: "The outdated one. No answer prompts a check; a confident wrong answer ends the enquiry."
+lastVerified: "2026-08-27"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+L1 said grounding fixes currency. That is true of the model's training and
+false of your index — you have moved the staleness problem, not removed it. Now
+it is yours to manage, which is an improvement only if you actually manage it.
+
+## The failure that matters most is deletion
+
+Updates are the obvious case: a document changes, the index holds the old text,
+answers lag. Bad, and usually noticed.
+
+Deletion is worse and quieter.
+
+> A policy is withdrawn because it was wrong. The file is removed. The index
+> still holds its passages.
+
+The system now answers confidently from guidance the organisation has formally
+retracted. Nobody sees a stale document — they see an answer. There is no
+visible artefact to notice, and the more authoritative your interface looks,
+the longer this survives.
+
+**Removing a document must remove its passages.** If your pipeline only ever
+adds, you have built something that cannot forget, and the first time it
+matters will be the worst time.
+
+## Rebuild or update
+
+**Rebuild everything** on a schedule. Simple, hard to get wrong, and it handles
+deletion for free because the new index only contains what currently exists.
+Fine while a rebuild takes minutes.
+
+**Update incrementally** as documents change. Necessary at scale, and it
+demands that you handle removal explicitly — which is exactly the case that
+gets forgotten, because nothing fails loudly when you skip it.
+
+Start with rebuilds. Move to incremental only when the rebuild genuinely
+becomes too slow, and write the deletion path first when you do.
+
+## Carry the date through
+
+Store when each passage was indexed, and show it.
+
+> *"Refunds are issued within 14 days — Returns policy, section 4, indexed 12
+> March."*
+
+That date converts an unanswerable question ("is this current?") into an
+instant judgement. A reader who knows the policy changed in April now knows to
+check. Without the date they have no way to even suspect.
+
+This is Explorer E7's habit applied to your own systems: name what you checked
+and when. Lrnon does it in two places — every registry card carries a
+`lastVerified` date, and a build **fails** when a tool description is more than
+120 days old. Not a reminder; a failure.
+
+## Decide what "too old" means before it matters
+
+Different material ages differently. A statutory notice may hold for years; a
+price list is wrong within a week.
+
+Pick a threshold per source and act on it — refuse, warn, or flag for review.
+Deciding in advance is much easier than deciding while looking at a specific
+embarrassing answer, when the temptation to rationalise is strongest.
+
+## Try it now (6 minutes)
+
+For the documents behind your grounded system, answer three questions in
+writing:
+
+1. When a document is **deleted**, what removes its passages? If the answer is
+   "nothing", that is today's most important bug.
+2. How old can a passage get before an answer from it is a problem?
+3. Does anything currently show a reader when the source was last checked?
+
+<Quiz client:visible items={[
+  {
+    q: "A withdrawn policy is deleted from the folder but its passages remain indexed. What happens?",
+    options: [
+      "The system stops returning it, because the file no longer exists",
+      "It keeps answering from retracted guidance, confidently, with nothing visible to reveal it",
+      "Answers become slower but stay correct"
+    ],
+    answer: 1,
+    explain: "The index is the source of truth for retrieval, not the folder. And there is no stale document on screen to notice — only an answer."
+  },
+  {
+    q: "Rebuilding the whole index on a schedule has one underrated advantage:",
+    options: [
+      "It is faster than updating incrementally",
+      "It handles deletion for free — the new index contains only what currently exists",
+      "It produces better embeddings"
+    ],
+    answer: 1,
+    explain: "Deletion is the case incremental pipelines forget, because skipping it fails silently. A rebuild cannot forget it."
+  },
+  {
+    q: "Why show the reader when a source was last indexed?",
+    options: [
+      "It demonstrates the system is actively maintained",
+      "It turns 'is this current?' into a judgement they can make instantly",
+      "It is required for citations to be valid"
+    ],
+    answer: 1,
+    explain: "Someone who knows the policy changed in April can act on a March date immediately. Without it they cannot even form the suspicion."
+  }
+]} />
+
+## Recap
+
+Grounding moves staleness from the model's training into your index, where it
+becomes your responsibility. Deletion is the failure that hides best — make
+sure removing a document removes its passages. Rebuild wholesale while you can.
+Carry the indexed date through to the reader, and decide what "too old" means
+before you are looking at a specific bad answer.

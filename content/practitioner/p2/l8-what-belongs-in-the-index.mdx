@@ -1,0 +1,158 @@
+---
+title: "What belongs in the index"
+description: "Indexing a document makes it answerable by anyone who can ask. Permissions, personal data, and the folder nobody audited."
+track: practitioner
+module: p2
+order: 8
+minutes: 9
+objectives:
+  - "Decide what may be indexed, on permissions rather than convenience"
+  - "Keep a retrieved passage inside the boundary the original document had"
+concepts: ["access control", "personal data", "data minimisation", "audit"]
+flashcards:
+  - front: "What does indexing a document do to its access controls?"
+    back: "Removes them, unless you rebuild them. A passage in a shared index is answerable to anyone who can ask a question."
+  - front: "What is the safe default for a document you are unsure about?"
+    back: "Leave it out. An absent document is a gap someone reports; a leaked one cannot be un-answered."
+  - front: "Why is a spreadsheet of names a poor thing to index?"
+    back: "Retrieval will surface individuals in answers to questions that were never about them, and nobody involved consented to that."
+lastVerified: "2026-08-27"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The last question of this module is the first one that should have been asked:
+which documents belong in the index at all?
+
+It gets skipped because the technical path of least resistance is to point the
+pipeline at a folder. That folder almost always contains more than whoever
+pointed at it remembered.
+
+## Indexing dissolves permissions
+
+A document in a shared drive carries an access list. Some people can open it;
+most cannot.
+
+Cut it into passages and put it in a shared index, and that list is gone —
+replaced by a much simpler rule: **anyone who can ask a question can reach any
+passage.**
+
+> The salary review is in the same folder as the handbook. Both get indexed.
+> Now "how are pay bands decided?" can return a passage naming individuals and
+> figures, to someone who could never have opened the file.
+
+Nobody decided this. It follows from indexing a folder rather than a list of
+documents, and the interface gives no hint that it happened.
+
+## Two ways to keep the boundary
+
+**Index only what everyone who can ask may see.** Simple, robust, and enough
+for most internal tools. The discipline is entirely in what goes in.
+
+**Carry permissions through** — store who may see each passage and filter at
+retrieval, before anything reaches the model. Necessary when the material
+genuinely differs by reader, and considerably harder: the filter must run on
+retrieval, not on display, because a passage that reaches the model has already
+left the boundary even if the answer is never shown.
+
+Start with the first. Move to the second only when the use case truly requires
+it, and test it with the twenty questions from L4 run as different people.
+
+## Personal data does not want to be retrievable
+
+Documents about *people* behave badly in an index. A spreadsheet of names, a
+list of complaints, notes from a one-to-one — these get surfaced in answers to
+questions that were never about the individuals concerned, and none of them
+agreed to that.
+
+Explorer E14 covers the personal side. The practitioner rule is narrower:
+
+> **Do not index personal data unless the system exists to answer questions
+> about those people, and the people know it does.**
+
+An HR tool that answers questions about employees is a legitimate thing that
+requires care. A general assistant that happens to have absorbed the HR folder
+is an incident that has not surfaced yet.
+
+## Keep the list, not the folder
+
+The single most useful habit in this lesson:
+
+> **Index an explicit list of documents. Never a directory.**
+
+A directory is a moving target — anything dropped in later is silently indexed,
+by whoever dropped it, without a decision. A list changes only when somebody
+changes it, which means somebody chose.
+
+It also gives you the audit answer. "Which documents can this thing see?"
+should be a file you can open, not a query you have to run.
+
+## When you are not sure, leave it out
+
+An absent document produces a gap. Someone asks, gets the refusal you wrote in
+L7, and tells you. That is a cheap, recoverable, self-reporting failure.
+
+A document that should not have been indexed produces answers. They are correct,
+useful, and reaching people who should not have them — and there is no moment
+where anything looks wrong. Removing it later does not un-answer what was
+already asked.
+
+> The two errors are not symmetrical, so the default should not be either.
+> **When unsure, leave it out.**
+
+## Try it now (8 minutes)
+
+Write down every document your system currently indexes. If you cannot — if the
+answer is "everything in that folder" — that is the finding.
+
+For each, ask: *would I be comfortable if any person who can ask a question
+could read this whole document?* Anything you hesitate over comes out until you
+have made a decision about it rather than inherited one.
+
+<Quiz client:visible items={[
+  {
+    q: "What happens to a document's access controls when it is indexed into a shared retrieval system?",
+    options: [
+      "They are preserved automatically by the index",
+      "They are gone unless you deliberately rebuild them — any asker can reach any passage",
+      "They apply to the answer but not the passage"
+    ],
+    answer: 1,
+    explain: "The index has one rule: reachable by anyone who can ask. Nothing in the interface reveals that a file's original permissions stopped applying."
+  },
+  {
+    q: "Why index an explicit list of documents rather than a directory?",
+    options: [
+      "Directories are slower to read",
+      "A directory silently indexes whatever is dropped in later, with nobody deciding",
+      "Lists produce better embeddings"
+    ],
+    answer: 1,
+    explain: "A list changes only when someone changes it, so every document present was chosen — and 'what can this see?' becomes a file you can open."
+  },
+  {
+    q: "You are unsure whether a document should be indexed. The safer default is to:",
+    options: [
+      "Index it — an unanswered question is worse than an over-broad answer",
+      "Leave it out — a gap gets reported, whereas a leak produces correct-looking answers and no visible failure",
+      "Index it with a lower relevance weight"
+    ],
+    answer: 1,
+    explain: "The two errors are not symmetrical. One is self-reporting and recoverable; the other cannot be un-answered after the fact."
+  }
+]} />
+
+## Recap
+
+Indexing a document removes its access controls unless you rebuild them, so
+index a list you chose rather than a folder that grows. Keep personal data out
+unless answering about those people is the system's purpose and they know it.
+When unsure, leave it out — a gap gets reported, a leak does not.
+
+That completes P2. You can ground an answer, find the right passages, know
+whether retrieval works, assemble the request safely, keep it current, refuse
+honestly, and decide what belongs. P3 takes the fencing from L5 and asks the
+harder question: what happens when somebody writes into your sources on
+purpose?

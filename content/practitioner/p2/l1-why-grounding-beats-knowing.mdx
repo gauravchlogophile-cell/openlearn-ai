@@ -1,0 +1,146 @@
+---
+title: "Why grounding beats knowing"
+description: "A model's training is a snapshot of a world that moved on. Supplying the passage it answers from turns a guess into a lookup you can check."
+track: practitioner
+module: p2
+order: 1
+minutes: 8
+objectives:
+  - "Say why supplying source text beats relying on what a model absorbed in training"
+  - "Recognise that a grounded answer is checkable and an ungrounded one is not"
+concepts: ["grounding", "retrieval", "citation", "knowledge cutoff"]
+flashcards:
+  - front: "What does grounding an answer mean?"
+    back: "Supplying the source passage in the request, so the model reads it rather than recalling something similar."
+  - front: "Why is a grounded answer easier to trust?"
+    back: "It can be checked against a source you control. An ungrounded one can only be checked against the world, which is slower and often skipped."
+  - front: "Does grounding stop a model being wrong?"
+    back: "No. It narrows what it can be wrong about, and makes the wrongness findable — which is a different and more useful property."
+lastVerified: "2026-08-27"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+P1 was about asking well. This module is about changing what the model is
+answering *from*.
+
+Everything in Explorer assumed the model knew things. It does — a great many —
+but what it knows is a compressed impression of text it saw during training,
+with no index, no dates and no way to tell you which part it is drawing on.
+E7·L1 named the consequence: fluency and accuracy are produced by different
+machinery, and they come apart without a visible signal.
+
+Grounding is the structural fix. Instead of asking a question and hoping, you
+put the relevant passage **in the request** and ask the model to answer from
+that.
+
+## The shift, in one comparison
+
+> *"What is our refund window?"*
+
+The model answers from an impression of every refund policy it has ever read.
+The answer will be plausible. It may even be right, by coincidence. You cannot
+tell which.
+
+> *"Here is section 4 of our returns policy. What is our refund window?
+> Quote the sentence you used."*
+
+Now the model is reading. The task has changed from recall to comprehension,
+and comprehension is the thing these systems are genuinely good at.
+
+## What this actually buys you
+
+**Currency.** A model's training has a cutoff. Your policy changed last
+Tuesday. No amount of prompting fixes that; supplying the current text does.
+
+**Specificity.** "Our" refund window is not a fact about the world. It is a
+fact about one document, and only that document contains it.
+
+**Checkability** — the one that matters most. A grounded answer comes with
+a place to look. E7·L3's two-minute method becomes possible: open the source,
+read the sentence in place. An ungrounded answer offers nothing to check
+against except your own memory.
+
+## What it does not buy you
+
+Grounding is not a truth serum, and the failure it does not fix is worth
+naming early because it is the one people meet in production.
+
+**A passage that mentions the topic is not a passage that answers the
+question.** Retrieval finds text that looks relevant. Whether that text
+actually contains the answer is a separate question, and nothing about
+supplying it forces the model to notice the difference.
+
+This is not hypothetical. Lrnon's own assistant retrieves from these lessons,
+and asked "what is the capital of France?" it legitimately surfaces E1·L6 —
+because that lesson contains the phrase *"the capital of France is ___"* as a
+next-word-prediction example. The retrieval is correct. The passage does not
+answer the question. Only an explicit rule to refuse when the passages fall
+short, plus a check that discards an answer citing nothing, closes that gap.
+
+You will build both in L7 and L8.
+
+## The shape of the thing you are building
+
+Four steps, and the rest of this module is each one in turn:
+
+> 1. **Split** your documents into passages small enough to be useful (L2)
+> 2. **Find** the few that bear on the question (L3, L4)
+> 3. **Supply** them, clearly fenced, with the question (L5)
+> 4. **Refuse** when they do not answer it, and prove what was used (L7, L8)
+
+Step four is the one that gets skipped, and it is the one that decides whether
+the thing you built is trustworthy or merely impressive.
+
+## Try it now (5 minutes)
+
+Take a question you already ask an assistant, where the answer depends on a
+document you control — a policy, a spec, a set of notes.
+
+Ask it cold. Then paste the relevant page in and ask again, adding *"quote the
+sentence you used."* Compare the two answers, and notice specifically whether
+the cold answer was **wrong** or merely **unverifiable**. They are different
+problems, and the second is the more common one.
+
+<Quiz client:visible items={[
+  {
+    q: "The main advantage of putting a source passage in the request is that:",
+    options: [
+      "It makes the model respond faster",
+      "The answer becomes checkable against something you control",
+      "It reduces the number of tokens the request uses"
+    ],
+    answer: 1,
+    explain: "Grounding converts recall into comprehension, and comprehension leaves a trail. Cost usually goes up, not down — passages are tokens."
+  },
+  {
+    q: "A retrieved passage mentions your question's topic but does not answer it. What should a well-built system do?",
+    options: [
+      "Answer from the passage anyway, since it is on topic",
+      "Say the passage does not contain the answer, and stop",
+      "Fall back on the model's general knowledge for that one"
+    ],
+    answer: 1,
+    explain: "Falling back to general knowledge silently un-grounds the answer while keeping the appearance of a source. Refusing is the honest outcome and the one worth engineering for."
+  },
+  {
+    q: "Grounding an answer in a supplied document means the answer is:",
+    options: [
+      "Guaranteed correct, because it came from your own material",
+      "Narrower in what it can be wrong about, and easier to check",
+      "No more reliable than an ungrounded one"
+    ],
+    answer: 1,
+    explain: "It is a large reduction in the space of possible errors plus a way to find the ones that remain. That is not the same as a guarantee."
+  }
+]} />
+
+## Recap
+
+Grounding replaces "what does the model know" with "what does this passage
+say". It fixes currency and specificity, and — most importantly — it makes an
+answer checkable. It does not make the model honest about passages that fall
+short of answering, which is the failure the rest of this module is built
+around.

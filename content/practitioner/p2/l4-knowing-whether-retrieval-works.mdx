@@ -1,0 +1,142 @@
+---
+title: "Knowing whether retrieval works"
+description: "Most grounded systems are judged by how the answers feel. A set of twenty questions with known right passages turns that into a number you can act on."
+track: practitioner
+module: p2
+order: 4
+minutes: 8
+objectives:
+  - "Build a small evaluation set that catches retrieval failures before users do"
+  - "Separate a retrieval failure from a generation failure when diagnosing"
+concepts: ["evaluation", "recall", "test set", "regression"]
+flashcards:
+  - front: "What is the minimum useful evaluation set?"
+    back: "Twenty real questions, each with the passage that should be found written down. Small enough to build in an hour, big enough to catch a regression."
+  - front: "How do you tell a retrieval failure from a generation failure?"
+    back: "Look at what was retrieved. If the right passage was not there, no prompt change will fix it — you are debugging the wrong half."
+  - front: "Why write the expected passage down before testing?"
+    back: "Deciding afterwards whether what came back was 'good enough' is how a system that has quietly degraded keeps passing."
+lastVerified: "2026-08-27"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+P1·L7 argued that a prompt doing real work deserves a test. Retrieval deserves
+one more, because its failures are quieter: the answer still arrives, still
+reads well, and is simply built on the wrong passage.
+
+## Twenty questions is enough
+
+You do not need a benchmark. You need a list.
+
+> Collect **twenty questions people actually ask**. For each, open your
+> documents and write down which passage *should* be returned.
+
+An hour's work. What it gives you is the ability to change something —
+different chunking, a different threshold, a new document — and immediately
+know whether you improved things or broke them.
+
+Real questions matter more than clever ones. Ask two colleagues what they would
+type. The questions you invent are shaped by knowing what the system can do,
+which is exactly the bias that hides failures.
+
+## Write the answer down first
+
+The temptation is to run a question, look at what came back, and decide whether
+it seems reasonable. That is not a test — it is an opinion formed after seeing
+the result, and it will rationalise almost anything.
+
+Deciding the expected passage **before** running it is what makes the outcome
+binary. Either the right passage was in the top few or it was not.
+
+## Two numbers worth having
+
+**Was the right passage retrieved at all?** If it never reaches the model, the
+model cannot use it. This is the number that matters most and the one people
+skip.
+
+**How many passages did you have to supply to get it?** If the right one is
+consistently fourth, your ranking is weak — you are compensating with volume,
+which costs money on every single request.
+
+## The diagnostic that saves hours
+
+When an answer is wrong, one question comes first:
+
+> **Was the right passage retrieved?**
+
+Two very different problems live behind that:
+
+- **It was not retrieved.** A retrieval failure. Changing the prompt, the
+  model, or the temperature will do nothing, and hours disappear into tuning
+  the half that was working.
+- **It was retrieved and the answer is still wrong.** A generation failure —
+  now the prompt, the fencing and the refusal rules are the right place to
+  look, which is L5 and L7.
+
+Log what was retrieved for every request. Not the answer, not the question if
+it may contain personal detail — just which passages were supplied. Without it
+you are guessing at which half broke.
+
+## Watch for the silent degradation
+
+Retrieval quality drifts as content grows. A collection of fifty passages is
+easy; the same questions against five thousand are not, because there are now
+many near-misses competing with the right answer.
+
+Re-run the twenty whenever the collection grows meaningfully. It takes minutes,
+and it is the only way to notice a system that got worse without anything
+visibly breaking.
+
+## Try it now (10 minutes)
+
+Write five questions and their expected passages. Run them.
+
+If all five pass, your five questions are too easy — add the awkward ones:
+something phrased in the user's vocabulary rather than the document's,
+something answered in two places, and something the documents do not cover at
+all. That last one is the most valuable test you will write, and L7 is about
+what should happen when it fires.
+
+<Quiz client:visible items={[
+  {
+    q: "An answer is wrong. What should you check first?",
+    options: [
+      "Whether the prompt wording could be clearer",
+      "Whether the right passage was retrieved at all",
+      "Whether a larger model would do better"
+    ],
+    answer: 1,
+    explain: "If the passage never arrived, prompt and model changes cannot help — and that is where hours vanish, tuning the half that was working."
+  },
+  {
+    q: "Why write down the expected passage before running the question?",
+    options: [
+      "It makes the test run faster",
+      "Judging afterwards whether the result was 'good enough' rationalises almost anything",
+      "It is required to compute a relevance score"
+    ],
+    answer: 1,
+    explain: "Deciding first makes the outcome binary. Deciding after seeing the output is an opinion, and a system that has quietly degraded will keep passing it."
+  },
+  {
+    q: "Your evaluation set should mostly contain:",
+    options: [
+      "Questions you invented while testing the system",
+      "Questions real users actually ask, in their own words",
+      "Questions with a single unambiguous keyword match"
+    ],
+    answer: 1,
+    explain: "Questions you invent are shaped by knowing what the system can do, which is the bias that hides its failures."
+  }
+]} />
+
+## Recap
+
+Twenty real questions with their expected passages written down in advance.
+Measure whether the right passage was retrieved and how deep you had to reach.
+Log what was supplied on every request, so a wrong answer can be attributed to
+retrieval or to generation rather than guessed at. Re-run as the collection
+grows, because that is when quality drifts silently.
