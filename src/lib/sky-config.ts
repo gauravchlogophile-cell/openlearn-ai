@@ -58,7 +58,14 @@ export const SKY_LIMITS = {
   /* The ceiling on one answer. Two or three sentences is the house style, so
      this is generous rather than tight — but it is also the number reserved
      against the daily budget BEFORE the call, so raising it directly reduces
-     how many questions a day's money buys. */
+     how many questions a day's money buys.
+
+     WATCH THIS if you pick a model that thinks. Gemini bills thought tokens
+     and Google's docs do not state how they interact with this ceiling, so a
+     reasoning model can spend the whole allowance before writing a word and
+     return nothing — which arrives here as a provider failure reading
+     "no text (MAX_TOKENS)" in the Worker log. Prefer a model with thinking off
+     by default, or raise this and accept fewer questions per day. */
   maxAnswerTokens: 800,
 
   /* A provider that has not answered in this long is a provider that has not

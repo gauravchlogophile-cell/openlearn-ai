@@ -438,6 +438,21 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     provider, model, result.ok);
 
   if (!result.ok) {
+    /* The reason goes to the Worker log, never to the browser. It names the
+       provider's status and, for Gemini, the finishReason — which is the
+       difference between "the key is wrong", "safety filtering fired" and
+       "MAX_TOKENS was reached before any answer text", the last being what
+       happens when a thinking model spends the output budget reasoning.
+       Without this the operator sees only a generic 502 and has nothing to act
+       on. Observability is already enabled in wrangler.jsonc, so this lands in
+       `wrangler tail` and the dashboard.
+
+       The learner's question is deliberately NOT logged — a log of what
+       children asked an assistant is not a debugging convenience worth
+       keeping. */
+    console.error('[sky] provider failed', {
+      provider, model, status: result.status, reason: result.reason,
+    });
     return json({ error: 'provider', message: SKY_COPY.unavailable, sources }, 502);
   }
 
