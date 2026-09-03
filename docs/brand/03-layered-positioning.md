@@ -66,8 +66,23 @@ no technical background, works on a phone, and does not require an account.
   none exists, and a mock-up shown to a funder becomes a screenshot we cannot
   retract. The verification page IS demonstrable and is the honest thing to
   show, including the fact that every code currently returns "no record".
-- **Sky is not enabled.** Built, guarded, tested, and switched off pending an
-  API key and a proper rate limiter. Do not demo it.
+- **Sky is enabled for STAFF ONLY**, as of 4 September 2026. Not for learners,
+  not for the public, and not something to describe as launched. It is at this
+  stage for one reason: gates 1 and 3 — 200 reviewed questions and a
+  wrong-answer rate under 2% — cannot be measured without it answering, and
+  neither has been measured yet.
+
+  Demoing it is now defensible where it was not before, with two conditions.
+  Say plainly that no learner can reach it. And do not offer an answer as
+  evidence of quality until the review has happened: one good answer proves
+  nothing, which is the entire reason the gate counts two hundred.
+
+  The rate-limiter concern that used to sit here is resolved, though not the
+  way it was written. The KV limiter was never replaced by a Durable Object;
+  the spend ceiling moved into Postgres instead, where the check and the
+  increment happen in one statement under a row lock, and KV was left doing
+  per-IP traffic shaping. That is the stronger fix, and worth stating
+  accurately rather than letting the old sentence stand.
 - **One maintainer.** Say "a small team" only if it stops being one person.
 - **Practitioner and Builder are incomplete.** P1 exists; P2–P11 and B1 are
   planned. The roadmap shows this honestly and marketing copy must match it.

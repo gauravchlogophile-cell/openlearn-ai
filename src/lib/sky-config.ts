@@ -10,10 +10,15 @@
  *  devtools gets a 503, not an answer.
  */
 
-export type SkyMode = 'off' | 'staff' | 'everyone';
+/* 'slice' was missing from this union while the admin console offered it and
+   the audience rules implemented it — so the middle stage of a four-stage
+   rollout was unreachable, and slicePercent governed nothing. */
+export type SkyMode = 'off' | 'staff' | 'slice' | 'everyone';
 
 /**
- * Ships 'off' and must stay that way until the gates below are green.
+ * The DEPLOYED CEILING. Sky can be narrower than this at any moment — the
+ * rollout row in the database can only restrict, never widen — but it can
+ * never be wider, and raising this takes a commit and a deploy.
  *
  * Turning Sky on is not a styling change. It introduces this project's first
  * recurring cost, against a README that promises "Free forever"; it sends
@@ -21,13 +26,29 @@ export type SkyMode = 'off' | 'staff' | 'everyone';
  * people who came here to learn, where being confidently wrong is the specific
  * harm E1·L7 teaches them to guard against.
  *
+ * Moved 'off' -> 'staff' on 2026-09-04, deliberately and with the owner's
+ * instruction. 'staff' means people holding an admin, sub-admin or owner role:
+ * one person today. It is not a step toward learners so much as the only way
+ * to gather the evidence gates 1 and 3 require, since neither can be measured
+ * without Sky actually answering.
+ *
+ * What stands behind it at this stage:
+ *   · audience enforced in the route and again in the island — a learner or an
+ *     anonymous visitor is refused before retrieval and before any spend
+ *   · the kill switch genuinely closes it, in one click, without a deploy
+ *   · 200k tokens and 500 calls a day, capped in Postgres under a row lock
+ *   · an uncited answer is discarded before anyone reads it
+ *
  * Gates, from the design, before this may become 'everyone':
- *   1. 200 staff questions reviewed by hand
- *   2. No answer without a source
- *   3. Wrong-answer rate under 2%
- *   4. Refusal wording signed off by a teacher
+ *   1. 200 staff questions reviewed by hand        — what 'staff' is FOR
+ *   2. No answer without a source                  — met, enforced in code
+ *   3. Wrong-answer rate under 2%                  — measured during (1)
+ *   4. Refusal wording signed off by a teacher     — needs a person
+ *
+ * Do not skip to 'everyone'. The console refuses it until the gates are green,
+ * and the gates are not yet read from data — that is the next piece of work.
  */
-export const SKY_MODE: SkyMode = 'off';
+export const SKY_MODE: SkyMode = 'staff';
 
 /** Which parts of the site Sky may read. Community rooms and Ask Doubts are
  *  excluded deliberately: they are learner-written, so quoting them would let

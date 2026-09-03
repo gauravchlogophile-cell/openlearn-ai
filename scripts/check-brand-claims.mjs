@@ -69,7 +69,13 @@ const probes = {
     return live || seededOpen;
   },
 
-  skyEnabled: () => !/SKY_MODE[^=]*=\s*'off'/.test(read('src/lib/sky-config.ts')),
+  /* The deployed ceiling, as a stage rather than a boolean. "Is Sky on?" was
+     the wrong question: a yes/no cannot tell "staff only, to gather review
+     evidence" from "open to every learner", and those are exactly the two
+     states the guides must never confuse. Reports the constant — the database
+     row can narrow it further but never widen it. */
+  skyStage: () => read('src/lib/sky-config.ts')
+    .match(/SKY_MODE: SkyMode = '([a-z]+)'/)?.[1] ?? 'unknown',
 
   /* The gate ships false and needs a named owner AND deputy. Both halves are
      the claim, so check both survive in the migration.
