@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import { isConfigured, supabase } from '../lib/supabase';
+import { skyAudience } from '../lib/sky-audience.js';
+import { SKY_MODE, SKY_LIMITS } from '../lib/sky-config';
 
 /** Sky — the dock button and panel.
  *
@@ -28,6 +31,41 @@ export default function Sky({ intro, disclaimer, suggestions }: Props) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const [state, setState] = useState<State>({ k: 'idle' });
+
+  /* Whether to render the dock at all.
+   *
+   *  Base.astro used to decide this with `SKY_MODE !== 'off'`, which showed the
+   *  button to every visitor the moment the mode moved to 'staff' — the stage
+   *  that means "staff only". The route now refuses those requests, so the
+   *  hole is closed either way; this stops a learner being offered a button
+   *  that answers 503, which is its own small betrayal.
+   *
+   *  Starts hidden and appears only once the check says yes. A dock that
+   *  flashes in and then vanishes is worse than one that arrives late. */
+  const [mayUse, setMayUse] = useState(false);
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      if (SKY_MODE === 'everyone') { if (alive) setMayUse(true); return; }
+      if (!isConfigured) return;
+      try {
+        const { data } = await supabase().auth.getUser();
+        const id = data.user?.id ?? null;
+        let isStaff = false;
+        if (id) {
+          const [{ data: o }, { data: a }, { data: s }] = await Promise.all([
+            supabase().rpc('is_owner'),
+            supabase().rpc('has_role', { wanted: 'admin' }),
+            supabase().rpc('has_role', { wanted: 'sub_admin' }),
+          ]);
+          isStaff = Boolean(o) || Boolean(a) || Boolean(s);
+        }
+        const v = skyAudience(SKY_MODE, { userId: id, isStaff }, SKY_LIMITS.slicePercent);
+        if (alive) setMayUse(v.allowed);
+      } catch { /* stays hidden, which is the safe direction */ }
+    })();
+    return () => { alive = false; };
+  }, []);
   const panelRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const slowTimer = useRef<number | undefined>(undefined);
@@ -59,9 +97,22 @@ export default function Sky({ intro, disclaimer, suggestions }: Props) {
     }, 6000);
 
     try {
+      /* The access token identifies the asker so the route can apply the
+         rollout stage. It is NOT trusted here: the route hands it to
+         PostgREST, which verifies the signature before any role check runs, so
+         editing it in devtools resolves to nobody rather than to staff. */
+      const headers: Record<string, string> = { 'content-type': 'application/json' };
+      if (isConfigured) {
+        try {
+          const { data } = await supabase().auth.getSession();
+          const token = data.session?.access_token;
+          if (token) headers.authorization = `Bearer ${token}`;
+        } catch { /* anonymous is a valid state, not an error */ }
+      }
+
       const res = await fetch('/api/sky', {
         method: 'POST',
-        headers: { 'content-type': 'application/json' },
+        headers,
         body: JSON.stringify({ q: text, page: location.pathname }),
       });
       const data = await res.json();
@@ -87,6 +138,9 @@ export default function Sky({ intro, disclaimer, suggestions }: Props) {
     borderRadius: 'var(--r-l)', boxShadow: '0 8px 32px rgba(0,0,0,0.12)',
     display: 'flex', flexDirection: 'column', maxHeight: 'min(70vh, 640px)',
   };
+
+  // Not for this viewer at this stage — render nothing at all.
+  if (!mayUse) return null;
 
   if (!open) {
     return (

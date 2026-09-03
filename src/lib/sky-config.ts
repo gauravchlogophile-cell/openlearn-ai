@@ -49,6 +49,12 @@ export const SKY_LIMITS = {
   maxPerSessionPerHour: 20,
   maxPerIpPerHour: 60,
 
+  /* What share of signed-in learners the 'slice' stage admits, 0-100. Sticky
+     per account, so nobody flickers in and out between pages. Starts at zero:
+     moving to 'slice' without deciding a number should admit nobody rather
+     than everybody. */
+  slicePercent: 0,
+
   /* The ceiling on one answer. Two or three sentences is the house style, so
      this is generous rather than tight — but it is also the number reserved
      against the daily budget BEFORE the call, so raising it directly reduces

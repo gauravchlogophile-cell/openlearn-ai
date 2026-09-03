@@ -40,6 +40,19 @@ export default function AdminSky() {
       .from('sky_rollout_log').select('*').order('at', { ascending: false }).limit(20);
     if (error) { setMsg('Could not load the log: ' + error.message); return; }
     setLog(data ?? []);
+
+    /* The last seven days of real provider calls. A ceiling nobody can see is
+       not much of a control, and this is where an unexpected bill becomes
+       visible before it appears on an invoice.
+
+       PGRST202 means migration 0013 has not been applied to this database yet,
+       which is a different thing from an error and should not be shouted
+       about — the table below simply stays empty. */
+    const sp = await supabase().rpc('sky_spend_summary');
+    if (!sp.error) setSpend((sp.data ?? []) as SpendRow[]);
+    else if (sp.error.code !== 'PGRST202') {
+      setMsg('Could not load spend: ' + sp.error.message);
+    }
   }
   useEffect(() => { void load(); }, []);
 

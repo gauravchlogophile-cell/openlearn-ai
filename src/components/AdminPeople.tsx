@@ -246,6 +246,19 @@ export default function AdminPeople() {
                           </span>
                         : <span style={{ color: 'var(--c-ink-faint)' }}>no end date</span>}
                     </td>
+                    <td style={{ padding: 'var(--sp-3)', textAlign: 'right' }}>
+                      {/* Offered for every row including the last owner's.
+                          revoke_role() refuses to remove the final super_admin,
+                          so the guard lives where it cannot be bypassed and the
+                          button does not need to second-guess it — the refusal
+                          arrives as a message rather than a missing control. */}
+                      {owner && (
+                        <button className="btn btn--ghost" disabled={busy}
+                          onClick={() => void revoke(g.user_id, g.role)}>
+                          Revoke
+                        </button>
+                      )}
+                    </td>
                   </tr>
                 ))}
               </tbody>

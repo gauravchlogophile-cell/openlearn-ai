@@ -7,6 +7,7 @@ import {
   callModel, parseProvider, buildUserTurn, citesASource, SKY_SYSTEM,
 } from '../../lib/sky-providers';
 import { createClient } from '@supabase/supabase-js';
+import { skyAudience } from '../../lib/sky-audience.js';
 
 /* This route must run per-request; the rest of the site is prerendered. */
 export const prerender = false;
@@ -83,13 +84,16 @@ const QUIZ_PREPARED = prepareQuiz((quizbank as { quiz: any[] }).quiz);
 /** Redact things that look personal. The design promises Sky never asks for
  *  them; people volunteer them anyway.
  *
- *  NOT WIRED UP YET, and deliberately not presented as if it were. It has no
- *  caller because nothing currently leaves this process — the provider seam
- *  below is unimplemented. It previously carried a comment claiming it ran
- *  "before anything leaves this process", which was a safety-shaped no-op:
- *  the next person to wire the provider would reasonably assume scrubbing was
- *  already happening and ship the learner's raw question to a third party.
- *  The call site is marked in the seam below; this must be applied there. */
+ *  WIRED, and called on the exact line the question is handed over — inside
+ *  buildUserTurn's argument, which is the last moment the text is still ours.
+ *
+ *  For a long time this had no caller and a comment claiming it ran "before
+ *  anything leaves this process": safety-shaped, and a no-op. The comment then
+ *  stayed stale for a second time after the provider WAS wired, because a
+ *  multi-line search-and-replace silently matched nothing against CRLF line
+ *  endings and the change was reported as made. Twice wrong in opposite
+ *  directions, which is a good argument for grepping the call site rather than
+ *  trusting the comment above the function. */
 export function redactForProvider(s: string) {
   return s
     .replace(/[\w.+-]+@[\w-]+\.[\w.]+/g, '[email]')
@@ -113,12 +117,15 @@ export function redactForProvider(s: string) {
  *  which is a new binding and class rather than a change to this function.
  *  That is the right fix and it is NOT done here.
  *
- *  Accepted for now because SKY_MODE is 'off' and no provider is wired, so
- *  nothing here is billable: the limiter currently bounds nothing because
- *  there is nothing to bound. It must NOT stay this way once Sky can spend
- *  money — treat a Durable Object as a prerequisite of enabling Sky, not a
- *  follow-up, since this is the only control standing between an abusive
- *  client and an unbounded provider bill.
+ *  It is no longer the only control, and no longer the one that matters for
+ *  money. 0013 moved the spend ceiling into Postgres, where the check and the
+ *  increment happen in one statement under a row lock — see reserveBudget()
+ *  below. This remains cheap per-IP traffic shaping, a job an approximate
+ *  counter does perfectly well.
+ *
+ *  The distinction is worth keeping: this bounds NUISANCE, sky_reserve()
+ *  bounds MONEY. Do not let a future change quietly make this the money
+ *  control again.
  *
  *  Fails CLOSED when the namespace is missing: an assistant that cannot be
  *  rate-limited at all should not be answering.
@@ -183,6 +190,51 @@ async function settleBudget(env: any, reservation: number | null,
   } catch { /* over-counts the day, which is the safe direction */ }
 }
 
+/** Who is asking. Verified at the database, never taken on the client's word.
+ *
+ *  The access token arrives in the Authorization header. Handing it to a
+ *  Supabase client means PostgREST validates the signature before is_owner()
+ *  or has_role() runs, so a hand-edited token resolves to nobody rather than
+ *  to whoever it claims to be.
+ *
+ *  Every failure path returns { userId: null, isStaff: false } — the least
+ *  privileged answer — so a database outage cannot promote a stranger to
+ *  staff. */
+async function identify(locals: any, request: Request):
+    Promise<{ userId: string | null; isStaff: boolean }> {
+  const nobody = { userId: null, isStaff: false };
+  const auth = request.headers.get('authorization');
+  const token = auth?.startsWith('Bearer ') ? auth.slice(7).trim() : '';
+  if (!token) return nobody;
+
+  const env = locals?.runtime?.env;
+  const url = env?.PUBLIC_SUPABASE_URL ?? import.meta.env.PUBLIC_SUPABASE_URL;
+  const anon = env?.PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
+  if (!url || !anon) return nobody;
+
+  try {
+    const db = createClient(url, anon, {
+      auth: { persistSession: false },
+      global: { headers: { Authorization: `Bearer ${token}` } },
+    });
+    const { data: user } = await db.auth.getUser(token);
+    const id = user?.user?.id ?? null;
+    if (!id) return nobody;
+
+    const [{ data: owner }, { data: admin }, { data: sub }] = await Promise.all([
+      db.rpc('is_owner'),
+      db.rpc('has_role', { wanted: 'admin' }),
+      db.rpc('has_role', { wanted: 'sub_admin' }),
+    ]);
+    /* 10g defines the staff stage as "people with an admin or sub-admin role".
+       Owners are included because excluding the person running the rollout
+       from the stage they are meant to be reviewing would be absurd. */
+    return { userId: id, isStaff: Boolean(owner) || Boolean(admin) || Boolean(sub) };
+  } catch {
+    return nobody;
+  }
+}
+
 export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
   // 1. Off means off. Checked here as well as in the page, so a flag flipped
   //    in devtools gets a 503 rather than an answer.
@@ -196,6 +248,26 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
   const host = request.headers.get('host');
   if (!origin || !host || new URL(origin).host !== host) {
     return json({ error: 'bad_origin' }, 403);
+  }
+
+  /* 2b. WHO is asking, and does this mode admit them?
+   *
+   *  Until this existed the route checked only whether the mode was 'off'.
+   *  'staff' — the first step of the documented rollout — therefore served
+   *  every anonymous visitor, which is the precise opposite of what the mode
+   *  is for. The dock button had the same hole.
+   *
+   *  Identity comes from the caller's Supabase access token, verified by
+   *  PostgREST rather than trusted here: a forged token fails signature
+   *  checking at the database and is_owner() simply returns false. The client
+   *  cannot promote itself by editing a request.
+   *
+   *  Fails closed throughout — no token, an unreadable token, an unreachable
+   *  database all mean "not staff", which in 'staff' mode means refused. */
+  const viewer = await identify(locals as any, request);
+  const verdict = skyAudience(SKY_MODE, viewer, SKY_LIMITS.slicePercent);
+  if (!verdict.allowed) {
+    return json({ error: 'sky_disabled', message: SKY_COPY.unavailable }, 503);
   }
 
   let body: { q?: unknown; page?: unknown };

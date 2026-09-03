@@ -35,7 +35,7 @@ export function completeLesson(state, slug, hash, eventId, now) {
 /** One pass award per module, idempotent by eventId AND by (reason, ref).
  * @param {ProgressState} state @param {string} moduleId @param {number} score
  * @param {string} eventId @param {Date} now @returns {ProgressState} */
-export function recordQuizPass(state, moduleId, score, eventId, now) {
+export function recordQuizPass(state, moduleId, _score, eventId, now) {
   if (quizPassed(state, moduleId)) return state;
   if (state.events.some((e) => e.id === eventId)) return state;
   return {
