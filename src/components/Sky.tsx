@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { isConfigured, supabase } from '../lib/supabase';
-import { skyAudience } from '../lib/sky-audience.js';
+import { skyAudience, leastPermissive } from '../lib/sky-audience.js';
 import { SKY_MODE, SKY_LIMITS } from '../lib/sky-config';
 
 /** Sky — the dock button and panel.
@@ -60,7 +60,25 @@ export default function Sky({ intro, disclaimer, suggestions }: Props) {
           ]);
           isStaff = Boolean(o) || Boolean(a) || Boolean(s);
         }
-        const v = skyAudience(SKY_MODE, { userId: id, isStaff }, SKY_LIMITS.slicePercent);
+        /* The route decides on the STRICTER of the deployed ceiling and the
+           rollout row, so this must too — otherwise the dock appears for
+           someone the route will refuse, which is exactly what happened the
+           first time Sky was switched to staff with an older 'off' row still
+           standing.
+
+           sky_rollout_log is admin-only by RLS, so this read succeeds for
+           staff and returns nothing for a learner. That asymmetry is fine:
+           a learner is only ever admitted by 'everyone', and if the kill
+           switch has been pressed during an incident, a dock that refuses is a
+           far smaller problem than one that answers. */
+        let recorded: string | null = null;
+        const { data: row } = await supabase()
+          .from('sky_rollout_log').select('mode')
+          .order('at', { ascending: false }).limit(1);
+        if (Array.isArray(row) && row[0]?.mode) recorded = row[0].mode as string;
+
+        const live = leastPermissive(SKY_MODE, recorded);
+        const v = skyAudience(live, { userId: id, isStaff }, SKY_LIMITS.slicePercent);
         if (alive) setMayUse(v.allowed);
       } catch { /* stays hidden, which is the safe direction */ }
     })();

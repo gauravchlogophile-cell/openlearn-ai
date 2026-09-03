@@ -95,8 +95,8 @@ ok(/db\.auth\.getUser\(token\)/.test(route),
    'the token is verified rather than parsed and trusted');
 
 ok(/if \(!mayUse\) return null/.test(dock), 'the dock renders nothing when refused');
-ok(/skyAudience\(SKY_MODE, \{ userId: id, isStaff \}/.test(dock),
-   'the dock applies the same audience rule the route does');
+ok(dock.includes('skyAudience(live, { userId: id, isStaff }'),
+   'the dock applies the audience rule to the COMBINED mode, as the route does');
 
 /* Base.astro keeps its mode check — with Sky off, shipping no island at all is
    correct and saves every visitor the bytes. What was wrong was that it was the
@@ -133,6 +133,19 @@ ok(route.includes(".order('at', { ascending: false }).limit(1)"),
 ok(readFileSync(ROOT + 'src/components/AdminSky.tsx', 'utf8')
      .includes('leastPermissive(SKY_MODE, current)'),
    'the console reports the same combined state the route enforces');
+
+/* The dock and the route must agree, or a viewer sees a button that refuses.
+   They disagreed the first time Sky went to staff: the route consulted the
+   rollout row and the island did not, so the dock appeared while an older
+   'off' row was still standing. */
+ok(dock.includes('leastPermissive(SKY_MODE, recorded)'),
+   'the dock decides on the same combined mode the route enforces');
+ok(dock.includes("from('sky_rollout_log')"),
+   'the dock reads the recorded stage rather than assuming the ceiling');
+ok(route.includes('narrowedByConsole'),
+   'a staff member is told WHICH switch refused them, since only they can act on it');
+ok(route.includes('viewer.isStaff && byCeiling.allowed'),
+   'that detail is given only to staff — a learner gets the plain wording');
 
 // ---------------------------------------------------------------------- run
 if (fail.length) {

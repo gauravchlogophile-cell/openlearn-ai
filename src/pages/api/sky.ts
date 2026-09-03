@@ -293,7 +293,23 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
   const liveMode = leastPermissive(SKY_MODE, await recordedMode(locals as any));
   const verdict = skyAudience(liveMode, viewer, SKY_LIMITS.slicePercent);
   if (!verdict.allowed) {
-    return json({ error: 'sky_disabled', message: SKY_COPY.unavailable }, 503);
+    /* Two switches means two reasons to be refused, and they need different
+       things done about them. Tell a STAFF member which one they hit — they
+       are the only person who can act on it, and "Sky is off right now" while
+       they are looking at a console that says Staff & volunteers is a way to
+       lose an afternoon.
+       Everyone else gets the plain wording: a learner does not need to know
+       which of our switches is down, only that a person will answer. */
+    const byCeiling = skyAudience(SKY_MODE, viewer, SKY_LIMITS.slicePercent);
+    const narrowedByConsole = viewer.isStaff && byCeiling.allowed;
+    return json({
+      error: 'sky_disabled',
+      message: narrowedByConsole
+        ? 'Sky is switched off from the admin console. The deployed build allows '
+          + 'this stage, so the rollout row is what is holding it — set the stage '
+          + 'again at /admin/sky and it will answer.'
+        : SKY_COPY.unavailable,
+    }, 503);
   }
 
   let body: { q?: unknown; page?: unknown };
