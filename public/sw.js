@@ -3,7 +3,15 @@
  * network-first for pages with cache fallback · /offline as last resort.
  * Module packs live in caches named ol-pack-<module> (written by the page,
  * served here). Bump SHELL_V to invalidate the shell. */
-const SHELL_V = 'ol-shell-v4';
+/* v5 — the Sky island changed five times across the audience, kill-switch and
+   diagnostic work, and it lives inside every page in SHELL_URLS below. The
+   rule at the top of this file exists for exactly that and was not followed:
+   a returning visitor could hold a precached shell referencing the old bundle,
+   which does not attach an access token, so the route sees an anonymous
+   request and refuses — while the dock still renders. That is precisely the
+   symptom that was reported, and it is indistinguishable from a broken login
+   unless you know to suspect the cache. */
+const SHELL_V = 'ol-shell-v5';
 const ASSETS = 'ol-assets-v1';
 const SHELL_URLS = ['/', '/home', '/roadmap', '/achievements', '/account', '/offline'];
 
