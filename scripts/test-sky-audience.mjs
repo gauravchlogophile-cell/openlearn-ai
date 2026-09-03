@@ -89,8 +89,13 @@ ok(/if \(!verdict\.allowed\)/.test(route), 'the route refuses when it says no');
 ok(route.includes('skyAudience(liveMode')
    && route.indexOf('skyAudience(liveMode') < route.indexOf('await callModel('),
    'the audience check happens BEFORE any provider call, so a refusal is free');
-ok(/const nobody = \{ userId: null, isStaff: false \}/.test(route),
-   'identity resolution fails closed to nobody');
+ok(route.includes('({ userId: null, isStaff: false, why })'),
+   'identity resolution fails closed to nobody, and records why');
+ok(route.includes('const rpcErr = owner.error ?? admin.error ?? sub.error'),
+   'a failing role lookup is distinguished from "not staff" rather than silently equal to it');
+ok(route.includes("request.headers.get('authorization')\n        ? { diagnostic:")
+   || /authorization'\)\s*\?\s*\{ diagnostic:/.test(route),
+   'the diagnostic is returned only to a caller who supplied a token');
 ok(/db\.auth\.getUser\(token\)/.test(route),
    'the token is verified rather than parsed and trusted');
 

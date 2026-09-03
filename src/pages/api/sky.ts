@@ -200,38 +200,54 @@ async function settleBudget(env: any, reservation: number | null,
  *  Every failure path returns { userId: null, isStaff: false } — the least
  *  privileged answer — so a database outage cannot promote a stranger to
  *  staff. */
-async function identify(locals: any, request: Request):
-    Promise<{ userId: string | null; isStaff: boolean }> {
-  const nobody = { userId: null, isStaff: false };
+type Viewer = { userId: string | null; isStaff: boolean; why: string };
+
+async function identify(locals: any, request: Request): Promise<Viewer> {
+  const nobody = (why: string): Viewer => ({ userId: null, isStaff: false, why });
+
   const auth = request.headers.get('authorization');
   const token = auth?.startsWith('Bearer ') ? auth.slice(7).trim() : '';
-  if (!token) return nobody;
+  if (!token) return nobody(auth ? 'auth_header_not_bearer' : 'no_auth_header');
 
   const env = locals?.runtime?.env;
   const url = env?.PUBLIC_SUPABASE_URL ?? import.meta.env.PUBLIC_SUPABASE_URL;
   const anon = env?.PUBLIC_SUPABASE_ANON_KEY ?? import.meta.env.PUBLIC_SUPABASE_ANON_KEY;
-  if (!url || !anon) return nobody;
+  if (!url || !anon) return nobody('supabase_not_configured_in_worker');
 
   try {
     const db = createClient(url, anon, {
       auth: { persistSession: false },
       global: { headers: { Authorization: `Bearer ${token}` } },
     });
-    const { data: user } = await db.auth.getUser(token);
-    const id = user?.user?.id ?? null;
-    if (!id) return nobody;
 
-    const [{ data: owner }, { data: admin }, { data: sub }] = await Promise.all([
+    const { data: user, error: userErr } = await db.auth.getUser(token);
+    const id = user?.user?.id ?? null;
+    if (!id) return nobody(`token_rejected:${userErr?.message ?? 'no user'}`);
+
+    const [owner, admin, sub] = await Promise.all([
       db.rpc('is_owner'),
       db.rpc('has_role', { wanted: 'admin' }),
       db.rpc('has_role', { wanted: 'sub_admin' }),
     ]);
+
+    /* Errors used to be discarded here. A failing is_owner() then read exactly
+       like "not staff", so a broken grant, a revoked EXECUTE or an expired
+       token all produced the same silent refusal with nothing to look at. */
+    const rpcErr = owner.error ?? admin.error ?? sub.error;
+    if (rpcErr) {
+      return { userId: id, isStaff: false, why: `role_lookup_failed:${rpcErr.message}` };
+    }
+
     /* 10g defines the staff stage as "people with an admin or sub-admin role".
        Owners are included because excluding the person running the rollout
        from the stage they are meant to be reviewing would be absurd. */
-    return { userId: id, isStaff: Boolean(owner) || Boolean(admin) || Boolean(sub) };
-  } catch {
-    return nobody;
+    const isStaff = Boolean(owner.data) || Boolean(admin.data) || Boolean(sub.data);
+    return {
+      userId: id, isStaff,
+      why: isStaff ? 'staff' : 'signed_in_no_role',
+    };
+  } catch (e) {
+    return nobody(`identify_threw:${(e as Error)?.message ?? 'unknown'}`);
   }
 }
 
@@ -302,6 +318,12 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
        which of our switches is down, only that a person will answer. */
     const byCeiling = skyAudience(SKY_MODE, viewer, SKY_LIMITS.slicePercent);
     const narrowedByConsole = viewer.isStaff && byCeiling.allowed;
+
+    console.error('[sky] refused', {
+      ceiling: SKY_MODE, live: liveMode,
+      identified: viewer.why, isStaff: viewer.isStaff, verdict: verdict.reason,
+    });
+
     return json({
       error: 'sky_disabled',
       message: narrowedByConsole
@@ -309,6 +331,16 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
           + 'this stage, so the rollout row is what is holding it — set the stage '
           + 'again at /admin/sky and it will answer.'
         : SKY_COPY.unavailable,
+      /* Returned ONLY to a caller who supplied a token, and it describes that
+         caller's own request: which stage is live, and where their identity
+         stopped resolving. Nothing about anybody else, and an anonymous probe
+         learns nothing it could not already see.
+         Without this the only channel was `wrangler tail`, which needs
+         credentials the person hitting the problem may not have to hand. */
+      ...(request.headers.get('authorization')
+        ? { diagnostic: { ceiling: SKY_MODE, live: liveMode,
+                          identified: viewer.why, verdict: verdict.reason } }
+        : {}),
     }, 503);
   }
 
