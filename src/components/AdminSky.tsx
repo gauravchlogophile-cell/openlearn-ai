@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import { SKY_MODE } from '../lib/sky-config';
+import { leastPermissive } from '../lib/sky-audience.js';
 
 /** /admin/sky — the master switch, the staged rollout and the kill switch.
  *
@@ -82,6 +83,10 @@ export default function AdminSky() {
 
   const allGatesGreen = GATES.every((g) => g.met);
   const current = log[0]?.mode ?? 'off';
+  /* What a visitor actually experiences: the stricter of the deployed ceiling
+     and the recorded stage. The route computes it the same way, so this console
+     cannot report a state the site is not in. */
+  const effective = leastPermissive(SKY_MODE, current);
 
   return (
     <div style={{ display: 'grid', gap: 'var(--sp-8)' }}>
@@ -92,19 +97,17 @@ export default function AdminSky() {
         <div className="note note--aim">
           <p style={{ marginTop: 0 }}>
             <strong>
-              In effect right now: {SKY_MODE === 'off'
+              In effect right now: {effective === 'off'
                 ? 'Off — nobody can reach Sky'
-                : MODES.find((m) => m.id === SKY_MODE)?.label ?? SKY_MODE}
+                : MODES.find((m) => m.id === effective)?.label ?? effective}
             </strong>
           </p>
           <p style={{ margin: 'var(--sp-1) 0 var(--sp-2)', color: 'var(--c-ink-soft)' }}>
-            Set on this console: <strong>{MODES.find((m) => m.id === current)?.label ?? current}</strong>
-            {SKY_MODE === 'off' && current !== 'off' && (
-              <> — recorded, but not in effect. The two are allowed to disagree,
-              and this shows you both: a console reporting the database value as
-              the live state would be telling you Sky is on when no learner can
-              reach it.</>
-            )}
+            Deployed ceiling <strong>{MODES.find((m) => m.id === SKY_MODE)?.label ?? SKY_MODE}</strong>
+            {' · '}set on this console <strong>{MODES.find((m) => m.id === current)?.label ?? current}</strong>.
+            {' '}The stricter of the two applies. The ceiling needs a deploy to
+            raise; this console can always narrow, which is what makes the kill
+            switch below worth having.
           </p>
           <p style={{ marginBottom: 0, color: 'var(--c-ink-soft)' }}>
             The build also ships a hard <code>SKY_MODE</code> in <code>src/lib/sky-config.ts</code>.

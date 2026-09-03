@@ -13,7 +13,7 @@
  */
 import { readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
-import { skyAudience, bucketOf } from '../src/lib/sky-audience.js';
+import { skyAudience, bucketOf, leastPermissive } from '../src/lib/sky-audience.js';
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const route = readFileSync(ROOT + 'src/pages/api/sky.ts', 'utf8');
@@ -81,10 +81,13 @@ ok(!skyAudience('slice', learner, undefined).allowed, 'a missing percentage admi
 // -------------------------------------------------------- wired up at all
 /* A correct function nothing calls is the failure mode this whole session keeps
    meeting, so assert the call sites too. */
-ok(/skyAudience\(SKY_MODE, viewer, SKY_LIMITS\.slicePercent\)/.test(route),
-   'the route applies the audience rule');
+ok(route.includes('skyAudience(liveMode, viewer, SKY_LIMITS.slicePercent)'),
+   'the route applies the audience rule to the COMBINED mode, not the constant');
 ok(/if \(!verdict\.allowed\)/.test(route), 'the route refuses when it says no');
-ok(route.indexOf('skyAudience(SKY_MODE') < route.indexOf('await callModel('),
+/* indexOf on a missing string returns -1, which would sit before everything and
+   pass this by accident — so require it present first. */
+ok(route.includes('skyAudience(liveMode')
+   && route.indexOf('skyAudience(liveMode') < route.indexOf('await callModel('),
    'the audience check happens BEFORE any provider call, so a refusal is free');
 ok(/const nobody = \{ userId: null, isStaff: false \}/.test(route),
    'identity resolution fails closed to nobody');
@@ -101,6 +104,35 @@ ok(/skyAudience\(SKY_MODE, \{ userId: id, isStaff \}/.test(dock),
    next reader does not conclude visibility is settled there. */
 ok(/not who may use it/i.test(base),
    'Base.astro says plainly that it decides existence, not audience');
+
+// ------------------------------------------------- the two switches agree
+/* The kill switch used to write a log row and change nothing, while reporting
+   "Sky is off". The route read the deployed constant alone. These assert the
+   two halves now combine, and combine in the safe direction. */
+ok(leastPermissive('staff', 'off') === 'off',
+   'THE KILL SWITCH: a recorded off beats a deployed staff');
+ok(leastPermissive('off', 'everyone') === 'off',
+   'a database saying everyone cannot raise a deployed off — the ceiling holds');
+ok(leastPermissive('everyone', 'slice') === 'slice',
+   'the console can narrow a permissive deploy without a redeploy');
+ok(leastPermissive('staff', 'staff') === 'staff', 'agreement is a no-op');
+ok(leastPermissive('everyone', null) === 'everyone',
+   'nothing recorded yet leaves the deployed value standing');
+ok(leastPermissive('everyone', 'EVERYONE') === 'everyone',
+   'an unrecognised recorded value is ignored rather than obeyed');
+ok(leastPermissive('nonsense', 'everyone') === 'off',
+   'an unrecognised deployed value collapses to off, never to permissive');
+ok(leastPermissive(undefined, undefined) === 'off', 'two unknowns are off');
+
+ok(route.includes('leastPermissive(SKY_MODE, await recordedMode('),
+   'the route combines both switches rather than reading the constant alone');
+ok(route.indexOf('leastPermissive(SKY_MODE') < route.indexOf('await callModel('),
+   'the combined mode is decided before any provider call');
+ok(route.includes(".order('at', { ascending: false }).limit(1)"),
+   'the recorded stage is the newest rollout-log row, which is what the console shows');
+ok(readFileSync(ROOT + 'src/components/AdminSky.tsx', 'utf8')
+     .includes('leastPermissive(SKY_MODE, current)'),
+   'the console reports the same combined state the route enforces');
 
 // ---------------------------------------------------------------------- run
 if (fail.length) {

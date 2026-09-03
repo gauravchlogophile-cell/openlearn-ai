@@ -11,6 +11,38 @@
  *  be tested through a deployed Worker is a gate that stops being tested.
  */
 
+/** Rollout stages, least permissive first. */
+export const MODE_ORDER = ['off', 'staff', 'slice', 'everyone'];
+
+/**
+ * The stricter of two modes.
+ *
+ * Sky has two switches and they mean different things:
+ *
+ *   the CONSTANT in sky-config.ts   a ceiling, changed only by a deploy
+ *   the DATABASE row               the live position, changed in one click
+ *
+ * Taking the stricter of the two makes both honest. The constant cannot be
+ * overridden upward from a database an attacker might reach, so the
+ * belt-and-braces holds. And the database can always narrow, which is what
+ * makes the kill switch a kill switch.
+ *
+ * Until this existed the route read the constant alone. /admin/sky's "Turn Sky
+ * off now" wrote a log row, changed nothing, and reported "Sky is off" — the
+ * one control whose entire value is being believed in an emergency.
+ *
+ * An unrecognised value on either side collapses to 'off'. A typo must never
+ * be the thing that widens an assistant's audience.
+ */
+export function leastPermissive(a, b) {
+  const ia = MODE_ORDER.indexOf(a);
+  const ib = MODE_ORDER.indexOf(b);
+  if (ia < 0 && ib < 0) return 'off';
+  if (ia < 0) return 'off';
+  if (ib < 0) return a;          // nothing recorded yet — the constant stands
+  return MODE_ORDER[Math.min(ia, ib)];
+}
+
 /** Deterministic 32-bit hash. Not for security — only to put an account in a
  *  stable bucket so a learner in the slice stays in it.
  *

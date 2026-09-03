@@ -7,7 +7,7 @@ import {
   callModel, parseProvider, buildUserTurn, citesASource, SKY_SYSTEM,
 } from '../../lib/sky-providers';
 import { createClient } from '@supabase/supabase-js';
-import { skyAudience } from '../../lib/sky-audience.js';
+import { skyAudience, leastPermissive } from '../../lib/sky-audience.js';
 
 /* This route must run per-request; the rest of the site is prerendered. */
 export const prerender = false;
@@ -235,6 +235,31 @@ async function identify(locals: any, request: Request):
   }
 }
 
+/** The stage recorded in the database — the half of the switch an operator can
+ *  change in one click.
+ *
+ *  Read with the service key because sky_rollout_log is admin-only by RLS, and
+ *  the person this protects is a learner mid-question, not an administrator.
+ *  No new table: the newest row IS the current stage, which is also what
+ *  /admin/sky renders, so the console and the route cannot disagree about what
+ *  was pressed.
+ *
+ *  Returns null when it cannot be read, which leaves the constant standing.
+ *  That is safe rather than convenient: if the database is genuinely down then
+ *  reserveBudget() below fails closed a few lines later and Sky refuses anyway,
+ *  so an unreadable mode cannot leave Sky answering unbudgeted.
+ */
+async function recordedMode(locals: any): Promise<string | null> {
+  try {
+    const db = serviceDb(locals?.runtime?.env);
+    if (!db) return null;
+    const { data, error } = await db
+      .from('sky_rollout_log').select('mode').order('at', { ascending: false }).limit(1);
+    if (error) return null;
+    return (Array.isArray(data) ? data[0]?.mode : null) ?? null;
+  } catch { return null; }
+}
+
 export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
   // 1. Off means off. Checked here as well as in the page, so a flag flipped
   //    in devtools gets a 503 rather than an answer.
@@ -265,7 +290,8 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
    *  Fails closed throughout — no token, an unreadable token, an unreachable
    *  database all mean "not staff", which in 'staff' mode means refused. */
   const viewer = await identify(locals as any, request);
-  const verdict = skyAudience(SKY_MODE, viewer, SKY_LIMITS.slicePercent);
+  const liveMode = leastPermissive(SKY_MODE, await recordedMode(locals as any));
+  const verdict = skyAudience(liveMode, viewer, SKY_LIMITS.slicePercent);
   if (!verdict.allowed) {
     return json({ error: 'sky_disabled', message: SKY_COPY.unavailable }, 503);
   }
