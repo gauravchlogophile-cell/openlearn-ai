@@ -47,7 +47,14 @@ function shellInputs() {
 
 const inputs = shellInputs();
 const hash = createHash('sha256');
-for (const rel of inputs) hash.update(readFileSync(join(ROOT, rel)));
+for (const rel of inputs) {
+  /* Read as text and normalise the line endings before hashing.
+     Hashing raw bytes made this fingerprint disagree with itself: this repo
+     checks out CRLF on Windows and LF in CI, so the same commit produced two
+     different hashes and the check could never pass in both places. It failed
+     in CI on its very first run, which is the good version of that mistake. */
+  hash.update(readFileSync(join(ROOT, rel), 'utf8').replace(/\r\n/g, '\n'));
+}
 const fingerprint = hash.digest('hex').slice(0, 16);
 
 const sw = readFileSync(join(ROOT, 'public/sw.js'), 'utf8');
@@ -63,6 +70,17 @@ const recorded = existsSync(join(ROOT, RECORD))
   : '';
 const expected = `${shellV} ${fingerprint}`;
 
+/* --write is handled BEFORE the failure branches. It was last, which made it
+   unreachable in the one situation it exists for: once a change was detected
+   the script exited before ever looking at the flag, so the message told you
+   to run a command that could not work. */
+if (process.argv.includes('--write')) {
+  const { writeFileSync } = await import('node:fs');
+  writeFileSync(join(ROOT, RECORD), expected + '\n');
+  console.log(`shell-version: recorded ${expected}`);
+  process.exit(0);
+}
+
 if (recorded !== expected) {
   const [wasV, wasHash] = recorded.split(/\s+/);
   if (wasHash && wasHash !== fingerprint && wasV === shellV) {
@@ -76,12 +94,6 @@ if (recorded !== expected) {
       `Shell inputs (${inputs.length}):\n` +
       inputs.map((i) => '  ' + i).join('\n') + '\n');
     process.exit(1);
-  }
-  if (process.argv.includes('--write')) {
-    const { writeFileSync } = await import('node:fs');
-    writeFileSync(join(ROOT, RECORD), expected + '\n');
-    console.log(`shell-version: recorded ${expected}`);
-    process.exit(0);
   }
   console.error(
     `\nshell-version: no recorded fingerprint for ${shellV}.\n` +
