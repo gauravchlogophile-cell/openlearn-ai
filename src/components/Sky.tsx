@@ -19,7 +19,7 @@ type State =
   | { k: 'slow' }
   | { k: 'answer'; text: string; sources: Source[] }
   | { k: 'out_of_scope'; title: string; message: string; handoff: Source[] }
-  | { k: 'unavailable'; message: string };
+  | { k: 'unavailable'; message: string; diagnostic?: Record<string, string> };
 
 interface Props {
   intro: string;
@@ -141,7 +141,14 @@ export default function Sky({ intro, disclaimer, suggestions }: Props) {
       } else if (res.ok && data.answer) {
         setState({ k: 'answer', text: data.answer, sources: data.sources ?? [] });
       } else {
-        setState({ k: 'unavailable', message: data.message ?? 'Sky is unavailable right now.' });
+        /* The server attaches a diagnostic only when the request carried a
+           token, and it describes this request alone. Shown rather than
+           buried in devtools: the person most likely to be refused while
+           signed in is the one running the rollout, and sending them to the
+           Network tab for four fields is friction with no upside. */
+        setState({ k: 'unavailable',
+                   message: data.message ?? 'Sky is unavailable right now.',
+                   diagnostic: data.diagnostic });
       }
     } catch {
       window.clearTimeout(slowTimer.current);
@@ -244,6 +251,26 @@ export default function Sky({ intro, disclaimer, suggestions }: Props) {
               <a className="btn btn--ghost" href="/roadmap">Browse the roadmap</a>
               <a className="btn btn--ghost" href="/feedback">Ask a person</a>
             </div>
+            {state.diagnostic && (
+              <details style={{ marginTop: 'var(--sp-3)' }}>
+                <summary style={{ cursor: 'pointer', fontSize: 'var(--fs-100)', color: 'var(--c-ink-faint)' }}>
+                  Technical detail
+                </summary>
+                <dl style={{
+                  margin: 'var(--sp-2) 0 0', fontSize: 'var(--fs-100)',
+                  fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+                  color: 'var(--c-ink-soft)', display: 'grid',
+                  gridTemplateColumns: 'auto 1fr', gap: '2px var(--sp-3)',
+                }}>
+                  {Object.entries(state.diagnostic).map(([k, v]) => (
+                    <>
+                      <dt key={k} style={{ color: 'var(--c-ink-faint)' }}>{k}</dt>
+                      <dd key={k + '-v'} style={{ margin: 0, wordBreak: 'break-word' }}>{String(v)}</dd>
+                    </>
+                  ))}
+                </dl>
+              </details>
+            )}
           </div>
         )}
       </div>
