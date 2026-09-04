@@ -121,11 +121,33 @@ export async function callModel(c: ModelCall): Promise<ModelResult> {
           messages: [{ role: 'system', content: c.system },
                      { role: 'user', content: c.user }] };
 
+  const send = (payload: unknown) => fetch(url, {
+    method: 'POST', headers, body: JSON.stringify(payload), signal: c.signal,
+  });
+
   let res: Response;
   try {
-    res = await fetch(url, {
-      method: 'POST', headers, body: JSON.stringify(body), signal: c.signal,
-    });
+    res = await send(body);
+
+    /* One retry, for one specific and recurring failure: the thinking option.
+       SKY_MODEL may be an ALIAS, and an alias moves under us — the model it
+       named yesterday accepted thinkingBudget, today's may want a different
+       field or refuse to disable thinking at all, and either way the request
+       is rejected whole with a 400. Sending it again without that one option
+       is strictly better than refusing: a slower, thinking answer beats no
+       answer, and the alternative is Sky staying dark until someone deploys.
+
+       Deliberately narrow. Only gemini, only 400, only when the provider's own
+       message names thinking, and only once — a blanket retry on 400 would
+       double the latency of every genuinely malformed request and hide the
+       fault instead of reporting it. */
+    if (!res.ok && res.status === 400 && c.provider === 'gemini') {
+      const peek = await res.clone().text().catch(() => '');
+      if (/thinking/i.test(peek)) {
+        const { thinkingConfig, ...rest } = (body as any).generationConfig ?? {};
+        res = await send({ ...(body as any), generationConfig: rest });
+      }
+    }
   } catch (e) {
     /* Includes the timeout abort. A provider that does not answer is a
        provider that does not answer — Sky says so rather than waiting. */
@@ -134,17 +156,26 @@ export async function callModel(c: ModelCall): Promise<ModelResult> {
   }
 
   if (!res.ok) {
-    /* The body may quote the request back, and the request contains a
-       learner's question. Never surface it — the status is what an operator
-       needs and the rest belongs nowhere.
+    /* The provider's own one-line message, and ONLY that.
+       Discarding the whole body cost three rounds of guessing at a 400 whose
+       cause the provider had already named precisely. The compromise: the
+       structured `error.message` field, capped, never the raw body — the body
+       can quote the request back, and the request carries a learner's
+       question. If the field is missing or the body is not JSON, nothing is
+       taken. The route passes this only to a caller holding a staff token. */
+    let detail = '';
+    try {
+      const parsed = JSON.parse(await res.text());
+      const m = parsed?.error?.message;
+      if (typeof m === 'string') detail = m.replace(/\s+/g, ' ').trim().slice(0, 300);
+    } catch { /* not JSON, or no message: the status still stands alone */ }
 
-       The status alone is not enough to act on, though: 403 and 404 send you
-       to completely different settings, and a bare number sends you to neither.
-       These are OUR words about a known status, not the provider's body, so
-       nothing from the response can travel with them. */
+    /* The status alone is not enough to act on: 403 and 404 send you to
+       completely different settings, and a bare number sends you to neither. */
     const meaning: Record<number, string> = {
-      400: 'the request was rejected as malformed — usually SKY_MODEL is not a '
-         + 'valid model name for this provider',
+      400: 'the request was rejected as malformed — the provider names the '
+         + 'field it objected to below. A wrong SKY_MODEL is one cause; an '
+         + 'option the model does not accept is another',
       401: 'the API key was not accepted — check SKY_API_KEY is the whole key '
          + 'and has no stray whitespace',
       403: 'the API key was refused — it may be invalid, revoked, restricted to '
@@ -156,7 +187,8 @@ export async function callModel(c: ModelCall): Promise<ModelResult> {
     };
     const why = meaning[res.status];
     return { ok: false, status: res.status,
-             reason: `provider returned ${res.status}${why ? ` — ${why}` : ''}` };
+             reason: `provider returned ${res.status}${why ? ` — ${why}` : ''}`
+                   + (detail ? ` | provider said: ${detail}` : '') };
   }
 
   let data: any;

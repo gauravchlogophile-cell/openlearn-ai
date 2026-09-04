@@ -91,6 +91,25 @@ ok(src.includes('usageMetadata?.promptTokenCount'),
    hard enough returns MAX_TOKENS with no answer — after we have paid. */
 ok(/thinkingConfig: \{ thinkingBudget: 0 \}/.test(src),
    'gemini thinking is disabled explicitly, not left to the model default');
+
+/* SKY_MODEL may be an ALIAS, and an alias moves under us: the model it named
+   yesterday took thinkingBudget, today's rejects the whole request with a 400.
+   Retrying without that one option beats refusing — a slow answer beats none,
+   and the alternative is Sky dark until someone deploys. */
+ok(/res\.status === 400 && c\.provider === 'gemini'/.test(src),
+   'a 400 from gemini is inspected before being reported');
+ok(/\/thinking\/i\.test\(peek\)/.test(src),
+   'the retry fires only when the provider itself named thinking');
+ok(/res\.clone\(\)\.text\(\)/.test(src),
+   'the body is cloned to peek — consuming it would leave nothing to report');
+ok((src.match(/const \{ thinkingConfig, \.\.\.rest \}/g) ?? []).length === 1,
+   'the option is dropped once — a blanket retry would double every '
+   + 'malformed request and hide the fault instead of reporting it');
+ok(/provider said: \$\{detail\}/.test(src),
+   "the provider's own message is reported, not just our guess about it");
+ok(/error\?\.message/.test(src) && !/reason:[^\n]*await res\.text\(\)/.test(src),
+   'only the structured message field is taken, never the raw body');
+ok(/slice\(0, 300\)/.test(src), 'and it is capped');
 ok(/thinkingConfig/.test(src) && /generationConfig: \{[\s\S]{0,200}thinkingConfig/.test(src),
    'thinkingConfig sits inside generationConfig, where gemini reads it');
 
@@ -182,16 +201,31 @@ ok(/\{ diagnostic: \{ stage: 'provider'[\s\S]{0,200}\}\s*:\s*\{\}/.test(route),
 const statuses = [400, 401, 403, 404, 429];
 ok(statuses.every((s) => new RegExp(`\\b${s}:`).test(src)),
    'the statuses an operator actually hits each carry a meaning');
-ok(/SKY_MODEL[\s\S]{0,120}valid model name/.test(src),
-   '400 points at the model name');
+/* 400 used to assert "usually SKY_MODEL is not a valid model name". That was
+   wrong the one time it mattered: the model was correct and the rejected field
+   was an option we sent. It sent the operator to change a setting that was
+   already right. It now defers to the provider's own message. */
+ok(/field it objected to below/.test(src),
+   '400 defers to the provider naming the field, rather than blaming the model');
+ok(/A wrong SKY_MODEL is one cause/.test(src),
+   'the model is offered as one cause, not asserted as the usual one');
 ok(/404:[\s\S]{0,120}no such model/.test(src),
    '404 points at the model, not the key');
 ok(/403:[\s\S]{0,200}invalid, revoked, restricted/.test(src),
    '403 points at the key and its restrictions');
 ok(/429:[\s\S]{0,160}not our own spend cap/.test(src),
    "429 distinguishes the provider's limit from ours — they read identically");
-ok(!/await res\.text\(\)/.test(src) && !/reason: JSON\.stringify\(/.test(src),
-   "the provider's response body is never surfaced — it quotes the question back");
+/* The rule was "the body is never read". It is now narrower rather than gone:
+   the STRUCTURED error.message field, capped, and nothing else. Discarding the
+   whole body cost three rounds guessing at a 400 the provider had already
+   described exactly. What must never travel is the raw body, which can quote
+   the request back — and the request carries a learner's question. */
+ok(!/reason: JSON\.stringify\(/.test(src) && !/JSON\.stringify\(parsed\)/.test(src),
+   "the raw body is never stringified into a reason");
+ok(!/detail = await res\.text\(\)/.test(src),
+   'the body text is never taken wholesale as the detail');
+ok(/typeof m === 'string'/.test(src),
+   'a non-string message field is ignored rather than coerced');
 /* The reason must be gated exactly as missing() is. It names internals — an
    anonymous visitor gets the plain refusal and nothing else. */
 ok(/\{ diagnostic: \{ stage: 'budget'[\s\S]{0,120}\}\s*:\s*\{\}/.test(route),

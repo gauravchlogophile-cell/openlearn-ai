@@ -11,7 +11,7 @@
    request and refuses — while the dock still renders. That is precisely the
    symptom that was reported, and it is indistinguishable from a broken login
    unless you know to suspect the cache. */
-const SHELL_V = 'ol-shell-v6';
+const SHELL_V = 'ol-shell-v7';
 const ASSETS = 'ol-assets-v1';
 const SHELL_URLS = ['/', '/home', '/roadmap', '/achievements', '/account', '/offline'];
 

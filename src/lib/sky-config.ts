@@ -92,13 +92,17 @@ export const SKY_LIMITS = {
      sets thinkingBudget 0 explicitly. The advice above was written as a hope
      and duly came true — gemini-flash-lite-latest reasons by default, and the
      first thing it did was exceed the timeout below. */
-  maxAnswerTokens: 800,
+  maxAnswerTokens: 2000,
 
   /* A provider that has not answered in this long is a provider that has not
      answered. Sky says so rather than holding the request open — and the
      reservation settles as a failure, so a hung provider cannot quietly drain
      the budget. */
-  providerTimeoutMs: 20000,
+  /* 40s, not 20s. The retry above may leave thinking ON — if the model will
+     not disable it, a reasoning answer is still better than none, and 20s was
+     not enough for one. This is a ceiling for the rare slow case, not a target;
+     with thinking off the same call returns in a second or two. */
+  providerTimeoutMs: 40000,
 
   /* Retrieval gate. Both must be cleared, because either alone is fooled.
    *
