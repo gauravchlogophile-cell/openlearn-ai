@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { supabase } from '../lib/supabase';
+import { supabase, isConfigured } from '../lib/supabase';
 import { SKY_MODE } from '../lib/sky-config';
 import { leastPermissive } from '../lib/sky-audience.js';
 
@@ -35,6 +35,8 @@ export default function AdminSky() {
   const [ok, setOk] = useState('');
   const [busy, setBusy] = useState(false);
   const [spend, setSpend] = useState<SpendRow[]>([]);
+  const [probe, setProbe] = useState<
+    { configured: boolean; token: string; status: string; body: string } | null>(null);
 
   async function load() {
     const { data, error } = await supabase()
@@ -73,12 +75,65 @@ export default function AdminSky() {
     setBusy(false);
     if (error) { setMsg(error.message); return; }
     const label = MODES.find((m) => m.id === mode)?.label ?? mode;
+    /* Says what is actually in effect rather than assuming the ceiling is
+       'off'. It said "Sky still will not reach anyone while the hard switch is
+       off" regardless of what the hard switch was — true when written, false
+       the moment the ceiling moved to staff, and the kind of sentence an
+       operator reasonably believes. */
+    const nowLive = leastPermissive(SKY_MODE, mode);
     setOk(kill
-      ? 'Kill switch recorded. Sky is off, and the change is in the log below.'
-      : `Recorded: ${label}. The change is in the log below.`
-        + (mode !== 'off' ? ' Sky still will not reach anyone while the hard'
-            + ' switch in sky-config.ts is off — see the note above.' : ''));
+      ? 'Kill switch recorded. Sky is off for everyone, immediately.'
+      : `Recorded: ${label}. In effect: `
+        + `${MODES.find((m) => m.id === nowLive)?.label ?? nowLive}.`
+        + (nowLive !== mode
+            ? ` The deployed ceiling is ${MODES.find((m) => m.id === SKY_MODE)?.label ?? SKY_MODE},`
+              + ' so it holds this narrower than you set it.'
+            : ''));
     await load();
+  }
+
+  /** The whole client path, run for real, reported verbatim.
+   *
+   *  Deliberately does NOT reuse Sky.tsx's request code — this must be able to
+   *  tell you that Sky.tsx is the broken part, which it cannot do if it shares
+   *  the same lines. It builds the request from scratch, the way the browser
+   *  would, and hides nothing that comes back. */
+  async function selfTest() {
+    setBusy(true); setMsg(''); setOk(''); setProbe(null);
+    let token: string | null = null;
+    let tokenNote = 'not configured';
+    try {
+      if (isConfigured) {
+        const { data } = await supabase().auth.getSession();
+        token = data.session?.access_token ?? null;
+        tokenNote = token
+          ? `present (${token.length} chars, expires ${
+              data.session?.expires_at
+                ? new Date(data.session.expires_at * 1000).toISOString().slice(0, 16).replace('T', ' ')
+                : 'unknown'})`
+          : 'NONE — the browser holds no session, so the route sees an anonymous request';
+      }
+    } catch (e) { tokenNote = 'lookup threw: ' + (e as Error).message; }
+
+    const headers: Record<string, string> = { 'content-type': 'application/json' };
+    if (token) headers.authorization = `Bearer ${token}`;
+
+    let status = '(no response)';
+    let body = '';
+    try {
+      const res = await fetch('/api/sky', {
+        method: 'POST', headers,
+        body: JSON.stringify({ q: 'what is a token', page: '/admin/sky' }),
+      });
+      status = String(res.status);
+      const text = await res.text();
+      try { body = JSON.stringify(JSON.parse(text), null, 2); } catch { body = text; }
+    } catch (e) {
+      body = 'request failed: ' + (e as Error).message;
+    }
+
+    setProbe({ configured: isConfigured, token: tokenNote, status, body });
+    setBusy(false);
   }
 
   const allGatesGreen = GATES.every((g) => g.met);
@@ -147,6 +202,47 @@ export default function AdminSky() {
             );
           })}
         </div>
+      </section>
+
+      {/* A button, because the equivalent needed a console paste and Chrome
+          blocks those by default. Runs the real request from this browser with
+          this session and shows everything that comes back — which is the one
+          measurement nobody could take remotely. */}
+      <section aria-label="Self-test">
+        <h2 style={{ fontSize: 'var(--fs-400)' }}>Ask Sky a test question</h2>
+        <p style={{ color: 'var(--c-ink-soft)' }}>
+          Sends a real question through the real route with your session, and
+          prints the raw answer. If Sky refuses, the reason it gives here is the
+          actual reason — not a guess from the outside.
+        </p>
+        <button className="btn" disabled={busy} onClick={() => void selfTest()}>
+          {busy ? 'Asking…' : 'Run the test'}
+        </button>
+
+        {probe && (
+          <div className="card" style={{ marginTop: 'var(--sp-4)' }}>
+            <dl style={{
+              margin: 0, display: 'grid', gridTemplateColumns: 'auto 1fr',
+              gap: '4px var(--sp-4)', fontSize: 'var(--fs-200)',
+              fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+            }}>
+              <dt style={{ color: 'var(--c-ink-faint)' }}>database configured</dt>
+              <dd style={{ margin: 0 }}>{String(probe.configured)}</dd>
+              <dt style={{ color: 'var(--c-ink-faint)' }}>session token</dt>
+              <dd style={{ margin: 0 }}>{probe.token}</dd>
+              <dt style={{ color: 'var(--c-ink-faint)' }}>HTTP status</dt>
+              <dd style={{ margin: 0 }}>{probe.status}</dd>
+            </dl>
+            <p style={{ margin: 'var(--sp-3) 0 var(--sp-1)', fontSize: 'var(--fs-100)', color: 'var(--c-ink-faint)' }}>
+              Raw response
+            </p>
+            <pre style={{
+              margin: 0, padding: 'var(--sp-3)', overflowX: 'auto',
+              background: 'var(--c-surface-2)', borderRadius: 'var(--r-m)',
+              fontSize: 'var(--fs-100)', whiteSpace: 'pre-wrap', wordBreak: 'break-word',
+            }}>{probe.body}</pre>
+          </div>
+        )}
       </section>
 
       <section aria-label="Kill switch">
