@@ -376,6 +376,14 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
      duplicated. */
   const env = (locals as any)?.runtime?.env;
 
+  /* The deployed version id, so a diagnostic can never again be read against
+     the wrong code. Cloudflare populates this binding; it is absent locally
+     and in any build predating the binding, which is itself the answer when
+     it does not appear. */
+  const build = env?.CF_VERSION?.id
+    ? String(env.CF_VERSION.id).slice(0, 8)
+    : 'unknown (binding absent — this build predates it)';
+
   const viewer = await identify(locals as any, request);
   const liveMode = leastPermissive(SKY_MODE, await recordedMode(locals as any));
   const verdict = skyAudience(liveMode, viewer, SKY_LIMITS.slicePercent);
@@ -409,7 +417,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
          Without this the only channel was `wrangler tail`, which needs
          credentials the person hitting the problem may not have to hand. */
       ...(request.headers.get('authorization')
-        ? { diagnostic: { ceiling: SKY_MODE, live: liveMode,
+        ? { diagnostic: { build, ceiling: SKY_MODE, live: liveMode,
                           identified: viewer.why, verdict: verdict.reason } }
         : {}),
     }, 503);
@@ -435,7 +443,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     if (!viewer.isStaff) return json({ error: 'forbidden' }, 403);
     const pk = env?.SKY_API_KEY;
     const pp = parseProvider(env?.SKY_PROVIDER);
-    if (!pk || !pp) return json({ error: 'not_configured', diagnostic: {
+    if (!pk || !pp) return json({ error: 'not_configured', diagnostic: { build,
       note: 'SKY_API_KEY and SKY_PROVIDER must both be set before models can be listed',
     } }, 503);
     const listed = await listModels({ provider: pp, apiKey: pk, base: env?.SKY_BASE_URL });
@@ -584,6 +592,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     sources,
     ...(request.headers.get('authorization')
       ? { diagnostic: {
+            build,
             missing: name,
             note: `The Worker cannot read ${name} at runtime. Check it is set on `
                 + 'the openlearn-ai Worker itself rather than another service, '
@@ -637,7 +646,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
       message: SKY_COPY.unavailable,
       sources,
       ...(request.headers.get('authorization')
-        ? { diagnostic: { stage: 'budget', why: budget.why } }
+        ? { diagnostic: { build, stage: 'budget', why: budget.why } }
         : {}),
     }, 503);
   }
@@ -700,7 +709,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
       message: SKY_COPY.unavailable,
       sources,
       ...(request.headers.get('authorization')
-        ? { diagnostic: { stage: 'provider', provider, model,
+        ? { diagnostic: { build, stage: 'provider', provider, model,
                           status: result.status, why: result.reason } }
         : {}),
     }, 502);

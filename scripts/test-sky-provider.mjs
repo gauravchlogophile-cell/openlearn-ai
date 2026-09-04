@@ -193,7 +193,7 @@ ok(/stage: 'budget', why: budget\.why/.test(route),
    `wrangler tail` — by which time the failure has usually scrolled past. */
 ok(/stage: 'provider'[\s\S]{0,120}why: result\.reason/.test(route),
    'the provider reason reaches the caller, not only the log');
-ok(/\{ diagnostic: \{ stage: 'provider'[\s\S]{0,200}\}\s*:\s*\{\}/.test(route),
+ok(/\{ diagnostic: \{ (?:build, )?stage: 'provider'[\s\S]{0,200}\}\s*:\s*\{\}/.test(route),
    'the provider reason is withheld from callers who supplied no token');
 /* A bare status number sends nobody anywhere: 403 and 404 mean different
    settings are wrong. These strings are OUR words about a known status — the
@@ -228,7 +228,7 @@ ok(/typeof m === 'string'/.test(src),
    'a non-string message field is ignored rather than coerced');
 /* The reason must be gated exactly as missing() is. It names internals — an
    anonymous visitor gets the plain refusal and nothing else. */
-ok(/\{ diagnostic: \{ stage: 'budget'[\s\S]{0,120}\}\s*:\s*\{\}/.test(route),
+ok(/\{ diagnostic: \{ (?:build, )?stage: 'budget'[\s\S]{0,120}\}\s*:\s*\{\}/.test(route),
    'the budget reason is withheld from callers who supplied no token');
 
 // ------------------------------------------------------------ the privacy
@@ -271,6 +271,21 @@ ok(!/if \(keyRole[\s\S]{0,80}allowed: true/.test(route),
    'nothing is AUTHORISED on the strength of an unverified claim');
 ok(route.includes('runtime_env'),
    'it reports whether the Worker environment is readable at all');
+
+/* Which code is running. Several rounds were spent reading a diagnostic
+   against the wrong build: a dashboard Retry re-runs the SAME commit, so the
+   build log says "Success" while the newest commit was never built, and every
+   symptom then looks like the fix failing rather than the fix being absent.
+   Answering it needed a 2.7MB bundle download and a grep. */
+ok(/env\?\.CF_VERSION\?\.id/.test(route), 'the deployed version id is read');
+ok(/binding absent — this build predates it/.test(route),
+   'a build without the binding says so, which is itself the answer');
+/* Every diagnostic carries it, or the one you are looking at is the one that
+   does not. */
+ok((route.match(/diagnostic: \{ build,|diagnostic: \{\s*\n\s*build,/g) ?? []).length >= 4,
+   'the build id is stamped on the diagnostics');
+ok(/CF_VERSION/.test(readFileSync(ROOT + 'wrangler.jsonc', 'utf8')),
+   'the version_metadata binding is declared in wrangler config');
 
 // ------------------------------------------------- listing what the key has
 /* A 404 names the model that does NOT work and nothing that does, so fixing

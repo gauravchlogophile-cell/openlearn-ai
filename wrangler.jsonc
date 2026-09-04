@@ -16,5 +16,16 @@
   },
   "kv_namespaces": [
     { "binding": "SESSION", "id": "89109907d15545819076c7708ff8db9b" }
-  ]
+  ],
+
+  /* Which code is actually running.
+     Half a dozen rounds of this session were spent on that question, and the
+     only way to answer it was to download the 2.7MB deployed bundle and grep
+     it for a string that should or should not be there. The specific trap: a
+     Retry in the dashboard re-runs the SAME commit, so the build log says
+     "Success" while the newest commit has never been built — and every symptom
+     looks like the fix not working rather than the fix not being deployed.
+     Cloudflare hands the version id to the Worker; the self-test now prints
+     it, and comparing it against the dashboard takes seconds. */
+  "version_metadata": { "binding": "CF_VERSION" }
 }
