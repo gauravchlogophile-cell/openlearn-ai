@@ -639,7 +639,23 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     console.error('[sky] provider failed', {
       provider, model, status: result.status, reason: result.reason,
     });
-    return json({ error: 'provider', message: SKY_COPY.unavailable, sources }, 502);
+    /* Also returned to a caller who supplied a token, on the same terms as
+       every other diagnostic here. It was logged and nowhere else, which meant
+       reading it required `wrangler tail` — a different tool, a different
+       window, and a failure that has usually already scrolled past. The self-
+       test exists precisely so an operator does not need that.
+
+       Safe to surface: every reason is composed by us from a status code and
+       our own words. No part of the provider's response body is ever in it. */
+    return json({
+      error: 'provider',
+      message: SKY_COPY.unavailable,
+      sources,
+      ...(request.headers.get('authorization')
+        ? { diagnostic: { stage: 'provider', provider, model,
+                          status: result.status, why: result.reason } }
+        : {}),
+    }, 502);
   }
 
   /* 11. The promise, enforced. "Never guesses" is not a prompt instruction we

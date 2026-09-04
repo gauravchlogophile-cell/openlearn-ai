@@ -160,6 +160,29 @@ ok(/cap is reached[\s\S]{0,80}not a fault/.test(route),
    'a genuine cap says it is the cap working, so nobody goes hunting a bug');
 ok(/stage: 'budget', why: budget\.why/.test(route),
    'the budget reason reaches the caller');
+
+/* The provider reason was logged and nowhere else, so reading it meant
+   `wrangler tail` — by which time the failure has usually scrolled past. */
+ok(/stage: 'provider'[\s\S]{0,120}why: result\.reason/.test(route),
+   'the provider reason reaches the caller, not only the log');
+ok(/\{ diagnostic: \{ stage: 'provider'[\s\S]{0,200}\}\s*:\s*\{\}/.test(route),
+   'the provider reason is withheld from callers who supplied no token');
+/* A bare status number sends nobody anywhere: 403 and 404 mean different
+   settings are wrong. These strings are OUR words about a known status — the
+   provider's body is never quoted, because it echoes the learner's question. */
+const statuses = [400, 401, 403, 404, 429];
+ok(statuses.every((s) => new RegExp(`\\b${s}:`).test(src)),
+   'the statuses an operator actually hits each carry a meaning');
+ok(/SKY_MODEL[\s\S]{0,120}valid model name/.test(src),
+   '400 points at the model name');
+ok(/404:[\s\S]{0,120}no such model/.test(src),
+   '404 points at the model, not the key');
+ok(/403:[\s\S]{0,200}invalid, revoked, restricted/.test(src),
+   '403 points at the key and its restrictions');
+ok(/429:[\s\S]{0,160}not our own spend cap/.test(src),
+   "429 distinguishes the provider's limit from ours — they read identically");
+ok(!/await res\.text\(\)/.test(src) && !/reason: JSON\.stringify\(/.test(src),
+   "the provider's response body is never surfaced — it quotes the question back");
 /* The reason must be gated exactly as missing() is. It names internals — an
    anonymous visitor gets the plain refusal and nothing else. */
 ok(/\{ diagnostic: \{ stage: 'budget'[\s\S]{0,120}\}\s*:\s*\{\}/.test(route),

@@ -125,8 +125,27 @@ export async function callModel(c: ModelCall): Promise<ModelResult> {
   if (!res.ok) {
     /* The body may quote the request back, and the request contains a
        learner's question. Never surface it — the status is what an operator
-       needs and the rest belongs nowhere. */
-    return { ok: false, status: res.status, reason: `provider returned ${res.status}` };
+       needs and the rest belongs nowhere.
+
+       The status alone is not enough to act on, though: 403 and 404 send you
+       to completely different settings, and a bare number sends you to neither.
+       These are OUR words about a known status, not the provider's body, so
+       nothing from the response can travel with them. */
+    const meaning: Record<number, string> = {
+      400: 'the request was rejected as malformed — usually SKY_MODEL is not a '
+         + 'valid model name for this provider',
+      401: 'the API key was not accepted — check SKY_API_KEY is the whole key '
+         + 'and has no stray whitespace',
+      403: 'the API key was refused — it may be invalid, revoked, restricted to '
+         + 'other referrers or IPs, or the API may not be enabled for its project',
+      404: `no such model — check SKY_MODEL (currently "${c.model}") exists for `
+         + 'this provider and is still current',
+      429: 'rate limited or out of quota at the provider — this is the provider '
+         + 'refusing, not our own spend cap',
+    };
+    const why = meaning[res.status];
+    return { ok: false, status: res.status,
+             reason: `provider returned ${res.status}${why ? ` — ${why}` : ''}` };
   }
 
   let data: any;
