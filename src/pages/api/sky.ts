@@ -163,13 +163,36 @@ function serviceDb(env: any) {
  *  a soft cap with extra steps.
  */
 async function reserveBudget(env: any, maxTokens: number):
-    Promise<{ allowed: boolean; reservation: number | null }> {
+    Promise<{ allowed: boolean; reservation: number | null; why: string }> {
   const db = serviceDb(env);
-  if (!db) return { allowed: false, reservation: null };
+  /* Three quite different faults used to leave by this one door reporting the
+     same word, and the operator-visible symptom of all three is identical: Sky
+     says it is off. Naming them costs nothing and saves a round of guessing —
+     the same reason missing() names which setting is unset. */
+  if (!db) {
+    return { allowed: false, reservation: null, why:
+      env?.SUPABASE_SERVICE_ROLE_KEY
+        ? 'PUBLIC_SUPABASE_URL is not set on the Worker'
+        : 'SUPABASE_SERVICE_ROLE_KEY is not set on the Worker — the spend cap '
+          + 'cannot be read, and a cap that cannot be read does not permit spending' };
+  }
   const { data, error } = await db.rpc('sky_reserve', { p_max_tokens: maxTokens });
-  if (error) return { allowed: false, reservation: null };
+  if (error) {
+    /* 42883 is undefined_function: migration 0013 has not been applied to this
+       database. Worth saying out loud, because it looks exactly like a bad key. */
+    const undefinedFn = error.code === '42883'
+      || /sky_reserve/i.test(error.message ?? '') && /does not exist/i.test(error.message ?? '');
+    return { allowed: false, reservation: null, why: undefinedFn
+      ? 'sky_reserve() does not exist in the database — apply migration '
+        + '0013_sky_budget.sql to production'
+      : `the budget reservation failed: ${error.message ?? 'unknown error'}` };
+  }
   const row = Array.isArray(data) ? data[0] : data;
-  return { allowed: row?.allowed === true, reservation: row?.reservation ?? null };
+  if (row?.allowed !== true) {
+    return { allowed: false, reservation: null,
+             why: "today's spend cap is reached — this is the cap working, not a fault" };
+  }
+  return { allowed: true, reservation: row?.reservation ?? null, why: 'ok' };
 }
 
 /** Correct the reservation to actual usage. Best-effort: a failure here
@@ -509,7 +532,17 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
    *    An assistant that cannot count what it is spending should not spend. */
   const budget = await reserveBudget(env, SKY_LIMITS.maxAnswerTokens);
   if (!budget.allowed) {
-    return json({ error: 'budget', message: SKY_COPY.unavailable, sources }, 503);
+    /* Same rule as missing(): the reason rides along only for a caller who
+       supplied a token, so an anonymous visitor learns nothing about our
+       configuration and an operator running the self-test learns everything. */
+    return json({
+      error: 'budget',
+      message: SKY_COPY.unavailable,
+      sources,
+      ...(request.headers.get('authorization')
+        ? { diagnostic: { stage: 'budget', why: budget.why } }
+        : {}),
+    }, 503);
   }
 
   /* 10. The call. Redaction happens on this line and not before, because this

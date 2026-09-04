@@ -129,14 +129,33 @@ ok(/reserveBudget\(env, SKY_LIMITS\.maxAnswerTokens\)/.test(route),
    'budget is reserved before the provider is called');
 ok(route.indexOf('reserveBudget(env') < route.indexOf('await callModel('),
    'the reservation happens BEFORE the call, not after');
-ok(/if \(!budget\.allowed\)[\s\S]{0,160}503/.test(route),
+ok(/if \(!budget\.allowed\)[\s\S]{0,600}503/.test(route),
    'a refused reservation stops the request');
-ok(/if \(!db\) return \{ allowed: false/.test(route),
+ok(/if \(!db\) \{[\s\S]{0,600}allowed: false/.test(route),
    'no database means no spend — the cap fails closed');
-ok(/if \(error\) return \{ allowed: false/.test(route),
+ok(/if \(error\) \{[\s\S]{0,600}allowed: false/.test(route),
    'a database error means no spend');
+ok(/if \(row\?\.allowed !== true\)[\s\S]{0,200}allowed: false/.test(route),
+   'a refusal from the cap itself means no spend');
 ok(/SUPABASE_SERVICE_ROLE_KEY/.test(route),
    'the budget is touched with the service key, not the browser-visible one');
+
+/* Four causes, one symptom. Every one of these makes Sky say it is off, and
+   until each named itself the only way to tell them apart was to change one
+   thing and try again. That cost a full round trip per guess. */
+ok(/why: string/.test(route), 'the reservation reports WHY it refused');
+ok(route.includes('SUPABASE_SERVICE_ROLE_KEY is not set on the Worker'),
+   'a missing service key says so, rather than looking like a spend cap');
+ok(/42883/.test(route) && /0013_sky_budget\.sql/.test(route),
+   'an unapplied migration names itself and the file to apply');
+ok(/cap is reached[\s\S]{0,80}not a fault/.test(route),
+   'a genuine cap says it is the cap working, so nobody goes hunting a bug');
+ok(/stage: 'budget', why: budget\.why/.test(route),
+   'the budget reason reaches the caller');
+/* The reason must be gated exactly as missing() is. It names internals — an
+   anonymous visitor gets the plain refusal and nothing else. */
+ok(/\{ diagnostic: \{ stage: 'budget'[\s\S]{0,120}\}\s*:\s*\{\}/.test(route),
+   'the budget reason is withheld from callers who supplied no token');
 
 // ------------------------------------------------------------ the privacy
 ok(/redactForProvider\(q\)/.test(route),
