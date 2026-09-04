@@ -105,7 +105,18 @@ export async function callModel(c: ModelCall): Promise<ModelResult> {
          the learner's lesson text never share a channel. */
       ? { systemInstruction: { parts: [{ text: c.system }] },
           contents: [{ role: 'user', parts: [{ text: c.user }] }],
-          generationConfig: { maxOutputTokens: c.maxTokens, temperature: 0.2 } }
+          /* Thinking OFF, deliberately.
+             Current Gemini flash models reason before answering, and both
+             costs land on us. It spent longer than the 20s budget and timed
+             out; and thinking tokens are drawn from maxOutputTokens, so a
+             model that thinks hard enough returns finishReason MAX_TOKENS with
+             no answer at all — which arrives here as "no text" after we have
+             already paid for it.
+             Sky's task does not want reasoning: read four supplied passages,
+             answer in a few sentences, cite one. Extended thinking buys
+             nothing here and costs latency a learner waits through. */
+          generationConfig: { maxOutputTokens: c.maxTokens, temperature: 0.2,
+                              thinkingConfig: { thinkingBudget: 0 } } }
       : { model: c.model, max_tokens: c.maxTokens,
           messages: [{ role: 'system', content: c.system },
                      { role: 'user', content: c.user }] };

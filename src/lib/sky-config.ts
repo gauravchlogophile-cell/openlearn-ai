@@ -86,7 +86,12 @@ export const SKY_LIMITS = {
      reasoning model can spend the whole allowance before writing a word and
      return nothing — which arrives here as a provider failure reading
      "no text (MAX_TOKENS)" in the Worker log. Prefer a model with thinking off
-     by default, or raise this and accept fewer questions per day. */
+     by default, or raise this and accept fewer questions per day.
+
+     That preference is no longer left to the choice of model: the Gemini call
+     sets thinkingBudget 0 explicitly. The advice above was written as a hope
+     and duly came true — gemini-flash-lite-latest reasons by default, and the
+     first thing it did was exceed the timeout below. */
   maxAnswerTokens: 800,
 
   /* A provider that has not answered in this long is a provider that has not

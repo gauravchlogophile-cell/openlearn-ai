@@ -85,6 +85,15 @@ ok(/finishReason/.test(src), 'a withheld ANSWER is detected');
 ok(src.includes('usageMetadata?.promptTokenCount'),
    'gemini token counts are read from usageMetadata, not usage');
 
+/* Thinking is OFF, and both reasons it must be are failures we actually hit.
+   Latency: reasoning took longer than the whole 20s budget and timed out.
+   Budget: thinking tokens come OUT of maxOutputTokens, so a model that thinks
+   hard enough returns MAX_TOKENS with no answer — after we have paid. */
+ok(/thinkingConfig: \{ thinkingBudget: 0 \}/.test(src),
+   'gemini thinking is disabled explicitly, not left to the model default');
+ok(/thinkingConfig/.test(src) && /generationConfig: \{[\s\S]{0,200}thinkingConfig/.test(src),
+   'thinkingConfig sits inside generationConfig, where gemini reads it');
+
 /* The one that matters most: HTTP 200 with no text must be a FAILURE, not an
    empty string falling through to the citation check — which would settle the
    reservation as a success and show the learner a blank reply. */
