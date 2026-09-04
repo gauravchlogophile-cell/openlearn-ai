@@ -84,8 +84,13 @@ no technical background, works on a phone, and does not require an account.
   per-IP traffic shaping. That is the stronger fix, and worth stating
   accurately rather than letting the old sentence stand.
 - **One maintainer.** Say "a small team" only if it stops being one person.
-- **Practitioner and Builder are incomplete.** P1 exists; P2–P11 and B1 are
-  planned. The roadmap shows this honestly and marketing copy must match it.
+- **Practitioner and Builder are incomplete.** P1, P2 and P3 exist; P4–P11 and
+  B1 are planned. The roadmap shows this honestly and marketing copy must match
+  it. This sentence had already gone stale once — it still said "P1 exists"
+  after P2 shipped, because claims.json was updated and the guide was not. The
+  staleness check reads the repo and compares it against claims.json, so it
+  catches a wrong NUMBER but not a guide that disagrees with its own claim
+  record. Update both.
 
 ## Known vulnerabilities to prepare for
 

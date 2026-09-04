@@ -1,0 +1,162 @@
+---
+title: "The text you did not write"
+description: "Every place text enters your workflow, and the difference between input you chose and input someone else controls."
+track: practitioner
+module: p3
+order: 1
+minutes: 8
+objectives:
+  - "Map every surface where text enters a workflow you have built"
+  - "Classify each surface by who controls the bytes, not by how likely harm seems"
+concepts: ["untrusted input", "threat model", "input surface", "trust boundary"]
+flashcards:
+  - front: "What makes an input 'untrusted'?"
+    back: "Somebody other than you can decide what it says. Not how dangerous it looks, and not how likely an attack seems — only who controls the bytes."
+  - front: "P2 chose its own sources. What changes in production?"
+    back: "Some sources are chosen, written, or edited by other people. The retrieval machinery is identical; the control over its contents is not."
+  - front: "Name three input surfaces people forget."
+    back: "Filenames, tool and API responses, and the output of another model. All three arrive as text your system reads."
+lastVerified: "2026-09-04"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+In P2 you built something that reads. You chose the documents, cut them up,
+ranked them and put the good ones in front of a model.
+
+Every one of those documents was yours.
+
+That is the assumption this module removes. Nearly every useful system ends up
+reading text that somebody else wrote, and the moment it does, a question you
+never had to ask becomes the most important one in the design: **who decided
+what this says?**
+
+## Untrusted is about control, not suspicion
+
+"Untrusted" sounds like an accusation. It is not. It is a statement about who
+holds the pen.
+
+A support ticket written by a customer is untrusted. So is a page your assistant
+fetches, a PDF a colleague uploads, a wiki anyone at your company can edit, and
+a product review. None of that implies the people involved are hostile. It
+means you cannot enumerate what the text might say, because you are not the one
+choosing.
+
+The distinction matters because the usual instinct — *"our users are fine, this
+is an internal tool"* — answers the wrong question. It estimates likelihood.
+The design question is capability: **if this text said the worst thing it could
+say, what would my system do?**
+
+## Where text actually gets in
+
+Most people list two or three surfaces and stop. The real list is longer, and
+the forgotten entries are where trouble lives.
+
+> **Things a person types.** Chat messages, form fields, search queries,
+> filenames.
+>
+> **Things a person supplies.** Uploaded documents, pasted text, linked URLs,
+> email forwarded to an address your system watches.
+>
+> **Things your system fetches.** Web pages, RSS feeds, API responses, database
+> rows written by somebody else, files from shared storage.
+>
+> **Things that arrive as metadata.** PDF titles, image alt text, HTML
+> comments, spreadsheet cell notes, code comments, commit messages.
+>
+> **Things another model produced.** The output of one assistant becoming the
+> input of the next, which inherits everything the first one read.
+
+That last one deserves its own moment. Chaining models is ordinary now, and
+each hop carries forward whatever the previous hop absorbed. A summariser that
+read a hostile page hands its summary to the next step as though it were your
+own text.
+
+## The map is the deliverable
+
+Before any defence is worth discussing, you need the list. Not a general sense
+of it — the actual list, written down, with a name against each entry.
+
+For each surface, three facts:
+
+1. **Who can write here?** You, a named colleague, any signed-in user, anyone
+   on the internet.
+2. **What does the system do with it?** Display it, summarise it, retrieve it,
+   pass it to a tool.
+3. **What can happen next?** Nothing, an answer, a database write, an email.
+
+That third column is the one that turns an interesting problem into an urgent
+one, and L4 is entirely about it.
+
+## Our own map, honestly
+
+Lrnon's assistant reads an index built from Lrnon's lessons. Today that content
+is written by a small team and reviewed before it merges, which makes it about
+as trusted as content gets.
+
+It is not permanently so. The project accepts contributions, and a lesson is a
+document like any other. The day an outside contribution lands in that index,
+the assistant is reading text a stranger wrote — with no change to a single
+line of retrieval code.
+
+That is the shape of most of these problems. The system does not become
+vulnerable when the code changes. It becomes vulnerable when the *inputs* do,
+which is a change nobody deploys and nobody reviews.
+
+## Try it now (10 minutes)
+
+Take one workflow you have built or are planning. Write the table:
+
+| Surface | Who can write it | What we do with it | What happens next |
+|---|---|---|---|
+
+Fill it in completely, including the boring rows. Then mark every row where
+column two is anything other than "me".
+
+Those rows are what the rest of this module is about. If the table has no such
+rows today, add one more: *what would have to change for it to?* On most
+projects the honest answer is "one feature request".
+
+<Quiz client:visible items={[
+  {
+    q: "What makes a particular input surface untrusted?",
+    options: [
+      "The people using it are likely to behave badly",
+      "Someone other than you decides what the text says",
+      "It arrives from outside your own network"
+    ],
+    answer: 1,
+    explain: "Trust here is about control of the bytes, not suspicion about people or network location. An internal wiki anyone can edit is untrusted; a file only you can write is not."
+  },
+  {
+    q: "One assistant summarises a fetched web page and hands the summary to a second assistant. What has happened to the trust boundary?",
+    options: [
+      "The summary is now trusted, because your own system produced it",
+      "Whatever the first model read is carried forward, so the second inherits the untrusted input",
+      "Summarising strips any instructions the page contained"
+    ],
+    answer: 1,
+    explain: "Each hop inherits what the previous hop absorbed. The second model receives text shaped by a page you did not write, presented as though it were internal."
+  },
+  {
+    q: "Your retrieval index contains only documents your team wrote. Later, outside contributions are accepted into the same index. What changed in the code?",
+    options: [
+      "Nothing — the exposure changed without any code change",
+      "The retrieval ranking needs rewriting for untrusted sources",
+      "The chunking strategy has to change"
+    ],
+    answer: 0,
+    explain: "This is the characteristic shape: the system becomes exposed when its inputs change, not its code. Nobody deploys that change and nobody reviews it."
+  }
+]} />
+
+## Recap
+
+Untrusted means somebody else controls what the text says, which is a question
+about authorship rather than about how suspicious anyone seems. The surfaces
+are more numerous than they first appear — metadata, tool responses and other
+models' output all count. Write the map before designing any defence, and pay
+attention to the last column, because what a system can do next is what turns
+this from interesting into urgent.

@@ -134,7 +134,7 @@
       "track": "practitioner",
       "title": "Untrusted Input and Prompt Injection",
       "tagline": "Your workflow reads things an attacker can write.",
-      "status": "planned"
+      "status": "live"
     },
     {
       "id": "p4",

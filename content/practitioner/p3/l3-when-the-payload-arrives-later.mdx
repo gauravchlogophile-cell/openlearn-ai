@@ -1,0 +1,187 @@
+---
+title: "When the payload arrives later"
+description: "Indirect injection in detail: the carriers, the hiding places, and why a retrieval system is an unusually good delivery mechanism."
+track: practitioner
+module: p3
+order: 3
+minutes: 10
+objectives:
+  - "Identify the carriers that deliver injected text into a workflow"
+  - "Recognise text that is present to a model but invisible to a person"
+concepts: ["indirect injection", "hidden text", "retrieval poisoning", "carrier"]
+flashcards:
+  - front: "Why is a retrieval system a good delivery mechanism for an attacker?"
+    back: "It selects text by relevance and places it in front of the model as material worth attending to. An attacker who can write a document only has to make it rank."
+  - front: "Name four ways text can be present to a model but invisible to a reader."
+    back: "White-on-white or zero-size text, HTML comments, image alt text, and document metadata such as PDF titles or cell notes."
+  - front: "What makes indirect injection patient?"
+    back: "The attacker writes once and waits. The payload sits in a document until some assistant reads it, so there is no per-victim effort and no timing to coordinate."
+lastVerified: "2026-09-04"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Direct injection needs someone at a keyboard. Indirect injection needs only that
+somebody, at some point, wrote something your system will later read.
+
+That difference — the gap in time between writing and reading — is what makes
+this the version worth designing against. The attacker does not need to be
+present, does not need to know who the victim is, and does not need anything to
+go right on the day.
+
+## The carriers
+
+Anything your workflow ingests is a carrier. In rough order of how often people
+overlook them:
+
+**Documents.** Uploaded files, shared drives, wikis, knowledge bases. The
+classic case, because it is where retrieval systems point.
+
+**Web pages.** Anything fetched by URL. If your assistant can browse, every page
+on the internet is an input surface, and the ones you did not choose are the
+ones an attacker can.
+
+**Messages and tickets.** Support queues, issue trackers, code review comments.
+These are written by outsiders by design — that is what they are for.
+
+**Email and invitations.** An assistant that reads a mailbox reads whatever
+anyone chose to send. Nobody has to be granted access to write to your inbox.
+
+**Code.** Comments, README files, dependency descriptions, commit messages. An
+assistant reading a repository is reading text from everyone who ever
+contributed to it, and from every package it pulled in.
+
+**Tool and API responses.** The output of a search, a lookup, a database row. A
+field that a customer filled in six months ago arrives as text today.
+
+**Other models.** Covered in L1, and it bears repeating here because it is the
+carrier people never draw on the diagram.
+
+## The hiding places
+
+A person reviewing a document sees the rendered result. A model receives the
+text. Those are different things, and the gap between them is where payloads
+sit.
+
+> **Visually hidden.** White text on white, zero font size, text positioned
+> off-page, an element with `display: none`. Extracted perfectly by every text
+> pipeline.
+>
+> **Structurally hidden.** HTML comments, image `alt` attributes, `title`
+> tooltips, hidden spreadsheet columns, speaker notes in a deck.
+>
+> **In the metadata.** PDF title and subject fields, EXIF descriptions, file
+> properties, cell comments.
+>
+> **Encoded.** Base64, unusual Unicode, zero-width characters between letters.
+> Some models decode these readily; more to the point, a filter looking for
+> English phrases will not match them.
+
+None of this is exotic. All of it survives the ordinary path from file to text,
+because that path is built to extract everything it can find, which is normally
+exactly what you want.
+
+The practical consequence: **a human reviewing the document is not a control.**
+The reviewer is looking at a rendering. The model is reading the file.
+
+## Why retrieval is a particularly good carrier
+
+Retrieval systems have a property that ought to be uncomfortable once you see
+it: they exist to find the most relevant text and put it in front of the model
+as material deserving attention.
+
+An attacker who can add a document to your index does not have to get it read.
+They have to make it *rank*, and P2·L3 is a fairly complete guide to how ranking
+works. Stuff the document with the terms your users ask about, and the retrieval
+machinery does the delivery.
+
+Worse, it is targeted for free. A document that ranks for *"refund policy"* is
+delivered specifically to people asking about refunds — which is to say,
+precisely the users for whom a wrong answer about refunds is worth engineering.
+
+The retrieval quality work from P2·L4 helps here for a reason that is not
+obvious. A test set that catches "the wrong passage is winning" also catches
+"a passage that should not be in the index at all is winning", because both
+show up the same way: as a retrieval result nobody expected.
+
+## Our own exposure, stated plainly
+
+Lrnon's assistant retrieves from an index built out of Lrnon's lessons. A lesson
+is a Markdown file in a public repository that accepts contributions.
+
+So the honest statement is: if a contribution containing an injected instruction
+were merged, that text would enter the index and could be retrieved and placed
+in front of the model, exactly like any other passage.
+
+Three things limit what would follow, and it is worth being specific about which
+of them are real controls and which are circumstance:
+
+- **Review before merge** — a genuine control, and the weakest of the three,
+  because as noted above a reviewer sees rendered Markdown.
+- **The passages are fenced and the system prompt names them as quoted
+  material** — a real mitigation with real limits, which is L5.
+- **The assistant can do almost nothing** — it reads an index and calls one
+  model. It cannot write to the database, send anything, or read learner
+  records. This is the control that actually bounds the damage, and it is L6.
+
+The worst outcome available is a wrong answer with a citation pointing at the
+poisoned lesson. That is bad. It is recoverable, and it is visible, which is the
+difference between a bad day and an incident.
+
+## Try it now (10 minutes)
+
+Take a document your own workflow would ingest. Add a line of white-on-white
+text, or an HTML comment, containing an ordinary-sounding instruction.
+
+Then run your actual extraction step — whatever turns files into text — and
+print the result.
+
+The question is not whether the model obeys. It is whether the line **is there**
+in the extracted text. If it is, then every control you were relying on from
+visual review is not a control at all, and you have learned that before someone
+else did.
+
+<Quiz client:visible items={[
+  {
+    q: "Why does a retrieval index make an unusually effective delivery mechanism?",
+    options: [
+      "Indexes usually lack access controls",
+      "It selects text by relevance and presents it as material worth attending to, so an attacker only needs their document to rank",
+      "Embeddings cannot represent hostile text"
+    ],
+    answer: 1,
+    explain: "Ranking does the delivery, and it delivers to exactly the users asking about that topic — targeting the attacker gets for free."
+  },
+  {
+    q: "A colleague reviews an uploaded document and sees nothing unusual. What has that review established?",
+    options: [
+      "That the document contains no injected instructions",
+      "Little — the reviewer saw a rendering while the model reads the file, including hidden and metadata text",
+      "That the extraction pipeline is working correctly"
+    ],
+    answer: 1,
+    explain: "Human review inspects the rendered result. White-on-white text, HTML comments, alt attributes and PDF metadata all survive extraction and none of them appear on screen."
+  },
+  {
+    q: "What makes indirect injection patient in a way direct injection is not?",
+    options: [
+      "The payload waits in a document until some assistant reads it, with no per-victim effort",
+      "Models process indirect input more slowly",
+      "It requires the attacker to be online when the victim asks"
+    ],
+    answer: 0,
+    explain: "Write once, wait. The attacker needs no knowledge of who the victim is and nothing to go right on the day."
+  }
+]} />
+
+## Recap
+
+Indirect injection separates writing from reading, so the attacker needs only to
+have written something your system will later ingest. The carriers include
+documents, pages, tickets, email, code, tool responses and other models. The
+payload can sit where a person cannot see it but extraction finds it easily,
+which means human review of a rendering is not a control. Retrieval is a
+particularly good carrier because ranking delivers the document to exactly the
+users asking about its topic.

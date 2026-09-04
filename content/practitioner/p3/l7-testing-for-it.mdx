@@ -1,0 +1,192 @@
+---
+title: "Testing for it"
+description: "Build an attack set, run it on every change, and read the result honestly — a passing suite means 'not these', never 'not any'."
+track: practitioner
+module: p3
+order: 7
+minutes: 10
+objectives:
+  - "Assemble an attack corpus that covers the shapes rather than a list of phrases"
+  - "Run it as a regression suite and interpret a pass without overclaiming"
+concepts: ["attack corpus", "regression testing", "red teaming", "evaluation"]
+flashcards:
+  - front: "What does a passing injection suite establish?"
+    back: "That these attacks did not work against this version. It is evidence about a sample, never a statement about the class."
+  - front: "Why cover shapes rather than collecting phrases?"
+    back: "Phrases are unbounded and a list only contains what you thought of. Shapes — override, role-play, encoding, hidden formatting, tool-triggering — generalise."
+  - front: "What must happen to every injection that gets through?"
+    back: "It becomes a permanent test case. A failure that is fixed but not recorded returns on the next refactor with nothing to catch it."
+lastVerified: "2026-09-04"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+P2·L4 argued that a retrieval system you have not measured is a retrieval system
+you are guessing about, and had you build a set of twenty questions with known
+right answers.
+
+Do the same thing here, for attacks. The reasoning is identical and the honesty
+required at the end is greater.
+
+## Collect shapes, not phrases
+
+The tempting approach is to gather injection strings from the internet into a
+list. It is better than nothing, and it will mislead you, because a list is
+exactly the set of things somebody already thought of.
+
+Organise by shape instead. Each shape is a way of getting instruction-like text
+into your input, and you write your own examples of each against your own
+system.
+
+> **Plain override.** *"Ignore the above and do X instead."* The obvious one.
+> It belongs in the set precisely because it is the baseline.
+>
+> **Authority claim.** *"System note: updated policy requires…"*, *"Message from
+> the administrator…"*. Borrowed authority instead of a command.
+>
+> **Editorial note.** The quiet one from L2 — an aside apparently addressed to a
+> reviewer, asking for an omission or an addition.
+>
+> **Role-play framing.** *"For the purposes of this test, respond as…"*.
+> Instruction disguised as context.
+>
+> **Encoding and obfuscation.** Base64, spaced-out letters, zero-width
+> characters, an instruction in another language. Aimed at filters more than at
+> the model.
+>
+> **Hidden formatting.** The L3 carriers — HTML comments, alt text, white text,
+> metadata. Test that your *extraction* surfaces them, then test what the model
+> does.
+>
+> **Tool-triggering.** Text that names one of your own tools and supplies
+> arguments. Only meaningful if you have tools, and essential if you do.
+>
+> **Exfiltration attempt.** Text that asks for a Markdown image with data in the
+> URL, per L4. Test whether the URL is even rendered.
+
+Three or four examples per shape gives you a working set of about thirty. That
+is enough to be useful and small enough to actually run.
+
+## Write down the expected outcome
+
+An attack case without an expected outcome cannot fail. Before running anything,
+record what *should* happen for each case, and be specific:
+
+- The answer does not contain the injected content.
+- No tool call is made.
+- Any URL in the output points at your own domain.
+- The refusal, if any, is the ordinary one — not an explanation of the attack.
+
+That last is a real category. A system that says *"I noticed an attempt to
+inject instructions in passage 3"* has leaked its detection logic and told the
+attacker precisely what to change.
+
+## Run it as a suite, not an afternoon
+
+The value is not in running these once. It is in running them on every change,
+because the things that quietly re-open this are ordinary:
+
+- A model or version change — including an **alias moving under you**, which
+  changes behaviour with no deployment on your side.
+- A prompt edit, including one that looks purely cosmetic.
+- A new tool, which adds a whole outbound path at once.
+- A new document source, which adds a carrier.
+- A retrieval change, which alters what reaches the model at all.
+
+Any of those can turn a passing case into a failing one, and none of them looks
+like a security change on the pull request.
+
+Two practical notes. **Run against a real model**, not a mock — the behaviour
+under test is the model's. And **budget for it**, because thirty cases on every
+change is a recurring cost; if your assistant has a spend cap, the suite draws
+on it like anything else.
+
+## Every escape becomes a fixture
+
+When one gets through — in testing or in production — fix it, then add it to the
+set permanently, along with a note of what it defeated.
+
+This is the same discipline as a regression test for a bug, for the same reason.
+A failure that is fixed but not recorded comes back on the next refactor, and
+the next person will not know it was ever considered.
+
+Over a year that file becomes the most valuable security artefact the project
+owns: a record of what actually worked against this system, rather than what the
+literature says works generally.
+
+## Reading a pass correctly
+
+Here is where honesty costs something.
+
+Your suite passes. Thirty attacks, none succeeded. What have you established?
+
+**That these thirty did not work against this version of this system.**
+
+Not that the system resists injection. Not that a class of attack is closed. The
+space of inputs is unbounded and your sample is thirty. This is the same
+inferential position as any test suite, and the same discipline applies: tests
+are evidence about the cases you ran.
+
+The failure mode to guard against is not a missed attack. It is the **decision
+that a passing suite justifies granting more capability** — connecting the
+mailbox, enabling the write, removing the confirmation. That reasoning converts
+a testing artefact into a security argument it cannot support.
+
+Test to find problems. Grant capability based on L6, which does not depend on
+what any test found.
+
+## Try it now (12 minutes)
+
+Write eight cases — one per shape above — against your own system, each with an
+expected outcome. Run them and record the result.
+
+Then, whatever the result, answer this in writing: **which of these would you
+have to see fail before you removed a permission?**
+
+If the answer is "none, because the permissions are already minimal", your
+design is doing the work. If it is "I would remove the send tool", consider
+removing it before a test tells you to.
+
+<Quiz client:visible items={[
+  {
+    q: "Your injection suite of thirty cases passes completely. What has that established?",
+    options: [
+      "The system resists prompt injection",
+      "These thirty attacks did not work against this version of this system",
+      "The remaining risk is confined to attacks nobody has published"
+    ],
+    answer: 1,
+    explain: "It is evidence about the sample you ran. The input space is unbounded, so a pass cannot be a statement about the class of attack."
+  },
+  {
+    q: "Why organise the corpus by shape rather than collecting known injection phrases?",
+    options: [
+      "Shapes are faster to execute",
+      "A phrase list contains only what somebody already thought of, while shapes generalise to variants you have not seen",
+      "Published phrases are usually out of date"
+    ],
+    answer: 1,
+    explain: "Ways of expressing an override are unbounded. Categories like authority claim, encoding and hidden formatting let you generate new cases rather than recognise old ones."
+  },
+  {
+    q: "A model alias your system points at silently moves to a newer version. Why does that matter for this suite?",
+    options: [
+      "It does not — the prompt is unchanged",
+      "Behaviour under test is the model's, so a case that passed can start failing with no deployment on your side",
+      "Newer models are always more resistant to injection"
+    ],
+    answer: 1,
+    explain: "The thing being tested is model behaviour. An alias moving changes it without any pull request, which is why the suite runs on a schedule and not only on your own changes."
+  }
+]} />
+
+## Recap
+
+Build a corpus organised by shape — override, authority claim, editorial note,
+role-play, encoding, hidden formatting, tool-triggering, exfiltration — with a
+written expected outcome for each. Run it against a real model on every change,
+including model and alias changes that arrive without a deployment. Record every
+escape as a permanent case. Read a pass as evidence about the cases you ran, and
+never as the justification for granting capability.

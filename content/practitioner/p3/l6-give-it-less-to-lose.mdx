@@ -1,0 +1,200 @@
+---
+title: "Give it less to lose"
+description: "The control that actually holds: reduce what the model is able to do, so a successful injection has nowhere to go."
+track: practitioner
+module: p3
+order: 6
+minutes: 10
+objectives:
+  - "Reduce a workflow's granted capability to what the task genuinely requires"
+  - "Place confirmation on irreversible actions so a person, not a model, authorises them"
+concepts: ["least privilege", "human in the loop", "capability scoping", "separation of duties"]
+flashcards:
+  - front: "Why is least privilege the load-bearing control here?"
+    back: "It is enforced by code outside the model, so it holds whether or not the model was persuaded. Every prompt-level measure is probabilistic."
+  - front: "What makes a confirmation step real rather than decorative?"
+    back: "It shows the actual effect — recipient, amount, which record — and it is refusable. A prompt that says 'proceed?' without the specifics trains people to click yes."
+  - front: "Why split the summarising step from the acting step?"
+    back: "The component that reads untrusted text should hold no authority. Anything it produces then arrives at the actor as a proposal, not as a command."
+lastVerified: "2026-09-04"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Everything in L5 makes injection less likely. Nothing in L5 makes it less
+costly.
+
+This lesson is the other half, and it is the half that holds, because it does
+not depend on the model behaving. It is enforced in code, outside the model,
+where enforcement is possible.
+
+The idea is old and unglamorous: **give the thing the least authority that lets
+it do its job.**
+
+## Start from the task, not the convenience
+
+The usual path to over-privilege is not carelessness. It is momentum. You are
+building, something needs a credential, the one on hand works, and it works for
+everything.
+
+Turn it around. Write what the assistant must do, then grant only that.
+
+> *"Answer questions about our public documentation."*
+> Needs: read the documentation index. That is all. No database write, no
+> customer records, no outbound requests.
+
+> *"Draft replies to support tickets for an agent to review."*
+> Needs: read the ticket, read the knowledge base, write a draft. It does not
+> need to send. Sending is the agent's action, performed after reading.
+
+That second one is the shape worth internalising. The valuable part — the draft —
+requires no dangerous capability at all. The danger comes entirely from
+automating the last step, which is also the cheapest step for a human to keep.
+
+## Read-only until proven otherwise
+
+Most assistant workflows need to read far more than they need to write, and
+read-only access has a property nothing else does: **it cannot be turned into an
+action.** An injection against a read-only deputy produces a wrong answer, and a
+wrong answer is visible and recoverable.
+
+Where writes are needed, scope them:
+
+- A credential for one table, not the schema.
+- One row, identified before the model is involved — never a row the model names.
+- Append-only where possible, so the worst case adds rather than destroys.
+- Separate credentials per capability, so one does not imply the others.
+
+That third point is worth dwelling on. **Who chooses the identifier?** If the
+model produces the record id, the injected instruction chooses which record. If
+the id is fixed by your code from the authenticated session, an injection can
+influence *what is written* but not *where*, and you have converted a breach
+into a data-quality problem.
+
+## Irreversible actions get a person
+
+Some actions cannot be undone: money moves, email is sent, records are deleted,
+messages are posted publicly. These are the ones a model should propose and a
+person should authorise.
+
+The confirmation has to be real, which most are not:
+
+**Show the effect, not the intent.** *"Send email?"* is decorative. *"Send to
+finance@othercompany.example, subject 'Q3 figures', with the attached
+spreadsheet"* is a confirmation, because the wrong thing is legible in it.
+
+**Make refusal cheap and normal.** If the only path forward is Approve, people
+approve.
+
+**Do not batch.** Ten actions behind one button is one decision about ten things,
+and the ninth is where the surprise lives.
+
+**Beware habituation.** A confirmation that fires forty times a day is
+click-through furniture by Tuesday. Confirm rarely, on things that matter, or
+the mechanism decays into a delay.
+
+## Split the reader from the actor
+
+The strongest structural move available: **the component that reads untrusted
+text should not be the component that holds authority.**
+
+A summariser reads the hostile page and returns text. That text goes to a second
+component which can act — but which treats its input as a *proposal* to be
+validated, not as a command to be executed.
+
+The validation is where the design lives, and it should be narrow and boring:
+
+- The proposal must match a fixed shape you defined, not free-form instructions.
+- Values must be checked against what the *user* asked for, not against what the
+  document said.
+- Anything outside the expected set is refused, not interpreted.
+
+This does not make the summariser trustworthy. It makes trustworthiness
+unnecessary at that point, which is a much easier property to obtain.
+
+## Worked example: Lrnon's assistant
+
+Stated flatly, because it is the clearest way to show the principle.
+
+`/api/sky` can do exactly three things: read a retrieval index compiled at build
+time, call one model, and increment a spend counter.
+
+Everything it might have been given, it was not:
+
+| Not granted | Consequence |
+|---|---|
+| Learner records | An injection cannot read anyone's progress |
+| Content writes | It cannot alter the lessons it retrieves from |
+| Outbound fetch | No image, webhook or search channel |
+| Email | Nothing can be sent |
+
+The one credential it holds — the database service key — reaches exactly one
+function, which adds numbers to a spend row. That function is granted to a
+single role and does nothing else.
+
+The result is that the worst outcome from a poisoned lesson is a wrong answer to
+one person, carrying a citation that points at the poisoned lesson — which makes
+it traceable.
+
+None of that came from cleverness about prompts. It came from the assistant
+never being given anything else to do.
+
+## Try it now (10 minutes)
+
+Take one workflow and write two lists.
+
+**Granted:** every credential, tool and permission it currently holds.
+**Required:** what the task genuinely needs.
+
+For every item in the first list not in the second, either remove it or write
+down why it stays. "It was easier" is an acceptable note as long as it is
+written, because it makes the trade visible to whoever reads this next.
+
+Then find the most irreversible action on the list and check its confirmation.
+If there is none, or if it says "proceed?" without naming what will happen, that
+is the first thing to fix.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is least privilege a stronger control than prompt-level defences?",
+    options: [
+      "It stops the injection from reaching the model",
+      "It is enforced in code outside the model, so it holds whether or not the model was persuaded",
+      "It makes the system prompt shorter and harder to override"
+    ],
+    answer: 1,
+    explain: "Fencing and instructions shift probabilities inside the model. A permission the credential does not carry cannot be talked into existing."
+  },
+  {
+    q: "A workflow writes to a record whose id the model produces. What is the smallest change that most reduces the risk?",
+    options: [
+      "Ask the model to double-check the id before writing",
+      "Fix the id in code from the authenticated session, so the model influences content but not destination",
+      "Log every write for later review"
+    ],
+    answer: 1,
+    explain: "If the model names the record, an injection chooses the record. Fixing the identifier outside the model converts a potential breach into a data-quality problem."
+  },
+  {
+    q: "Which confirmation step is doing real work?",
+    options: [
+      "'Send email?' with Approve and Cancel",
+      "'Send to finance@othercompany.example, subject Q3 figures, with the attached spreadsheet' with an easy refusal",
+      "A five-second delay before sending, with an option to abort"
+    ],
+    answer: 1,
+    explain: "A confirmation only works if the wrong thing is legible in it. Naming intent rather than effect trains people to approve without reading."
+  }
+]} />
+
+## Recap
+
+Reduce what the model can do until a successful injection has nowhere to go.
+Start from the task and grant only what it needs; prefer read-only, because a
+read-only deputy produces wrong answers rather than actions. Where writes exist,
+let your code choose the identifier rather than the model. Put irreversible
+actions behind confirmations that show the actual effect and can be refused, and
+keep the component that reads untrusted text separate from the one holding
+authority.

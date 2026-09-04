@@ -2,6 +2,12 @@
   "_comment": "Every change to the learning content, dated — including the ones that make us look bad. A lesson that was wrong is more useful to a learner as a published correction than as a quiet edit. Hand-maintained on purpose: git history records what changed, not why it mattered or who caught it. Newest first. 'kind' must be one of the values scripts/validate-content.mjs allows.",
   "entries": [
     {
+      "date": "2026-09-04",
+      "kind": "New module",
+      "where": "Practitioner · P3",
+      "what": "Untrusted Input and Prompt Injection published — eight lessons on building workflows that read text somebody else wrote. Mapping every surface where text enters and who controls the bytes; what prompt injection is and why it is a structural property rather than an unpatched bug, since escaping needs a grammar natural language does not have; indirect injection and the carriers that deliver it, including text that survives extraction while being invisible to a reviewer; ranking impact by capability rather than by how clever an attack looks, and the three ingredients whose combination turns a wrong answer into a breach; what fencing and system prompts genuinely buy, which is a lower rate and not a closed class; least privilege as the control that actually holds because it is enforced outside the model; building an attack corpus organised by shape and reading a passing suite without overclaiming; and designing so that a successful injection stays recoverable. Lrnon’s own assistant is the worked example throughout, including an honest account of its exposure once outside contributions reach the retrieval index, and the occasion when its kill switch wrote a log row and changed nothing while reporting success. Practitioner is now three modules of twelve."
+    },
+    {
       "date": "2026-09-03",
       "kind": "New module",
       "where": "Practitioner · P2",

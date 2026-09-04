@@ -1,0 +1,193 @@
+---
+title: "Designing for the day it works"
+description: "Assume one gets through. What you can undo, what you would notice, what you can switch off, and what you must not write down."
+track: practitioner
+module: p3
+order: 8
+minutes: 10
+objectives:
+  - "Design a workflow that stays recoverable when an injection succeeds"
+  - "Decide what to log for detection without creating a second exposure"
+concepts: ["blast radius", "detection", "kill switch", "incident response"]
+flashcards:
+  - front: "The three questions to ask of any workflow before shipping it."
+    back: "What can I undo, what would I notice, and what can I switch off. If the answers are 'nothing, nothing, nothing', the design is not finished."
+  - front: "Why can logging become a second exposure?"
+    back: "A log of what people asked an assistant is a record of what they were worried about, and it is usually read by more people and guarded less well than the original data."
+  - front: "What makes a kill switch real?"
+    back: "One control, reachable under pressure, that a person can operate without a deployment — and that has been tested while the system was working."
+lastVerified: "2026-09-04"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+L5 lowers the rate. L6 lowers the cost. L7 measures what you can.
+
+None of that gets the probability to zero, so the last question is the one that
+decides whether a bad day is a bad day or an incident: **what happens after one
+works?**
+
+Three questions cover most of it.
+
+## What can I undo?
+
+Sort what your system does by reversibility, and design so the irreversible set
+is as small as you can stand.
+
+**Prefer proposing to doing.** A draft is reversible. A sent message is not.
+
+**Prefer adding to replacing.** Append-only means the previous state still
+exists. An overwrite means it does not.
+
+**Keep the before.** If a value is changed, store what it was. This is dull and
+it is the difference between "we restored it" and "we think it used to be
+something else".
+
+**Delay what cannot be recalled.** A short queue before an irreversible action —
+even sixty seconds — turns a catastrophe into an interruption, provided anyone
+is watching. Which is the next question.
+
+## What would I notice?
+
+Assume it worked. Trace the path. Where is the evidence, and would a human ever
+see it?
+
+The uncomfortable version of this question: *if this had happened last Tuesday,
+would I know today?* For most systems the honest answer is no, and it is worth
+knowing that before rather than after.
+
+Things worth recording, and none of them require anything sophisticated:
+
+- **Every action taken**, with its arguments and what triggered it.
+- **Refusals and unusual outputs.** A spike in refusals is a signal that someone
+  is probing.
+- **Outbound requests**, especially any URL the model produced. If a domain
+  appears that is not on your list, that is exactly the L4 image channel.
+- **Which documents were retrieved for which answer.** This is what lets you
+  trace a bad answer back to a poisoned source, and it is cheap.
+
+That last one is worth more than it costs. Lrnon's assistant returns the source
+links with every answer, which was a product decision about honesty. It doubles
+as provenance: a wrong answer arrives with a pointer to the passage that caused
+it.
+
+## What must I not write down?
+
+Detection pulls toward logging everything. Resist it, because a log is a second
+copy of the problem, usually read by more people and guarded less carefully.
+
+**Do not log the user's question by default.** A record of what people asked an
+assistant is a record of what they were worried about. On a learning site that
+includes children; in other contexts it includes health, money and legal
+questions. That file is more sensitive than most of what it sits beside, and it
+did not exist until you created it.
+
+Log the **shape** instead: that a request happened, which passages were
+retrieved, which action followed, whether it was refused. That is enough to
+investigate almost anything, and it is not a transcript.
+
+Lrnon's route logs provider failures with the model, the status and the reason —
+and explicitly not the question. The comment in that file says why, because a
+future change that adds it back should have to argue with something.
+
+## What can I switch off?
+
+If it is behaving badly right now, how does it stop?
+
+A real kill switch has four properties, and most do not:
+
+1. **One control.** Not "remove the credential and redeploy and clear the
+   cache".
+2. **No deployment.** A build pipeline in the path means minutes at best, and
+   minutes are what you do not have.
+3. **Operable by whoever is there.** Not only the person who built it.
+4. **Tested while working.** This is the one that gets skipped, and it is the
+   one that matters.
+
+That fourth point deserves the emphasis. A switch tested only against an already
+broken system has proved nothing — it will report success either way, because
+the system was going to be off regardless. The test that means something is:
+system working, press it, confirm it stops, turn it back on.
+
+Lrnon's is a row in the database, read on every request and combined with the
+deployed ceiling by taking whichever is stricter. It once wrote its log row and
+changed nothing at all while reporting success, which is worse than not having
+one — it produced a false belief during exactly the moment when a true one
+mattered.
+
+## The paragraph worth writing
+
+Before shipping anything that reads untrusted input, write this down:
+
+> If an injected instruction were followed, the worst outcome is **X**. We would
+> find out by **Y**. We would stop it by **Z**. Recovery is **W**.
+
+Four sentences. If any of them is hard to complete, that is the design not
+finished rather than a documentation task outstanding.
+
+For Lrnon's assistant it reads: *a learner gets a wrong answer citing the
+poisoned lesson; we find out from the citation or from a report; we set the
+stage to off in the console; recovery is correcting the lesson and rebuilding
+the index.*
+
+That is not an impressive paragraph. Being unimpressive is the objective — the
+bounded outcome came from L6, not from anything clever, and if the paragraph
+were dramatic the design would be wrong.
+
+## Try it now (10 minutes)
+
+Write the four sentences for one workflow you own. Then check them against
+reality rather than intention:
+
+- Is the "find out" mechanism something you have looked at this month?
+- Has the "stop it" step ever been performed while the system was working?
+- Does the recovery step depend on data you are actually keeping?
+
+Most first drafts fail the second and third checks. That is useful information
+about where the work is.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is testing a kill switch only against a broken system worthless?",
+    options: [
+      "Broken systems respond more slowly to controls",
+      "The system was going to be off either way, so the test reports success whether or not the switch works",
+      "The switch needs production traffic to engage"
+    ],
+    answer: 1,
+    explain: "A control tested only where its effect is indistinguishable from the existing state has been confirmed of nothing. Press it while the system is working, and confirm it stops."
+  },
+  {
+    q: "Why is logging every user question a poor default for an assistant?",
+    options: [
+      "It is expensive at scale",
+      "It creates a record of what people were worried about, usually read by more people and guarded less carefully than the original data",
+      "Questions rarely help with debugging"
+    ],
+    answer: 1,
+    explain: "The log is a second copy of something sensitive that did not exist until you made it. Record the shape — retrieval, action, refusal — which supports investigation without a transcript."
+  },
+  {
+    q: "Recording which passages were retrieved for each answer mainly buys you what?",
+    options: [
+      "Faster retrieval on repeat questions",
+      "Provenance — a wrong answer can be traced back to the source that caused it",
+      "Smaller prompts on subsequent calls"
+    ],
+    answer: 1,
+    explain: "It is the link from a bad output to the poisoned input. Without it you know something went wrong but not which document to fix."
+  }
+]} />
+
+## Recap
+
+Assume one succeeds, then answer four things: what can be undone, what would be
+noticed, what must not be written down, and what can be switched off. Prefer
+proposing to doing and adding to replacing. Log the shape of requests and the
+passages retrieved rather than the questions themselves, because a transcript is
+a second exposure you created. Test the kill switch while the system is working,
+since a test against a broken one confirms nothing. Then write the four
+sentences — worst outcome, detection, stop, recovery — and treat any you cannot
+finish as unfinished design.

