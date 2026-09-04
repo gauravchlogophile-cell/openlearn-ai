@@ -452,24 +452,54 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
    * design gates rollout on 200 staff questions reviewed by hand and a
    * wrong-answer rate under 2% before Sky reaches a single learner.
    */
+  /* Three separate settings, and until now all three refused with the same
+     word. "not_configured" told an operator that something was missing but
+     never WHICH — so the only way forward was to re-enter all of them and
+     hope.
+
+     NAMES only, never values. Saying which variable is absent is the whole
+     point and is safe; echoing any part of a key would put a secret in a
+     response body. SKY_PROVIDER and SKY_MODEL echo their values because
+     neither is a secret and a typo in either is a likely cause — "Gemini" with
+     a capital G parses fine, but a stray space or a retired model name does
+     not, and seeing the string is how you spot that.
+
+     Rides along only for a caller who supplied a token, like the audience
+     diagnostic. */
+  const missing = (name: string) => json({
+    error: 'not_configured',
+    message: SKY_COPY.unavailable,
+    sources,
+    ...(request.headers.get('authorization')
+      ? { diagnostic: {
+            missing: name,
+            note: `The Worker cannot read ${name} at runtime. Check it is set on `
+                + 'the openlearn-ai Worker itself rather than another service, '
+                + 'and that the name matches exactly, including case.',
+            seen: {
+              SKY_API_KEY: env?.SKY_API_KEY ? 'present' : 'ABSENT',
+              SKY_PROVIDER: env?.SKY_PROVIDER ? `present ("${env.SKY_PROVIDER}")` : 'ABSENT',
+              SKY_MODEL: env?.SKY_MODEL ? `present ("${env.SKY_MODEL}")` : 'ABSENT',
+              SUPABASE_SERVICE_ROLE_KEY: env?.SUPABASE_SERVICE_ROLE_KEY ? 'present' : 'ABSENT',
+              runtime_env: env ? 'readable' : 'UNREADABLE — locals.runtime.env is undefined',
+            },
+          } }
+      : {}),
+  }, 503);
+
   const apiKey = env?.SKY_API_KEY;
-  if (!apiKey) {
-    // Honest failure. Sky is enabled but not configured, so it says it is
-    // unavailable rather than inventing an answer from the retrieved text.
-    return json({ error: 'not_configured', message: SKY_COPY.unavailable, sources }, 503);
-  }
+  if (!apiKey) return missing('SKY_API_KEY');
 
   const provider = parseProvider(env?.SKY_PROVIDER);
   if (!provider) {
     /* Not inferred from the key's shape. Guessing the vendor from a secret's
        prefix means a misconfiguration posts the key to the WRONG vendor's
        endpoint, which is a credential disclosure rather than a failed call. */
-    return json({ error: 'not_configured', message: SKY_COPY.unavailable, sources }, 503);
+    return missing('SKY_PROVIDER');
   }
+
   const model = env?.SKY_MODEL;
-  if (!model) {
-    return json({ error: 'not_configured', message: SKY_COPY.unavailable, sources }, 503);
-  }
+  if (!model) return missing('SKY_MODEL');
 
   /* 9. Money. Reserved BEFORE the call, from Postgres, under a row lock.
    *

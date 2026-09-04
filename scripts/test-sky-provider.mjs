@@ -58,8 +58,8 @@ ok(/'gemini'/.test(src) && /'google'/.test(src),
    would send the key somewhere nobody chose. */
 ok(/parseProvider\(env\?\.SKY_PROVIDER\)/.test(route),
    'the route reads the vendor from the environment');
-ok(/if \(!provider\)[\s\S]{0,400}not_configured/.test(route),
-   'an unset vendor stops the request before any call is made');
+ok(/if \(!provider\)[\s\S]{0,400}return missing\('SKY_PROVIDER'\)/.test(route),
+   'an unset vendor stops the request before any call is made, and names itself');
 ok(!/SKY_PROVIDER[^)]*\|\|\s*['"]/.test(route),
    'there is no fallback vendor string anywhere in the route');
 
@@ -144,6 +144,21 @@ ok(/redactForProvider\(q\)/.test(route),
 ok(route.indexOf('redactForProvider(q)') > route.indexOf('await callModel(')
    || /user: buildUserTurn\(redactForProvider\(q\)/.test(route),
    'redaction is applied inside the provider call, not somewhere earlier');
+
+// ------------------------------------------------- naming what is missing
+/* All three settings used to refuse with the same word, so an operator could
+   tell that something was unset but never which — the only way forward was to
+   re-enter all of them and hope. */
+ok(route.includes("return missing('SKY_API_KEY')")
+   && route.includes("return missing('SKY_PROVIDER')")
+   && route.includes("return missing('SKY_MODEL')"),
+   'each missing setting is named separately');
+ok(!route.includes('key: apiKey') && !route.includes('SKY_API_KEY: env?.SKY_API_KEY,'),
+   'the diagnostic never echoes the API key itself');
+ok(route.includes("SKY_API_KEY: env?.SKY_API_KEY ? 'present' : 'ABSENT'"),
+   'the key is reported as present/absent only, never its value');
+ok(route.includes('runtime_env'),
+   'it reports whether the Worker environment is readable at all');
 
 // ---------------------------------------------------------------------- run
 if (fail.length) {
