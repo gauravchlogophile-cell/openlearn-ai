@@ -141,6 +141,29 @@ async function rateLimit(env: any, key: string, limit: number): Promise<boolean>
   return true;
 }
 
+/** The role a Supabase key CLAIMS, read for diagnostics only.
+ *
+ *  This is not verification and is never used to decide anything — the
+ *  signature is checked at the database, where it belongs. It exists because
+ *  the anon key and the service key are both long strings beginning "eyJ",
+ *  they sit inches apart on the same dashboard page, and pasting the wrong one
+ *  produces a permission error that names neither of them. An operator then
+ *  has a key that looks entirely correct and an error that points elsewhere.
+ *
+ *  Returns the role NAME only. No part of any key is returned, logged, or
+ *  included in a response.
+ */
+function keyRole(key: string | undefined): string | null {
+  if (!key) return null;
+  const payload = key.split('.')[1];
+  if (!payload) return null;   // not a JWT — the newer sb_secret_… format
+  try {
+    const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+    const role = JSON.parse(json)?.role;
+    return typeof role === 'string' ? role : null;
+  } catch { return null; }
+}
+
 /** The Worker's own database client, holding the SERVICE key.
  *
  *  Not the anon key. sky_reserve() is granted to service_role alone, because a
@@ -183,6 +206,16 @@ async function reserveBudget(env: any, maxTokens: number):
         ? 'PUBLIC_SUPABASE_URL is not set on the Worker'
         : 'SUPABASE_SERVICE_ROLE_KEY is not set on the Worker — the spend cap '
           + 'cannot be read, and a cap that cannot be read does not permit spending' };
+  }
+  /* Checked before the error is interpreted, because the wrong key produces a
+     permission error that reads like a missing grant, and an operator would go
+     looking at the migration instead of at the key they pasted. */
+  const role = keyRole(env?.SUPABASE_SERVICE_ROLE_KEY);
+  if (role && role !== 'service_role') {
+    return { allowed: false, reservation: null, why:
+      `SUPABASE_SERVICE_ROLE_KEY holds a "${role}" key, not a service_role key `
+      + '— the anon key sits beside it on the same page and will not work here, '
+      + 'because sky_reserve() is granted to service_role alone' };
   }
   const { data, error } = await db.rpc('sky_reserve', { p_max_tokens: maxTokens });
   if (error) {
@@ -511,7 +544,15 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
               SKY_API_KEY: env?.SKY_API_KEY ? 'present' : 'ABSENT',
               SKY_PROVIDER: env?.SKY_PROVIDER ? `present ("${env.SKY_PROVIDER}")` : 'ABSENT',
               SKY_MODEL: env?.SKY_MODEL ? `present ("${env.SKY_MODEL}")` : 'ABSENT',
-              SUPABASE_SERVICE_ROLE_KEY: env?.SUPABASE_SERVICE_ROLE_KEY ? 'present' : 'ABSENT',
+              /* Reports the role the key claims, never the key. "present" was
+                 not enough: the anon key is also present, also long, also
+                 starts eyJ, and is the single most likely thing to be here by
+                 mistake. */
+              SUPABASE_SERVICE_ROLE_KEY: !env?.SUPABASE_SERVICE_ROLE_KEY ? 'ABSENT'
+                : keyRole(env.SUPABASE_SERVICE_ROLE_KEY) === 'service_role'
+                  ? 'present (role: service_role)'
+                  : `present, but claims role "${keyRole(env.SUPABASE_SERVICE_ROLE_KEY) ?? 'unreadable'}"`
+                    + ' — this is probably the WRONG key',
               runtime_env: env ? 'readable' : 'UNREADABLE — locals.runtime.env is undefined',
             },
           } }

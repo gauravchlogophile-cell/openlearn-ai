@@ -184,6 +184,25 @@ ok(!route.includes('key: apiKey') && !route.includes('SKY_API_KEY: env?.SKY_API_
    'the diagnostic never echoes the API key itself');
 ok(route.includes("SKY_API_KEY: env?.SKY_API_KEY ? 'present' : 'ABSENT'"),
    'the key is reported as present/absent only, never its value');
+
+/* The anon key and the service key are both long strings starting "eyJ", and
+   they sit inches apart on the same Supabase page. Confusing them yields a
+   permission error naming neither, so the role is read and reported. */
+ok(/function keyRole\(/.test(route), 'the role a key claims can be read');
+ok(/return typeof role === 'string' \? role : null/.test(route),
+   'keyRole returns the role NAME only — never key material');
+ok(/if \(!payload\) return null/.test(route),
+   'a non-JWT key (the sb_secret_ format) is tolerated, not crashed on');
+ok(/catch \{ return null; \}/.test(route),
+   'an unparseable key is null, never an exception on the request path');
+ok(/role !== 'service_role'[\s\S]{0,300}not a service_role key/.test(route),
+   'a wrong-role key names itself instead of surfacing as a grant problem');
+ok(route.includes("'present (role: service_role)'"),
+   'the diagnostic confirms the RIGHT key, not merely a present one');
+/* The check must not be load-bearing. Authorisation happens at the database
+   against the signature; this only explains failures. */
+ok(!/if \(keyRole[\s\S]{0,80}allowed: true/.test(route),
+   'nothing is AUTHORISED on the strength of an unverified claim');
 ok(route.includes('runtime_env'),
    'it reports whether the Worker environment is readable at all');
 
