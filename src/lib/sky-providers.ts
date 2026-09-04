@@ -274,7 +274,8 @@ export function citesASource(text: string, passageCount: number): boolean {
  *  their error body, which we do not surface, so they would gain less.
  */
 export async function listModels(c: { provider: Provider; apiKey: string; base?: string }):
-    Promise<{ ok: true; models: string[] } | { ok: false; status: number; reason: string }> {
+    Promise<{ ok: true; models: string[]; filtered: boolean; total: number }
+          | { ok: false; status: number; reason: string }> {
   if (c.provider !== 'gemini') {
     return { ok: false, status: 501, reason: `listing models is not implemented for ${c.provider}` };
   }
@@ -301,13 +302,28 @@ export async function listModels(c: { provider: Provider; apiKey: string; base?:
      which would be an inviting and completely non-working choice for
      SKY_MODEL. The "models/" prefix is stripped because that is the form
      SKY_MODEL takes. */
-  const models = (Array.isArray(data?.models) ? data.models : [])
-    .filter((m: any) => Array.isArray(m?.supportedGenerationMethods)
-      ? m.supportedGenerationMethods.includes('generateContent')
-      : true)
-    .map((m: any) => String(m?.name ?? '').replace(/^models\//, ''))
-    .filter(Boolean)
-    .sort();
+  const named = (Array.isArray(data?.models) ? data.models : [])
+    .map((m: any) => ({
+      name: String(m?.name ?? '').replace(/^models\//, ''),
+      methods: Array.isArray(m?.supportedGenerationMethods)
+        ? m.supportedGenerationMethods as string[] : null,
+    }))
+    .filter((m: { name: string }) => m.name);
 
-  return { ok: true, models };
+  /* The first version of this filtered with `: true` when the provider did not
+     report methods — so when the field was absent for every model, it silently
+     listed the ENTIRE catalogue while claiming to list usable ones. Music,
+     image and transcription models appeared as valid choices for SKY_MODEL.
+
+     A filter whose failure mode is "no filtering, silently" is worse than no
+     filter, because the output still reads as authoritative. So: trust the
+     field where the provider reports it, and where it reports it for nothing,
+     SAY the list is unfiltered rather than implying otherwise. */
+  const reports = named.some((m: { methods: string[] | null }) => m.methods !== null);
+  const models = (reports
+    ? named.filter((m: { methods: string[] | null }) =>
+        m.methods?.includes('generateContent')).map((m: { name: string }) => m.name)
+    : named.map((m: { name: string }) => m.name)).sort();
+
+  return { ok: true, models, filtered: reports, total: named.length };
 }

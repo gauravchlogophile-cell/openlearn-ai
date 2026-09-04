@@ -441,7 +441,21 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     const listed = await listModels({ provider: pp, apiKey: pk, base: env?.SKY_BASE_URL });
     return listed.ok
       ? json({ ok: true, provider: pp, configured: env?.SKY_MODEL ?? null,
-               configuredIsAvailable: listed.models.includes(env?.SKY_MODEL ?? ''),
+               /* Named for what it actually proves. It was configuredIsAvailable,
+                  which read as "this model works" — but when the provider does
+                  not report supported methods, appearing in the catalogue proves
+                  only that the name is known, and a listed-but-retired model
+                  still answers :generateContent with 404. That is exactly the
+                  case this probe was built to diagnose, and the old name
+                  contradicted the evidence in front of it. */
+               configuredIsListed: listed.models.includes(env?.SKY_MODEL ?? ''),
+               listIsFilteredToUsable: listed.filtered,
+               ...(listed.filtered ? {} : { note:
+                 'The provider did not report which methods each model supports, '
+                 + 'so this is the FULL catalogue — image, music and speech models '
+                 + 'included. Appearing here does not mean a model can answer '
+                 + 'questions, and a retired model can still be listed.' }),
+               total: listed.total,
                models: listed.models })
       : json({ error: 'provider', status: listed.status, why: listed.reason }, 502);
   }

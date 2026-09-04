@@ -233,8 +233,22 @@ ok(route.includes('runtime_env'),
 /* A 404 names the model that does NOT work and nothing that does, so fixing
    SKY_MODEL was a guess against a list only the provider can see. */
 ok(/export async function listModels/.test(src), 'the available models can be listed');
-ok(/supportedGenerationMethods[\s\S]{0,120}generateContent/.test(src),
-   'embedding models are filtered out — an inviting, completely non-working choice');
+ok(/Array\.isArray\(m\?\.supportedGenerationMethods\)/.test(src)
+   && /m\.methods\?\.includes\('generateContent'\)/.test(src),
+   'the supported-methods field is honoured where the provider reports it');
+/* The first version fell back to `: true`, so when the field was absent for
+   EVERY model it listed the entire catalogue while reading as a vetted list —
+   music, image and transcription models offered as choices for SKY_MODEL. A
+   filter whose failure mode is "no filtering, silently" is worse than none,
+   because the output still reads as authoritative. */
+ok(!/supportedGenerationMethods\s*\)\s*\n\s*\?[\s\S]{0,80}\n\s*: true\)/.test(src),
+   'an unreported methods field does NOT silently pass the whole catalogue');
+ok(/filtered: reports/.test(src) && /const reports = named\.some/.test(src),
+   'the result records whether any filtering actually happened');
+ok(/listIsFilteredToUsable: listed\.filtered/.test(route),
+   'the console is told whether the list was filtered');
+ok(/FULL catalogue/.test(route),
+   'an unfiltered list says so outright, rather than implying it was vetted');
 ok(/replace\(\/\^models\\\/\/, ''\)/.test(src),
    'the "models/" prefix is stripped, because that is the form SKY_MODEL takes');
 ok(/'x-goog-api-key': c\.apiKey/.test(src) && !/models\?key=/.test(src),
@@ -256,8 +270,18 @@ ok(route.indexOf("body.probe === 'models'")
    'the probe returns before any budget is reserved');
 ok(route.indexOf("body.probe === 'models'") < route.indexOf('await callModel('),
    'the probe never reaches the completion call');
-ok(/configuredIsAvailable: listed\.models\.includes/.test(route),
-   'the answer says outright whether the CONFIGURED model is in the list');
+/* Named for what it proves. It was configuredIsAvailable, which reads as "this
+   model works" — but where methods are unreported, appearing in the catalogue
+   proves only that the name is KNOWN, and a listed-but-retired model still
+   answers :generateContent with 404. That was the very case in front of it. */
+ok(/configuredIsListed: listed\.models\.includes/.test(route),
+   'the answer says whether the configured model is in the list');
+/* Comment-stripped: the rename is EXPLAINED in a comment naming the old field,
+   and a test that cannot tell an explanation from an implementation fails on
+   its own documentation. The same reason the gemini key check does this. */
+const routeCode = route.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+ok(!/configuredIsAvailable/.test(routeCode),
+   'nothing claims availability on the strength of a catalogue entry');
 ok(!/models: listed\.models[\s\S]{0,80}apiKey/.test(route),
    'the key is not returned beside the models');
 
