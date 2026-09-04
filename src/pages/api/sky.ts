@@ -149,7 +149,15 @@ async function rateLimit(env: any, key: string, limit: number): Promise<boolean>
  *  a browser.
  */
 function serviceDb(env: any) {
-  const url = env?.PUBLIC_SUPABASE_URL;
+  /* The URL falls back to the build-time value, as identify() and verify.ts
+     both already do. It was read from the runtime binding ALONE here, and the
+     two are stocked from different places: PUBLIC_SUPABASE_URL has to be a
+     BUILD variable because Astro inlines it, so the runtime binding is
+     routinely absent even on a correctly configured Worker. The effect was a
+     budget reservation that failed closed for a reason nobody had got wrong —
+     Sky would have kept refusing after the service key was finally set.
+     Safe to inline: it is the public project URL, not a credential. */
+  const url = env?.PUBLIC_SUPABASE_URL ?? import.meta.env.PUBLIC_SUPABASE_URL;
   const key = env?.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return null;
   return createClient(url, key, { auth: { persistSession: false } });

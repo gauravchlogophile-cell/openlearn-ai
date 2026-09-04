@@ -144,6 +144,14 @@ ok(/SUPABASE_SERVICE_ROLE_KEY/.test(route),
    until each named itself the only way to tell them apart was to change one
    thing and try again. That cost a full round trip per guess. */
 ok(/why: string/.test(route), 'the reservation reports WHY it refused');
+/* The URL and the key come from different places — the URL is a BUILD variable
+   because Astro inlines it, the key is a RUNTIME secret because it must never
+   touch a build. Reading both from the runtime binding alone made a correctly
+   configured Worker fail closed. */
+ok(/const url = env\?\.PUBLIC_SUPABASE_URL \?\? import\.meta\.env\.PUBLIC_SUPABASE_URL/.test(route),
+   'the service client falls back to the build-time project URL');
+ok(!/const key = env\?\.SUPABASE_SERVICE_ROLE_KEY \?\? import\.meta\.env/.test(route),
+   'the service KEY has no build-time fallback — a secret must never be inlined');
 ok(route.includes('SUPABASE_SERVICE_ROLE_KEY is not set on the Worker'),
    'a missing service key says so, rather than looking like a spend cap');
 ok(/42883/.test(route) && /0013_sky_budget\.sql/.test(route),
