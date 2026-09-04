@@ -98,17 +98,25 @@ ok(/thinkingConfig: \{ thinkingBudget: 0 \}/.test(src),
    and the alternative is Sky dark until someone deploys. */
 ok(/res\.status === 400 && c\.provider === 'gemini'/.test(src),
    'a 400 from gemini is inspected before being reported');
-ok(/\/thinking\/i\.test\(peek\)/.test(src),
-   'the retry fires only when the provider itself named thinking');
-ok(/res\.clone\(\)\.text\(\)/.test(src),
-   'the body is cloned to peek — consuming it would leave nothing to report');
+/* The retry first required the RESPONSE to mention "thinking". Gemini's real
+   reply was "Request contains an invalid argument." — naming no field — so it
+   never fired and the request stayed broken. Matching on an error string is
+   matching on someone else's wording, which nobody promised to keep stable.
+   The condition is now what WE sent, which we know for certain. */
+ok(/generationConfig\?\.thinkingConfig\)/.test(src),
+   'the retry is conditioned on what we sent, not on the provider’s wording');
+ok(!/\/thinking\/i\.test\(peek\)/.test(src),
+   'it no longer depends on the provider naming the field');
+ok(/\[\$\{err\.status\}\]/.test(src) && /fieldViolations/.test(src),
+   'the machine-readable status and field violations are read, since the '
+   + 'human-readable message can name nothing at all');
 ok((src.match(/const \{ thinkingConfig, \.\.\.rest \}/g) ?? []).length === 1,
    'the option is dropped once — a blanket retry would double every '
    + 'malformed request and hide the fault instead of reporting it');
 ok(/provider said: \$\{detail\}/.test(src),
    "the provider's own message is reported, not just our guess about it");
-ok(/error\?\.message/.test(src) && !/reason:[^\n]*await res\.text\(\)/.test(src),
-   'only the structured message field is taken, never the raw body');
+ok(/err\?\.message/.test(src) && !/reason:[^\n]*await res\.text\(\)/.test(src),
+   'only structured fields are taken, never the raw body');
 ok(/slice\(0, 300\)/.test(src), 'and it is capped');
 ok(/thinkingConfig/.test(src) && /generationConfig: \{[\s\S]{0,200}thinkingConfig/.test(src),
    'thinkingConfig sits inside generationConfig, where gemini reads it');
@@ -224,8 +232,13 @@ ok(!/reason: JSON\.stringify\(/.test(src) && !/JSON\.stringify\(parsed\)/.test(s
    "the raw body is never stringified into a reason");
 ok(!/detail = await res\.text\(\)/.test(src),
    'the body text is never taken wholesale as the detail');
-ok(/typeof m === 'string'/.test(src),
-   'a non-string message field is ignored rather than coerced');
+ok(/typeof err\?\.message === 'string'/.test(src)
+   && /typeof err\?\.status === 'string'/.test(src),
+   'non-string message and status fields are ignored rather than coerced');
+ok(/Array\.isArray\(err\?\.details\)/.test(src)
+   && /Array\.isArray\(d\?\.fieldViolations\)/.test(src),
+   'the details walk is guarded at every level — a provider error path must '
+   + 'never throw while reporting a provider error');
 /* The reason must be gated exactly as missing() is. It names internals — an
    anonymous visitor gets the plain refusal and nothing else. */
 ok(/\{ diagnostic: \{ (?:build, )?stage: 'budget'[\s\S]{0,120}\}\s*:\s*\{\}/.test(route),

@@ -137,16 +137,22 @@ export async function callModel(c: ModelCall): Promise<ModelResult> {
        is strictly better than refusing: a slower, thinking answer beats no
        answer, and the alternative is Sky staying dark until someone deploys.
 
-       Deliberately narrow. Only gemini, only 400, only when the provider's own
-       message names thinking, and only once — a blanket retry on 400 would
+       The condition is what WE sent, not what the provider said. It first
+       required the response to mention "thinking" — and Gemini's actual reply
+       was "Request contains an invalid argument.", naming no field at all, so
+       the retry never fired and the request stayed broken. Matching on an
+       error string is matching on someone else's wording, which they are under
+       no obligation to keep.
+
+       Still bounded: only gemini, only 400, only when this request actually
+       carried thinkingConfig, and only once. A blanket retry on 400 would
        double the latency of every genuinely malformed request and hide the
-       fault instead of reporting it. */
-    if (!res.ok && res.status === 400 && c.provider === 'gemini') {
-      const peek = await res.clone().text().catch(() => '');
-      if (/thinking/i.test(peek)) {
-        const { thinkingConfig, ...rest } = (body as any).generationConfig ?? {};
-        res = await send({ ...(body as any), generationConfig: rest });
-      }
+       fault instead of reporting it. When the second attempt fails too, its
+       error is what gets reported. */
+    if (!res.ok && res.status === 400 && c.provider === 'gemini'
+        && (body as any).generationConfig?.thinkingConfig) {
+      const { thinkingConfig, ...rest } = (body as any).generationConfig;
+      res = await send({ ...(body as any), generationConfig: rest });
     }
   } catch (e) {
     /* Includes the timeout abort. A provider that does not answer is a
@@ -165,10 +171,21 @@ export async function callModel(c: ModelCall): Promise<ModelResult> {
        taken. The route passes this only to a caller holding a staff token. */
     let detail = '';
     try {
-      const parsed = JSON.parse(await res.text());
-      const m = parsed?.error?.message;
-      if (typeof m === 'string') detail = m.replace(/\s+/g, ' ').trim().slice(0, 300);
-    } catch { /* not JSON, or no message: the status still stands alone */ }
+      const err = JSON.parse(await res.text())?.error;
+      const parts: string[] = [];
+      if (typeof err?.message === 'string') parts.push(err.message);
+      /* The message can be useless on its own — Gemini answered "Request
+         contains an invalid argument." and named nothing. The machine-readable
+         status and any fieldViolations carry what the prose left out. */
+      if (typeof err?.status === 'string') parts.push(`[${err.status}]`);
+      for (const d of Array.isArray(err?.details) ? err.details : []) {
+        for (const v of Array.isArray(d?.fieldViolations) ? d.fieldViolations : []) {
+          if (v?.field) parts.push(`field: ${v.field}`);
+          if (v?.description) parts.push(String(v.description));
+        }
+      }
+      detail = parts.join(' ').replace(/\s+/g, ' ').trim().slice(0, 300);
+    } catch { /* not JSON, or no error object: the status still stands alone */ }
 
     /* The status alone is not enough to act on: 403 and 404 send you to
        completely different settings, and a bare number sends you to neither. */
