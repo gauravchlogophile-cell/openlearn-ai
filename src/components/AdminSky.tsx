@@ -98,8 +98,11 @@ export default function AdminSky() {
    *  tell you that Sky.tsx is the broken part, which it cannot do if it shares
    *  the same lines. It builds the request from scratch, the way the browser
    *  would, and hides nothing that comes back. */
-  async function selfTest() {
-    setBusy(true); setMsg(''); setOk(''); setProbe(null);
+  /* Deliberately shares selfTest's request code rather than duplicating it —
+     but note selfTest itself still does NOT reuse Sky.tsx's, because a test
+     that shares the code under test cannot catch a fault inside it. Here the
+     code under test is the ROUTE, and both of these are callers. */
+  async function ask(payload: Record<string, unknown>) {
     let token: string | null = null;
     let tokenNote = 'not configured';
     try {
@@ -122,8 +125,7 @@ export default function AdminSky() {
     let body = '';
     try {
       const res = await fetch('/api/sky', {
-        method: 'POST', headers,
-        body: JSON.stringify({ q: 'what is a token', page: '/admin/sky' }),
+        method: 'POST', headers, body: JSON.stringify(payload),
       });
       status = String(res.status);
       const text = await res.text();
@@ -131,10 +133,24 @@ export default function AdminSky() {
     } catch (e) {
       body = 'request failed: ' + (e as Error).message;
     }
+    return { configured: isConfigured, token: tokenNote, status, body };
+  }
 
-    setProbe({ configured: isConfigured, token: tokenNote, status, body });
+  /* Which models will this key actually accept?
+     A 404 names the model that does not work and nothing that does, so without
+     this the fix is guesswork against a list only the provider can see. */
+  async function listModels() {
+    setBusy(true); setMsg(''); setOk(''); setProbe(null);
+    setProbe(await ask({ probe: 'models' }));
     setBusy(false);
   }
+
+  async function selfTest() {
+    setBusy(true); setMsg(''); setOk(''); setProbe(null);
+    setProbe(await ask({ q: 'what is a token', page: '/admin/sky' }));
+    setBusy(false);
+  }
+
 
   const allGatesGreen = GATES.every((g) => g.met);
   const current = log[0]?.mode ?? 'off';
@@ -215,9 +231,19 @@ export default function AdminSky() {
           prints the raw answer. If Sky refuses, the reason it gives here is the
           actual reason — not a guess from the outside.
         </p>
-        <button className="btn" disabled={busy} onClick={() => void selfTest()}>
-          {busy ? 'Asking…' : 'Run the test'}
-        </button>
+        <div style={{ display: 'flex', gap: 'var(--sp-3)', flexWrap: 'wrap' }}>
+          <button className="btn" disabled={busy} onClick={() => void selfTest()}>
+            {busy ? 'Asking…' : 'Run the test'}
+          </button>
+          {/* Asks the provider which models this key accepts. A 404 names the
+              model that does NOT work and nothing that does, which leaves
+              correcting SKY_MODEL a guess against a list only the provider can
+              see. Reserves no budget and requests no completion. */}
+          <button className="btn btn--ghost" disabled={busy}
+                  onClick={() => void listModels()}>
+            {busy ? 'Asking…' : 'List available models'}
+          </button>
+        </div>
 
         {probe && (
           <div className="card" style={{ marginTop: 'var(--sp-4)' }}>

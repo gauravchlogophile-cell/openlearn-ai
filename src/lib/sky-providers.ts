@@ -258,3 +258,56 @@ export function citesASource(text: string, passageCount: number): boolean {
   const cited = [...text.matchAll(/\[(\d{1,2})\]/g)].map((m) => Number(m[1]));
   return cited.some((n) => n >= 1 && n <= passageCount);
 }
+
+/** Ask the provider which models this key can actually use.
+ *
+ *  A 404 from :generateContent says the model name is not available, and says
+ *  nothing about what IS. Without this, correcting SKY_MODEL is guesswork
+ *  against a name the operator cannot see — and model names are retired on the
+ *  provider's schedule, not ours, so this is not a one-off need.
+ *
+ *  Returns NAMES only. The key travels in a header as it does everywhere else
+ *  here, and no part of it is ever returned.
+ *
+ *  Gemini only for now: it is the one whose names are versioned and dated, and
+ *  the one whose 404 sent us looking. The other two report an unknown model in
+ *  their error body, which we do not surface, so they would gain less.
+ */
+export async function listModels(c: { provider: Provider; apiKey: string; base?: string }):
+    Promise<{ ok: true; models: string[] } | { ok: false; status: number; reason: string }> {
+  if (c.provider !== 'gemini') {
+    return { ok: false, status: 501, reason: `listing models is not implemented for ${c.provider}` };
+  }
+  const base = c.base ?? DEFAULT_BASE.gemini;
+  let res: Response;
+  try {
+    res = await fetch(`${base}/v1beta/models?pageSize=200`, {
+      headers: { 'x-goog-api-key': c.apiKey },
+    });
+  } catch {
+    return { ok: false, status: 504, reason: 'could not reach the provider' };
+  }
+  if (!res.ok) {
+    /* 403 here and 404 on :generateContent are a meaningful pair: the key is
+       refused outright rather than the model being missing. */
+    return { ok: false, status: res.status, reason: `provider returned ${res.status}`
+      + (res.status === 403 ? ' — the key itself was refused, so the model name is not the problem' : '') };
+  }
+  let data: any;
+  try { data = await res.json(); }
+  catch { return { ok: false, status: 502, reason: 'provider sent malformed JSON' }; }
+
+  /* Only models that can actually answer. The list includes embedding models,
+     which would be an inviting and completely non-working choice for
+     SKY_MODEL. The "models/" prefix is stripped because that is the form
+     SKY_MODEL takes. */
+  const models = (Array.isArray(data?.models) ? data.models : [])
+    .filter((m: any) => Array.isArray(m?.supportedGenerationMethods)
+      ? m.supportedGenerationMethods.includes('generateContent')
+      : true)
+    .map((m: any) => String(m?.name ?? '').replace(/^models\//, ''))
+    .filter(Boolean)
+    .sort();
+
+  return { ok: true, models };
+}

@@ -4,7 +4,7 @@ import index from '../../generated/sky-index.json';
 import quizbank from '../../generated/sky-quizbank.json';
 import { prepareQuiz, quizMatch, wantsAnswerKey } from '../../lib/sky-guard.js';
 import {
-  callModel, parseProvider, buildUserTurn, citesASource, SKY_SYSTEM,
+  callModel, listModels, parseProvider, buildUserTurn, citesASource, SKY_SYSTEM,
 } from '../../lib/sky-providers';
 import { createClient } from '@supabase/supabase-js';
 import { skyAudience, leastPermissive } from '../../lib/sky-audience.js';
@@ -369,6 +369,13 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
    *
    *  Fails closed throughout — no token, an unreadable token, an unreachable
    *  database all mean "not staff", which in 'staff' mode means refused. */
+  /* Hoisted above the model probe below, which reads it. It was declared
+     further down beside its first use in the rate limiter; the probe sits
+     earlier, and a `const` read before its declaration is a ReferenceError at
+     runtime rather than a compile error, so this is moved rather than
+     duplicated. */
+  const env = (locals as any)?.runtime?.env;
+
   const viewer = await identify(locals as any, request);
   const liveMode = leastPermissive(SKY_MODE, await recordedMode(locals as any));
   const verdict = skyAudience(liveMode, viewer, SKY_LIMITS.slicePercent);
@@ -408,8 +415,36 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     }, 503);
   }
 
-  let body: { q?: unknown; page?: unknown };
+  let body: { q?: unknown; page?: unknown; probe?: unknown };
   try { body = await request.json(); } catch { return json({ error: 'bad_json' }, 400); }
+
+  /* An operator probe: which models can this key actually use?
+   *
+   * A 404 from :generateContent says the configured name is not available and
+   * says nothing about what is, which leaves correcting SKY_MODEL a guessing
+   * game against a list the operator cannot see. Model names are retired on
+   * the provider's schedule, so this is a standing need, not a one-off.
+   *
+   * STAFF ONLY, and checked separately from the audience gate above — that
+   * gate answers "may this person use Sky", which at stage 'all' is everyone.
+   * This asks the provider a question on our key, so it takes the stricter
+   * test. It reserves no budget and asks for no completion: listing models is
+   * free, and a probe that could spend would be a way to spend without asking
+   * anything. */
+  if (body.probe === 'models') {
+    if (!viewer.isStaff) return json({ error: 'forbidden' }, 403);
+    const pk = env?.SKY_API_KEY;
+    const pp = parseProvider(env?.SKY_PROVIDER);
+    if (!pk || !pp) return json({ error: 'not_configured', diagnostic: {
+      note: 'SKY_API_KEY and SKY_PROVIDER must both be set before models can be listed',
+    } }, 503);
+    const listed = await listModels({ provider: pp, apiKey: pk, base: env?.SKY_BASE_URL });
+    return listed.ok
+      ? json({ ok: true, provider: pp, configured: env?.SKY_MODEL ?? null,
+               configuredIsAvailable: listed.models.includes(env?.SKY_MODEL ?? ''),
+               models: listed.models })
+      : json({ error: 'provider', status: listed.status, why: listed.reason }, 502);
+  }
 
   const q = typeof body.q === 'string' ? body.q.trim() : '';
   if (!q) return json({ error: 'empty' }, 400);
@@ -457,7 +492,6 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
   }
 
   // 6. Rate limit before retrieval, and before any provider call.
-  const env = (locals as any)?.runtime?.env;
   const ip = clientAddress ?? 'unknown';
   if (!(await rateLimit(env, `ip:${ip}`, SKY_LIMITS.maxPerIpPerHour))) {
     return json({ error: 'rate_limited', message: 'Too many questions for now. Try again shortly.' }, 429);

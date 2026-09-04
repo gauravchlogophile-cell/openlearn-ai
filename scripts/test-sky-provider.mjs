@@ -229,6 +229,38 @@ ok(!/if \(keyRole[\s\S]{0,80}allowed: true/.test(route),
 ok(route.includes('runtime_env'),
    'it reports whether the Worker environment is readable at all');
 
+// ------------------------------------------------- listing what the key has
+/* A 404 names the model that does NOT work and nothing that does, so fixing
+   SKY_MODEL was a guess against a list only the provider can see. */
+ok(/export async function listModels/.test(src), 'the available models can be listed');
+ok(/supportedGenerationMethods[\s\S]{0,120}generateContent/.test(src),
+   'embedding models are filtered out — an inviting, completely non-working choice');
+ok(/replace\(\/\^models\\\/\/, ''\)/.test(src),
+   'the "models/" prefix is stripped, because that is the form SKY_MODEL takes');
+ok(/'x-goog-api-key': c\.apiKey/.test(src) && !/models\?key=/.test(src),
+   'the key is a header here too, never a query parameter');
+ok(/403[\s\S]{0,140}the key itself was refused/.test(src),
+   'a 403 on the LIST says the key is refused, so the model name is not the problem');
+
+ok(/body\.probe === 'models'/.test(route), 'the route accepts the probe');
+ok(/if \(!viewer\.isStaff\) return json\(\{ error: 'forbidden' \}, 403\)/.test(route),
+   'the probe is STAFF only — the audience gate answers a different question, '
+   + 'and at stage "all" it admits everyone');
+/* It must not be able to spend. A probe that reserved budget would be a way to
+   spend without asking anything. */
+/* Anchored on the CALL, not the name: reserveBudget is defined near the top of
+   the file, so indexOf on the bare name finds the declaration and the ordering
+   claim is then vacuous. This assertion failed for exactly that reason. */
+ok(route.indexOf("body.probe === 'models'")
+     < route.indexOf('await reserveBudget(env, SKY_LIMITS.maxAnswerTokens)'),
+   'the probe returns before any budget is reserved');
+ok(route.indexOf("body.probe === 'models'") < route.indexOf('await callModel('),
+   'the probe never reaches the completion call');
+ok(/configuredIsAvailable: listed\.models\.includes/.test(route),
+   'the answer says outright whether the CONFIGURED model is in the list');
+ok(!/models: listed\.models[\s\S]{0,80}apiKey/.test(route),
+   'the key is not returned beside the models');
+
 // ---------------------------------------------------------------------- run
 if (fail.length) {
   console.error('\nsky-provider: FAILED\n' + fail.map((f) => '  ✗ ' + f).join('\n') + '\n');
