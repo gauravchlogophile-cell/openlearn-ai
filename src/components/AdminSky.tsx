@@ -258,10 +258,24 @@ export default function AdminSky() {
    *
    * Only a case ID is sent. The payloads live in the corpus bundled into the
    * Worker, so no attack text travels from this browser. */
-  async function runInjection() {
-    setBusy(true); setMsg(''); setOk(''); setProbe(null); setInj([]);
+  /* Resumable, because a free-tier quota makes a clean 27-case run unlikely.
+   *
+   * Measured: this key allows about ten calls a minute, so the corpus needs
+   * three and a half minutes at best. A run that is interrupted, or started
+   * twice because the first looked frozen during a 65-second wait, spends its
+   * quota and finishes with gaps — and three separate runs produced gaps in
+   * three different places.
+   *
+   * So results accumulate rather than reset. `only` runs a subset, which lets
+   * the button beneath the table re-run just the cases that errored: seven
+   * cases fit inside one quota window comfortably, where twenty-seven do not.
+   * The corpus does not have to be completed in one sitting to be complete. */
+  async function runInjection(only?: string[]) {
+    const ids = only ?? INJECTION_CASES;
+    setBusy(true); setMsg(''); setOk(''); setProbe(null);
+    if (!only) setInj([]);
     const out: InjResult[] = [];
-    for (const [n, id] of INJECTION_CASES.entries()) {
+    for (const [n, id] of ids.entries()) {
       /* Paced. The first run put 27 calls through in about a minute and
          eleven came back as bare provider errors — free-tier Gemini limits
          requests per minute, and a burst trips it. Eleven unrun cases
@@ -276,8 +290,8 @@ export default function AdminSky() {
          4.5s sends thirteen a minute, which is why a third of the corpus never
          ran. 8s sends seven and a half. */
       if (n > 0) await new Promise((r) => setTimeout(r, 8000));
-      setMsg(`Running ${id} — ${out.length} of ${INJECTION_CASES.length} done`
-        + ` · about ${Math.ceil(((INJECTION_CASES.length - n) * 8) / 60)} min left`);
+      setMsg(`Running ${id} — ${out.length} of ${ids.length} done`
+        + ` · about ${Math.ceil(((ids.length - n) * 8) / 60)} min left`);
 
       /* One retry, and for a rate limit it waits a full window.
          Twenty seconds was not enough: a per-minute quota needs the minute to
@@ -320,7 +334,13 @@ export default function AdminSky() {
         manualReview: parsed.manualReview === true,
         answer: parsed.answer ?? r.body,
       });
-      setInj([...out]);
+      /* Merged, not replaced: a subset run must update its own rows and
+         leave every other result standing. */
+      setInj((prev) => {
+        const merged = prev.filter((x) => !out.some((y) => y.id === x.id));
+        return [...merged, ...out].sort(
+          (a, b) => INJECTION_CASES.indexOf(a.id) - INJECTION_CASES.indexOf(b.id));
+      });
     }
     const failed = out.filter((r) => r.verdict === 'FAIL').length;
     const read = out.filter((r) => r.verdict === 'READ').length;
@@ -505,6 +525,26 @@ export default function AdminSky() {
                 </tbody>
               </table>
             </div>
+
+            {/* A free-tier quota of about ten calls a minute means a clean
+                27-case run is unlikely, and three runs left gaps in three
+                different places. Finishing the corpus over two sittings is
+                not a worse result than finishing it in one. */}
+            {inj.some((r) => r.verdict.startsWith('error')) && (
+              <div style={{ marginTop: 'var(--sp-3)' }}>
+                <button className="btn" disabled={busy}
+                  onClick={() => void runInjection(
+                    inj.filter((r) => r.verdict.startsWith('error')).map((r) => r.id))}>
+                  Re-run the {inj.filter((r) => r.verdict.startsWith('error')).length} that
+                  {' '}did not complete
+                </button>
+                <p style={{ margin: 'var(--sp-2) 0 0', color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>
+                  These are almost always the provider’s per-minute quota rather than a
+                  result. Re-running only the gaps keeps the batch small enough to fit
+                  inside one window, and the rows above are kept.
+                </p>
+              </div>
+            )}
           </div>
         )}
 
