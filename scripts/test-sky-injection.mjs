@@ -76,6 +76,19 @@ for (const c of corpus.cases) {
 const ids = corpus.cases.map((c) => c.id);
 ok(new Set(ids).size === ids.length, 'case ids are unique');
 
+/* The admin console loops over a literal list of ids so it can show progress
+   without first asking the Worker what exists. A list that drifts would
+   silently stop running part of the corpus — the failure would be invisible,
+   because the run would still report every case it knew about as passing. */
+{
+  const ui = readFileSync(ROOT + 'src/components/AdminSky.tsx', 'utf8');
+  const listed = [...(ui.match(/const INJECTION_CASES = \[([\s\S]*?)\]/)?.[1] ?? '')
+    .matchAll(/'([^']+)'/g)].map((m) => m[1]);
+  ok(listed.length === ids.length && ids.every((id) => listed.includes(id)),
+     `the console's case list matches the corpus `
+     + `(corpus ${ids.length}, console ${listed.length})`);
+}
+
 // ------------------------------------------------ the fence cannot be closed
 /* The central property. Everything the module claims about separation rests on
    a passage being unable to leave its own fence. */

@@ -87,6 +87,25 @@ function gatesFrom(s: GateStats | null) {
   ];
 }
 
+type InjResult = {
+  id: string; shape: string; verdict: string; problems: string[];
+  expect: string; manualReview: boolean; answer: string;
+};
+
+/* The case IDs, listed here so the console can loop without first asking the
+   Worker what exists. Kept in step with security/injection-corpus.json by a
+   check in scripts/test-sky-injection.mjs — a list that silently drifts would
+   quietly stop running some of the corpus. */
+const INJECTION_CASES = [
+  'override-01', 'override-02', 'override-03', 'authority-01',
+  'authority-02', 'authority-03', 'editorial-01', 'editorial-02',
+  'roleplay-01', 'roleplay-02', 'roleplay-03', 'encoding-01',
+  'encoding-02', 'encoding-03', 'encoding-04', 'formatting-01',
+  'formatting-02', 'exfiltration-01', 'exfiltration-02', 'exfiltration-03',
+  'fence-01', 'fence-02', 'fence-03', 'scope-01',
+  'scope-02', 'scope-03', 'scope-04',
+];
+
 const VERDICTS = [
   { id: 'good', label: 'Answered well' },
   { id: 'wrong', label: 'Wrong or misleading' },
@@ -104,6 +123,7 @@ export default function AdminSky() {
     { configured: boolean; token: string; status: string; body: string } | null>(null);
   const [stats, setStats] = useState<GateStats | null>(null);
   const [reviewNote, setReviewNote] = useState('');
+  const [inj, setInj] = useState<InjResult[]>([]);
 
   async function load() {
     const { data, error } = await supabase()
@@ -225,6 +245,44 @@ export default function AdminSky() {
   async function selfTest() {
     setBusy(true); setMsg(''); setOk(''); setProbe(null);
     setProbe(await ask({ q: 'what is a token', page: '/admin/sky' }));
+    setBusy(false);
+  }
+
+  /* Run the injection corpus, one case per request.
+   *
+   * The loop lives here rather than in the Worker because twenty-seven
+   * sequential model calls in one invocation would sit close to the wall-clock
+   * limit, and a probe that times out half way reports nothing about the half
+   * it did run. Looping in the browser also means the count moves while it
+   * works, which matters when the whole thing takes a minute.
+   *
+   * Only a case ID is sent. The payloads live in the corpus bundled into the
+   * Worker, so no attack text travels from this browser. */
+  async function runInjection() {
+    setBusy(true); setMsg(''); setOk(''); setProbe(null); setInj([]);
+    const out: InjResult[] = [];
+    for (const id of INJECTION_CASES) {
+      setMsg(`Running ${id} — ${out.length} of ${INJECTION_CASES.length} done`);
+      const r = await ask({ probe: 'injection', case: id });
+      let parsed: any = {};
+      try { parsed = JSON.parse(r.body); } catch { /* keep the raw below */ }
+      out.push({
+        id,
+        shape: parsed.shape ?? '?',
+        verdict: parsed.verdict ?? (parsed.error ? `error: ${parsed.error}` : '?'),
+        problems: parsed.problems ?? [],
+        expect: parsed.expect ?? '',
+        manualReview: parsed.manualReview === true,
+        answer: parsed.answer ?? r.body,
+      });
+      setInj([...out]);
+    }
+    const failed = out.filter((r) => r.verdict === 'FAIL').length;
+    const read = out.filter((r) => r.verdict === 'READ').length;
+    setMsg('');
+    setOk(`${out.length} cases run · ${failed} failed · ${read} need a human read. `
+      + 'A pass means these cases did not work against this model today — not '
+      + 'that Sky resists injection, and not a reason to widen the stage.');
     setBusy(false);
   }
 
@@ -353,7 +411,57 @@ export default function AdminSky() {
                   onClick={() => void listModels()}>
             {busy ? 'Asking…' : 'List available models'}
           </button>
+          {/* The corpus, against the real model. Costs roughly 27 calls from
+              the same daily cap learners use, which is why it is a deliberate
+              press and not something that runs on a schedule from here. */}
+          <button className="btn btn--ghost" disabled={busy}
+                  onClick={() => void runInjection()}>
+            {busy ? 'Running…' : `Run the injection corpus (${INJECTION_CASES.length})`}
+          </button>
         </div>
+
+        {inj.length > 0 && (
+          <div className="card" style={{ marginTop: 'var(--sp-4)' }}>
+            <p style={{ margin: '0 0 var(--sp-2)', fontWeight: 600 }}>
+              Injection corpus — {inj.length} of {INJECTION_CASES.length}
+            </p>
+            <p style={{ margin: '0 0 var(--sp-3)', color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>
+              Each row is one attack shape sent through the real prompt assembly to the
+              real model. <strong>pass</strong> means that attack did not work today —
+              not that Sky resists injection, and not a reason to widen the stage.
+            </p>
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 'var(--fs-100)' }}>
+                <thead>
+                  <tr style={{ textAlign: 'left', color: 'var(--c-ink-faint)' }}>
+                    <th style={{ padding: '4px 8px' }}>Case</th>
+                    <th style={{ padding: '4px 8px' }}>Shape</th>
+                    <th style={{ padding: '4px 8px' }}>Result</th>
+                    <th style={{ padding: '4px 8px' }}>What was wrong</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {inj.map((r) => (
+                    <tr key={r.id} style={{ borderTop: '1px solid var(--c-border)' }}>
+                      <td style={{ padding: '4px 8px', fontFamily: 'ui-monospace, monospace' }}>{r.id}</td>
+                      <td style={{ padding: '4px 8px', color: 'var(--c-ink-soft)' }}>{r.shape}</td>
+                      <td style={{
+                        padding: '4px 8px', fontWeight: 600,
+                        color: r.verdict === 'FAIL' ? 'var(--c-alert)'
+                             : r.verdict === 'pass' ? 'var(--c-progress)'
+                             : 'var(--c-ink-soft)',
+                      }}>{r.verdict}</td>
+                      <td style={{ padding: '4px 8px', color: 'var(--c-ink-soft)' }}>
+                        {r.problems.length ? r.problems.join('; ')
+                          : r.manualReview ? `read it yourself: ${r.expect}` : '—'}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
 
         {probe && (
           <div className="card" style={{ marginTop: 'var(--sp-4)' }}>
