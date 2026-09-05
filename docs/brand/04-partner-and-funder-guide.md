@@ -68,10 +68,19 @@ metered data plan, with a screen reader.
 
 Stated honestly, because a funder who discovers the gaps later is a funder lost.
 
-**Current constraints:** one maintainer. Certification is referenced in the
-curriculum and **not built**. The assistant feature is complete, guarded and
-switched off pending running costs. Practitioner and Builder tracks are one
-module of a planned twenty.
+**Current constraints:** one maintainer. Certification is **built and not
+issuing** — the schema, assessments, published rubric and public verification
+all exist, and `certification_open()` refuses until two named reviewers are in
+place and the guardian path has been tested with real families. Sky, the site
+assistant, is **enabled for staff only** as of 4 September 2026, with a spend
+cap enforced in the database rather than a promise. Practitioner and Builder
+tracks are three modules of a planned twelve.
+
+This paragraph was itself stale for a fortnight, saying certification was "not
+built" and the assistant "switched off" after both had changed. It is the one
+paragraph in these guides most likely to rot, because it is the one describing
+things in motion — check it against the repo before sending, not against
+memory.
 
 **What resource unlocks, in order:**
 1. **A second safeguarding-trained person** — the single blocker on community
@@ -82,8 +91,13 @@ module of a planned twenty.
 3. **Native-speaker contributors** — genuine multilingual coverage requires
    people who write and check each language. Machine translation would
    contradict the curriculum's own teaching.
-4. **Certification infrastructure** — assessment, issuance, verification,
-   revocation.
+4. **Two named certification reviewers** — not infrastructure. The schema,
+   assessment flow, rubric, issuance, revocation and public verification page
+   are built; `certification_open()` refuses until two reviewers have agreed on
+   twenty sample answers and the guardian-email path has been tested with real
+   families. This item used to read "certification infrastructure — assessment,
+   issuance, verification, revocation", which would have invited a funder to
+   pay for work already done.
 
 ## What we will not do for funding
 

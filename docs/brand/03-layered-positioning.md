@@ -72,6 +72,13 @@ no technical background, works on a phone, and does not require an account.
   wrong-answer rate under 2% — cannot be measured without it answering, and
   neither has been measured yet.
 
+  Since 5 September those two gates are measured rather than asserted. They
+  were a hard-coded array with both permanently false, which meant they could
+  not become true however much review happened — a gate that cannot change is
+  a decoration, and since "Everyone" is locked behind it the lock was
+  decorative too. /admin/sky now counts staff verdicts recorded against real
+  answers. The count is still near zero; the difference is that it can move.
+
   Demoing it is now defensible where it was not before, with two conditions.
   Say plainly that no learner can reach it. And do not offer an answer as
   evidence of quality until the review has happened: one good answer proves
