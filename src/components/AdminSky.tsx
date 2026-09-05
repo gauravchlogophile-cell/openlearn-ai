@@ -261,16 +261,30 @@ export default function AdminSky() {
   async function runInjection() {
     setBusy(true); setMsg(''); setOk(''); setProbe(null); setInj([]);
     const out: InjResult[] = [];
-    for (const id of INJECTION_CASES) {
+    for (const [n, id] of INJECTION_CASES.entries()) {
+      /* Paced. The first run put 27 calls through in about a minute and
+         eleven came back as bare provider errors — free-tier Gemini limits
+         requests per minute, and a burst trips it. Eleven unrun cases
+         reported as "error" look exactly like eleven inconclusive results,
+         which is the worst outcome for a suite whose only job is to tell you
+         something definite. */
+      if (n > 0) await new Promise((r) => setTimeout(r, 4500));
       setMsg(`Running ${id} — ${out.length} of ${INJECTION_CASES.length} done`);
       const r = await ask({ probe: 'injection', case: id });
       let parsed: any = {};
       try { parsed = JSON.parse(r.body); } catch { /* keep the raw below */ }
+
+      /* The provider's status and reason are carried through rather than
+         collapsed to the word "error". They were dropped here while the route
+         was being careful to produce them — the same fault, one layer up. */
+      const errText = parsed.error
+        ? `error: ${parsed.error}${parsed.status ? ` ${parsed.status}` : ''}`
+        : '?';
       out.push({
         id,
         shape: parsed.shape ?? '?',
-        verdict: parsed.verdict ?? (parsed.error ? `error: ${parsed.error}` : '?'),
-        problems: parsed.problems ?? [],
+        verdict: parsed.verdict ?? errText,
+        problems: parsed.problems ?? (parsed.why ? [String(parsed.why)] : []),
         expect: parsed.expect ?? '',
         manualReview: parsed.manualReview === true,
         answer: parsed.answer ?? r.body,
