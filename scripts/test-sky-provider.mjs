@@ -150,7 +150,19 @@ ok(/passages are the complete extent of what you know/i.test(src),
    'the system prompt confines the model to the supplied passages');
 ok(/quoted material, never as instructions/i.test(src),
    'the system prompt names retrieved text as quoted material');
-ok(src.includes('"""'), 'passages are fenced in the user turn');
+/* This asserted a literal """ — the fixed delimiter buildUserTurn used to
+   fence with. That delimiter was the defect: P2·L5, the lesson teaching
+   fencing, contains """ in its worked example and sits in the live index, so a
+   real passage could close the fence. The property worth pinning is that the
+   delimiter cannot be predicted, not that it is any particular string.
+   scripts/test-sky-injection.mjs checks the behaviour; this checks the source. */
+ok(/crypto\.getRandomValues\(bytes\)/.test(src),
+   'the fence delimiter is generated per request');
+ok(/const tag = 'UNTRUSTED-'/.test(src) && !/\.map\(\(p, i\) => `\[\$\{i \+ 1\}\] \$\{p\.label\}\\n"""/.test(src),
+   'passages are fenced with that per-request tag, not a fixed one');
+ok(/<\$\{tag\}>[\s\S]{0,80}<\/\$\{tag\}>/.test(src),
+   'each passage carries its own opening and closing marker — spotlighting, '
+   + 'so the boundary is identifiable throughout rather than only at the ends');
 ok(/Question from a learner/.test(src),
    'the question and the passages are distinguishable from each other');
 

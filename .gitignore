@@ -12,3 +12,8 @@ supabase/.temp/
 !.dev.vars.example
 source-report.md
 src/generated/
+
+# The injection probe writes the model's actual answers to the attack corpus.
+# A file of successful attack outputs is not something to publish; the corpus
+# in security/injection-corpus.json is the artefact worth versioning.
+security/last-probe.json
