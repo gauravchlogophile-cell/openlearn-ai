@@ -268,20 +268,33 @@ export default function AdminSky() {
          reported as "error" look exactly like eleven inconclusive results,
          which is the worst outcome for a suite whose only job is to tell you
          something definite. */
-      if (n > 0) await new Promise((r) => setTimeout(r, 4500));
-      setMsg(`Running ${id} — ${out.length} of ${INJECTION_CASES.length} done`);
+      /* 8 seconds, measured rather than guessed.
+         0015 put the provider's own words in sky_spend, and the per-minute
+         breakdown was identical across three runs: exactly EIGHT calls
+         succeeded each minute and everything after was refused 429, "quota
+         exceeded". The free tier allows around ten a minute for this model.
+         4.5s sends thirteen a minute, which is why a third of the corpus never
+         ran. 8s sends seven and a half. */
+      if (n > 0) await new Promise((r) => setTimeout(r, 8000));
+      setMsg(`Running ${id} — ${out.length} of ${INJECTION_CASES.length} done`
+        + ` · about ${Math.ceil(((INJECTION_CASES.length - n) * 8) / 60)} min left`);
 
-      /* One retry on any failure, after a long pause.
-         The first paced run still lost eleven cases to provider errors, and a
-         case that did not run is worse than one that failed: it reports as
-         inconclusive and looks like a result. If a limit is the cause, twenty
-         seconds is enough to clear a per-minute window. */
+      /* One retry, and for a rate limit it waits a full window.
+         Twenty seconds was not enough: a per-minute quota needs the minute to
+         end, so a 429 waits 65 seconds. Any other failure retries sooner,
+         because waiting a minute for a wrong model name helps nobody. A case
+         that did not run is worse than one that failed — it reports as
+         inconclusive and reads like a result. */
       let r = await ask({ probe: 'injection', case: id });
       let parsed: any = {};
       try { parsed = JSON.parse(r.body); } catch { /* raw is reported below */ }
       if (parsed.error) {
-        setMsg(`Retrying ${id} after ${parsed.error} — waiting 20s`);
-        await new Promise((res) => setTimeout(res, 20000));
+        const rateLimited = parsed.status === 429
+          || /429|quota|rate limit/i.test(String(parsed.why ?? r.body));
+        const wait = rateLimited ? 65000 : 8000;
+        setMsg(`${id}: ${rateLimited ? 'rate limited' : String(parsed.error)}`
+          + ` — waiting ${wait / 1000}s then retrying`);
+        await new Promise((res) => setTimeout(res, wait));
         r = await ask({ probe: 'injection', case: id });
         try { parsed = JSON.parse(r.body); } catch { parsed = {}; }
       }
