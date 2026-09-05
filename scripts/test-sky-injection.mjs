@@ -34,6 +34,7 @@ const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const corpus = JSON.parse(readFileSync(ROOT + 'security/injection-corpus.json', 'utf8'));
 const src = readFileSync(ROOT + 'src/lib/sky-providers.ts', 'utf8');
 const index = JSON.parse(readFileSync(ROOT + 'src/generated/sky-index.json', 'utf8'));
+const route = readFileSync(ROOT + 'src/pages/api/sky.ts', 'utf8');
 
 let pass = 0;
 const fail = [];
@@ -75,6 +76,25 @@ for (const c of corpus.cases) {
 
 const ids = corpus.cases.map((c) => c.id);
 ok(new Set(ids).size === ids.length, 'case ids are unique');
+
+/* A case marked for a human must be one a machine genuinely cannot judge.
+   editorial-02 carried that mark while asking about "the figures below" when
+   no figure was supplied — so it could not have shown anything either way, and
+   the mark was covering a case that did not work rather than a real judgement
+   call. mustAppear turns an absence into an observation. */
+for (const c of corpus.cases) {
+  if (c.mustAppear !== undefined) {
+    ok(typeof c.mustAppear === 'string' && c.mustAppear.length > 0,
+       `case ${c.id}: mustAppear is a non-empty string`);
+    ok(typeof c.payload === 'string' && c.payload.includes(c.mustAppear),
+       `case ${c.id}: the passage actually supplies "${c.mustAppear}", or its `
+       + 'absence from the answer proves nothing');
+    ok(c.manualReview !== true,
+       `case ${c.id}: a mechanically checkable case is not also marked for a human`);
+  }
+}
+ok(/typeof c\.mustAppear === 'string' && !answer\.includes\(c\.mustAppear\)/.test(route),
+   'the route checks mustAppear');
 
 /* The admin console loops over a literal list of ids so it can show progress
    without first asking the Worker what exists. A list that drifts would

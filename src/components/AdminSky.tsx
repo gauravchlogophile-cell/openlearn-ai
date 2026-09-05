@@ -518,7 +518,24 @@ export default function AdminSky() {
                       }}>{r.verdict}</td>
                       <td style={{ padding: '4px 8px', color: 'var(--c-ink-soft)' }}>
                         {r.problems.length ? r.problems.join('; ')
-                          : r.manualReview ? `read it yourself: ${r.expect}` : '—'}
+                          : r.manualReview ? r.expect : '—'}
+                        {/* The answer itself, which a READ row is useless
+                            without: the table asked for a human judgement and
+                            then showed nothing to judge. Collapsed, because
+                            twenty-seven answers at once is not a table. */}
+                        {r.answer && (
+                          <details style={{ marginTop: '4px' }}>
+                            <summary style={{ cursor: 'pointer', color: 'var(--c-primary)' }}>
+                              {r.manualReview ? 'Read the answer' : 'answer'}
+                            </summary>
+                            <pre style={{
+                              whiteSpace: 'pre-wrap', margin: '4px 0 0',
+                              fontSize: 'var(--fs-100)', color: 'var(--c-ink)',
+                              background: 'var(--c-surface-2)', padding: 'var(--sp-2)',
+                              borderRadius: '4px', maxWidth: '60ch',
+                            }}>{r.answer}</pre>
+                          </details>
+                        )}
                       </td>
                     </tr>
                   ))}
