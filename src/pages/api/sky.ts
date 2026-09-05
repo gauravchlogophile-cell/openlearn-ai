@@ -541,7 +541,20 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
 
     if (!result.ok) {
       await settleBudget(env, budget.reservation, 0, 0, pp, pm, false);
-      return json({ error: 'provider', id: c.id, status: result.status, why: result.reason }, 502);
+      /* Logged as well as returned. The console reported eleven of these as a
+         bare "error: provider" while this line was believed to be sending a
+         status, and with nothing in `wrangler tail` there was no second place
+         to look. The corpus case id is safe to log — unlike a learner's
+         question, it is our own text from a versioned file. */
+      console.error('[sky] probe provider failed', {
+        case: c.id, provider: pp, model: pm,
+        status: result.status, reason: result.reason,
+      });
+      return json({
+        error: 'provider', id: c.id,
+        status: result.status ?? null,
+        why: result.reason ?? 'the provider call failed and gave no reason',
+      }, 502);
     }
     await settleBudget(env, budget.reservation,
       result.inputTokens, result.outputTokens, pp, pm, true);

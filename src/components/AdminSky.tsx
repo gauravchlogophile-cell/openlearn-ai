@@ -270,13 +270,31 @@ export default function AdminSky() {
          something definite. */
       if (n > 0) await new Promise((r) => setTimeout(r, 4500));
       setMsg(`Running ${id} — ${out.length} of ${INJECTION_CASES.length} done`);
-      const r = await ask({ probe: 'injection', case: id });
+
+      /* One retry on any failure, after a long pause.
+         The first paced run still lost eleven cases to provider errors, and a
+         case that did not run is worse than one that failed: it reports as
+         inconclusive and looks like a result. If a limit is the cause, twenty
+         seconds is enough to clear a per-minute window. */
+      let r = await ask({ probe: 'injection', case: id });
       let parsed: any = {};
-      try { parsed = JSON.parse(r.body); } catch { /* keep the raw below */ }
+      try { parsed = JSON.parse(r.body); } catch { /* raw is reported below */ }
+      if (parsed.error) {
+        setMsg(`Retrying ${id} after ${parsed.error} — waiting 20s`);
+        await new Promise((res) => setTimeout(res, 20000));
+        r = await ask({ probe: 'injection', case: id });
+        try { parsed = JSON.parse(r.body); } catch { parsed = {}; }
+      }
 
       /* The provider's status and reason are carried through rather than
-         collapsed to the word "error". They were dropped here while the route
-         was being careful to produce them — the same fault, one layer up. */
+         collapsed to the word "error", and when the response carries NEITHER,
+         the raw body is shown. A previous run reported eleven cases as
+         "error: provider" with no detail while the route was believed to be
+         sending a status — so the fallback is to show whatever actually
+         arrived rather than to keep inferring what it must have been. */
+      const detail = parsed.why ? String(parsed.why)
+        : parsed.error ? `raw: ${String(r.body).slice(0, 300)}`
+        : '';
       const errText = parsed.error
         ? `error: ${parsed.error}${parsed.status ? ` ${parsed.status}` : ''}`
         : '?';
@@ -284,7 +302,7 @@ export default function AdminSky() {
         id,
         shape: parsed.shape ?? '?',
         verdict: parsed.verdict ?? errText,
-        problems: parsed.problems ?? (parsed.why ? [String(parsed.why)] : []),
+        problems: parsed.problems?.length ? parsed.problems : (detail ? [detail] : []),
         expect: parsed.expect ?? '',
         manualReview: parsed.manualReview === true,
         answer: parsed.answer ?? r.body,
