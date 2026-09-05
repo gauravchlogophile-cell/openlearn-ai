@@ -245,7 +245,8 @@ async function reserveBudget(env: any, maxTokens: number):
 /** Correct the reservation to actual usage. Best-effort: a failure here
  *  over-counts the day's spend, which is the safe direction to be wrong in. */
 async function settleBudget(env: any, reservation: number | null,
-    input: number, output: number, provider: string, model: string, ok: boolean) {
+    input: number, output: number, provider: string, model: string, ok: boolean,
+    reason?: string) {
   if (reservation == null) return;
   const db = serviceDb(env);
   if (!db) return;
@@ -253,9 +254,19 @@ async function settleBudget(env: any, reservation: number | null,
      so it has no .catch to call. Accounting must never break an answer the
      learner has already paid for. */
   try {
+    /* The reason rides along on failures, which is 0015's whole point: three
+       runs of the injection corpus lost the same cases to "error: provider"
+       with no reason, and every round of diagnosis depended on a person
+       relaying what a table showed. A failure reason in the spend row is
+       readable at the database, with no browser and no live log stream.
+
+       Shape, not content — P3·L8. A status code and our own words about it are
+       operational facts about our own request, not a record of what anyone
+       asked. */
     await db.rpc('sky_settle', {
       p_reservation: reservation, p_input: input, p_output: output,
       p_provider: provider, p_model: model, p_ok: ok,
+      p_reason: ok ? null : (reason ?? null),
     });
   } catch { /* over-counts the day, which is the safe direction */ }
 }
@@ -540,7 +551,8 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     } finally { clearTimeout(timer); }
 
     if (!result.ok) {
-      await settleBudget(env, budget.reservation, 0, 0, pp, pm, false);
+      await settleBudget(env, budget.reservation, 0, 0, pp, pm, false,
+        `${result.status} ${result.reason}`);
       /* Logged as well as returned. The console reported eleven of these as a
          bare "error: provider" while this line was believed to be sending a
          status, and with nothing in `wrangler tail` there was no second place
@@ -793,7 +805,8 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
   await settleBudget(env, budget.reservation,
     result.ok ? result.inputTokens : 0,
     result.ok ? result.outputTokens : 0,
-    provider, model, result.ok);
+    provider, model, result.ok,
+    result.ok ? undefined : `${result.status} ${result.reason}`);
 
   if (!result.ok) {
     /* The reason goes to the Worker log, never to the browser. It names the
