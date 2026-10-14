@@ -87,6 +87,11 @@ function gatesFrom(s: GateStats | null) {
   ];
 }
 
+type FailRow = {
+  reason: string; occurrences: number;
+  first_seen: string; last_seen: string; model: string | null;
+};
+
 type InjResult = {
   id: string; shape: string; verdict: string; problems: string[];
   expect: string; manualReview: boolean; answer: string;
@@ -124,6 +129,7 @@ export default function AdminSky() {
   const [stats, setStats] = useState<GateStats | null>(null);
   const [reviewNote, setReviewNote] = useState('');
   const [inj, setInj] = useState<InjResult[]>([]);
+  const [fails, setFails] = useState<FailRow[]>([]);
 
   async function load() {
     const { data, error } = await supabase()
@@ -152,6 +158,18 @@ export default function AdminSky() {
     if (!gs.error) setStats((Array.isArray(gs.data) ? gs.data[0] : gs.data) ?? null);
     else if (gs.error.code !== 'PGRST202') {
       setMsg('Could not load review stats: ' + gs.error.message);
+    }
+
+    /* Why Sky last refused, over 180 days.
+       On 2026-09-09 one call failed with "User location is not supported" and
+       nobody saw it for five weeks. The spend table above counted it as a
+       failure and named nothing, and its 7-day window then dropped it
+       entirely — so the only record of the single most interesting thing Sky
+       had done was a number that had already scrolled away. */
+    const fl = await supabase().rpc('sky_failures');
+    if (!fl.error) setFails((fl.data ?? []) as FailRow[]);
+    else if (fl.error.code !== 'PGRST202') {
+      setMsg('Could not load failures: ' + fl.error.message);
     }
   }
   useEffect(() => { void load(); }, []);
@@ -633,6 +651,45 @@ export default function AdminSky() {
           onClick={() => setMode('off', true)}>
           Turn Sky off now
         </button>
+      </section>
+
+      {/* Why Sky refused, named rather than counted.
+          The spend table below counts failures over seven days and names none
+          of them. On 9 September one call failed with "User location is not
+          supported" and nobody saw it for five weeks — then the window dropped
+          it. A number that scrolls away is not detection. */}
+      <section aria-label="Why Sky refused">
+        <h2 style={{ fontSize: 'var(--fs-400)' }}>Why Sky last refused</h2>
+        <p style={{ color: 'var(--c-ink-soft)' }}>
+          Every distinct provider failure in the last 180 days, newest first. These are
+          our own words about a status code — never anybody’s question.
+        </p>
+        {fails.length === 0 ? (
+          <p style={{ color: 'var(--c-ink-faint)' }}>
+            No recorded provider failures. That is the good state, and it is also what
+            an unapplied migration looks like — check the spend table below has rows.
+          </p>
+        ) : (
+          <ul style={{ listStyle: 'none', padding: 0, display: 'grid', gap: 'var(--sp-2)' }}>
+            {fails.map((f) => (
+              <li key={f.reason} className="card">
+                <div style={{
+                  display: 'flex', gap: 'var(--sp-3)', flexWrap: 'wrap',
+                  color: 'var(--c-ink-faint)', fontSize: 'var(--fs-100)',
+                }}>
+                  <strong style={{ color: 'var(--c-alert)' }}>
+                    {f.occurrences}×
+                  </strong>
+                  <span>last {new Date(f.last_seen).toISOString().slice(0, 16).replace('T', ' ')}</span>
+                  {f.model && <span>{f.model}</span>}
+                </div>
+                <p style={{ margin: 'var(--sp-2) 0 0', fontSize: 'var(--fs-100)' }}>
+                  {f.reason}
+                </p>
+              </li>
+            ))}
+          </ul>
+        )}
       </section>
 
       <section aria-label="Spend">

@@ -202,6 +202,27 @@ export async function callModel(c: ModelCall): Promise<ModelResult> {
       429: 'rate limited or out of quota at the provider — this is the provider '
          + 'refusing, not our own spend cap',
     };
+    /* Geography, named as geography.
+       Observed in production on 2026-09-09: a single 400 carrying "User
+       location is not supported for the API use. [FAILED_PRECONDITION]". That
+       is not a wrong model name or a bad option, and the generic 400 text
+       would have sent an operator to check both.
+
+       It matters more than a one-line mapping suggests. A Worker's outbound
+       fetch leaves from the edge location handling the request, which is the
+       one nearest the VISITOR — so whether Sky works depends on where the
+       learner is, not on where the site is hosted. For a project whose
+       curriculum has a module on using AI from outside the places that are
+       well served, that is the failure mode most worth naming accurately. */
+    if (/user location is not supported|FAILED_PRECONDITION/i.test(detail)) {
+      return { ok: false, status: res.status, reason:
+        `provider returned ${res.status} — the provider does not serve the `
+        + 'region this request went out from. A Worker calls out from the edge '
+        + 'location nearest the visitor, so this depends on where the LEARNER '
+        + 'is and will affect some learners and not others'
+        + (detail ? ` | provider said: ${detail}` : '') };
+    }
+
     const why = meaning[res.status];
     return { ok: false, status: res.status,
              reason: `provider returned ${res.status}${why ? ` — ${why}` : ''}`

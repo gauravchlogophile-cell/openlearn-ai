@@ -235,6 +235,22 @@ ok(/403:[\s\S]{0,200}invalid, revoked, restricted/.test(src),
    '403 points at the key and its restrictions');
 ok(/429:[\s\S]{0,160}not our own spend cap/.test(src),
    "429 distinguishes the provider's limit from ours — they read identically");
+
+/* Geography. Observed in production on 2026-09-09: a 400 carrying "User
+   location is not supported for the API use. [FAILED_PRECONDITION]". The
+   generic 400 wording blames SKY_MODEL or an option, and would have sent an
+   operator to check two settings that were both correct. */
+ok(/user location is not supported\|FAILED_PRECONDITION/i.test(src),
+   'a location refusal is detected before the generic 400 wording');
+ok(/does not serve the \n?\s*\+? ?'?region this request went out from|region this request went out from/.test(src),
+   'it says the provider does not serve the region the request left from');
+ok(/nearest the visitor/.test(src) && /where the LEARNER/.test(src),
+   'and that a Worker egresses near the VISITOR, so availability varies by '
+   + 'learner rather than by where the site is hosted');
+/* Ordering matters: the specific check must come first, or the generic 400
+   meaning wins and the operator is misdirected. */
+ok(src.indexOf('FAILED_PRECONDITION') < src.indexOf('const why = meaning[res.status]'),
+   'the location check runs BEFORE the generic status mapping');
 /* The rule was "the body is never read". It is now narrower rather than gone:
    the STRUCTURED error.message field, capped, and nothing else. Discarding the
    whole body cost three rounds guessing at a 400 the provider had already
