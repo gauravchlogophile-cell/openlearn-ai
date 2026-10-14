@@ -1,0 +1,177 @@
+---
+title: "When not to build one"
+description: "A document, a template or a script is often the better answer. The maintenance you take on, and the three questions that settle it."
+track: practitioner
+module: p4
+order: 8
+minutes: 8
+objectives:
+  - "Choose between a custom assistant and a simpler artefact for a given task"
+  - "Account for the maintenance a shared assistant commits you to"
+concepts: ["appropriate tooling", "maintenance cost", "determinism", "adoption"]
+flashcards:
+  - front: "When is a written document the better answer?"
+    back: "When the output should be identical every time. A checklist does not need a model, and a model makes it worse by varying."
+  - front: "What does building a shared assistant commit you to?"
+    back: "Owning it, keeping its knowledge current, re-testing it when the model changes, and answering for its answers. None of that ends."
+  - front: "What is the honest test of whether it was worth building?"
+    back: "Is anybody other than its author still using it in a month. Most are not, and the work is unrecovered either way."
+lastVerified: "2026-10-14"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Seven lessons on building these well. This one is about the commonest mistake in
+the module, which is building one at all.
+
+A custom assistant is cheap to make and not cheap to keep. The making takes an
+afternoon; the keeping lasts as long as anyone uses it. Most are built because
+making one is satisfying, and abandoned because keeping one is not.
+
+## Three questions
+
+### Should the output be the same every time?
+
+Then you want a document, a template or a form.
+
+A refund policy, a checklist, an escalation path, the five questions to ask a
+new client — these have right answers. A model will phrase them differently each
+time, occasionally omit one, and very occasionally invent a sixth. That is not
+a bug to be instructed away; it is what generating text means.
+
+The test is simple: if you would be unhappy to see two different versions of the
+answer, do not use something that generates the answer.
+
+### Is it the same input and output every time?
+
+Then you may want a script.
+
+"Take the CSV, filter these rows, format it like that" is code. Code is exact,
+free to run, testable, and does not change its mind. A model doing deterministic
+work is slower, costs money per run, and is wrong occasionally in ways nobody
+checks because it is usually right.
+
+This one catches experienced people, because a model gets a working version
+faster. It is worth distinguishing: a model is an excellent way to **write** the
+script and a poor way to **be** the script.
+
+### Will anybody else actually use it?
+
+Usually, no.
+
+The honest base rate for a shared assistant is that its author uses it and
+nobody else does. Colleagues have their own habits, did not ask for it, and
+try it once when told. If the answer to this question is "I think they'd find it
+useful", you are predicting adoption you have no evidence for — and L2's point
+applies: a mediocre first answer ends the trial permanently.
+
+A prompt pasted into a shared document gets more use than most custom
+assistants, costs nothing to maintain, and can be read and corrected by the
+people using it.
+
+## What you are signing up for
+
+If the three questions say build it, build it. But count the cost honestly,
+because it is the part that goes unsaid:
+
+- **Owning it** (L5), which mostly means refusing additions
+- **Keeping its knowledge current** (L3), which nothing will remind you to do
+- **Re-testing when the model changes** (L6), including changes nobody tells you
+  about
+- **Answering for its answers**, which is the one people do not expect and
+  which arrives as "your thing told me X"
+
+None of that ends. A document you write is finished; an assistant you share is
+a standing commitment with no completion state.
+
+## Where it is genuinely the right answer
+
+Not an argument against the feature. Four cases where it earns the maintenance:
+
+**The output should vary, correctly.** Rewriting copy, drafting replies,
+summarising — the variation is the work.
+
+**The judgement is hard and the rules are soft.** "Does this draft match our
+tone" has no deterministic answer, and a configuration encodes a standard better
+than a style guide nobody reads.
+
+**It lowers a real floor.** A colleague who would not write a good prompt can use
+one. That is the strongest case in the module, and it is about people rather
+than models.
+
+**It is used often enough to be worth maintaining.** Daily, by several people.
+Weekly by one person is a saved prompt.
+
+## Lrnon's own answer
+
+Sky passes the first test and barely passes the fourth, and that is worth being
+candid about.
+
+It passes the first clearly: answering a learner's question in their own words
+is exactly the variable work a model suits, and a static FAQ was the alternative
+considered and rejected. Lowering the floor also applies — a learner who would
+not know what to search for can ask.
+
+On the fourth it is honest to say it is not yet established. It is open to staff
+only. It has made a few hundred model calls, but most of those were tests and
+probes rather than anyone asking a real question, and the two readiness gates
+meant to show it is good enough have recorded nothing, because nobody has
+reviewed an answer yet. The maintenance has been real: a fence delimiter, two injection
+fixes, a geographic failure nobody saw for five weeks.
+
+The open question is not whether Sky works. It is whether it earns the attention
+it has taken — and the honest answer today is *not proven*, which is why it is
+still at staff rather than open to learners.
+
+## Try it now (6 minutes)
+
+Think of a custom assistant you have built or are planning, and answer the three
+questions in writing.
+
+Then one more: **what would I use instead, and how long would that take?** If
+the answer is "a page in the handbook, twenty minutes", that is worth knowing
+before the afternoon goes.
+
+<Quiz client:visible items={[
+  {
+    q: "The output should be identical every time. What should you build?",
+    options: [
+      "A custom assistant with tightly worded instructions",
+      "A document, template or form — generating text means it will vary",
+      "A custom assistant with the temperature set low"
+    ],
+    answer: 1,
+    explain: "Variation is not a bug to instruct away; it is what generating text means. If two different versions of the answer would bother you, do not generate the answer."
+  },
+  {
+    q: "Why do experienced people reach for a model where a script belongs?",
+    options: [
+      "Scripts cannot handle messy real-world input",
+      "A model reaches a working version faster, which is a good way to write the script and a poor way to be it",
+      "Scripts need a deployment process the model avoids"
+    ],
+    answer: 1,
+    explain: "Deterministic work by a model is slower, costs per run, and is occasionally wrong in ways nobody checks because it is usually right."
+  },
+  {
+    q: "What is the honest base rate for a shared custom assistant?",
+    options: [
+      "Most are adopted once colleagues see a demonstration",
+      "Its author uses it and nobody else does",
+      "Adoption depends mainly on how well the instructions are written"
+    ],
+    answer: 1,
+    explain: "Colleagues have their own habits and did not ask for it. A prompt in a shared document often gets more use, costs nothing to maintain, and can be corrected by its readers."
+  }
+]} />
+
+## Recap
+
+Ask three questions first: should the output be identical, is it the same input
+and output each time, and will anybody else really use it. Those point at a
+document, a script, and usually nothing. Building commits you to ownership,
+currency, re-testing and answering for the answers, none of which ends. Build
+one where variation is the work, the rules are soft, it lowers a real floor, and
+it is used often enough to repay the keeping.

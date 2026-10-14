@@ -2,6 +2,12 @@
   "_comment": "Every change to the learning content, dated — including the ones that make us look bad. A lesson that was wrong is more useful to a learner as a published correction than as a quiet edit. Hand-maintained on purpose: git history records what changed, not why it mattered or who caught it. Newest first. 'kind' must be one of the values scripts/validate-content.mjs allows.",
   "entries": [
     {
+      "date": "2026-10-14",
+      "kind": "New module",
+      "where": "Practitioner · P4",
+      "what": "Custom Assistants published — eight lessons on building a saved configuration other people will use. What the feature actually is, which is instructions, optional knowledge and permissions rather than a trained model, and why that misunderstanding leads people to expect improvement with use and to pay for fine-tuning they did not need; writing instructions for someone busy and unfamiliar who gets no second turn, including what to do when a request is unclear; attaching knowledge, and the characteristic failure, which is age rather than error; why a shared assistant holds no secrets, since its instructions can be recited and its files quoted; ownership and a change record, because most platforms keep no history of what the instructions said before; a dozen test cases written before handover, with the author named as the weakest tester; what transfers when you move platform and what does not; and when a document, template or script is the better answer. Sky is the worked example throughout, including an honest account of why its own usefulness is not yet established and a geographic refusal that went unnoticed for five weeks. Practitioner is now four modules of twelve."
+    },
+    {
       "date": "2026-09-04",
       "kind": "New module",
       "where": "Practitioner · P3",

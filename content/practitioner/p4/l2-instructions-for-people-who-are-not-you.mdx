@@ -1,0 +1,169 @@
+---
+title: "Instructions for people who are not you"
+description: "A prompt you steer is not a configuration you hand over. Writing for someone who will ask once, oddly, and not follow up."
+track: practitioner
+module: p4
+order: 2
+minutes: 9
+objectives:
+  - "Write instructions that hold without the author present to correct them"
+  - "Specify what the assistant should do when the request is unclear or out of scope"
+concepts: ["handover", "default behaviour", "scope", "instruction design"]
+flashcards:
+  - front: "What is the main difference between a prompt and a configuration?"
+    back: "A prompt is steered — you see the answer and correct it. A configuration is handed over, and the author is not there for the second turn."
+  - front: "What must every shared assistant specify that a personal prompt need not?"
+    back: "What to do when the request is unclear or out of scope. Left unsaid, it guesses, and a confident guess is the worst available outcome."
+  - front: "Why write the first line as the assistant's job rather than its personality?"
+    back: "A job constrains answers; a personality decorates them. 'You summarise support tickets for an agent to review' rules things out in a way 'You are a helpful assistant' never does."
+lastVerified: "2026-10-14"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+P1 taught you to write a good prompt. This is a different skill, and the
+difference is not length.
+
+When you prompt, you are in the loop. You read the answer, notice it missed the
+point, and say so. The second turn fixes the first — P1·L5 argued that the
+second prompt matters most, and it does.
+
+A configuration gets no second turn. Someone asks it one question, reads one
+answer, and forms a view about whether this thing is any good. You are not
+there. You will usually never know what they asked.
+
+## Write for the worst reasonable user
+
+Not a hostile one — P3 covered that. Someone **busy, unfamiliar, and reasonable**:
+they will ask in half a sentence, they will not read your description, they will
+assume it can do more than it can, and they will not come back to tell you it
+went wrong. They will simply stop using it.
+
+Three things follow.
+
+### Say what the job is, in the first line
+
+Not a personality. A job.
+
+> *"You are a helpful assistant for the marketing team."*
+
+This rules nothing out. Compare:
+
+> *"You rewrite draft copy to match the house style guide below. You do not
+> invent claims, prices or statistics, and you do not write anything that has
+> not been asked for."*
+
+The second constrains. A personality decorates an answer; a job constrains it —
+and constraint is the whole value of handing over a configuration rather than
+a paragraph of encouragement.
+
+### Say what to do when the request is unclear
+
+This is the single most skipped instruction, and the one that most changes how a
+shared assistant behaves in practice.
+
+A personal prompt does not need it: when you are vague, you see the misreading
+and correct it. A colleague who is vague gets a confident answer to a question
+they did not ask, and has no idea.
+
+So choose, deliberately:
+
+> *"If the request is ambiguous, ask one clarifying question before answering.
+> If it is outside rewriting copy — anything about budgets, contracts or
+> people — say that is outside what you do, and suggest who to ask."*
+
+Both halves matter. Without the first, it guesses. Without the second, it
+helpfully ventures into territory where being wrong costs something.
+
+### Say what good looks like, with an example
+
+P1·L1 argued for showing rather than telling, and it is more important here,
+because the reader of your instructions is a model and the users of your
+assistant are not available to interpret.
+
+One worked example — a realistic input and the output you want — does more than
+three paragraphs of description. Two examples are better, especially when the
+second is an edge case: a request that should be refused, or a short input that
+should produce a short answer rather than a padded one.
+
+## Keep the scope narrower than you want to
+
+The temptation when building is to make it handle everything. Resist it, for a
+reason that is about people rather than models.
+
+An assistant that does one thing well is used. One that does six things
+adequately is tried once and abandoned, because a user who gets a mediocre
+answer on their first attempt does not file a bug — they conclude the tool is
+mediocre, and that conclusion is very hard to reverse.
+
+Narrow also makes the next two lessons possible: a narrow assistant can be
+tested (L6), and its knowledge can be kept current (L3). A broad one cannot
+really be either.
+
+## Name the audience inside the instructions
+
+Worth stating explicitly, because models pitch to whoever they are told about:
+
+> *"The people asking are support agents with product knowledge but no legal
+> training. Do not explain what a refund is. Do not offer legal interpretation."*
+
+That single sentence removes both over-explanation and over-reach, which are the
+two most common complaints about a shared assistant.
+
+## Try it now (12 minutes)
+
+Take a prompt you use regularly and convert it into a configuration. Add the
+three things a personal prompt never needs:
+
+1. The job, as a constraint, in the first line.
+2. What to do when a request is unclear, and what is out of scope.
+3. One worked example, plus one that should be refused.
+
+Then do the test that matters: **give it to a colleague with no explanation at
+all.** Not a description, not a demo — just the assistant. What they ask first is
+almost never what you designed for, and that gap is the thing you are actually
+writing against.
+
+<Quiz client:visible items={[
+  {
+    q: "Why does a shared configuration need instructions a personal prompt does not?",
+    options: [
+      "Shared assistants receive more requests and need efficiency",
+      "The author is not present for the second turn, so a misreading is never corrected",
+      "Platforms require a minimum instruction length"
+    ],
+    answer: 1,
+    explain: "Prompting is steered — you see the answer and fix it. A colleague gets one answer to a question they may not have asked clearly, and usually never reports it."
+  },
+  {
+    q: "The most commonly skipped instruction in a shared assistant is:",
+    options: [
+      "What tone of voice to use",
+      "What to do when the request is unclear or out of scope",
+      "How long the answer should be"
+    ],
+    answer: 1,
+    explain: "Left unsaid, it guesses confidently — and ventures into territory where being wrong has a cost. Both halves are needed: ask when unclear, decline when outside."
+  },
+  {
+    q: "Why keep a shared assistant's scope narrower than feels necessary?",
+    options: [
+      "Broad instructions exceed the platform's character limit",
+      "One mediocre first answer makes people abandon it, and narrow scope is what makes testing and currency possible",
+      "Narrow assistants are cheaper to run per request"
+    ],
+    answer: 1,
+    explain: "Users do not file bugs; they conclude the tool is mediocre and stop. A narrow assistant can also be tested and kept current, where a broad one can be neither."
+  }
+]} />
+
+## Recap
+
+A prompt is steered and a configuration is handed over, so write for someone
+busy, unfamiliar and reasonable who will ask once and not come back. Open with
+the job as a constraint rather than a personality, say what to do when a request
+is unclear and what lies outside, and show one good example and one refusal.
+Keep the scope narrower than you want, because narrow is what makes an assistant
+usable, testable and possible to keep true.

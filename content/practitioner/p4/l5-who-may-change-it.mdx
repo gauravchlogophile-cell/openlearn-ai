@@ -1,0 +1,188 @@
+---
+title: "Who may change it"
+description: "A shared configuration is shared infrastructure. Ownership, silent edits, and why 'it used to work' is unanswerable without a record."
+track: practitioner
+module: p4
+order: 5
+minutes: 9
+objectives:
+  - "Assign an owner and an editing rule to a shared assistant before colleagues depend on it"
+  - "Keep a change record good enough to answer 'what changed?' weeks later"
+concepts: ["ownership", "change record", "versioning", "configuration drift"]
+flashcards:
+  - front: "Why is a shared assistant infrastructure rather than a document?"
+    back: "People depend on its behaviour without reading it. A change reaches every future conversation immediately, with no review and no announcement."
+  - front: "What makes 'it used to work' unanswerable?"
+    back: "No record of what the instructions said before. Most platforms keep no history, so without your own copy there is nothing to compare against."
+  - front: "What is the minimum change record worth keeping?"
+    back: "The instruction text in version control, or a dated copy in a document, plus one line per change saying what and why."
+lastVerified: "2026-10-14"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The moment a colleague starts relying on your assistant, it stops being a thing
+you made and becomes **infrastructure**. Not because it is important, but because
+people depend on its behaviour without reading it.
+
+That changes what an edit means. A document someone edits badly is visibly
+different. A configuration someone edits badly produces answers that are subtly
+different for everyone, immediately, with no review step and nobody told.
+
+## Three failures, all ordinary
+
+None of these needs anybody to behave unreasonably.
+
+**The helpful tightening.** Someone adds *"always respond in under 100 words"*
+because an answer was long. Reasonable. It also truncates the one case where
+detail mattered, and nobody connects the two.
+
+**The scope creep.** A colleague asks whether it can also do X. Someone adds X
+to the instructions. Six months later it does nine things adequately, having
+done one thing well — the L2 failure, arrived at by increments nobody would
+refuse individually.
+
+**The silent fix that moved the problem.** An instruction is rewritten to solve
+one complaint. It solves it. It also changes behaviour on a case the author
+never tried, and the person who relied on that case now has a tool that is
+quietly worse and no vocabulary for saying so.
+
+What these share is that nothing looks broken. There is no error, no failure, no
+log line. Just a tool that fits someone's work slightly less well than it did
+last month.
+
+## Name an owner
+
+One person. Not a committee, and not "the team".
+
+The owner's job is narrow: decide what the assistant is for, and keep it being
+that. In practice that means saying no to additions — which is why it has to be
+a person rather than a group, because a group approves things.
+
+If nobody owns it, the honest statement is that it is nobody's job to notice it
+has drifted, and nobody will.
+
+## Decide who may edit, explicitly
+
+Most platforms offer roughly: only me, some people, anyone in the organisation.
+Pick deliberately, and understand what you are choosing.
+
+**Narrow editing is usually right** for anything colleagues depend on. The cost
+is that improvements wait for the owner. The benefit is that behaviour does not
+change without someone deciding it should.
+
+**Wide editing suits a shared scratchpad** — something a small group iterates on
+together, where everyone using it is also maintaining it. That is a real and
+good use, and it is a different kind of object from the one people depend on.
+
+The failure is not choosing: leaving the default, discovering months later that
+four people have edited it, and having no way to find out what any of them
+changed.
+
+## Keep the text somewhere you control
+
+This is the practical heart of the lesson, and it is almost always skipped.
+
+**Most platforms keep no usable history of your instructions.** There is no diff,
+no previous version, no "who changed this". The box contains whatever it
+contains now.
+
+So keep your own copy. In order of preference:
+
+- **In version control**, as a plain text file. You get history, diffs,
+  authorship and dates for free, and the file is the source of truth that gets
+  pasted in rather than the box being the original.
+- **In a dated document**, appending a copy each time it changes.
+- **At minimum**, one line per change in a log: date, what changed, why.
+
+That last one takes ten seconds and is the difference between "it used to work"
+being a diagnosis and being a complaint.
+
+## The question you are preparing to answer
+
+Someone will say: *"this was better a few weeks ago."* They will be vague,
+because they are describing a feeling about output quality and have no example
+to hand.
+
+With a record, that is tractable. You look at what changed, find the
+tightening, and either explain the trade or revert it.
+
+Without one, you have an unfalsifiable claim about a tool whose behaviour you
+cannot reconstruct — and you will probably conclude they are misremembering,
+which is the worst available outcome because it is sometimes true and you have
+no way to tell.
+
+## Lrnon's version, including the bit that failed
+
+Sky's instructions live in `src/lib/sky-providers.ts`, in version control, with
+every change in the history and a commit message saying why. The September
+change to rule 3 is a single diff, dated, with the measured reason recorded
+beside it.
+
+That is the good version. The bad version happened too, and it is worth naming
+because it is the same class of problem one level up. The readiness gates in the
+admin console were a hard-coded list with three of four permanently false — so
+no amount of actual review would have moved them. A gate that cannot change is
+not a control, and nobody noticed for weeks, because nothing about a false value
+looks wrong.
+
+Version control answers *what changed*. It does not answer *whether the thing
+was ever capable of changing*, and that question needs asking separately.
+
+## Try it now (8 minutes)
+
+For one shared assistant, write down three things:
+
+1. **Who owns it** — a name, not a team.
+2. **Who may edit it** — and go and check the actual setting rather than
+   assuming.
+3. **Where the instruction text is kept** outside the platform.
+
+If the third is blank, fix it now by copying the text into a file with today's
+date. That copy is worth more than it looks: it is the only thing that makes the
+next change reversible.
+
+<Quiz client:visible items={[
+  {
+    q: "Why does editing a shared configuration differ from editing a shared document?",
+    options: [
+      "Configurations are longer and harder to review",
+      "The change reaches every future conversation immediately, with no review and nobody told",
+      "Platforms apply configuration changes on a delay"
+    ],
+    answer: 1,
+    explain: "People depend on its behaviour without reading it. A badly edited document looks different; a badly edited configuration just fits someone's work slightly less well."
+  },
+  {
+    q: "Why keep the instruction text outside the platform?",
+    options: [
+      "Platforms impose a character limit on saved instructions",
+      "Most platforms keep no usable history, so without your own copy there is nothing to compare against",
+      "External copies load faster at request time"
+    ],
+    answer: 1,
+    explain: "There is usually no diff and no previous version — the box holds whatever it holds now. Your own copy is what makes a change reversible."
+  },
+  {
+    q: "Why should a shared assistant have one named owner rather than a team?",
+    options: [
+      "Platforms only permit a single owner account",
+      "The job is mostly saying no to additions, and groups approve things",
+      "A single owner reduces the licence cost"
+    ],
+    answer: 1,
+    explain: "Keeping it being one thing means refusing increments nobody would refuse individually. With nobody owning it, noticing the drift is nobody's job."
+  }
+]} />
+
+## Recap
+
+Once colleagues depend on it, a configuration is infrastructure: edits change
+behaviour for everyone at once, with no review and no announcement. The usual
+damage comes from reasonable changes — a helpful tightening, an agreed addition,
+a fix that moved the problem. Name one owner, choose the editing permission
+deliberately rather than leaving the default, and keep the instruction text
+somewhere with history. That copy is what makes "it used to work" a diagnosis
+instead of a complaint.

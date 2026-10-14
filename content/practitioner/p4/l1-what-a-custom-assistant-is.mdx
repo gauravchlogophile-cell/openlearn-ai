@@ -1,0 +1,167 @@
+---
+title: "What a custom assistant actually is"
+description: "A saved configuration, not a new model. What the feature does, what it does not do, and why the difference costs money when it is misunderstood."
+track: practitioner
+module: p4
+order: 1
+minutes: 8
+objectives:
+  - "Describe a custom assistant as instructions, knowledge and permissions rather than as a trained model"
+  - "Decide whether a task needs a saved configuration at all"
+concepts: ["custom assistant", "system prompt", "configuration", "fine-tuning"]
+tools: ["chatgpt", "claude", "gemini"]
+flashcards:
+  - front: "What is a custom assistant made of?"
+    back: "Instructions, optionally some attached knowledge, and whatever permissions the platform grants it. All of it is configuration — nothing is trained."
+  - front: "Does building one teach the model anything?"
+    back: "No. The instructions are sent with every request, like a prompt you no longer have to retype. Nothing is learned and nothing persists in the model."
+  - front: "Why does the training confusion matter in practice?"
+    back: "People expect it to improve with use, assume their data has been absorbed, and pay for fine-tuning they did not need. All three follow from the same wrong picture."
+lastVerified: "2026-10-14"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Every major assistant now offers a way to save a configuration and give it a
+name. ChatGPT calls them custom GPTs, Claude has Projects, Gemini has Gems, and
+the pattern is the same everywhere because the underlying idea is simple.
+
+Simpler, in fact, than most people assume — and the gap between what it is and
+what it is believed to be costs real money.
+
+## Three parts, and that is all
+
+> **Instructions.** A block of text sent with every request. The thing P1 taught
+> you to write, saved so nobody retypes it.
+>
+> **Knowledge.** Optionally, some files. The platform does retrieval over them —
+> the machinery from P2, with the choices made for you.
+>
+> **Permissions.** Whatever the platform lets it reach: a search tool, your
+> files, a connected service. Often none.
+
+That is the whole object. A custom assistant is a **saved configuration**.
+
+## Nothing is being trained
+
+This is the misconception worth killing first, because three expensive mistakes
+grow from it.
+
+When you write instructions into a custom assistant, the model does not learn
+them. They are **prepended to every conversation**, invisibly, exactly as if you
+had pasted them yourself and then deleted the paste from view. The model is the
+same model everyone else is using. Your configuration changes what it is told,
+not what it knows.
+
+Three consequences follow, and each is something people genuinely get wrong:
+
+**It does not improve with use.** A custom assistant that gave a poor answer in
+March gives the same poor answer in October unless somebody edits the
+instructions. Nothing accumulates. There is no learning curve to wait out.
+
+**Your files have not been absorbed.** They sit alongside, and are searched when
+a question seems relevant. If retrieval misses, the answer is as if the file did
+not exist — which is P2·L4's entire subject, and it applies here with the
+ranking hidden from you.
+
+**You almost certainly do not need fine-tuning.** Fine-tuning does change a
+model's weights, costs considerably more, needs a dataset, and is the wrong tool
+for "I want it to follow our house style". A configuration handles that. People
+reach for fine-tuning because the configuration felt too simple to be the
+answer, and the simplicity is the point.
+
+## What the saving actually buys
+
+If it is only a saved prompt, why bother?
+
+**Nobody retypes it.** The thing P1·L8 said about prompts that survive — this is
+the mechanism for surviving.
+
+**Everyone gets the same one.** Eight colleagues with eight slightly different
+prompts produce eight slightly different standards. One configuration produces
+one.
+
+**It can be corrected centrally.** Find a flaw, fix it once, and every future
+conversation has the fix. That is a genuine shift from pasted prompts, and it is
+the strongest argument for the feature.
+
+**It lowers the floor.** A colleague who would never write a good prompt can use
+a good one, which is often the real reason to build one at all.
+
+## What it does not fix
+
+A configuration cannot make a model know something it does not know, and cannot
+make it reliable at something it is unreliable at. If the underlying model gets
+your domain wrong, a custom assistant gets your domain wrong in a consistent
+house style — which is arguably worse, because consistency reads as competence.
+
+## Lrnon's own, as a worked example
+
+Sky is a custom assistant built by hand rather than on a platform, and it has
+exactly the three parts:
+
+- **Instructions** — a system prompt with five numbered rules, sent on every
+  request
+- **Knowledge** — a retrieval index built from the lessons at build time
+- **Permissions** — none worth the word. It reads the index and writes an
+  answer. It cannot send, fetch, or read any learner's record.
+
+Nothing about it is trained. The rules are re-sent every time, and when one of
+them was found to be insufficient in September the fix was a sentence added to a
+text file. Each of those properties is a platform feature too; building it by
+hand only makes them visible.
+
+## Try it now (6 minutes)
+
+Open whichever assistant you use and find its saved-configuration feature. Do
+not build anything yet. Just read the form and name each field as one of the
+three parts above.
+
+Then answer one question: **if this is only a saved prompt, what would I gain by
+saving it?** If the answer is "nothing, I am the only user and I only do this
+occasionally", you have learned something useful, and L8 is about exactly that
+case.
+
+<Quiz client:visible items={[
+  {
+    q: "What happens to the instructions you write into a custom assistant?",
+    options: [
+      "The model is trained on them and remembers them",
+      "They are sent with every request, like a prompt nobody has to retype",
+      "They are compiled into a private copy of the model"
+    ],
+    answer: 1,
+    explain: "It is configuration, not training. The model is the same one everyone uses; your instructions change what it is told, not what it knows."
+  },
+  {
+    q: "A custom assistant gave a weak answer in March. By October, with heavy use, it will:",
+    options: [
+      "Have improved, because usage is feedback",
+      "Give the same weak answer, unless somebody edited the instructions",
+      "Have improved only if users corrected it in conversation"
+    ],
+    answer: 1,
+    explain: "Nothing accumulates between conversations. There is no learning curve to wait out, which means no fix arrives unless a person makes one."
+  },
+  {
+    q: "The strongest practical argument for saving a configuration rather than pasting a prompt is:",
+    options: [
+      "It uses fewer tokens per request",
+      "A flaw can be corrected once and every later conversation has the fix",
+      "The platform optimises saved instructions automatically"
+    ],
+    answer: 1,
+    explain: "Central correction is the real shift. Eight pasted prompts drift into eight standards; one configuration can be fixed in one place."
+  }
+]} />
+
+## Recap
+
+A custom assistant is instructions, optional knowledge and whatever permissions
+the platform grants — a saved configuration and nothing more. Nothing is
+trained, so it does not improve with use, your files are searched rather than
+absorbed, and fine-tuning is almost certainly not what you want. What saving
+buys is one shared standard that can be corrected centrally. What it cannot buy
+is competence the underlying model lacks.

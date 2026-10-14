@@ -1,0 +1,170 @@
+---
+title: "Attaching knowledge, and keeping it true"
+description: "P2's retrieval, with the choices made for you — and the quiet failure of a file uploaded in March still answering questions in October."
+track: practitioner
+module: p4
+order: 3
+minutes: 9
+objectives:
+  - "Attach knowledge to a shared assistant knowing which retrieval choices the platform has made for you"
+  - "Put a date and an owner on attached knowledge so staleness is visible rather than silent"
+concepts: ["attached knowledge", "retrieval", "staleness", "provenance"]
+flashcards:
+  - front: "What does a platform's knowledge upload hide from you?"
+    back: "Every choice from P2 — how the file was cut up, how passages are ranked, how many reach the model, and whether retrieval found anything at all."
+  - front: "What is the characteristic failure of attached knowledge?"
+    back: "Not being wrong. Being old. A file uploaded once answers confidently from superseded content, and nothing in the answer says when it was true."
+  - front: "What belongs in the attached file itself?"
+    back: "A date and an owner, in the text. Then the answer can carry them, and a reader can tell how old the claim is without access to the upload."
+lastVerified: "2026-10-14"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Most platforms let you attach files to a custom assistant. This is P2 with the
+dials hidden: the uploads are cut up, indexed and retrieved by machinery you do
+not see and cannot tune.
+
+That is a reasonable trade. It also means the failure modes from P2 are still
+present, and you have fewer instruments to notice them with.
+
+## What the platform decided for you
+
+P2 made you choose four things. A platform chooses all four and does not say
+which way:
+
+**How the file was cut up.** P2·L2 argued a chunk must still mean something on
+its own. A table split from its headings, or a policy split from the section
+number it refers to, retrieves perfectly and informs nobody.
+
+**How passages are ranked.** Keyword, meaning-based, or a mixture. You cannot
+see the scores, so P2·L3's reasoning about rare words carrying the weight is
+invisible to you here.
+
+**How many passages reach the model.** Usually a handful. Which handful, you
+cannot inspect.
+
+**What happens when retrieval finds nothing.** The important one. Some platforms
+answer from general knowledge without saying so, which is the behaviour P2·L7
+spends a whole lesson arguing against. An answer that looks grounded and is not
+is worse than a refusal, because it carries the authority of your attached
+document without its content.
+
+You can find out which of those last two your platform does, and it takes about
+five minutes. It is the single most useful thing to know about a tool you are
+about to hand to colleagues.
+
+## The failure is age, not error
+
+Attached knowledge rarely goes wrong by being incorrect. It goes wrong by being
+**old**, and this is the one problem a custom assistant makes worse rather than
+better.
+
+The shape is always the same. Someone builds an assistant, uploads the policy,
+and it works. The policy changes. Nobody thinks of the assistant, because it is
+not in anybody's list of places the policy lives. Six months later a colleague
+asks it a question and receives a confident, well-formatted answer from the
+superseded version — with no indication that it is a year behind.
+
+A pasted prompt does not do this. You paste the current document because you
+have it open. A saved configuration keeps whatever it was given, indefinitely,
+and nothing about the answer reveals its age.
+
+## Make the age visible
+
+Three things, in order of how much they buy:
+
+**Put the date in the file.** Not in the filename — in the text, at the top:
+*"Refund policy, current as of 14 October 2026. Owner: finance."* Then the
+assistant can be told to quote it, and the answer carries its own age.
+
+**Tell it to say what it read.** The citation requirement from P2·L5, applied
+here: an answer naming the document and its date lets a reader judge. One that
+says "our policy is 14 days" does not.
+
+**Give the knowledge an owner and a review date.** Not a platform feature — a
+line in whatever document governs that policy, saying it also lives in an
+assistant. The assistant cannot remind you. The policy's owner can.
+
+That third one is the only durable fix, and it is organisational rather than
+technical. Lrnon's version is a build-time check: a tool description older than
+120 days fails the build, so staleness stops a deploy rather than waiting to be
+noticed. Most teams cannot wire that into an uploaded file, which is exactly why
+the date has to be written where the answer will carry it.
+
+## Fewer, better files
+
+The instinct is to upload everything available, on the reasoning that more
+context cannot hurt. It can, in two ways.
+
+**Ranking gets harder.** P2·L5 made this point about passages and it holds for
+documents: a relevant file among twenty marginal ones is harder to surface, not
+easier.
+
+**Contradictions become invisible.** Two documents disagreeing is the worst case
+for attached knowledge, because the model will answer from one of them without
+mentioning the other. Three versions of a policy in a folder is not redundancy,
+it is a coin toss with a confident voice.
+
+Upload the current version. Delete the superseded ones, rather than keeping them
+"for reference" — a folder is reference, an assistant's knowledge base is an
+answer.
+
+## Try it now (10 minutes)
+
+Take an assistant with files attached, or build one with a single document, and
+ask it two questions.
+
+1. Something the document clearly answers. Does the reply name the document?
+2. **Something adjacent that the document does not cover at all.** Watch
+   carefully. Does it say the document does not cover it, or does it answer
+   anyway?
+
+The second question is the one worth your time. If it answered, your assistant
+is not grounded in the way you assumed — it is a general assistant with some
+reading material, and every answer it gives needs the scepticism you would apply
+to an ungrounded one.
+
+<Quiz client:visible items={[
+  {
+    q: "Which retrieval decision matters most to find out about your platform?",
+    options: [
+      "How large each chunk of the file is",
+      "What it does when retrieval finds nothing — answer from general knowledge, or say so",
+      "Whether it uses keyword or meaning-based ranking"
+    ],
+    answer: 1,
+    explain: "An answer that looks grounded and is not carries your document's authority without its content, which is worse than a refusal. The other choices matter less and you can live with not knowing them."
+  },
+  {
+    q: "The characteristic failure of attached knowledge is that it is:",
+    options: [
+      "Incorrect, because files are often written carelessly",
+      "Old, and nothing about the answer reveals its age",
+      "Too large for the model's context window"
+    ],
+    answer: 1,
+    explain: "A saved configuration keeps what it was given indefinitely. A pasted prompt does not have this problem, because you paste the document you have open."
+  },
+  {
+    q: "Why is keeping three versions of a policy in the knowledge base worse than keeping one?",
+    options: [
+      "It triples the storage cost of the assistant",
+      "The model answers from one without mentioning the others, so it is a coin toss in a confident voice",
+      "Older files are ranked above newer ones"
+    ],
+    answer: 1,
+    explain: "Contradiction is the worst case for attached knowledge, because nothing in the answer reveals that the sources disagreed. A folder is reference; a knowledge base is an answer."
+  }
+]} />
+
+## Recap
+
+Attaching files is P2's retrieval with the dials hidden, so find out the one
+thing that matters most — whether your platform answers from general knowledge
+when retrieval finds nothing. The usual failure is age rather than error, and a
+saved configuration holds whatever it was given indefinitely. Put the date and
+owner inside the file so the answer can carry them, give the knowledge a human
+owner, and upload the current version only.

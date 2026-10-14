@@ -1,0 +1,166 @@
+---
+title: "The configuration is yours, the platform is not"
+description: "What transfers when you move, what does not, and the small habits that keep a year of work from living only inside somebody else's product."
+track: practitioner
+module: p4
+order: 7
+minutes: 9
+objectives:
+  - "Identify which parts of a custom assistant transfer between platforms and which do not"
+  - "Keep the portable parts outside the platform as a matter of habit"
+concepts: ["portability", "lock-in", "export", "platform dependency"]
+tools: ["chatgpt", "claude", "gemini"]
+flashcards:
+  - front: "Which parts of a custom assistant are portable?"
+    back: "The instructions, the source documents and your test set — all of them text you wrote. Everything the platform generated from them is not."
+  - front: "What is usually the real lock-in?"
+    back: "Not the configuration, which is short. It is the test set you never wrote down, the tuning you did by feel, and the connections to other systems."
+  - front: "What single habit protects portability?"
+    back: "Treat the file as the original and the platform as a copy. Paste in from your own text; never let the box be the only place the instructions exist."
+lastVerified: "2026-10-14"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+A custom assistant is built inside somebody else's product. Platforms change
+terms, change prices, discontinue features, and occasionally discontinue
+themselves. None of that is a reason to avoid them. It is a reason to know which
+parts of your work are yours.
+
+This is P10's subject in full. Here it is only about the assistant you just
+built.
+
+## What travels
+
+**Your instructions.** Text you wrote. They move anywhere, and may need small
+edits — one platform wants Markdown headings, another prefers plain prose — but
+the thinking transfers whole. This is the bulk of the value.
+
+**Your source documents.** You had them before you uploaded them. You still
+have them, assuming you kept the originals rather than only the upload.
+
+**Your test set.** The dozen cases from L6. These transfer perfectly and are
+worth more on a move than at any other time, because they are how you find out
+whether the new platform behaves like the old one.
+
+## What does not
+
+**The index.** Whatever the platform built from your files is not portable, and
+not worth wanting — it is rebuilt from the same documents in a few minutes.
+
+**Platform-specific features.** A built-in search tool, an action calling your
+API, a connector to the company drive. These are the genuinely sticky parts, and
+the stickiness is proportional to how much you lean on them.
+
+**Conversation history.** Usually exportable as text, rarely in a form that
+recreates anything. Treat it as a record, not an asset.
+
+**The behaviour.** This is the one people miss. The same instructions on a
+different model produce different answers — not worse, different. Tone shifts,
+refusals land differently, edge cases change hands. Your instructions were tuned
+against one model's tendencies even if you never thought of it that way.
+
+## The lock-in is rarely the configuration
+
+The configuration is a page of text. If that were all, moving would take an
+afternoon.
+
+What makes moving expensive is everything you did not write down:
+
+- The dozen test cases you ran from memory
+- The six rephrasings you tried before the instruction worked
+- The three things you learned it gets wrong, which live in your head
+- The connections to other systems, each of which is its own migration
+
+L5 asked you to keep the instruction text in version control, and L6 asked you
+to write the test cases down. Both were about something else at the time —
+reversibility and measurement. They are also, between them, most of what
+portability means in practice. The habits that make a configuration maintainable
+are the habits that make it movable, which is a convenient thing to be true.
+
+## One habit
+
+> **The file is the original. The platform holds a copy.**
+
+Write the instructions in a text file. Paste them in. When you change them,
+change the file and paste again.
+
+That inverts the default, where the box is the original and the file — if it
+exists — is a backup someone made once. Under the inverted version, moving
+platforms is pasting into a different box, and that is all it should ever be.
+
+## Being honest about the trade
+
+Lrnon's own position is worth stating, because it is not the maximally portable
+one.
+
+Sky is vendor-neutral by construction. The provider seam supports three request
+shapes, the vendor is read from configuration and never guessed, and switching
+means changing an environment variable. The reasoning is in the file: a project
+teaching that no single assistant suits every job should not hard-code one.
+
+But Sky runs on Cloudflare Workers and Supabase, and neither is a seam. Moving
+either would be real work. That was a deliberate trade — a small project with
+one maintainer takes managed infrastructure and spends its portability budget
+where the curriculum's own argument demanded it, which was the model.
+
+Which is the general shape of this. You will not avoid all lock-in and should
+not try. Choose where it sits, write the choice down, and prefer it where
+switching is cheapest — not where it is most visible.
+
+## Try it now (8 minutes)
+
+For one assistant you have built, list what you would need to recreate it
+elsewhere. Then mark each item: **do I have this outside the platform?**
+
+The instructions, probably yes. The source files, probably yes. The test cases,
+usually not. The reasons behind each instruction, almost never.
+
+Fix the cheapest gap now. Copying the instruction text into a dated file takes
+under a minute and is the one that matters most, because it is the item the
+platform will not hand back if the account is ever closed to you.
+
+<Quiz client:visible items={[
+  {
+    q: "Which part of a custom assistant carries the most value across a platform move?",
+    options: [
+      "The index the platform built from your files",
+      "The instructions, the source documents and the test set — all text you wrote",
+      "The conversation history, as a record of what worked"
+    ],
+    answer: 1,
+    explain: "The index is rebuilt in minutes from the same documents. The text you wrote is the thinking, and it transfers whole."
+  },
+  {
+    q: "The same instructions on a different platform's model will:",
+    options: [
+      "Behave identically, since the instructions are the same",
+      "Behave differently — tone, refusals and edge cases shift, because the instructions were tuned against one model's tendencies",
+      "Fail until rewritten in that platform's required format"
+    ],
+    answer: 1,
+    explain: "Different rather than worse. You tuned against one model even if you never framed it that way, which is why the test set earns its keep on a move."
+  },
+  {
+    q: "What usually makes moving a custom assistant expensive?",
+    options: [
+      "Export restrictions in the platform's terms",
+      "Everything undocumented — the test cases, the rephrasings, the known weaknesses, the connections",
+      "The cost of re-indexing attached files"
+    ],
+    answer: 1,
+    explain: "The configuration is a page of text. The expense is what lives only in your head, which is why the habits that make it maintainable also make it movable."
+  }
+]} />
+
+## Recap
+
+Your instructions, your documents and your test set travel; the index, the
+platform features and the exact behaviour do not. The expensive part of a move
+is never the configuration but everything undocumented around it, which means
+L5's version control and L6's written cases were portability work as well.
+Invert the default so the file is the original and the platform holds a copy.
+Then choose where lock-in sits deliberately, rather than avoiding it everywhere
+and succeeding nowhere.

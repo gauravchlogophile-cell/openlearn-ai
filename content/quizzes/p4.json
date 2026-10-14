@@ -1,0 +1,316 @@
+{
+  "module": "p4",
+  "title": "Custom Assistants — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "p4-01",
+      "q": "A custom assistant consists of:",
+      "options": [
+        "A model trained on your documents and examples",
+        "Instructions, optionally attached knowledge, and whatever permissions the platform grants",
+        "A fine-tuned copy of the base model held in your account"
+      ],
+      "answer": 1,
+      "explain": "It is a saved configuration. Nothing is trained, and the model is the same one everyone else is using."
+    },
+    {
+      "id": "p4-02",
+      "q": "What happens to the instructions written into a custom assistant?",
+      "options": [
+        "The model learns them and recalls them later",
+        "They are sent with every request, like a prompt nobody has to retype",
+        "They are compiled into a private model variant"
+      ],
+      "answer": 1,
+      "explain": "Configuration, not training. Your instructions change what the model is told, never what it knows."
+    },
+    {
+      "id": "p4-03",
+      "q": "A custom assistant answered poorly in March. After heavy use, by October it will:",
+      "options": [
+        "Have improved, since usage acts as feedback",
+        "Answer the same way, unless somebody edited the instructions",
+        "Have improved if users corrected it during conversations"
+      ],
+      "answer": 1,
+      "explain": "Nothing accumulates between conversations. There is no learning curve to wait out, so no fix arrives unless a person makes one."
+    },
+    {
+      "id": "p4-04",
+      "q": "Why do people reach for fine-tuning when a configuration would do?",
+      "options": [
+        "Fine-tuning is the only way to change a model's tone",
+        "The configuration felt too simple to be the answer, though simplicity is the point",
+        "Configurations cannot hold more than a few hundred words"
+      ],
+      "answer": 1,
+      "explain": "Fine-tuning changes weights, costs considerably more and needs a dataset. House style is a configuration problem."
+    },
+    {
+      "id": "p4-05",
+      "q": "The strongest practical argument for saving a configuration rather than pasting a prompt is:",
+      "options": [
+        "It consumes fewer tokens per request",
+        "A flaw can be corrected once and every later conversation carries the fix",
+        "The platform refines saved instructions over time"
+      ],
+      "answer": 1,
+      "explain": "Central correction is the real shift. Eight pasted prompts drift into eight standards; one configuration is fixed in one place."
+    },
+    {
+      "id": "p4-06",
+      "q": "Why does a shared configuration need instructions a personal prompt does not?",
+      "options": [
+        "Shared assistants handle more volume and need efficiency rules",
+        "The author is absent for the second turn, so a misreading never gets corrected",
+        "Platforms require a minimum instruction length for shared assistants"
+      ],
+      "answer": 1,
+      "explain": "Prompting is steered — you see the answer and fix it. A colleague gets one answer and usually never reports that it missed."
+    },
+    {
+      "id": "p4-07",
+      "q": "The most commonly skipped instruction in a shared assistant is:",
+      "options": [
+        "Which tone of voice to adopt",
+        "What to do when a request is unclear or outside its scope",
+        "How long answers ought to be"
+      ],
+      "answer": 1,
+      "explain": "Unsaid, it guesses confidently and ventures where being wrong costs something. Both halves are needed: ask when unclear, decline when outside."
+    },
+    {
+      "id": "p4-08",
+      "q": "Why open the instructions with the job rather than a personality?",
+      "options": [
+        "Models respond better to job titles than to adjectives",
+        "A job rules things out; a personality only decorates the answer",
+        "Personality descriptions consume more of the context window"
+      ],
+      "answer": 1,
+      "explain": "'You are a helpful assistant' constrains nothing. 'You rewrite copy to this style guide and invent no claims' constrains, and constraint is the value of handing over a configuration."
+    },
+    {
+      "id": "p4-09",
+      "q": "Why keep a shared assistant's scope narrower than feels necessary?",
+      "options": [
+        "Broad instructions exceed platform character limits",
+        "A mediocre first answer ends the trial, and narrow scope is what makes testing and currency possible",
+        "Narrow assistants cost less per request to operate"
+      ],
+      "answer": 1,
+      "explain": "Users do not file bugs; they conclude the tool is mediocre. A narrow assistant can also be tested and kept current, where a broad one can be neither."
+    },
+    {
+      "id": "p4-10",
+      "q": "Which retrieval decision is most worth discovering about your platform?",
+      "options": [
+        "The size of each chunk it creates from a file",
+        "What it does when retrieval finds nothing — answer from general knowledge, or say so",
+        "Whether ranking is keyword-based or meaning-based"
+      ],
+      "answer": 1,
+      "explain": "An answer that looks grounded and is not carries your document's authority without its content, which is worse than a refusal."
+    },
+    {
+      "id": "p4-11",
+      "q": "The characteristic failure of knowledge attached to a custom assistant is that it is:",
+      "options": [
+        "Incorrect, because uploaded files are often written carelessly",
+        "Old, and nothing in the answer reveals its age",
+        "Larger than the model's context window allows"
+      ],
+      "answer": 1,
+      "explain": "A saved configuration keeps whatever it was given indefinitely. A pasted prompt avoids this, because you paste the document you have open."
+    },
+    {
+      "id": "p4-12",
+      "q": "Keeping three versions of a policy in the knowledge base is worse than keeping one because:",
+      "options": [
+        "Storage costs rise with each attached file",
+        "The model answers from one without mentioning the others — a coin toss in a confident voice",
+        "Older documents are ranked above newer ones"
+      ],
+      "answer": 1,
+      "explain": "Contradiction is the worst case for attached knowledge, since nothing in the answer reveals that the sources disagreed."
+    },
+    {
+      "id": "p4-13",
+      "q": "Where should the date of an attached document be recorded?",
+      "options": [
+        "In the filename, so the upload list shows it",
+        "In the text at the top of the document, so an answer can carry it",
+        "In the platform's version notes for the assistant"
+      ],
+      "answer": 1,
+      "explain": "A filename is invisible to a reader of the answer. Inside the text, the assistant can quote the date and a reader can judge how old the claim is."
+    },
+    {
+      "id": "p4-14",
+      "q": "What should you assume about a shared assistant's instructions?",
+      "options": [
+        "They stay private unless the platform states otherwise",
+        "Anyone who can use the assistant can read them, directly or sideways",
+        "Only users holding edit permission can read them"
+      ],
+      "answer": 1,
+      "explain": "They sit in the only channel the model has. An assistant refusing every question about its own configuration could not explain what it helps with."
+    },
+    {
+      "id": "p4-15",
+      "q": "A file is attached so an assistant can answer policy questions. Who can reach its content?",
+      "options": [
+        "Only the people the file itself was shared with",
+        "Anyone who can use the assistant, because answering questions about a document discloses it a bit at a time",
+        "Only users who were granted knowledge-base permissions"
+      ],
+      "answer": 1,
+      "explain": "The file's own permissions do not travel with it. The assistant reads with your reach and answers whoever is asking — a confused deputy pointed at your own documents."
+    },
+    {
+      "id": "p4-16",
+      "q": "Why is a list of forbidden topics inside the instructions a particular risk?",
+      "options": [
+        "Models follow negative instructions unreliably",
+        "It tells a reader what is worth asking about — a refusal list is a map",
+        "It consumes context that attached knowledge could use"
+      ],
+      "answer": 1,
+      "explain": "'Never discuss the outage in June' reveals there was an outage in June. Where that matters, the rule belongs in code deciding what the assistant is told at all."
+    },
+    {
+      "id": "p4-17",
+      "q": "Why does editing a shared configuration differ from editing a shared document?",
+      "options": [
+        "Configurations are longer and harder to review properly",
+        "The change reaches every future conversation at once, with no review and nobody told",
+        "Platforms apply configuration edits after a delay"
+      ],
+      "answer": 1,
+      "explain": "People depend on its behaviour without reading it. A badly edited document looks different; a badly edited configuration just fits someone's work slightly less well."
+    },
+    {
+      "id": "p4-18",
+      "q": "Why keep the instruction text somewhere outside the platform?",
+      "options": [
+        "Platforms cap how long saved instructions may be",
+        "Most platforms keep no usable history, so without your own copy there is nothing to compare against",
+        "External copies are loaded faster at request time"
+      ],
+      "answer": 1,
+      "explain": "There is usually no diff and no previous version — the box holds whatever it holds now. Your own copy is what makes a change reversible."
+    },
+    {
+      "id": "p4-19",
+      "q": "Why give a shared assistant one named owner rather than a team?",
+      "options": [
+        "Platforms permit only a single owner account",
+        "The job is largely refusing additions, and groups approve things",
+        "A single owner reduces the licence cost"
+      ],
+      "answer": 1,
+      "explain": "Keeping it being one thing means refusing increments nobody would refuse individually. With nobody owning it, noticing the drift is nobody's job."
+    },
+    {
+      "id": "p4-20",
+      "q": "Why is the author the weakest tester of their own assistant?",
+      "options": [
+        "Authors spend less time testing than real users do",
+        "They ask in its vocabulary, know its boundaries, and read a near-miss as a hit",
+        "Authors cannot inspect the retrieval scores"
+      ],
+      "answer": 1,
+      "explain": "None of it is fixable by being more careful. It is fixable by writing cases down in advance and letting someone else use the thing."
+    },
+    {
+      "id": "p4-21",
+      "q": "A refusal test case passes when the assistant:",
+      "options": [
+        "Declines clearly and stops there",
+        "Declines and says what to do instead",
+        "Declines and names the instruction that forbade it"
+      ],
+      "answer": 1,
+      "explain": "A bare refusal is a dead end, and dead ends get worked around rather than respected. Naming the internal rule tells a reader what to rephrase."
+    },
+    {
+      "id": "p4-22",
+      "q": "Why re-run a test set periodically rather than only after editing?",
+      "options": [
+        "Test cases decay and need rewriting over time",
+        "The model can change underneath you with nothing edited on your side",
+        "Platforms rotate which instructions they honour"
+      ],
+      "answer": 1,
+      "explain": "A platform update or a moved version alias changes behaviour with no change of yours. Sky's own corpus has a case that passed four times then failed from identical inputs."
+    },
+    {
+      "id": "p4-23",
+      "q": "Which parts of a custom assistant transfer to another platform?",
+      "options": [
+        "The index the platform built from the attached files",
+        "The instructions, source documents and test set — all text you wrote",
+        "The conversation history, as a record of what worked"
+      ],
+      "answer": 1,
+      "explain": "The index rebuilds in minutes from the same documents. The text you wrote is the thinking, and it moves whole."
+    },
+    {
+      "id": "p4-24",
+      "q": "The same instructions running on a different platform's model will:",
+      "options": [
+        "Behave identically, since the instructions are unchanged",
+        "Behave differently — tone, refusals and edge cases shift, because they were tuned against one model's tendencies",
+        "Fail until rewritten in the new platform's required format"
+      ],
+      "answer": 1,
+      "explain": "Different rather than worse. You tuned against one model even without framing it that way, which is why the test set earns its keep during a move."
+    },
+    {
+      "id": "p4-25",
+      "q": "What usually makes moving a custom assistant expensive?",
+      "options": [
+        "Export restrictions written into the platform's terms",
+        "Everything undocumented — the test cases, the rephrasings, the known weaknesses, the connections",
+        "The cost of re-indexing the attached files"
+      ],
+      "answer": 1,
+      "explain": "The configuration is a page of text. The expense is what lives only in somebody's head, which is why maintainability habits are portability habits."
+    },
+    {
+      "id": "p4-26",
+      "q": "The output must be identical every time. What should you build?",
+      "options": [
+        "A custom assistant with very tightly worded instructions",
+        "A document, template or form, because generating text means it will vary",
+        "A custom assistant with its temperature set to zero"
+      ],
+      "answer": 1,
+      "explain": "Variation is not a bug to instruct away; it is what generating text means. If two different versions of the answer would bother you, do not generate the answer."
+    },
+    {
+      "id": "p4-27",
+      "q": "Why do experienced people reach for a model where a script belongs?",
+      "options": [
+        "Scripts cannot cope with messy real-world input",
+        "A model reaches a working version faster — a good way to write the script, a poor way to be it",
+        "Scripts require a deployment process the model avoids"
+      ],
+      "answer": 1,
+      "explain": "Deterministic work done by a model is slower, costs per run, and is occasionally wrong in ways nobody checks because it is usually right."
+    },
+    {
+      "id": "p4-28",
+      "q": "What is the honest base rate for a shared custom assistant?",
+      "options": [
+        "Most get adopted once colleagues have seen a demonstration",
+        "Its author uses it and nobody else does",
+        "Adoption depends mainly on how well the instructions are written"
+      ],
+      "answer": 1,
+      "explain": "Colleagues have their own habits and did not ask for it. A prompt in a shared document often gets more use and costs nothing to maintain."
+    }
+  ]
+}

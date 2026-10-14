@@ -1,0 +1,175 @@
+---
+title: "Testing before you hand it over"
+description: "A dozen questions with known good answers, run before colleagues depend on it — and why 'it works for me' is the least informative evidence available."
+track: practitioner
+module: p4
+order: 6
+minutes: 9
+objectives:
+  - "Build a small set of questions with agreed good answers for a shared assistant"
+  - "Test the cases that reveal failure rather than the ones that confirm success"
+concepts: ["test set", "author bias", "refusal", "regression"]
+flashcards:
+  - front: "Why is 'it works for me' weak evidence?"
+    back: "You ask in the words the instructions were written in, know what it can do, and read a near-miss as a hit. None of that transfers to a colleague."
+  - front: "Which three cases must a test set include?"
+    back: "Something it should refuse, something adjacent to its scope, and a badly phrased version of a question it handles well."
+  - front: "When should the set be re-run?"
+    back: "After any instruction edit, after a knowledge update, and periodically — because the model can change under you with no edit on your side."
+lastVerified: "2026-10-14"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+P2·L4 made you build twenty questions with known answers to find out whether
+retrieval worked. P3·L7 made you build an attack corpus. This is the same move
+for a configuration, and it is smaller: a dozen questions is enough.
+
+The argument is identical in all three places. A thing you have not measured is
+a thing you are guessing about, and the guess is always flattering.
+
+## Why your own testing is the weakest kind
+
+You are the worst available tester of your own assistant, for three reasons that
+have nothing to do with care.
+
+**You ask in its vocabulary.** You wrote the instructions, so you use the words
+they use. A colleague says *"sort this out for me"* and attaches something, and
+that is a genuinely harder input than anything you typed.
+
+**You know the boundaries.** You do not ask the out-of-scope question, because
+you know it is out of scope. The colleague does not know, so it is the second
+thing they try.
+
+**You read a near-miss as a hit.** You know what the answer should have been, so
+an answer gesturing at it feels right. Someone without that knowledge reads only
+what is on the screen.
+
+None of this is fixable by being more careful. It is fixable by writing the
+cases down in advance and by letting someone else use the thing.
+
+## The dozen
+
+Four of each, roughly:
+
+### Four it should handle well
+
+The real work. Take actual requests — from an inbox, a ticket queue, a chat —
+rather than inventing clean ones. Invented requests are always better phrased
+than real ones.
+
+Write down what a good answer contains. Not the exact words; the facts it must
+include and the things it must not.
+
+### Four that are awkward
+
+This is where the information is.
+
+- **Badly phrased.** A half-sentence, no context, a typo in the key term.
+- **Adjacent.** Plausibly related, actually outside the scope. For a copy
+  rewriter: *"is this claim legally OK?"*
+- **Underspecified.** Missing the one thing needed to answer. Does it ask, as
+  L2's instruction told it to, or does it guess?
+- **Too long.** A wall of pasted text with the real question in the middle.
+
+### Four it should refuse
+
+Deliberate, written down, with the refusal you want.
+
+What counts as refusable depends on the assistant, and deciding is most of the
+value: a copy assistant should refuse to invent a statistic; a support assistant
+should refuse to promise a refund; any assistant pointed at the public should
+refuse medical, legal and financial advice and say who to ask.
+
+A refusal case passes when it refuses **and says what to do instead**. A bare
+"I can't help with that" is a dead end, and a dead end gets worked around rather
+than respected.
+
+## Hand it to one person and watch
+
+The highest-value twenty minutes available: give it to a colleague, with no
+explanation, and watch without helping.
+
+Resist explaining. The urge is strong and it destroys the evidence — once you
+have said "try asking it to rewrite something", you have lost the thing you were
+measuring, which is what somebody does with no instructions.
+
+Two things usually happen. They ask something you did not design for, and they
+abandon a question halfway and rephrase it. Both are findings. The second is the
+more useful one, because it tells you the first answer was discouraging in a way
+no test case would have shown.
+
+## Re-run it, and know what forces a re-run
+
+The set is worth keeping because the things that break an assistant arrive
+quietly:
+
+- **An instruction edit** — including one that looks cosmetic.
+- **A knowledge update**, which changes what retrieval surfaces.
+- **The model changing underneath you.** The platform updates, or a version
+  alias moves, and nothing on your side changed at all.
+
+That last one is why a periodic run matters and not only a run after edits. It
+is also measured rather than theoretical: Sky's own injection corpus has a case
+that passed four times and failed the fifth with nothing changed in between —
+one in five, from the same inputs. Four passes were not evidence that it worked.
+They were four samples.
+
+If one case matters more than the rest, run it several times before believing it.
+
+## Try it now (15 minutes)
+
+Write twelve lines. One per case: the question, and what a good answer contains.
+
+Run them. Mark each pass, fail, or arguable — and keep the arguable ones rather
+than resolving them, because they are where your instructions are ambiguous
+rather than wrong.
+
+Then the question worth answering honestly: **how many of these did you try
+before reading this?** For most assistants in use, the answer is the four easy
+ones, which is also the four that told you least.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is the author the weakest tester of their own assistant?",
+    options: [
+      "Authors spend less time testing than users do",
+      "They ask in its vocabulary, know its boundaries, and read a near-miss as a hit",
+      "Authors cannot see the retrieval scores"
+    ],
+    answer: 1,
+    explain: "None of that is fixable by being more careful. It is fixable by writing cases down in advance and letting someone else use the thing."
+  },
+  {
+    q: "A refusal case passes when the assistant:",
+    options: [
+      "Declines clearly and stops",
+      "Declines and says what to do instead",
+      "Declines and explains which instruction forbade it"
+    ],
+    answer: 1,
+    explain: "A bare refusal is a dead end, and dead ends get worked around rather than respected. Naming the internal rule is a separate problem — it tells a reader what to rephrase."
+  },
+  {
+    q: "Why re-run the set periodically rather than only after you edit something?",
+    options: [
+      "Test sets decay and need rewriting over time",
+      "The model can change underneath you with nothing edited on your side",
+      "Platforms rotate which instructions they honour"
+    ],
+    answer: 1,
+    explain: "A platform update or a moved version alias changes behaviour with no change of yours. Sky's own corpus has a case that passed four times and failed the fifth from identical inputs."
+  }
+]} />
+
+## Recap
+
+Write a dozen cases with the good answer recorded: four it should handle, four
+awkward, four it should refuse with somewhere to go instead. Your own testing is
+the weakest kind, because you ask in its vocabulary and read near-misses
+generously, so hand it to one colleague and watch without explaining. Re-run
+after any edit and periodically regardless, since the model can change with
+nothing changed on your side — and run the case you most rely on several times,
+because one pass is one sample.
