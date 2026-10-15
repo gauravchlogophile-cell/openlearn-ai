@@ -1,0 +1,189 @@
+---
+title: "A cap that holds"
+description: "A cap that is checked after the spend, or counted by something that races, is a suggestion. Where the check lives decides whether it works."
+track: practitioner
+module: p7
+order: 3
+minutes: 10
+objectives:
+  - "Distinguish a hard cap from a soft one by where the check and the increment happen"
+  - "Design a cap that reserves before it spends and fails closed when it cannot count"
+concepts: ["hard cap", "soft cap", "reserve and settle", "fail closed"]
+flashcards:
+  - front: "What makes a cap hard rather than soft?"
+    back: "The check and the increment happen together, in one place that cannot race. A read-then-write over a store that is not atomic lets a burst all pass at once."
+  - front: "Why reserve the worst case before the call?"
+    back: "You cannot know the cost until after. Reserving the maximum first means a burst cannot collectively exceed the limit, and settling afterwards corrects it to what was used."
+  - front: "What should a cap do when it cannot read its own counter?"
+    back: "Refuse. A cap that fails open when the counter is unreachable is a cap that works only when nothing is wrong."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Everyone intends to have a spending limit. Far fewer have one that holds under
+pressure, because most limits are checked in a way that fails exactly when it is
+needed.
+
+## The race
+
+Picture the obvious implementation. A request arrives, reads today's total, sees it
+is under the limit, makes the call, and adds its cost to the total.
+
+Now send twenty requests at once.
+
+Each reads the total, finds it under the limit, and proceeds. By the time any has
+written its cost back, all twenty have already passed the check. The limit was never
+consulted in a way that could stop them, because no request saw another's.
+
+> **Check, then act, then record** is a race. The check and the record have to be
+> one step.
+
+That is the whole difference between a soft cap and a hard one. A soft cap is
+approximately right on a quiet day and wrong precisely under load, which is when
+an attacker, a bug or a viral moment produces the load.
+
+## A soft cap, honestly described
+
+Lrnon has one of each, and they are described in the code as what they are.
+
+The per-visitor limiter reads a count from a key-value store, compares it, and
+writes it back. That store is neither atomic nor immediately consistent across
+locations, so two requests can both read five and both write six, and a client
+spreading requests across locations can see stale counts for several seconds.
+
+The code says so plainly: it bounds nuisance, not money. It is there to keep one
+person from hammering the endpoint, and it does that job well enough. It was never
+meant to protect the bill, and its own comment warns against letting it quietly
+become the thing that does.
+
+## A hard cap
+
+The control that protects the money lives in the database, and it works differently.
+
+Before any model call, the server asks the database to **reserve** the worst-case
+cost. One statement, under a row lock, checks whether the day's total plus this
+reservation would exceed the cap, and if not, records the reservation. Because the
+check and the record are the same operation, and the lock admits one request at a
+time, twenty simultaneous requests are processed one after another. The twenty-first
+that would breach the limit is refused.
+
+Afterwards the reservation is **settled**: corrected down to what was actually used.
+
+Three properties make it hold.
+
+**One place.** The check and the increment cannot be separated, so there is no gap
+for a second request to slip through.
+
+**Worst case first.** The reservation is the maximum the call could use, not an
+estimate. Reserving the estimate afterwards is the original race again.
+
+**Settling downward.** Reserving the maximum would over-count, so it is corrected
+once the real figure is known. A failure to settle over-counts the day, which is the
+safe direction to be wrong in.
+
+## Several caps, for different failures
+
+One limit rarely covers it. Lrnon has three, and each catches something the others
+do not.
+
+> **Per call.** The most any single call may use. It bounds the worst case that the
+> reservation takes, and stops one enormous request from consuming a day.
+>
+> **Per day, in tokens.** The money cap. The one that actually binds, as L1 showed.
+>
+> **Per day, in calls.** A guard against a flood of tiny requests, which would stay
+> under the token cap and still be a problem.
+
+The same logic applies at the provider. Most let you set a spending limit or an
+alert on your account. Set one. It is the second line, and unlike yours it still
+works if your own code has a bug.
+
+## Fail closed
+
+The question that distinguishes a real cap is what it does when it cannot count.
+
+If the database is unreachable, the service key is missing, or the counter returns an
+error, there are two choices. Allow the call, on the reasoning that availability
+matters. Or refuse it.
+
+For money the answer is to refuse. A cap that lets everything through when its
+counter is unreachable works only when nothing is wrong, and it is the failures that
+produce surprise bills. Lrnon's reservation returns *not allowed* in every one of
+those cases, and says why to a verified staff member, not to the learner.
+
+The reasoning does not carry over to everything. A feature that merely displays
+something can reasonably fail open. Spending money, sending messages and changing
+records should fail closed. Decide for each, deliberately, and write the decision
+down.
+
+## Tell someone
+
+There is a gap in the design above, and it is worth stating because it is typical.
+
+A cap stops spending. It does not tell anyone. When Lrnon's daily limit is reached,
+the assistant tells learners it is off and the console shows the spend table, and
+nobody is notified. Whoever next looks will find it, which might be tomorrow.
+
+Add an alert at a fraction of the cap, such as eighty percent, sent somewhere a
+person reads. A cap that stops the harm and leaves the owner to find out later is
+half a control.
+
+## Try it now (15 minutes)
+
+For a feature you run, answer five questions.
+
+1. **Where is the check, and where is the increment?** If they are different
+   operations, there is a race.
+2. **Is the amount reserved before the call, as a maximum?**
+3. **What happens when the counter cannot be read?**
+4. **Is there a second cap at the provider?**
+5. **Who is told when it is nearly reached?**
+
+The honest answers are usually no, no, it goes ahead, no, and nobody. Each is a
+small piece of work and together they are the difference between a limit and a
+hope.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is 'read the total, check it, make the call, add to the total' a race?",
+    options: [
+      "Reading and writing are slow operations",
+      "Many simultaneous requests can all read the old total and pass the check before any records its cost",
+      "Totals reset at midnight in the middle of requests"
+    ],
+    answer: 1,
+    explain: "The check and the record must be one step. A soft cap is right on a quiet day and wrong under load, which is when it is needed."
+  },
+  {
+    q: "Why reserve the worst-case cost before the call and settle afterwards?",
+    options: [
+      "Settling is cheaper than reserving",
+      "A burst cannot collectively exceed the limit, and the reservation is later corrected down to actual use",
+      "Providers require a reservation for every request"
+    ],
+    answer: 1,
+    explain: "Reserving an estimate afterwards is the original race. Failing to settle only over-counts the day, which is the safe direction to be wrong in."
+  },
+  {
+    q: "A spending cap cannot read its own counter. What should it do?",
+    options: [
+      "Allow the call, because availability matters most",
+      "Refuse the call, because a cap that fails open works only when nothing is wrong",
+      "Allow it and log a warning for later"
+    ],
+    answer: 1,
+    explain: "It is the failures that produce surprise bills. For money, messages and record changes, fail closed; a feature that merely displays something can reasonably fail open."
+  }
+]} />
+
+## Recap
+
+A cap that checks then acts then records is a race, and a soft cap fails exactly
+under load. A hard cap makes the check and the increment one operation under a lock,
+reserves the worst case before the call and settles downward afterwards. Use several
+caps, per call, per day in tokens and per day in calls, and set a second limit at the
+provider. Fail closed when the counter cannot be read, and add an alert before the
+limit, because a cap that stops spending without telling anyone is half a control.

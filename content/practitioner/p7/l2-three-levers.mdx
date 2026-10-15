@@ -1,0 +1,174 @@
+---
+title: "Three levers"
+description: "Cost comes down by making fewer calls, sending less per call, or using a smaller model. Each has a price in quality, and each is easy to pull too far."
+track: practitioner
+module: p7
+order: 2
+minutes: 9
+objectives:
+  - "Reduce the cost of a model-backed feature using call count, context size and model size"
+  - "Judge each reduction by what it costs in quality, not only by what it saves"
+concepts: ["call count", "context size", "model size", "caching"]
+flashcards:
+  - front: "What are the three cost levers?"
+    back: "Fewer calls, less sent per call, and a smaller model. Every saving comes from one of the three."
+  - front: "What is the risk of pulling a lever?"
+    back: "Saving money by lowering quality you did not measure. A cheaper setup is only cheaper if the answers are still good, and you can only know that with a test set."
+  - front: "Why does Lrnon not cache answers?"
+    back: "An answer is specific to the question and the moment, may draw on a lesson that has since changed, and the saving is small at this volume. It is a decision, not an oversight."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Once you know what a feature costs, the question is how to make it cost less. There
+are three ways, and every saving anyone has ever found comes from one of them.
+
+> **Fewer calls.**
+> **Less sent per call.**
+> **A smaller model.**
+
+Each can be pulled too far, and the way to stop yourself is a test set. A cheaper
+setup is only cheaper if the answers are still good.
+
+## Fewer calls
+
+The cheapest call is the one you did not make.
+
+**Do not call a model for what a rule can do.** P5·L2 made this case for chains. A
+lookup, a filter or a pattern match costs nothing, and the saving is total.
+
+**Stop before the call when the answer is known.** Lrnon's assistant refuses before
+calling the model in several situations: a request from someone the current rollout
+stage does not cover, a question already identified as asking for an assessment
+answer, and a question for which retrieval found nothing relevant. Each of those is
+a model call that never happens.
+
+**Cache what repeats, where it is safe.** If the same request keeps arriving and the
+answer does not change, store the answer. This is the largest single saving in many
+systems, and the one with the most ways to go wrong. A cached answer can be stale,
+can be shown to someone it was not meant for, and can outlive the document it drew
+on.
+
+Lrnon deliberately does not cache assistant answers. They are tied to a question
+and a moment, they can rest on a lesson that has since been corrected, and at this
+volume the saving would be small. Responses are sent marked no-store, and a comment
+in the code gives the reason. That is a decision made with the cost in front of it,
+which is different from not having thought about it.
+
+**Limit retries.** P5·L5 covered running twice. Every unnecessary retry is a paid
+call.
+
+## Less sent per call
+
+Cost follows tokens, and most of the tokens in most calls are context.
+
+**Send fewer passages.** P2·L5 argued that three or four good passages beat ten
+mediocre ones for answer quality. It is also three to four times cheaper. Lrnon sends
+four.
+
+**Trim the instructions.** A system prompt is paid for on every call. A thousand-word
+set of rules costs the same on the first question as on the millionth. Keep it as
+long as it needs to be, and read it for sentences that earn nothing.
+
+Be careful here. Some of Lrnon's longest instructions are its longest because each
+sentence was added after something went wrong. Cutting for tokens would remove the
+protection, so cut by testing, not by feel.
+
+**Cap the output.** A maximum length on the answer bounds the worst case and keeps
+answers short. Sky's style rules ask for two or three sentences, and a hard ceiling
+sits behind them.
+
+**Turn off what you do not need.** Reasoning, where the provider offers it, is
+typically billed as output. For a task that reads supplied text and answers briefly,
+it adds cost and delay and little else.
+
+## A smaller model
+
+The most dramatic saving is often the simplest. Models in the same family differ in
+price by large factors, and many tasks do not need the largest.
+
+E11·L3 covered right-sizing. The method is to start with the smallest model that
+might do, test it on your own cases, and move up only when it fails. Most people do
+the opposite: they start with the biggest because it is safe, and never revisit.
+
+Two cautions.
+
+**Test before switching.** A smaller model may handle the typical case and fail the
+awkward one. Your test set (P4·L6) is how you find out, and the awkward cases are the
+ones to include.
+
+**Use different models for different steps.** A chain does not need one model. A small
+one can classify or extract, and a larger one can write the part a reader sees.
+That is P5·L2's separation of rules, cheap steps and expensive steps, applied to
+the model itself.
+
+## What to watch while you cut
+
+Every reduction changes behaviour, usually in a way that does not show up in the
+bill.
+
+> Fewer passages: a relevant one gets dropped.
+> Shorter instructions: a safeguard disappears.
+> A smaller model: the hard cases quietly get worse.
+> A lower output ceiling: answers get cut off mid-thought.
+
+The last one is worth dwelling on. Lrnon raised its output ceiling from 800 to 2000
+tokens as a precaution, for a reason that had nothing to do with quality of writing.
+A model that reasons spends part of the same allowance thinking, and with too little
+room the provider can return no text at all, after the call has been paid for. That
+outcome was anticipated and guarded against rather than observed here. A ceiling that
+is too low does not save money. It risks a failure that is billed and returns nothing.
+
+## Try it now (15 minutes)
+
+For one feature, list a saving under each lever. Then, for each, write the one case
+in your test set that would reveal if it went wrong.
+
+Make the cheapest of the three changes and run the set. If nothing broke, keep it.
+If something did, you have learned what that sentence or passage was actually doing,
+which is worth more than the saving.
+
+<Quiz client:visible items={[
+  {
+    q: "What are the only three ways to reduce the cost of a model-backed feature?",
+    options: [
+      "Cheaper hosting, fewer users, and shorter answers",
+      "Fewer calls, less sent per call, and a smaller model",
+      "Caching, batching, and prompt compression"
+    ],
+    answer: 1,
+    explain: "Every saving comes from one of the three. Caching and rules are ways of making fewer calls; trimming and compression send less; model choice is the third."
+  },
+  {
+    q: "Why can cutting a system prompt for token cost be dangerous?",
+    options: [
+      "Shorter prompts always produce worse answers",
+      "Some sentences were added after something went wrong, so cutting by feel removes the protection",
+      "Providers charge more for short prompts"
+    ],
+    answer: 1,
+    explain: "Cut by testing. A sentence that looks like padding may be the one guarding against a failure that already happened once."
+  },
+  {
+    q: "Why is a very low output ceiling a false economy?",
+    options: [
+      "Output tokens are the cheapest to buy",
+      "A model that reasons spends the same allowance thinking, and with too little room it can return nothing after the call is paid for",
+      "Ceilings are ignored by most providers"
+    ],
+    answer: 1,
+    explain: "A ceiling that is too low does not save money. It produces a failure that is billed and returns no answer."
+  }
+]} />
+
+## Recap
+
+Cost falls through fewer calls, less sent per call, or a smaller model, and each is
+easy to pull too far. Skip the model where a rule works, refuse before calling when
+you already know the answer, and cache only where staleness and audience cannot hurt
+you. Send fewer, better passages and cap the output. Start with the smallest model
+that might do and test the awkward cases before switching. A saving is only real if
+a test set shows the answers stayed good.

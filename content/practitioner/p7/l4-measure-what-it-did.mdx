@@ -1,0 +1,185 @@
+---
+title: "Measure what it did"
+description: "Record the shape of every call, the reason beside every failure, and keep it long enough to find the thing that mattered. Never the question itself."
+track: practitioner
+module: p7
+order: 4
+minutes: 9
+objectives:
+  - "Decide what to record about every model call so that cost and failures are explainable later"
+  - "Keep failure reasons visible over a window long enough to find them"
+concepts: ["observability", "failure reason", "retention window", "cost per outcome"]
+flashcards:
+  - front: "What is the minimum worth recording per call?"
+    back: "When, which model, tokens in and out, whether it succeeded, and if not, why. Enough to explain the bill and the failures, without a transcript."
+  - front: "Why store the reason beside the failure?"
+    back: "Otherwise diagnosis depends on someone relaying what a log showed, and detail is lost in the relay. With the reason in the same record, the answer is one query away."
+  - front: "Why does the retention window matter?"
+    back: "A failure that happens once will scroll out of a short window before anyone looks. Evidence you cannot find because it aged out is the same as evidence never kept."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+You cannot manage what a system cost, or why it failed, if you did not write it
+down at the time. This lesson is about what to write, where, and for how long.
+
+It is also the lesson where this project's own record is least flattering, because
+the mistakes were instructive.
+
+## The record
+
+For every model call, one row. The fields that earn their place:
+
+> **When** it was reserved and when it was settled.
+> **Which** provider and model.
+> **How many** tokens went in and came out.
+> **Whether** it succeeded.
+> **If not, why.**
+
+That is Lrnon's spend table, and it is small on purpose. It is enough to answer the
+questions that come up: what did Tuesday cost, which model was in use when it
+changed, how long do calls take, how often do they fail and for what reason.
+
+What is deliberately **not** in it is the question. P3·L8 gave the reason: a record
+of what people asked an assistant is a record of what they were worried about, and
+on a learning site that includes children. The shape of a call supports almost every
+investigation, and a transcript is a second exposure you created. Note too that the
+reason column holds our own words about a status code, never the provider's body,
+which can quote the request back.
+
+## The reason, in the same place
+
+The failure column was added late, and the occasion is the best argument for it.
+
+An injection test run kept losing about ten of its twenty-seven cases to an error
+that said only *provider*. The route had been written to return a reason, the
+console to display it, and the deployed code had been checked and did contain both.
+The reason still never arrived, because every path to it ran through a person copying
+text from a screen, and detail was lost at each copy.
+
+Four rounds went on guessing. The cause was then added to the same row that recorded
+the failure, and read straight out of the database. It said the provider had
+refused for exceeding its quota, and the per-minute counts showed it at once.
+
+> A diagnostic that depends on someone relaying it is not a diagnostic.
+
+Put the reason where it can be queried, in the record of the failure itself.
+
+## A window long enough to find things
+
+The second lesson is about time.
+
+The console summarised the previous seven days of calls, with a count of how many
+failed. On 9 September one call failed with a message saying the provider did not
+serve the region the request came from. Nobody saw it. The count read *one*, and the
+reason was not shown anywhere. By the time anyone looked, five weeks later, the
+seven-day window had dropped it entirely.
+
+Two separate gaps made that possible.
+
+**The count named nothing.** A number of failures says that something went wrong and
+nothing about what. Group failures by reason and show the reasons.
+
+**The window was shorter than the interval between looks.** If you check weekly,
+evidence needs to last longer than a week, or whatever happened in the middle goes
+unseen. The failures panel now covers 180 days.
+
+The general rule: **make the window longer than the gap between looks, by a wide
+margin.**
+
+## Cost per outcome
+
+Raw totals are the beginning. The useful figures divide.
+
+> Cost per answered question.
+> Tokens per call, over time, and whether the trend is up.
+> Failure rate, and which reason dominates.
+> Share of calls refused before reaching the model.
+
+The trend is where things show. Tokens per call creeping up usually means context is
+growing. A rising failure rate with one reason dominant points at a cause. A falling
+share of early refusals suggests something has stopped catching what it used to.
+
+A caution about interpretation. A failed call is not necessarily free. A request that
+is rejected before generating anything is normally not billed, but one that times out
+after the provider has started may be. Check your provider's rules rather than
+assuming, and look at the bill as well as your own table.
+
+## Read it, sometimes
+
+A record nobody reads is a record that failed.
+
+Set a time, weekly is plenty at small scale, and look at three things: spend against
+the cap, the list of distinct failure reasons, and any trend in tokens per call. Ten
+minutes. Most weeks nothing will be wrong, and that is the point of the habit: the
+week something is wrong, you are already looking.
+
+## What the record cannot show
+
+Be honest about the limits.
+
+Lrnon's table cannot tell you whether an answer was **good**. It records that a call
+was made, used some tokens, and succeeded. Whether the answer was right is a separate
+measurement, which is what the review buttons and readiness gates exist for, and
+those have recorded nothing yet. The cost record and the quality record are different
+things, and a healthy-looking spend table says nothing about the second.
+
+A system can be cheap, fast, reliable and wrong. Measure all four.
+
+## Try it now (12 minutes)
+
+For a feature you run, check three things.
+
+1. **What is recorded per call?** Is there a reason beside each failure?
+2. **How long does the record last,** and how often do you look? Is the first longer
+   than the second by a wide margin?
+3. **Does anything in it contain what a person asked?** If so, ask whether the
+   investigation really needs it.
+
+Then do the weekly look once, now, and write down what you would not have been able
+to answer.
+
+<Quiz client:visible items={[
+  {
+    q: "Why record the failure reason in the same row as the failure?",
+    options: [
+      "Rows with reasons take less storage",
+      "Otherwise diagnosis relies on someone relaying a log, and detail is lost at each copy",
+      "Providers require reasons to be stored for audit"
+    ],
+    answer: 1,
+    explain: "With the reason in the record, the answer is one query away. A diagnostic that depends on someone relaying it is not a diagnostic."
+  },
+  {
+    q: "A single failure went unseen for five weeks. What two gaps allowed it?",
+    options: [
+      "The count named nothing, and the window was shorter than the gap between looks",
+      "The failure was too small to log, and alerts were disabled",
+      "The provider hid the failure, and the console cached old data"
+    ],
+    answer: 0,
+    explain: "Group failures by reason so they are named, and keep the window much longer than the interval between looks."
+  },
+  {
+    q: "What can a spend table not tell you?",
+    options: [
+      "How many tokens each call used",
+      "Whether the answers were good",
+      "Which model handled each call"
+    ],
+    answer: 1,
+    explain: "A system can be cheap, fast, reliable and wrong. Cost and quality are different measurements and need different records."
+  }
+]} />
+
+## Recap
+
+Record one row per model call with when, which model, tokens in and out, whether it
+succeeded and, if not, why, and leave out the question itself. Keep the reason in the
+same record as the failure, because a diagnostic that depends on someone relaying it
+loses detail. Make the retention window much longer than the gap between your looks,
+group failures by reason, and divide totals into cost per outcome. Look weekly, and
+remember the cost record says nothing about whether the answers were good.

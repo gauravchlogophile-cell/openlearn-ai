@@ -1,0 +1,183 @@
+---
+title: "Failing well"
+description: "Decide in advance what happens when the model is down, slow or refused: fail closed or open, degrade to something true, and tell people what to do next."
+track: practitioner
+module: p7
+order: 7
+minutes: 9
+objectives:
+  - "Choose fail-open, fail-closed or degrade for each failure of a model-backed feature"
+  - "Write the message people see so that it is true and tells them what to do"
+concepts: ["graceful degradation", "fail closed", "timeout", "fallback"]
+flashcards:
+  - front: "What are the three ways to respond to a failure?"
+    back: "Fail open and carry on, fail closed and refuse, or degrade to a simpler thing that is still true. Choose per failure, by what the cost of being wrong is."
+  - front: "What makes a degraded-mode message good?"
+    back: "It is true, it says what still works, and it tells the person what to do next. A message that promises something the fallback cannot deliver is worse than an error."
+  - front: "What is the catch with a fallback model?"
+    back: "It behaves differently, so it needs its own testing, its own cost estimate and possibly its own terms. A fallback never tested is a second thing that fails at the worst moment."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Everything above is about preventing and noticing trouble. This lesson is about the
+moment it arrives anyway, and what the person on the other end sees.
+
+The model will be down, slow, refused, over quota or returning rubbish. The only
+question is whether you decided in advance what happens.
+
+## Three responses
+
+**Fail open.** Carry on as if nothing were wrong. Appropriate when the failing part
+only adds something optional and being wrong costs little: a recommendation panel
+that cannot load, a suggestion that does not appear.
+
+**Fail closed.** Refuse. Appropriate when carrying on would spend money, send
+something, change a record, or give an answer without its safeguards. L3 applied this
+to a spending counter.
+
+**Degrade.** Fall back to something simpler that is still true. Appropriate when
+there is a useful lesser version available.
+
+The choice is made **per failure**, not per system. One feature can fail open on a
+slow suggestion, closed on an unreachable spend counter, and degrade on a refused
+model call. Write the decision down for each, because the default is usually whatever
+the code did when nobody thought about it.
+
+## What Lrnon does
+
+The assistant's failures are handled differently depending on what failed, and the
+differences are deliberate.
+
+> **The spend counter cannot be read:** fail closed. Money is at stake.
+>
+> **The provider refuses, times out, or errors:** degrade. The learner sees a plain
+> message and can still use search, which does not depend on the model.
+>
+> **The answer comes back uncited:** discard it and hand off. An answer without a
+> source is the failure the whole design exists to prevent.
+>
+> **The rollout switch says off:** refuse, for everyone.
+
+The message learners see in the degraded case is: *Sky is off right now. Search still
+works, and feedback is answered by a person within two working days.*
+
+## A degraded message must be true
+
+That sentence makes three claims, and each has to hold.
+
+**"Search still works."** It does, because search is a separate, static feature that
+does not touch the model. If search were also broken, or depended on the same
+provider, the message would be false at the very moment it was read.
+
+**"Feedback is answered by a person within two working days."** That is a promise
+about staffing. It holds only as long as someone is actually answering.
+
+**"Sky is off right now."** True in effect, and a little blurry: it is the same
+sentence whether the cause is an outage, a quota, a cap or a kill switch. That is
+intentional for learners, who need to know what to do and not which ceiling was
+reached. Operators get the real reason through a separate path.
+
+The test for any such message: if the fallback it describes were checked right now,
+would it pass? A message that promises more than the fallback delivers is worse than
+a plain error, because it sends someone down a path that does not work.
+
+## Time out, deliberately
+
+A model call that never returns is a failure that does not announce itself.
+
+Set a timeout on every provider call. Lrnon's is forty seconds, after a shorter value
+proved too tight for a model that was reasoning, and a request that exceeds it is
+treated as a failure and settled as one, so a hung provider cannot quietly drain the
+budget.
+
+Choose the number from measurement, not hope. Too short and you discard answers that
+would have arrived. Too long and a person waits through a failure. Tell the person
+something while they wait if it can take more than a few seconds.
+
+## Fallback models
+
+The obvious suggestion is a second model to try when the first fails. It is sometimes
+right, and it has costs people overlook.
+
+**It behaves differently.** P4·L7 made this point for moving platforms. A fallback is
+a different model with different tone, different refusals and different edge cases,
+and answers it gives are not the answers you tested.
+
+**It needs its own testing.** Run the same test set against it, ahead of time. A
+fallback never exercised is a second system that fails at the worst moment, when it is
+needed for the first time.
+
+**It carries its own cost and terms.** Different price, possibly a different provider,
+data flowing somewhere your privacy notice does not mention. P8 and P10 cover why that
+matters.
+
+**It can hide the problem.** If the fallback quietly takes over, nobody notices the
+primary has been failing for a week.
+
+Lrnon has no fallback model. That is a choice made for these reasons, and not an
+oversight; the degrade path to search and a person was judged enough at this scale.
+
+## Tell people what to do
+
+Whatever the failure, the person affected should be able to answer one question from
+the screen: *what do I do now?*
+
+Not "an error occurred". Not a code. A sentence that names what still works and what
+to try. If the honest answer is "wait", say how long, and if there is nothing they
+can do, say that too.
+
+## Try it now (12 minutes)
+
+For a feature you run, list its failures: the model is down, slow, refuses, returns
+uncited or malformed output, the counter is unreachable, a limit is hit.
+
+For each write the response, fail open, fail closed or degrade, and the exact message
+a person would see. Then test every claim in those messages as if you were the person
+reading them.
+
+<Quiz client:visible items={[
+  {
+    q: "A feature's spend counter cannot be reached. What should it do?",
+    options: [
+      "Fail open, since availability matters most",
+      "Fail closed, because money is at stake",
+      "Degrade to a cheaper model"
+    ],
+    answer: 1,
+    explain: "Choose per failure. Spending money, sending messages and changing records fail closed; an optional suggestion can fail open."
+  },
+  {
+    q: "What makes the message 'search still works' safe to show during an outage?",
+    options: [
+      "It is short and reassuring",
+      "Search does not depend on the model, so the claim holds at the moment it is read",
+      "Learners will not try search anyway"
+    ],
+    answer: 1,
+    explain: "If the fallback described were checked right now, it should pass. A message promising more than the fallback delivers is worse than a plain error."
+  },
+  {
+    q: "Why can a silent fallback model be a problem?",
+    options: [
+      "Fallback models always cost more",
+      "It can hide the fact that the primary has been failing, and it gives answers you never tested",
+      "It makes timeouts longer"
+    ],
+    answer: 1,
+    explain: "A fallback behaves differently, needs its own testing and cost estimate, and if it takes over quietly nobody notices the primary failing."
+  }
+]} />
+
+## Recap
+
+Decide per failure whether to fail open, fail closed or degrade, and write the
+decision down. Spending, sending and changing records fail closed; optional extras can
+fail open; where a simpler true thing exists, degrade to it. A degraded message must
+be true, say what still works and tell the person what to do next. Time out every
+provider call, with a number chosen from measurement. Treat a fallback model as a
+second system that needs its own testing, cost and terms, and which can hide the
+primary failing.

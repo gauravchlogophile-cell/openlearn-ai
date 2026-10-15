@@ -1,0 +1,179 @@
+---
+title: "Limits you do not set"
+description: "Providers cap requests and tokens per minute and per day. Find the real number by measuring, pace to it, wait the right amount, and make runs resumable."
+track: practitioner
+module: p7
+order: 5
+minutes: 9
+objectives:
+  - "Find a provider's real rate limit by measuring rather than guessing"
+  - "Pace, retry and resume so that hitting the limit costs time and not results"
+concepts: ["rate limit", "quota", "backoff", "resumable run"]
+flashcards:
+  - front: "What does an HTTP 429 mean?"
+    back: "Too many requests or quota exceeded. It does not say which limit, or whether waiting a minute or a day will help, so read the message and the pattern."
+  - front: "How do you find a real rate limit?"
+    back: "Measure it. Count successes per minute across several runs. A stable number, such as eight, is the limit regardless of what the documentation or the tier page implies."
+  - front: "How long should a per-minute limit retry wait?"
+    back: "Until the window ends, so about a minute. Twenty seconds cannot clear a per-minute limit. Retry once, not repeatedly."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Lessons 1 to 4 were about limits you set on yourself. This one is about limits that
+are set on you, which arrive without warning, vary by account, and tell you very
+little when you hit them.
+
+## What a provider limits
+
+Several things at once, and they are different.
+
+> **Requests per minute.** How often you may call.
+> **Tokens per minute.** How much you may send and receive in that time.
+> **Requests or tokens per day.** A longer window with its own ceiling.
+> **Concurrent requests.** How many may be in flight together.
+
+Hitting any one produces a refusal, usually an HTTP 429. The status tells you that
+you are over a limit and not which one, and the message wording varies.
+
+This matters because the right response differs. A per-minute limit clears in a
+minute. A daily one does not clear until tomorrow. Retrying a daily-quota refusal
+every twenty seconds spends effort and achieves nothing.
+
+## Measure the limit
+
+The published figure is a starting point. It may describe a different tier from yours,
+may have changed since the page was written, or may not describe the limit that
+actually binds first.
+
+So measure it, as Lrnon did without intending to.
+
+A test sent 27 model calls, spaced 4.5 seconds apart. A third of them failed with the
+provider's quota message, and the failures moved around from run to run, which first
+made them look like something about specific cases. Reading the counts per minute
+from the database across several runs settled it. In the three runs that matter, the
+pattern was the same: **eight calls succeeded in a minute, then everything else that
+minute was refused.** The failing cases were just whichever fell after the eighth.
+
+The measured figure was lower than the spacing allowed. 4.5 seconds is thirteen calls
+a minute against a limit of about eight to ten. Pacing was then set at 8 seconds, a
+little under the limit, and the run completed.
+
+The method generalises: send a run, count successes per minute, repeat. A number that
+stays the same is the limit.
+
+The limit also belongs to the account tier at that moment. A free tier is usually much
+tighter than a paid one, and moving up changes the figure. Note the date you
+measured, and re-measure when something changes.
+
+## Pace to it
+
+Stay under the limit rather than bumping against it.
+
+**Space the calls.** Convert the limit into a gap: eight a minute is one every 7.5
+seconds, so use a little more than that.
+
+**Cap concurrency.** Several requests in flight at once can breach a per-minute limit
+all together even if the average is fine.
+
+**Do not run two loops.** The request counts suggested this happened here, at eleven
+to sixteen a minute where one loop sends under eight. A wait of a full minute looks
+like a freeze, so a person presses the button again, and now two loops compete for
+the same quota. Both slow down and both fail more. A run that looks stuck during a deliberate
+wait should say so on screen.
+
+## Retry once, and wait the right time
+
+Retries are where well-meant code makes things worse.
+
+**Wait for the window, not for a short pause.** If the limit is per minute, a
+twenty-second retry will fail again. A rate-limit refusal should wait roughly a full
+minute. Other failures can retry sooner, because waiting a minute for a wrong model
+name helps nobody.
+
+**Retry once.** Not forever. A call that fails twice is telling you something, and
+a loop that retries indefinitely turns a quota problem into a runaway.
+
+**Back off with some randomness** if many callers share a limit. Otherwise they all
+retry at the same instant and collide again. At small scale this rarely matters; at
+larger scale it is the difference between recovering and failing in waves.
+
+## Make the run resumable
+
+A long run against a tight limit will, sooner or later, be interrupted. By a quota,
+a timeout, a closed tab, a second press of a button.
+
+If an interrupted run loses everything, you must finish it in one go, which a tight
+limit may not allow. So design runs to **accumulate**: keep the results already
+obtained, and let a re-run cover only the gaps.
+
+Lrnon's test console does exactly that. Results are merged rather than reset, and a
+button beneath the table re-runs only the cases that did not complete. Seven cases
+fit comfortably inside one window where twenty-seven do not. A corpus finished over
+two sittings is not a worse result than one finished at once.
+
+## When the limit is the product
+
+For a learner-facing feature there is a harder question than pacing: what happens
+when a *user's* request hits the limit?
+
+Lrnon's per-visitor limiter and daily caps exist partly for this, and the answer
+shown to the learner is the same plain message whatever the reason: the assistant is
+off for now, search still works, and a person answers feedback within two working
+days. The operator-facing diagnostic says which limit it was. Learners need to know
+what to do next, and not which internal ceiling was reached.
+
+## Try it now (15 minutes)
+
+If you have anything that calls a provider repeatedly, measure its limit. Run it
+three times, count successes in each minute, and write down the stable number with
+today's date and your tier.
+
+Then check four things: does your code space calls to stay under it, does a rate-limit
+refusal wait for the window, does it retry once and no more, and can an interrupted
+run resume without redoing completed work?
+
+<Quiz client:visible items={[
+  {
+    q: "What does an HTTP 429 tell you?",
+    options: [
+      "That the provider is down",
+      "That you are over a limit, without saying which one or how long to wait",
+      "That your credentials were rejected"
+    ],
+    answer: 1,
+    explain: "Read the message and the pattern. A per-minute limit clears in a minute; a daily one does not clear until tomorrow."
+  },
+  {
+    q: "How can you find a provider's real rate limit?",
+    options: [
+      "Read the pricing page for your tier",
+      "Count successes per minute across several runs; a stable number is the limit",
+      "Ask the provider's assistant"
+    ],
+    answer: 1,
+    explain: "The published figure may describe another tier or an older date. Measuring across repeated runs gives the number that actually binds."
+  },
+  {
+    q: "A run that waits a full minute on a rate limit looks frozen. What commonly goes wrong?",
+    options: [
+      "The provider cancels the waiting request",
+      "Someone presses the button again, and two loops compete for the same quota",
+      "The platform doubles the limit"
+    ],
+    answer: 1,
+    explain: "Say on screen that it is waiting, and make the run resumable so an interruption costs only the gaps."
+  }
+]} />
+
+## Recap
+
+Providers limit requests and tokens per minute and per day, and a 429 does not say
+which. Measure the real limit by counting successes per minute across runs, note the
+tier and the date, and pace a little under it. Wait for the whole window before
+retrying a rate limit, retry once, and avoid starting a second loop while the first
+waits. Make long runs resumable so an interruption costs only the gaps, and give the
+people using the feature a plain message that tells them what to do next.

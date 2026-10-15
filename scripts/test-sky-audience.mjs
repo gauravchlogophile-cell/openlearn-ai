@@ -95,7 +95,23 @@ ok(route.includes('const rpcErr = owner.error ?? admin.error ?? sub.error'),
    'a failing role lookup is distinguished from "not staff" rather than silently equal to it');
 ok(route.includes("request.headers.get('authorization')\n        ? { diagnostic:")
    || /authorization'\)\s*\?\s*\{ diagnostic:/.test(route),
-   'the diagnostic is returned only to a caller who supplied a token');
+   'the identity diagnostic is returned only to a caller who supplied a token');
+
+/* The configuration diagnostics are a different matter. They name the provider,
+   the model, which secrets are present and the role the service key claims, and
+   were gated on the Authorization header merely EXISTING — so any value, valid
+   or not, unlocked them. The identity diagnostic above is allowed to work that
+   way because its purpose is to explain why someone was not recognised.
+   These three are not, and require a verified staff viewer. */
+{
+  const spreads = [...route.matchAll(/\.\.\.\((viewer\.isStaff|request\.headers\.get\('authorization'\))\s*\n?\s*\? \{ diagnostic: \{([^}]{0,60})/g)];
+  const byHeader = spreads.filter((m) => m[1].startsWith('request'));
+  const byStaff = spreads.filter((m) => m[1] === 'viewer.isStaff');
+  ok(byHeader.length === 1,
+     'exactly one diagnostic still unlocks on a header, the identity one');
+  ok(byStaff.length >= 3,
+     'the configuration, budget and provider diagnostics require a verified staff viewer');
+}
 ok(/db\.auth\.getUser\(token\)/.test(route),
    'the token is verified rather than parsed and trusted');
 

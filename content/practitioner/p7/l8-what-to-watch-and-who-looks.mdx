@@ -1,0 +1,198 @@
+---
+title: "What to watch, and who looks"
+description: "A short list of signals, a weekly ten minutes, a one-page runbook and a named person for when you are away. Monitoring that nobody reads is decoration."
+track: practitioner
+module: p7
+order: 8
+minutes: 9
+objectives:
+  - "Choose a short list of signals worth watching and a cadence for looking at them"
+  - "Write a runbook that someone other than the builder could follow"
+concepts: ["monitoring", "runbook", "alert design", "bus factor"]
+flashcards:
+  - front: "What makes a signal worth watching?"
+    back: "Someone will act on it. A figure that never prompts a decision is clutter, and clutter hides the signal that matters."
+  - front: "What belongs in a runbook?"
+    back: "For each symptom: what to check first, in order, what each result means, and what to do. Written calm, to be read in a hurry by someone who did not build it."
+  - front: "What is the honest limit of a one-person operation?"
+    back: "Nobody covers when that person is away. The mitigation is writing things down so that a capable stranger could keep it running for a few days."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The last lesson in this module draws the earlier ones together into something a
+person can actually do. Monitoring that nobody reads is decoration, and the useful
+version is smaller than most dashboards.
+
+## A short list
+
+Pick signals by a single test: **will someone act on it?** A figure that never
+prompts a decision is clutter, and clutter buries the signal that matters.
+
+For a model-backed feature, a short list covers nearly everything:
+
+> **Spend against the cap.** Is today going to hit the limit, and is the trend up?
+>
+> **Failure reasons.** Grouped, newest first, over a long window.
+>
+> **Latency.** How long calls take, and whether that is drifting.
+>
+> **Refusals before the model.** The share of requests turned away early, which
+> should be stable.
+>
+> **Quality.** Whatever tells you whether the answers are good.
+
+Five. Resist adding a sixth because it is easy to collect.
+
+## Where Lrnon actually stands
+
+Measured against that list, honestly.
+
+**Spend:** shown in the console, seven days of it. No alert before the cap.
+
+**Failure reasons:** shown, grouped, 180 days. Added after a failure went unseen for
+five weeks.
+
+**Latency:** each settled call has a reserved and a settled time, so it can be worked
+out, but nothing displays or tracks it.
+
+**Refusals before the model:** not kept anywhere that can be queried, though some
+reach the Worker's log. If a rule started refusing everything, nothing in the console
+would show it.
+
+**Quality:** the review buttons exist and had recorded nothing when this was written.
+The readiness gates that depend on them read zero.
+
+So one of five signals is in good shape, two are partial, and two are absent or empty.
+That is a fair account of a project that built the mechanism before the habit, and
+it is better said than glossed.
+
+## A weekly ten minutes
+
+Cadence matters more than coverage. A modest look every week beats a perfect dashboard
+checked on the day something has already gone wrong.
+
+Put it in the calendar. Fixed time, ten minutes, the same order every week:
+
+1. Spend against the cap, and the direction.
+2. Distinct failure reasons: anything new?
+3. Anything in the quality record.
+4. Any announcement from the provider.
+
+Most weeks nothing will be wrong. That is the design. The week something is, you are
+already looking, and you know what normal looks like because you have seen it fifty
+times.
+
+## Alerts are for the few things that cannot wait
+
+An alert interrupts a person. Spend it carefully.
+
+**Alert on what needs action soon:** the cap nearly reached, the failure rate suddenly
+high, the heartbeat from P5·L5 missed.
+
+**Do not alert on what can wait for Tuesday:** a slightly higher latency, a single
+isolated failure, a trend.
+
+Alerts that fire often and mean little teach people to ignore them. P5·L6 made this
+argument about approvals, and it applies here without change: an alert that has
+become furniture protects nothing, while looking like protection.
+
+Send them somewhere that a human reads and that is not their general inbox.
+
+## A runbook
+
+The runbook is the thing most likely to be missing, and the one that matters most on a
+bad day.
+
+For each symptom, write what to check first, in order, and what each result means.
+Lrnon's assistant, for example:
+
+> **Symptom: Sky says it is off.**
+> 1. Look at the stage in the console. Is it off, or narrowed from the ceiling?
+> 2. Run the self-test. Read the diagnostic, which names the stage that stopped it.
+> 3. If it says provider, read the failure reason. A 404 means the model name; a 429
+>    means a quota; a 400 naming a location means the region.
+> 4. If it says budget, read why: no key, no database, or the cap reached.
+> 5. Press the model-list button to see what the provider currently offers.
+
+That is useful because it was built from real incidents, and every step exists
+because it once took a long time to find. The tools it names, the self-test and the
+model probe, were built for exactly this.
+
+Write it calm. Read it in a hurry. Make it short enough that someone will follow it
+rather than skip to guessing.
+
+## One person is a risk
+
+Lrnon is run by one person, and the project says so openly.
+
+For monitoring, that has a specific meaning. If that person is away, ill, or simply
+not looking, nothing else is: no second pair of eyes, no one to notice the cap was
+hit on Thursday.
+
+There is no complete answer to that at this size, only reductions.
+
+**Write things down** so that a capable stranger could keep it running for a few days:
+the runbook, the commands, where the secrets live and who may touch them.
+
+**Make failure safe by default.** Caps that refuse, a degrade path that is true, a
+kill switch that works. A system that fails closed while unattended is a system you
+can leave alone.
+
+**Be honest about response time.** The promise that a person answers within two
+working days is a statement about staffing, and it is the right size for the staffing
+that exists.
+
+## Try it now (15 minutes)
+
+Write the five signals for something you run, and mark each: good, partial, or absent.
+
+Then write one runbook entry, for the failure you fear most, as steps someone else
+could follow. Hand it to a colleague and ask them to say where they would get stuck.
+
+Finally put the weekly look in the calendar before you close this page.
+
+<Quiz client:visible items={[
+  {
+    q: "What test decides whether a signal is worth watching?",
+    options: [
+      "Whether it is easy to collect",
+      "Whether someone will act on it",
+      "Whether competitors also track it"
+    ],
+    answer: 1,
+    explain: "A figure that never prompts a decision is clutter, and clutter buries the signal that matters."
+  },
+  {
+    q: "Why does a weekly ten-minute look beat a perfect dashboard?",
+    options: [
+      "Dashboards are expensive to build",
+      "You learn what normal looks like, so the week something is wrong you are already looking",
+      "Weekly looks are required by providers"
+    ],
+    answer: 1,
+    explain: "Cadence matters more than coverage. A modest look every week, repeated, is what makes an anomaly stand out."
+  },
+  {
+    q: "What is the right way to write a runbook entry?",
+    options: [
+      "As a detailed essay on how the system works",
+      "As ordered steps for one symptom, calm to write and quick to follow by someone who did not build it",
+      "As a list of every error code the system can produce"
+    ],
+    answer: 1,
+    explain: "It is read in a hurry. Each step should exist because it once took a long time to find."
+  }
+]} />
+
+## Recap
+
+Watch a short list of signals that someone will act on: spend against the cap, failure
+reasons over a long window, latency, early refusals and quality. Look weekly for ten
+minutes at a fixed time, reserve alerts for the few things that cannot wait, and write
+a runbook of ordered steps per symptom that a stranger could follow. Be candid about
+where you stand: Lrnon has one signal in good shape and two empty. With one operator,
+the mitigation is writing things down and making failure safe by default.

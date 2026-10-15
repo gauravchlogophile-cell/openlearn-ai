@@ -1,0 +1,316 @@
+{
+  "module": "p7",
+  "title": "Cost, Monitoring and Reliability — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "p7-01",
+      "q": "Which three numbers produce a daily cost estimate for a model-backed feature?",
+      "options": [
+        "Model size, context length and number of users",
+        "Tokens per call, calls per day and price per token",
+        "Hosting cost, licence cost and support cost"
+      ],
+      "answer": 1,
+      "explain": "Input and output are usually priced separately, so estimate them separately too. Prices move, so take the current ones from the provider's own page."
+    },
+    {
+      "id": "p7-02",
+      "q": "A feature's limits are 200,000 tokens and 500 calls a day, and each call uses about 800 tokens. Which limit binds first?",
+      "options": [
+        "The call limit, since 500 is the smaller number",
+        "The token limit, reached after about 250 calls",
+        "Neither, because the limits apply per month"
+      ],
+      "answer": 1,
+      "explain": "Two limits sit side by side and nothing says which matters. Dividing shows the token cap is reached long before the call cap."
+    },
+    {
+      "id": "p7-03",
+      "q": "Why must a budget be built on the worst case as well as the typical one?",
+      "options": [
+        "Providers bill at the worst-case rate by default",
+        "It has to hold on the bad day, not the average one",
+        "Typical estimates are almost always too high"
+      ],
+      "answer": 1,
+      "explain": "A system that is affordable on average and ruinous on a busy day is not affordable."
+    },
+    {
+      "id": "p7-04",
+      "q": "Why is cost per unit of value more useful than a monthly total?",
+      "options": [
+        "Monthly totals are routinely inaccurate",
+        "The same monthly figure can be good or bad depending on what it bought, and cost per unit shows how it scales",
+        "Providers do not publish monthly totals"
+      ],
+      "answer": 1,
+      "explain": "A hundred pounds that resolves three tickets is expensive; the same hundred resolving three thousand is not."
+    },
+    {
+      "id": "p7-05",
+      "q": "What are the only three ways to reduce the cost of a model-backed feature?",
+      "options": [
+        "Cheaper hosting, fewer users and shorter answers",
+        "Fewer calls, less sent per call, and a smaller model",
+        "Caching, batching and prompt compression"
+      ],
+      "answer": 1,
+      "explain": "Every saving comes from one of the three. Caching and rules are ways of making fewer calls; trimming and compression send less; model choice is the third."
+    },
+    {
+      "id": "p7-06",
+      "q": "Why can cutting a system prompt purely for token cost be dangerous?",
+      "options": [
+        "Shorter prompts always produce worse answers",
+        "Some sentences were added after something went wrong, so cutting by feel removes the protection",
+        "Providers charge more for short prompts"
+      ],
+      "answer": 1,
+      "explain": "Cut by testing. A sentence that looks like padding may be guarding against a failure that already happened once."
+    },
+    {
+      "id": "p7-07",
+      "q": "Why is an output ceiling set too low a false economy?",
+      "options": [
+        "Output tokens are the cheapest to buy",
+        "A model that reasons spends the same allowance thinking, and with too little room the call can be billed and return nothing",
+        "Ceilings are ignored by most providers"
+      ],
+      "answer": 1,
+      "explain": "A ceiling that is too low does not save money. It risks a failure that costs and produces no answer."
+    },
+    {
+      "id": "p7-08",
+      "q": "Why is 'read the total, check it, make the call, add to the total' a race?",
+      "options": [
+        "Reading and writing are slow operations",
+        "Many simultaneous requests can all read the old total and pass the check before any records its cost",
+        "Totals reset at midnight in the middle of requests"
+      ],
+      "answer": 1,
+      "explain": "The check and the record must be one step. A soft cap is right on a quiet day and wrong under load, which is when it is needed."
+    },
+    {
+      "id": "p7-09",
+      "q": "Why reserve the worst-case cost before a call and settle afterwards?",
+      "options": [
+        "Settling is cheaper than reserving",
+        "A burst cannot collectively exceed the limit, and the reservation is corrected down to actual use afterwards",
+        "Providers require a reservation for every request"
+      ],
+      "answer": 1,
+      "explain": "Reserving an estimate afterwards is the original race. A failure to settle only over-counts the day, which is the safe direction to be wrong in."
+    },
+    {
+      "id": "p7-10",
+      "q": "A spending cap cannot read its own counter. What should it do?",
+      "options": [
+        "Allow the call, because availability matters most",
+        "Refuse the call, because a cap that fails open works only when nothing is wrong",
+        "Allow it and log a warning for later"
+      ],
+      "answer": 1,
+      "explain": "It is the failures that produce surprise bills. For money, messages and record changes, fail closed."
+    },
+    {
+      "id": "p7-11",
+      "q": "A hard cap stops spending but sends no notification. What is missing?",
+      "options": [
+        "A second, higher cap",
+        "An alert before the limit, so the owner finds out before the feature stops",
+        "A larger reservation per call"
+      ],
+      "answer": 1,
+      "explain": "A cap that stops the harm and leaves the owner to find out later is half a control. Alert at a fraction of the limit, somewhere a person reads."
+    },
+    {
+      "id": "p7-12",
+      "q": "Gemini reports reasoning tokens separately from the answer, and a cap counts only the answer. What follows?",
+      "options": [
+        "The cap is slightly too strict",
+        "Recorded spend can be lower than the bill, so a cap enforced against the record undercounts",
+        "Nothing, because reasoning tokens are not charged"
+      ],
+      "answer": 1,
+      "explain": "A hard cap that undercounts is a soft cap with a confident label. Summing the two errs towards over-counting, which is the safe direction."
+    },
+    {
+      "id": "p7-13",
+      "q": "Why record the failure reason in the same row as the failure?",
+      "options": [
+        "Rows with reasons take less storage",
+        "Otherwise diagnosis relies on someone relaying a log, and detail is lost at each copy",
+        "Providers require reasons to be stored for audit"
+      ],
+      "answer": 1,
+      "explain": "With the reason in the record, the answer is one query away. A diagnostic that depends on someone relaying it is not a diagnostic."
+    },
+    {
+      "id": "p7-14",
+      "q": "A single failure went unseen for five weeks. Which two gaps allowed it?",
+      "options": [
+        "The count named nothing, and the window was shorter than the gap between looks",
+        "The failure was too small to log, and alerts were disabled",
+        "The provider hid the failure, and the console cached old data"
+      ],
+      "answer": 0,
+      "explain": "Group failures by reason so they are named, and keep the window much longer than the interval between looks."
+    },
+    {
+      "id": "p7-15",
+      "q": "What can a spend table not tell you?",
+      "options": [
+        "How many tokens each call used",
+        "Whether the answers were good",
+        "Which model handled each call"
+      ],
+      "answer": 1,
+      "explain": "A system can be cheap, fast, reliable and wrong. Cost and quality are different measurements and need different records."
+    },
+    {
+      "id": "p7-16",
+      "q": "What does an HTTP 429 tell you?",
+      "options": [
+        "That the provider is down",
+        "That you are over a limit, without saying which one or how long to wait",
+        "That your credentials were rejected"
+      ],
+      "answer": 1,
+      "explain": "Read the message and the pattern. A per-minute limit clears in a minute; a daily one does not clear until tomorrow."
+    },
+    {
+      "id": "p7-17",
+      "q": "How can you find a provider's real rate limit?",
+      "options": [
+        "Read the pricing page for your tier",
+        "Count successes per minute across several runs; a stable number is the limit",
+        "Ask the provider's assistant"
+      ],
+      "answer": 1,
+      "explain": "The published figure may describe another tier or an older date. Measuring across repeated runs gives the number that actually binds."
+    },
+    {
+      "id": "p7-18",
+      "q": "How long should a retry wait after a per-minute rate limit?",
+      "options": [
+        "About twenty seconds",
+        "Roughly a full minute, so the window actually ends",
+        "As short as possible, retrying repeatedly"
+      ],
+      "answer": 1,
+      "explain": "Twenty seconds cannot clear a per-minute limit. Retry once, not repeatedly, since a call that fails twice is telling you something."
+    },
+    {
+      "id": "p7-19",
+      "q": "Why make a long run against a tight limit resumable?",
+      "options": [
+        "Resumable runs are cheaper to schedule",
+        "An interruption then costs only the gaps, not the whole run",
+        "Providers refuse runs that cannot resume"
+      ],
+      "answer": 1,
+      "explain": "A corpus finished over two sittings is not a worse result than one finished at once. Merge results and re-run only what did not complete."
+    },
+    {
+      "id": "p7-20",
+      "q": "A model appears in the provider's list but every call to it returns 404. What does the listing prove?",
+      "options": [
+        "That the model works but your key is wrong",
+        "Only that the name is known, not that the model can still generate",
+        "That the provider is experiencing an outage"
+      ],
+      "answer": 1,
+      "explain": "Check by calling it, not by reading the catalogue. A label that says available when it only checked listed is a hazard."
+    },
+    {
+      "id": "p7-21",
+      "q": "Why condition a fallback retry on what you sent rather than on the provider's error message?",
+      "options": [
+        "Error messages are never returned for rejected requests",
+        "An error string is someone else's wording and can change, while the request you sent is known with certainty",
+        "Provider messages are always too long to parse"
+      ],
+      "answer": 1,
+      "explain": "A fallback that waited for the message to mention the option never fired, because the real message named no field."
+    },
+    {
+      "id": "p7-22",
+      "q": "Why must a test set be run periodically and not only after your own changes?",
+      "options": [
+        "Test sets expire after a set time",
+        "The provider changes things on its own timetable, with no change on your side",
+        "Platforms require periodic retesting for compliance"
+      ],
+      "answer": 1,
+      "explain": "Only a set run repeatedly and compared can tell real drift from the ordinary run-to-run variation that any single result contains."
+    },
+    {
+      "id": "p7-23",
+      "q": "Why can availability of a model differ between users of the same feature?",
+      "options": [
+        "Providers rank users by account age",
+        "A request leaves from the location nearest the visitor, and the provider may not serve every region",
+        "Cached answers are served to some users"
+      ],
+      "answer": 1,
+      "explain": "A test from your own desk will not show it, and nothing in your configuration explains why one person succeeds and another does not."
+    },
+    {
+      "id": "p7-24",
+      "q": "A feature's spend counter cannot be reached. What should it do?",
+      "options": [
+        "Fail open, since availability matters most",
+        "Fail closed, because money is at stake",
+        "Degrade to a cheaper model"
+      ],
+      "answer": 1,
+      "explain": "Choose per failure. Spending money, sending messages and changing records fail closed; an optional suggestion can fail open."
+    },
+    {
+      "id": "p7-25",
+      "q": "What makes the message 'search still works' safe to show during an outage?",
+      "options": [
+        "It is short and reassuring",
+        "Search does not depend on the model, so the claim holds at the moment it is read",
+        "Learners will not try search anyway"
+      ],
+      "answer": 1,
+      "explain": "If the fallback described were checked right now, it should pass. A message promising more than the fallback delivers is worse than a plain error."
+    },
+    {
+      "id": "p7-26",
+      "q": "Why can a silent fallback model be a problem?",
+      "options": [
+        "Fallback models always cost more",
+        "It can hide that the primary has been failing, and it gives answers you never tested",
+        "It makes timeouts longer"
+      ],
+      "answer": 1,
+      "explain": "A fallback behaves differently, needs its own testing and cost estimate, and if it takes over quietly nobody notices the primary failing."
+    },
+    {
+      "id": "p7-27",
+      "q": "What test decides whether a signal is worth watching?",
+      "options": [
+        "Whether it is easy to collect",
+        "Whether someone will act on it",
+        "Whether competitors also track it"
+      ],
+      "answer": 1,
+      "explain": "A figure that never prompts a decision is clutter, and clutter buries the signal that matters."
+    },
+    {
+      "id": "p7-28",
+      "q": "What is the right way to write a runbook entry?",
+      "options": [
+        "As a detailed essay on how the system works",
+        "As ordered steps for one symptom, calm to write and quick to follow by someone who did not build it",
+        "As a list of every error code the system can produce"
+      ],
+      "answer": 1,
+      "explain": "It is read in a hurry. Each step should exist because it once took a long time to find."
+    }
+  ]
+}

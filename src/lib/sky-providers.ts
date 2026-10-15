@@ -266,9 +266,19 @@ export async function callModel(c: ModelCall): Promise<ModelResult> {
       return { ok: false, status: 502,
         reason: `provider returned no text${finish ? ` (${finish})` : ''}` };
     }
+    /* Reasoning tokens are counted too.
+       Gemini reports them in thoughtsTokenCount, SEPARATELY from
+       candidatesTokenCount, and bills them. This used to read only the
+       candidates, so a model that reasoned would have been recorded as having
+       used far less than it was charged for — and the daily cap is enforced
+       against the recorded figure. A "hard" cap that undercounts is a soft cap
+       with a confident label.
+       Summing them errs towards over-counting, which is the safe direction for
+       a cap to be wrong in. Where the field is absent it contributes nothing. */
+    const meta = data?.usageMetadata;
     return { ok: true, text: text.trim(),
-      inputTokens: data?.usageMetadata?.promptTokenCount ?? 0,
-      outputTokens: data?.usageMetadata?.candidatesTokenCount ?? 0 };
+      inputTokens: meta?.promptTokenCount ?? 0,
+      outputTokens: (meta?.candidatesTokenCount ?? 0) + (meta?.thoughtsTokenCount ?? 0) };
   }
 
   const text = data?.choices?.[0]?.message?.content ?? '';

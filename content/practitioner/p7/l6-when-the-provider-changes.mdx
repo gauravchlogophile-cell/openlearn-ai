@@ -1,0 +1,180 @@
+---
+title: "When the provider changes under you"
+description: "Aliases move, models retire, options are rejected and regions refused, with no change on your side. Catch it with version stamps, probes and a regular test."
+track: practitioner
+module: p7
+order: 6
+minutes: 10
+objectives:
+  - "Name the ways a working integration breaks without any change by you"
+  - "Detect provider-side change with stamps, probes and a recurring test, instead of from a user report"
+concepts: ["model alias", "deprecation", "regional availability", "regression detection"]
+flashcards:
+  - front: "What does it mean that a model alias moves?"
+    back: "A name such as 'latest' points at whatever the provider currently chooses. The behaviour behind it can change overnight with no deployment on your side."
+  - front: "Does appearing in a provider's model list mean a model works?"
+    back: "No. It means the name is known. A listed model can still reject requests, so check by calling it, not by reading the catalogue."
+  - front: "How do you notice a provider-side change?"
+    back: "Run a fixed test set on a schedule and compare. A stamp of the deployed version shows what you are on, and a model-list probe shows what the provider offers."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The hardest bugs in a model-backed system are the ones where nothing changed on your
+side. The code is the same, the configuration is the same, and it worked yesterday.
+
+This project met four different versions of that in a few weeks, which makes it a
+useful set of case studies.
+
+## Case 1: the name that was retired
+
+Sky was configured to use one model. The provider answered every call with a 404, no
+such model.
+
+The model list the provider returned **contained** that name. A first version of the
+admin tool even reported that the configured model was available, a statement the
+evidence in front of it contradicted. Appearing in the catalogue meant the name was
+known, and it did not mean the model could still generate.
+
+Two lessons. A list of models is not proof of usability. And the field that said
+*available* was renamed to say *listed*, because a label that claims more than it
+checked is a hazard.
+
+The fix was to move to a current model. The model chosen was itself an alias.
+
+## Case 2: the option that stopped being accepted
+
+Having moved to an alias that points at the provider's current small model, the next
+request failed with a 400. The request set an option that turns off the model's
+reasoning, which the model behind the alias no longer accepted.
+
+The provider's message was generic, saying the request contained an invalid argument.
+No field was named. A fallback that retried only when the message mentioned the
+option never fired.
+
+The fix was to condition the retry on **what we sent**, not on what the provider
+happened to say. An error string is someone else's wording, with no obligation to
+stay stable. The request that was actually sent is known with certainty.
+
+## Case 3: the same prompt, a different result
+
+During testing of attack cases, one of them passed on four runs in a row and failed on
+the fifth with nothing changed. That is not a provider change, but it is closely
+related: even without any change, the same input can produce different outputs.
+
+It means a single pass is a single sample. When an alias really does move, some of
+what changes will look exactly like this and be indistinguishable from noise on any
+one run. Only a set run repeatedly, and compared, can tell the two apart.
+
+## Case 4: the region
+
+One call, on 9 September, failed with a message saying the user's location was not
+supported. It did not recur. A Worker's outgoing request leaves from the location
+nearest the visitor, so whether the provider serves it can depend on who is asking and
+from where, with nothing in your configuration to explain why one person succeeds and
+another does not.
+
+It was invisible for five weeks because nothing displayed failure reasons. L4 covers
+that. The relevant point here is that **availability can differ by user**, and a test
+from your own desk will not show it.
+
+## Four defences
+
+### Know what you are running
+
+Stamp the deployed version into your diagnostics. Lrnon's returns the first eight
+characters of the running version's identifier, so that a diagnostic can never again
+be read against the wrong code. That mattered more than expected: several rounds were
+spent on fixes that had never been deployed, because a retry in the dashboard had
+apparently rebuilt the previous version.
+
+### Ask the provider what it offers
+
+A probe that lists the models your key can reach is a small tool with a large payoff.
+Remember what it proves, which is that a name exists. It narrows the search for a
+replacement and confirms nothing about whether the model works.
+
+### Choose pinning or alias deliberately
+
+An alias keeps you current without effort and moves without warning. A pinned version
+stays still until it is retired, then fails.
+
+Neither is safe. They fail differently. An alias risks changed behaviour; a pin risks
+a hard failure on a date you may not have noticed. Choose based on which you can
+detect faster, and write the choice down.
+
+### Run a fixed test on a schedule
+
+The only reliable way to detect behavioural drift is to run the same cases regularly
+and compare. P4·L6 described the set for an assistant and P3·L7 the corpus for attacks.
+Both need to run **periodically as well as after your own changes**, because the
+provider changes things on its own timetable.
+
+Lrnon's attack corpus exists for this. It is not on a schedule yet. That is the gap,
+and it should be said plainly: the tool is built and the habit is not.
+
+## Subscribe to the news
+
+Providers announce deprecations, usually with notice. The announcements go to an
+address or a page that somebody has to be reading.
+
+Put the provider's changelog or status page somewhere you will see it, and give one
+person the job. It is the cheapest early warning available, and the one most often
+skipped because nothing is wrong.
+
+## Try it now (10 minutes)
+
+For anything you run against a provider, list what you would not notice if it changed:
+
+1. Which model name does it use, and is it an alias or a pin?
+2. Would you see a retirement before a user did?
+3. When did you last run your test set against it?
+4. Who reads the provider's announcements?
+
+Put the answer to the third on the calendar, recurring, today.
+
+<Quiz client:visible items={[
+  {
+    q: "A model appears in the provider's list but every call to it returns 404. What does the listing prove?",
+    options: [
+      "That the model works but your key is wrong",
+      "Only that the name is known, not that the model can still generate",
+      "That the provider is experiencing an outage"
+    ],
+    answer: 1,
+    explain: "Check by calling it, not by reading the catalogue. A label that says available when it only checked listed is a hazard."
+  },
+  {
+    q: "Why condition a fallback retry on what you sent rather than on the provider's error message?",
+    options: [
+      "Error messages are never returned for rejected requests",
+      "An error string is someone else's wording and can change, while the request you sent is known with certainty",
+      "Provider messages are always too long to parse"
+    ],
+    answer: 1,
+    explain: "A fallback that waited for the message to mention the option never fired, because the real message named no field."
+  },
+  {
+    q: "Why must a test set be run periodically and not only after your own changes?",
+    options: [
+      "Test sets expire after a set time",
+      "The provider changes things on its own timetable, with no change on your side",
+      "Platforms require periodic retesting for compliance"
+    ],
+    answer: 1,
+    explain: "Only a set run repeatedly and compared can tell real drift from the ordinary run-to-run variation that any single result contains."
+  }
+]} />
+
+## Recap
+
+A working integration can break with nothing changed on your side. Models are retired
+while still listed, aliases move and stop accepting options, the same input varies
+from run to run, and availability can differ by region and so by user. Defend with a
+version stamp in diagnostics, a probe that lists what the provider offers, a
+deliberate choice between pinning and an alias, and a fixed test set run on a
+schedule. Condition fallbacks on what you sent rather than on error wording, and put
+the provider's announcements in front of one named person.

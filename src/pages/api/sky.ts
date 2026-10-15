@@ -432,7 +432,15 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
          stopped resolving. Nothing about anybody else, and an anonymous probe
          learns nothing it could not already see.
          Without this the only channel was `wrangler tail`, which needs
-         credentials the person hitting the problem may not have to hand. */
+         credentials the person hitting the problem may not have to hand.
+
+         This one is deliberately gated on a token being PRESENT and not on
+         the viewer being recognised as staff. Its job is to explain why
+         someone was NOT recognised, so requiring recognition would hide it from
+         exactly the person it exists for. What it carries is stage names and
+         the identity failure, nothing about configuration. The diagnostics
+         further down, which do name configuration, require a verified staff
+         viewer: a header of any value used to unlock those, and it should not. */
       ...(request.headers.get('authorization')
         ? { diagnostic: { build, ceiling: SKY_MODE, live: liveMode,
                           identified: viewer.why, verdict: verdict.reason } }
@@ -727,7 +735,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
     error: 'not_configured',
     message: SKY_COPY.unavailable,
     sources,
-    ...(request.headers.get('authorization')
+    ...(viewer.isStaff
       ? { diagnostic: {
             build,
             missing: name,
@@ -782,7 +790,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
       error: 'budget',
       message: SKY_COPY.unavailable,
       sources,
-      ...(request.headers.get('authorization')
+      ...(viewer.isStaff
         ? { diagnostic: { build, stage: 'budget', why: budget.why } }
         : {}),
     }, 503);
@@ -846,7 +854,7 @@ export const POST: APIRoute = async ({ request, locals, clientAddress }) => {
       error: 'provider',
       message: SKY_COPY.unavailable,
       sources,
-      ...(request.headers.get('authorization')
+      ...(viewer.isStaff
         ? { diagnostic: { build, stage: 'provider', provider, model,
                           status: result.status, why: result.reason } }
         : {}),

@@ -3,6 +3,18 @@
   "entries": [
     {
       "date": "2026-10-15",
+      "kind": "Content updated",
+      "where": "Practitioner · module counts",
+      "what": "Corrected how the entries for P2, P3, P4, P5 and P6 describe the size of the Practitioner track. Each said Practitioner was a number of modules of twelve. Practitioner has eleven modules, P1 to P11; the twelfth in that figure is the first Builder module, B1, which belongs to a different track. The correct reading of the earlier entries is a number of eleven Practitioner modules. Those entries are left as they were published, wrong count included, because a correction belongs in a new dated entry and not in a quiet edit to an old one."
+    },
+    {
+      "date": "2026-10-15",
+      "kind": "New module",
+      "where": "Practitioner · P7",
+      "what": "Cost, Monitoring and Reliability published — eight lessons on running a model-backed feature in production without surprises. Estimating cost from tokens per call, calls per day and price per token, for a typical day and a worst one, and measuring to find which of several limits actually binds; the three levers, which are fewer calls, less sent per call and a smaller model; why a cap that checks, acts and then records is a race, and how reserving the worst case first and settling afterwards makes one hold; recording the shape of every call with the reason beside every failure, over a window longer than the gap between looks; rate limits that are set on you and how to find them by measuring; four ways a provider changes under you with no change on your side; deciding between failing open, failing closed and degrading, and writing a message that is true; and a short list of signals, a weekly look and a runbook. Lrnon is the worked example throughout, including an honest account of which of its own signals are in good shape and which are empty. Practitioner is now seven of its eleven modules."
+    },
+    {
+      "date": "2026-10-15",
       "kind": "New module",
       "where": "Practitioner · P6",
       "what": "Multi-Step Workflows and Agents published — eight lessons on systems where the model chooses the next step. The one question that separates a workflow from an agent, and why most things sold as agents are workflows with a single real judgement in them; the loop mechanically, why every turn re-reads the whole history so cost climbs roughly with the square of the turns, and reserving a budget for the whole run before it starts; the tool list as the whole risk, judging each tool by its worst single call; why reliability multiplies down a chain, so ten steps at ninety-five percent each give a run that is right about six times in ten; what an agent actually remembers, and why hostile text read early in a run stays in play; defining done as something code can check, and recognising a stuck run; why an agent’s report of its own work is not evidence of it; and four questions for deciding where an agent is the right answer at all. Lrnon’s assistant is the worked example, as a deliberate non-agent: one retrieval, one model call, no tools the model can reach. Practitioner is now six modules of twelve."

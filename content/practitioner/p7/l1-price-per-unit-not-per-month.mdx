@@ -1,0 +1,174 @@
+---
+title: "Price per unit, not per month"
+description: "Costs scale with tokens and calls, not with how impressive the demo was. Estimate a worst case and a typical case before you build, in numbers."
+track: practitioner
+module: p7
+order: 1
+minutes: 8
+objectives:
+  - "Estimate the daily cost of a model-backed feature from tokens per call and calls per day"
+  - "Work out which of a call cap and a token cap will bind first"
+concepts: ["token pricing", "cost estimate", "worst case", "unit economics"]
+flashcards:
+  - front: "What three numbers produce a cost estimate?"
+    back: "Tokens per call, calls per day, and the price per token. Input and output are usually priced separately, so estimate them separately too."
+  - front: "Why estimate a worst case as well as a typical one?"
+    back: "A budget has to hold on the bad day, not the average one. The worst case is the longest question, the largest context and the highest call volume arriving together."
+  - front: "Why does a per-month figure hide the problem?"
+    back: "A flat monthly sum looks affordable and says nothing about how it scales. The question is what one more user, one more call or one longer answer adds."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Explorer E11 explained what a token is and why the bill moved. P6·L2 showed that a
+loop multiplies it. This module is about running a model-backed thing in
+production without the bill, the limits, or the provider's behaviour surprising
+you.
+
+It starts with arithmetic, because most surprises are arithmetic nobody did.
+
+## Three numbers
+
+> **Tokens per call.** Everything sent in, plus everything that comes back.
+>
+> **Calls per day.** How often it runs.
+>
+> **Price per token.** Set by the provider, usually different for input and
+> output, and liable to change.
+
+Multiply them and you have a daily figure. The mistake is not getting the
+multiplication wrong. It is skipping it, and judging the cost from how the thing
+feels in a demonstration, where the questions are short and the volume is one.
+
+Do not look up a price from memory or from an old article. Prices move, and the
+current ones are on the provider's own page. What matters here is the structure of
+the estimate, which does not change.
+
+## Estimate two cases
+
+**Typical.** The question people usually ask, the usual amount of context, the usual
+number of calls. This is what you will see most days.
+
+**Worst.** The longest question you allow, the largest context you attach, the
+output at its ceiling, and the highest volume you might plausibly see. Not the
+theoretical maximum of a malicious user, which is a separate problem for the next
+lesson, but the bad day of an ordinary one.
+
+A budget has to hold on the worst case. A system that is affordable on average and
+ruinous on a busy day is not affordable.
+
+## Measure rather than guess
+
+Once anything is running, replace the estimate with a measurement.
+
+Lrnon's assistant ran a 27-case test against the real model and recorded what it
+used: **22,037 tokens across the 27 calls, about 800 per call.** That is a small
+number, and it is a real one, and it changes what the budget means.
+
+The daily limits are 200,000 tokens and 500 calls. At about 800 tokens a call, the
+token limit is reached after roughly 250 calls, long before the call limit. So the
+call cap, which looks like the protection, is not the one that will bind. The token
+cap is.
+
+You only learn that by dividing. Two limits sit side by side in the settings and
+nothing tells you which one matters.
+
+## Output costs more, and thinking counts
+
+Two details change the estimate.
+
+**Output is usually the dearer side.** Providers commonly charge more per token for
+what the model writes than for what it reads. A feature that reads a lot and
+writes a little costs less than its token count suggests; one that writes at length
+costs more.
+
+**Reasoning tokens usually bill as output.** A model that thinks before answering
+spends tokens doing so, and those are typically charged. Where it is on, a one-line
+answer can cost many times its visible length.
+
+Lrnon asks for reasoning to be off, because the task is reading four passages and
+answering in a few sentences. The current model rejected that option, so the request
+falls back to being sent without it and the model's own default applies. Answers
+measured about 50 tokens, which suggests little reasoning, but that is a
+measurement and not a setting.
+
+It also exposed a bug worth owning. The provider reports reasoning tokens in a field
+separate from the answer, and Lrnon was reading only the answer. Had the model
+reasoned, the recorded spend would have been lower than the bill, and the daily cap is
+enforced against the recorded figure. It now adds the two. Check how your provider
+reports and counts both, on its own documentation, and re-check when the model
+changes.
+
+## Per unit of value, not per month
+
+A flat figure at the end of a month tells you what was spent and not whether it was
+spent well.
+
+Divide by something that matters. Cost per answered question. Cost per record
+processed. Cost per ticket resolved. A feature at a hundred pounds a month that
+resolves three tickets is expensive; one at a hundred pounds that resolves three
+thousand is not, and the monthly figures are identical.
+
+It also tells you how cost scales. If the cost per unit is stable, doubling usage
+doubles the bill, and you can plan. If it climbs with usage, because context grows
+or loops lengthen, you have a different problem and the monthly figure was hiding
+it.
+
+## Try it now (12 minutes)
+
+Take a feature you run or plan. Write down:
+
+1. Tokens in, tokens out, per call, typical and worst.
+2. Calls per day, typical and busy.
+3. The provider's current prices, from its own page, with today's date.
+
+Multiply out both cases. Then ask which of your limits will be reached first, and
+whether you have a number for it or only a feeling.
+
+If you can run it, measure twenty real calls and replace your estimate with the
+result. The gap between the two is the most useful thing you will learn this week.
+
+<Quiz client:visible items={[
+  {
+    q: "A feature's limits are 200,000 tokens and 500 calls a day, and each call uses about 800 tokens. Which limit binds first?",
+    options: [
+      "The call limit, since 500 is the smaller number",
+      "The token limit, reached after about 250 calls",
+      "Neither, because the limits apply per month"
+    ],
+    answer: 1,
+    explain: "Two limits sit side by side and nothing says which matters. Dividing shows that the token cap is reached long before the call cap."
+  },
+  {
+    q: "Why must a budget be built on the worst case as well as the typical one?",
+    options: [
+      "Providers bill at the worst-case rate by default",
+      "It has to hold on the bad day, not the average one",
+      "Typical estimates are always too high"
+    ],
+    answer: 1,
+    explain: "A system that is affordable on average and ruinous on a busy day is not affordable. The worst case is the longest question and the highest volume of an ordinary user."
+  },
+  {
+    q: "Why is cost per unit of value more useful than a monthly total?",
+    options: [
+      "Monthly totals are inaccurate",
+      "The same monthly figure can be good or bad depending on what it bought, and cost per unit shows how it scales",
+      "Providers do not publish monthly totals"
+    ],
+    answer: 1,
+    explain: "A hundred pounds that resolves three tickets is expensive; the same hundred resolving three thousand is not."
+  }
+]} />
+
+## Recap
+
+A cost estimate is tokens per call, calls per day and the current price, worked out
+for a typical day and a worst one, and the budget has to hold on the worst. Measure
+once anything runs, because the measurement can change which limit matters: Lrnon's
+call cap is not the one that binds, its token cap is. Output usually costs more
+than input and reasoning tokens usually count as output. Judge cost per unit of
+value rather than per month, since that is the number that shows how it scales.

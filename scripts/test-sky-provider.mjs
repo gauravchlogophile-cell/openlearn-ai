@@ -82,8 +82,14 @@ ok(/systemInstruction/.test(src),
 ok(src.includes('promptFeedback?.blockReason'),
    'a blocked PROMPT is detected — gemini returns 200 with no candidate');
 ok(/finishReason/.test(src), 'a withheld ANSWER is detected');
-ok(src.includes('usageMetadata?.promptTokenCount'),
+ok(src.includes('meta?.promptTokenCount'),
    'gemini token counts are read from usageMetadata, not usage');
+/* Reasoning tokens are reported separately from the answer and are billed. Only
+   the candidates were being counted, so a model that reasoned would have been
+   recorded as using far less than it was charged for, and the daily cap is
+   enforced against the recorded figure. */
+ok(/\(meta\?\.candidatesTokenCount \?\? 0\) \+ \(meta\?\.thoughtsTokenCount \?\? 0\)/.test(src),
+   'reasoning tokens are added to the output count so the cap cannot undercount');
 
 /* Thinking is OFF, and both reasons it must be are failures we actually hit.
    Latency: reasoning took longer than the whole 20s budget and timed out.
