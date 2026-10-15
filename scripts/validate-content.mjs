@@ -44,6 +44,13 @@ function parseFrontmatter(src, file) {
       list?.push(obj);
     } else if (/^\s+back:/.test(line) && obj) {
       obj.back = line.replace(/^\s+back:\s*/, '').replace(/^"|"$/g, '');
+    } else if (/^\s+- label:/.test(line)) {
+      // `sources:` entries — a list of {label, url, retrieved, kind}.
+      obj = { label: line.replace(/^\s+- label:\s*/, '').replace(/^"|"$/g, '') };
+      list?.push(obj);
+    } else if (/^\s+(url|retrieved|kind):/.test(line) && obj) {
+      const kv = line.match(/^\s+(\w+):\s*(.*)$/);
+      obj[kv[1]] = kv[2].replace(/^"|"$/g, '');
     } else if (/^\s+-\s/.test(line) && list) {
       list.push(line.replace(/^\s+-\s*/, '').replace(/^"|"$/g, ''));
     } else if (line.trim() !== '') {
@@ -95,6 +102,28 @@ for (const file of lessonFiles) {
   if (Array.isArray(fm.tools))
     for (const t of fm.tools)
       if (!registryIds.has(t)) errors.push(`${rel}: tool "${t}" not in /registry (CUR-3)`);
+
+  /* Outside sources (a law, a vendor's published terms). Shape only here —
+     check-sources.mjs watches the URLs weekly. */
+  if (Array.isArray(fm.sources)) {
+    for (const s of fm.sources) {
+      if (!s.label) errors.push(`${rel}: a source is missing its label`);
+      if (!/^https:\/\/\S+$/.test(s.url ?? '')) errors.push(`${rel}: source "${s.label}" needs an https url`);
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(s.retrieved ?? '')) errors.push(`${rel}: source "${s.label}" needs retrieved: YYYY-MM-DD`);
+      if (s.kind && !['official', 'secondary'].includes(s.kind)) errors.push(`${rel}: source "${s.label}" kind must be official or secondary`);
+    }
+  }
+
+  /* Lessons teach judgement, so they may age more slowly than a tool card
+     (which fails at 120 days). But a lesson nobody has re-read in six months
+     is a lesson nobody is vouching for, and the visible "checked" date would
+     be a claim about the past. Warn at 90, fail at 180. */
+  if (fm.lastVerified && /^\d{4}-\d{2}-\d{2}$/.test(fm.lastVerified)) {
+    const asOf = process.env.OL_TODAY ? new Date(process.env.OL_TODAY) : new Date();
+    const lessonDays = Math.floor((asOf - new Date(fm.lastVerified + 'T00:00:00Z')) / 86400000);
+    if (lessonDays > 180) errors.push(`${rel}: lesson not re-read in ${lessonDays} days — re-check it or archive it`);
+    else if (lessonDays > 90) warnings.push(`${rel}: lesson re-read due (${lessonDays} days)`);
+  }
 
   // Body checks: recap required; no raw <script>; hype-word lint
   const body = src.replace(/^---\n[\s\S]*?\n---/, '');

@@ -18,8 +18,14 @@
  *  RegistryCard remains for the in-body case where a tool IS the subject of a
  *  section. This is the lighter, always-present bibliography.
  */
-interface Props { ids: string[]; }
-const { ids } = Astro.props;
+interface Props {
+  ids: string[];
+  /** Outside sources for facts that are not about a tool: a law, a vendor's
+   *  published terms. Same promise as the tool list — show where it came from
+   *  and when it was read — but the lesson's author supplies them. */
+  sources?: { label: string; url: string; retrieved: string; kind?: 'official' | 'secondary' }[];
+}
+const { ids, sources = [] } = Astro.props;
 
 const files = import.meta.glob('../../registry/*.json', { eager: true });
 const all = Object.values(files).map((m: any) => m.default);
@@ -34,12 +40,12 @@ const cards = ids
 const STALE_DAYS = 120;
 const age = (d: string) => Math.floor((Date.now() - new Date(d).getTime()) / 86400000);
 ---
-{cards.length > 0 && (
+{(cards.length > 0 || sources.length > 0) && (
   <section aria-labelledby="sources-h"
     style="border-top:1px solid var(--c-border);margin-block-start:var(--sp-8);padding-block-start:var(--sp-4);">
     <h2 id="sources-h" style="font-size:var(--fs-200);font-family:var(--font-body);
       text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-3);">
-      Tools named in this lesson
+      {cards.length > 0 ? 'Tools named in this lesson' : 'Sources for this lesson'}
     </h2>
 
     <p style="color:var(--c-ink-soft);font-size:var(--fs-100);margin:0 0 var(--sp-3);">
@@ -68,5 +74,30 @@ const age = (d: string) => Math.floor((Date.now() - new Date(d).getTime()) / 864
         );
       })}
     </ul>
+
+    {sources.length > 0 && (
+      <>
+        {cards.length > 0 && (
+          <p style="color:var(--c-ink-soft);font-size:var(--fs-100);margin:var(--sp-4) 0 var(--sp-3);">
+            Other sources used for facts in this lesson:
+          </p>
+        )}
+        <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
+          {sources.map((x) => {
+            const days = age(x.retrieved);
+            return (
+              <li style="display:flex;flex-wrap:wrap;gap:var(--sp-2);align-items:baseline;font-size:var(--fs-100);">
+                <strong>{x.label}</strong>
+                <span style="color:var(--c-ink-soft);">{x.kind === 'secondary' ? 'summary, not the official text' : 'official source'}</span>
+                <a href={x.url} rel="noopener">Open ↗</a>
+                <span style={'color:' + (days > STALE_DAYS ? 'var(--c-alert)' : 'var(--c-ink-faint)') + ';'}>
+                  {days > STALE_DAYS ? `⚠ read ${x.retrieved} — ${days} days ago, may have changed` : `read ${x.retrieved}`}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </>
+    )}
   </section>
 )}

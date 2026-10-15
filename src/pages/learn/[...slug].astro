@@ -88,7 +88,7 @@ const sidebarLessons = all.map((l) => ({ slug: l.id, title: l.data.title, order:
     {/* Every tool this lesson names, with the vendor's own source and the date
         it was checked. Rendered from frontmatter so a lesson cannot name a
         product without sourcing it — see LessonSources for why that matters. */}
-    <LessonSources ids={lesson.data.tools ?? []} />
+    <LessonSources ids={lesson.data.tools ?? []} sources={lesson.data.sources ?? []} />
 
     <nav aria-label="Lesson navigation" style="display:flex;justify-content:space-between;gap:var(--sp-4);align-items:center;flex-wrap:wrap;">
       <span style="display:flex;gap:var(--sp-2);align-items:center;flex-wrap:wrap;">

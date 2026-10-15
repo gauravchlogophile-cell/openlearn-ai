@@ -15,6 +15,15 @@ const lessons = defineCollection({
     objectives: z.array(z.string()).min(1).max(3),
     concepts: z.array(z.string()).min(1),
     tools: z.array(z.string()).default([]),
+    /** Outside sources for facts that are not about a tool — a law, a vendor's
+     *  published terms. Rendered under the lesson with the date it was read,
+     *  and watched weekly by scripts/check-sources.mjs. */
+    sources: z.array(z.object({
+      label: z.string(),
+      url: z.string().url(),
+      retrieved: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+      kind: z.enum(['official', 'secondary']).default('official'),
+    })).default([]),
     flashcards: z.array(z.object({ front: z.string(), back: z.string() })).min(2).max(6),
     lastVerified: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
     contributors: z.array(z.string()).min(1),

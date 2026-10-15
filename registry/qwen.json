@@ -7,6 +7,7 @@
   "capabilities": { "chat": true, "vision": true, "files": false, "voice": false, "webSearch": false, "api": true },
   "freeTierNotes": "Weights are downloadable for self-hosting; hosted API access is available through Alibaba Cloud.",
   "docsUrl": "https://qwen.readthedocs.io/en/latest/",
+  "watchUrl": "https://qwenlm.github.io/blog/",
   "tosNotes": "Licence terms vary by model in the family. Check the specific model's licence, and consider where hosted processing occurs.",
   "lastVerified": "2026-08-26",
   "verifier": "core-team",

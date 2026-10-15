@@ -17,3 +17,10 @@ src/generated/
 # A file of successful attack outputs is not something to publish; the corpus
 # in security/injection-corpus.json is the artefact worth versioning.
 security/last-probe.json
+
+# Weekly freshness job outputs (regenerated every run)
+content-audit.md
+content-audit.json
+freshness-packet.md
+freshness-body.md
+validate-report.txt

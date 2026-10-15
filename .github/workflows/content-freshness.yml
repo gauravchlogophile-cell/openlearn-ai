@@ -1,0 +1,80 @@
+name: Content freshness
+
+# One weekly job, one issue. It replaces two older workflows (staleness.yml and
+# source-watch.yml) that each opened an issue only when no open issue with their
+# label existed — so a single forgotten issue silenced the check for weeks. This
+# one refreshes the same issue every Monday instead, and closes it when clear.
+#
+# It never edits a lesson. See docs/handbook/content-freshness.md.
+
+on:
+  schedule:
+    - cron: '0 6 * * 1'        # Mondays 06:00 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  freshness:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+
+      # 1. Calendar rules: tool cards (90/120 days) and lessons (90/180 days).
+      - name: Lint dates
+        run: node scripts/validate-content.mjs > validate-report.txt 2>&1 || true
+
+      # 2. Did a vendor page or a cited source change? Never fails the job.
+      - name: Watch sources
+        run: node scripts/check-sources.mjs || true
+
+      # 3. Per-lesson audit: age, unsourced tools, volatile claims, broken links.
+      - name: Audit lessons
+        run: node scripts/audit-content.mjs --links
+
+      # 4. Evidence list for whatever is flagged. With a GEMINI_API_KEY secret it
+      #    also drafts suggestions, each backed by a quotation found verbatim on
+      #    the source page. Without the secret it still runs, evidence only.
+      - name: Build review packet
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+        run: node scripts/propose-updates.mjs
+
+      - name: Compose report
+        id: compose
+        run: node scripts/compose-freshness-report.mjs
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: content-audit
+          path: |
+            content-audit.md
+            content-audit.json
+            source-report.md
+            freshness-packet.md
+            freshness-body.md
+
+      - name: Open, refresh or close the weekly issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+          ACTIONABLE: ${{ steps.compose.outputs.actionable }}
+        run: |
+          gh label create freshness --color BFD4F2 --description "Weekly content freshness report" 2>/dev/null || true
+          N=$(gh issue list --label freshness --state open --json number --jq '.[0].number // empty')
+          TITLE="Weekly content freshness"
+          if [ "$ACTIONABLE" = "true" ]; then
+            if [ -n "$N" ]; then
+              gh issue edit "$N" --body-file freshness-body.md
+              gh issue comment "$N" --body "Refreshed by the weekly run on $(date -u +%F). The description above is current."
+            else
+              gh issue create --title "$TITLE" --label freshness --label content --body-file freshness-body.md
+            fi
+          elif [ -n "$N" ]; then
+            gh issue comment "$N" --body "All clear on the weekly run of $(date -u +%F). Closing."
+            gh issue close "$N"
+          fi
