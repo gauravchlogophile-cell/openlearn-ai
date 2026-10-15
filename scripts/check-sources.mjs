@@ -128,7 +128,7 @@ const watched = [
 
 const prev = existsSync(STORE) ? JSON.parse(readFileSync(STORE, 'utf8')) : { sources: {} };
 const next = { generatedAt: new Date().toISOString(), sources: {} };
-const changed = [], unreachable = [], fresh = [], thin = [];
+const changed = [], unreachable = [], fresh = [], thin = [], unstable = [];
 
 /* An honest bot identifier gets 403 from four of fifteen vendors. Two of those
    four (Canva, Midjourney) serve fine to a normal browser UA — the block is a
@@ -207,6 +207,27 @@ for (const card of watched) {
   const sim = sketchSimilarity(fp.sketch, before.sketch);   // null until a baseline has a sketch
   const delta = before.words ? ((fp.words - before.words) / before.words) * 100 : 0;
   if (Math.abs(delta) >= 2 || (sim !== null && sim < 0.9)) {
+    /* A difference seen once is not yet a change. Some pages return a different
+       rendering on each request (Google's API terms measured 3,711, 2,731 and
+       2,635 words on three fetches in a row). Fetch twice more: if either looks
+       like the baseline it was noise; if the two disagree with each other the
+       page is unstable and cannot be watched by wording; only when both agree
+       on the new text is it reported as a change. */
+    const again = [];
+    for (let i = 0; i < 2; i++) {
+      await sleep(3000);
+      try {
+        const w = readableText(await get(target)).split(' ').filter(Boolean);
+        again.push({ words: w.length, sketch: sketch(w) });
+      } catch { /* a failed re-fetch simply gives us less to compare */ }
+    }
+    const same = (a, b) =>
+      Math.abs(((a.words - b.words) / (b.words || 1)) * 100) < 2 && (sketchSimilarity(a.sketch, b.sketch) ?? 1) >= 0.9;
+    if (again.some((a) => same(a, before))) continue;
+    if (again.length === 2 && !(same(again[0], again[1]) && same(again[0], fp))) {
+      unstable.push(`${card.id}: the page returned different text on repeated requests (${[fp.words, ...again.map((a) => a.words)].join(', ')} words), so wording cannot be compared (${target})`);
+      continue;
+    }
     changed.push({
       id: card.id, name: card.name, url: card.docsUrl,
       delta: delta.toFixed(1), was: before.words, now: fp.words,
@@ -229,6 +250,9 @@ if (unreachable.length) {
   lines.push('## Could not check', '',
     ...unreachable.map((u) => `- ${u}`),
     '', 'Some vendors block scripted fetches outright. Open these in a real browser to check them, and if the block is permanent give the card a `watchUrl` pointing at a reachable changelog or newsroom.', '');
+}
+if (unstable.length) {
+  lines.push('## Unstable pages — not comparable', '', ...unstable.map((u) => `- ${u}`), '', 'These cannot be watched by wording. Read them by hand when a lesson that relies on them is re-checked.', '');
 }
 if (thin.length) {
   lines.push('## Weak signal — cannot be trusted as "unchanged"', '',
