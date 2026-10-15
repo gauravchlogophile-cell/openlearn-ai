@@ -150,8 +150,19 @@ export const SKY_COPY = {
   intro:
     "I can answer questions about anything on Lrnon — lessons, how the money works, volunteering. " +
     "I only read this site, so if the answer isn't here I'll say so.",
+  /* Changed on 2026-10-15. This used to end "Nothing you type is used to train
+     anything.", a promise Lrnon cannot keep on its own authority: the question is
+     sent to an outside model provider, and what that provider does with it is set
+     by the provider's terms for the plan in use. Google's published terms for the
+     unpaid Gemini quota say submitted content and responses may be used to
+     improve its products and may be read by human reviewers, and advise against
+     submitting personal information. The quota errors seen in testing are
+     consistent with that tier. Not confirmed either way, and that is the point:
+     an assurance to learners has to be true on the plan actually used, so this
+     states only what is true on any plan. Restore a training claim only after
+     the plan and its current terms have been checked and dated. */
   disclaimer:
-    'Sky can be wrong. Answers link to the page they came from. Nothing you type is used to train anything.',
+    'Sky can be wrong. Answers link to the page they came from. Your question is sent to an outside AI service to write the answer, so please do not type personal details.',
   assessmentTitle: 'That one is yours to answer',
   assessment:
     'That looks like a question from a quiz you are taking, so I am not going to answer it. ' +
