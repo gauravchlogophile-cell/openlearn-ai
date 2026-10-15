@@ -1,0 +1,183 @@
+---
+title: "Children change the rules"
+description: "Under the DPDP Act a child is anyone under eighteen, with verifiable parental consent and a bar on tracking. Many workflows reach children without meaning to."
+track: practitioner
+module: p8
+order: 6
+minutes: 9
+objectives:
+  - "Say what the DPDP Act and the GDPR add when the person is a child"
+  - "Check whether a workflow reaches children even though it was not built for them"
+concepts: ["children's data", "verifiable parental consent", "behavioural monitoring", "age thresholds"]
+flashcards:
+  - front: "Who counts as a child under the DPDP Act?"
+    back: "Anyone under eighteen. Section 9 requires verifiable consent of a parent or lawful guardian before processing a child's personal data, in the manner prescribed."
+  - front: "What does section 9(3) forbid?"
+    back: "Tracking or behavioural monitoring of children, and targeted advertising directed at them. Narrow exemptions can be prescribed, and they are tied to specific purposes."
+  - front: "What is the GDPR's age for a child's own consent online?"
+    back: "Sixteen by default for information society services relying on consent, with Member States allowed to set a lower age, no lower than thirteen."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Every duty in this module gets stricter when the person is a child, and the stricter
+rule is much easier to meet when you have designed for it from the start.
+
+The most useful thing to say first is that the question is not *"is this product for
+children?"* It is *"will children reach it?"*. Anything on the open web that is free and
+interesting will be reached by them, and the laws are written with that in mind.
+
+## The DPDP Act
+
+Section 9 sets four rules, which were read for this lesson on a reproduction of the Act.
+
+> **(1) Verifiable consent first.** Before processing any personal data of a child, the
+> Data Fiduciary must obtain verifiable consent of the child's parent or lawful
+> guardian, in the manner prescribed.
+>
+> **(2) No detrimental processing.** A Data Fiduciary must not undertake processing that
+> is likely to cause a detrimental effect on the well-being of a child.
+>
+> **(3) No tracking or targeting.** A Data Fiduciary must not undertake tracking or
+> behavioural monitoring of children, or targeted advertising directed at children.
+>
+> **(4) and (5) Exemptions.** The Rules may disapply (1) and (3) for specified classes
+> and purposes and on conditions, and the Government may set an age above which a
+> fiduciary shown to be verifiably safe is exempt.
+
+A child, for this Act, is anyone under eighteen. That is a higher line than many
+people assume, and it means most teenagers using a service are covered.
+
+Failing the children's obligations sits in the second-highest penalty band, up to ₹200
+crore, as a ceiling.
+
+Two points worth taking carefully.
+
+**Sub-section (3) is not about consent.** Parental consent does not unlock tracking or
+behavioural monitoring. The bar applies to the processing itself, unless an exemption
+has been prescribed for a specific purpose. Commentators read the exemptions as narrow
+and tied to purposes such as safety, and not as covering analytics or profiling.
+
+**Engagement analytics are the exposed area.** A learning platform measuring how long a
+child stays, what they click, and what to show them next is doing something that looks
+very like behavioural monitoring. Whether it falls within the section is a legal
+question, and it is the right one to ask.
+
+## The GDPR
+
+The GDPR does not ban tracking children in terms, and it treats them with particular
+care throughout: they merit specific protection, notices must be understandable to them,
+and processing their data weighs more heavily in any balancing.
+
+Its age rule is Article 8. Where consent is the basis for offering an online service
+directly to a child, the child may consent themselves from sixteen, and below that a
+parent must. Member States may set a lower age, but not below thirteen. So the age
+differs from one EU country to the next, and a service operating across Europe has to
+know which applies.
+
+## Did you reach a child?
+
+Check four things in any workflow.
+
+**Is there an age signal?** A date of birth, a school email, a class, a parent's
+contact. If you collect none, you cannot tell, which is itself a finding.
+
+**Is the audience likely to include children?** A subject taught in schools, a
+free educational tool, anything popular with students.
+
+**What is processed about them?** An account name, progress, free-text questions, device
+data.
+
+**Does anything profile, track or target?** Recommendations driven by behaviour,
+analytics tied to a person, any advertising.
+
+If children are likely to reach it, either design for them or take real steps to keep
+them out. Writing "for over-18s" in the terms and doing nothing else is not a measure.
+
+## What designing for them looks like
+
+Lrnon is open to learners of all ages, and several choices follow from that.
+
+> **No account is needed to learn.** Progress is stored on the learner's own device
+> first. A child who never signs in generates almost nothing server-side.
+>
+> **No private messaging at all.** The schema has no table for it, so the risk cannot
+> arise from a bug.
+>
+> **No identifying profile fields,** and handles that are generated and cannot be
+> chosen or changed.
+>
+> **No advertising,** so none can be targeted.
+>
+> **Volunteering under eighteen needs verifiable guardian consent,** implemented in the
+> schema.
+>
+> **The assistant's records hold no questions and no learner identity.**
+
+Those are design decisions made so that the hard questions do not arise, and that is the
+cheapest way to meet section 9: avoid doing the thing it restricts.
+
+## What is not settled
+
+Honesty requires saying where the project has not finished.
+
+The assistant is open to staff only, partly because the readiness gates are unmet. Opening
+it to learners including those under eighteen raises specific questions that need an
+answer first. A child's question goes to an outside provider. The footer now says not to
+type personal details, but whether a question is personal data, whether verifiable
+parental consent is needed for it, and what the provider's terms permit are questions for
+advice, not for a lesson. They are listed here as open, not as resolved.
+
+## Try it now (10 minutes)
+
+For a workflow of yours, answer the four checks above. Then answer one more: **if a
+fourteen-year-old used this tomorrow, what would we be holding about them, and would we
+be comfortable explaining it to their parent?**
+
+If the answer is unease, that is the signal to minimise, and not to write a clause.
+
+<Quiz client:visible items={[
+  {
+    q: "Under the DPDP Act, how old does a person have to be to stop being a child?",
+    options: [
+      "Thirteen",
+      "Sixteen",
+      "Eighteen"
+    ],
+    answer: 2,
+    explain: "A child is anyone under eighteen, which is higher than many people assume and covers most teenagers using a service."
+  },
+  {
+    q: "A parent consents to a platform tracking their child's behaviour. What does section 9(3) say?",
+    options: [
+      "The consent makes tracking lawful",
+      "The bar on tracking and behavioural monitoring applies to the processing itself, unless a specific exemption is prescribed",
+      "Tracking is allowed for children over sixteen"
+    ],
+    answer: 1,
+    explain: "Parental consent does not unlock tracking or behavioural monitoring. The exemptions are narrow and tied to particular purposes."
+  },
+  {
+    q: "What is the cheapest way to meet the rules on children's data?",
+    options: [
+      "A clause in the terms saying the service is for adults",
+      "Designing so the restricted processing is not done at all",
+      "Asking users to confirm their age"
+    ],
+    answer: 1,
+    explain: "A service that needs no account, has no messaging, no advertising and records no questions has little for the rules to bite on. A terms clause with no other measure is not a measure."
+  }
+]} />
+
+## Recap
+
+Ask whether children will reach a workflow, not whether it was built for them. The DPDP
+Act treats anyone under eighteen as a child, requires verifiable parental consent before
+processing their data, forbids processing likely to harm their well-being, and bars
+tracking, behavioural monitoring and targeted advertising directed at them, with narrow
+prescribed exemptions. The GDPR sets a default of sixteen for a child's own consent
+online, lowerable to thirteen. The cheapest compliance is not doing the restricted
+thing, and Lrnon's own opening of the assistant to learners remains an open question.

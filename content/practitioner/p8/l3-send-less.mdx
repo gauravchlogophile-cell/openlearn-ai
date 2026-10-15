@@ -1,0 +1,180 @@
+---
+title: "Send less"
+description: "The strongest protection is not collecting or forwarding what a step does not need. Minimise by design, and treat pattern-based redaction as a net, not a wall."
+track: practitioner
+module: p8
+order: 3
+minutes: 9
+objectives:
+  - "Remove personal data from a model call that does not need it"
+  - "State honestly what a pattern-based redaction step does and does not catch"
+concepts: ["data minimisation", "redaction", "purpose limitation", "structured input"]
+flashcards:
+  - front: "What is data minimisation?"
+    back: "Collecting and using only what the purpose needs. Both laws treat it as a duty, and it is also the cheapest protection, since data you never held cannot leak."
+  - front: "What can a pattern-based redactor catch?"
+    back: "Things with a regular shape: email addresses, phone-like numbers, long ID-like digit runs. It cannot catch names, addresses, or a description that only one person fits."
+  - front: "What is better than redacting a free-text box?"
+    back: "Not offering one where you do not need it, or replacing it with structured fields so you never receive what you would then have to remove."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Every duty in L2 is easier to meet, and cheaper to meet, if you hold less. Data you
+never collected cannot be breached, does not have to be erased on request, and does
+not need a contract with whoever would otherwise have received it.
+
+That is **data minimisation**, and both laws state it as a duty. Here it is also just
+good engineering.
+
+## Ask what each step needs
+
+For every step that receives personal data, ask three questions.
+
+> **Does this step need it to do its job?**
+> **Does it need all of it, or only part?**
+> **Does it need it in this form, or would something less identifying do?**
+
+A summarising step does not need the customer's name to summarise a complaint. A
+classifier does not need an email address to decide the category. Strip what the step
+does not need *before* it arrives, not after.
+
+The most common finding when people do this honestly is that an identifier travelled
+through the entire chain because it was in the first record, and nothing needed it
+after step two.
+
+## Replace identity with a reference
+
+Often a step needs to refer to a person without knowing who they are.
+
+Give the record an opaque key, a ticket number, an internal ID. The model sees *"ticket
+4471 complains about a delayed refund"*, writes a reply, and your code, not the model,
+joins it back to the customer. The model never held a name.
+
+This is the same principle as P5·L4 and P6·L3 applied to privacy: the model supplies
+content, and your code supplies the target. The identifying detail stays on the side of
+the boundary you control.
+
+## Prefer fields to free text
+
+A free-text box is the most efficient way to collect more than you wanted.
+
+People type what is on their mind. A "tell us more" field receives names, health
+details, family circumstances and the occasional password. A set of structured fields,
+a category, a date, a product, receives exactly the categories you asked for.
+
+Where a free-text field is genuinely needed, tell people what not to put in it, next to
+the field and in plain words, and accept that some will anyway.
+
+## What redaction can and cannot do
+
+When free text reaches a model, a redaction step is a sensible safety net. Be exact
+about how small a net it is.
+
+Lrnon's assistant redacts before a question is sent to the provider. It replaces
+anything shaped like an email address, anything shaped like a phone number, and
+grouped runs of twelve digits, with a plain marker. It runs on the line where the
+question is handed over, because that is the last moment the text is still the
+project's.
+
+That catches things with a regular shape. It does **not** catch:
+
+- **Names.** "My daughter Asha has been..." passes straight through.
+- **Addresses** written in ordinary prose.
+- **Health, family or financial details** described in words.
+- **Anything where the pattern differs:** a number written with words, an email
+  spelled out as "name at example dot com", an ID with a format nobody anticipated.
+- **A description that identifies one person without naming them.**
+
+So it reduces the obvious cases and leaves the rest. A pattern is a net, and nothing
+about a net makes it a wall.
+
+Two habits make it honest.
+
+**Test it with real examples.** Feed it twenty things people actually type, and read
+what survives. The result is nearly always shorter than the list of what you assumed
+it did.
+
+**Do not describe it as more than it is.** A notice that says personal data is removed
+before it is sent is a claim, and the redactor does not support it. "We try to remove
+obvious identifiers such as email addresses and phone numbers" is a claim it does.
+
+## Say it where people type
+
+The most effective control in a free-text assistant is often a sentence next to the box.
+
+Lrnon's assistant never asks for personal details, which is part of its design, and its
+footer now tells people not to type any. That is not a technical control and it should
+not be the only one, but it changes what arrives. An assistant that says plainly *"don't
+put personal details here"* receives fewer of them than one that does not.
+
+## Purpose limitation
+
+One more idea sits next to minimisation. Data collected for one purpose should not
+quietly be used for another.
+
+If you gather questions to answer them, do not later mine them to profile the people
+who asked. In an automation this tends to happen sideways: a log written for debugging
+becomes a dataset someone finds useful for something else. Decide the purpose when you
+collect, write it down, and treat a new purpose as a new decision.
+
+This is also why P3·L8 and P7·L4 recorded the *shape* of each call and not the
+question. Not storing the content makes the repurposing impossible, which is stronger
+than a policy against it.
+
+## Try it now (15 minutes)
+
+Take a workflow that handles personal data and, for each step, answer the three
+questions at the top. Mark any step that receives more than it needs.
+
+Then test any redaction you have with ten realistic inputs, including ones that contain
+a name and an address. Write down what got through.
+
+Finally find one free-text field you could replace with structured fields, or one place
+to add a plain sentence saying what not to type.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is minimisation the cheapest protection available?",
+    options: [
+      "Regulators exempt organisations that hold little data",
+      "Data you never collected cannot be breached, needs no erasure on request, and needs no contract with a recipient",
+      "Smaller datasets are always more accurate"
+    ],
+    answer: 1,
+    explain: "Every duty is easier to meet if you hold less. It is also good engineering and not only a legal duty."
+  },
+  {
+    q: "A redactor catches email-shaped and phone-shaped text. What does it miss?",
+    options: [
+      "Nothing that matters",
+      "Names, addresses in prose, and details described in words",
+      "Anything longer than one sentence"
+    ],
+    answer: 1,
+    explain: "A pattern is a net and not a wall. It reduces the obvious cases and leaves the rest, so describe it as no more than that."
+  },
+  {
+    q: "A step summarises complaints. What is the best way to keep customer names away from the model?",
+    options: [
+      "Ask the model not to repeat names",
+      "Give each record an opaque reference and let your code join the reply back to the customer",
+      "Let the model see names but delete its logs"
+    ],
+    answer: 1,
+    explain: "The model supplies content and your code supplies the target. The identifying detail stays on the side of the boundary you control."
+  }
+]} />
+
+## Recap
+
+Hold and forward less: for each step ask whether it needs the data, how much, and in
+what form, and strip the rest before it arrives. Use opaque references instead of
+identities, and structured fields instead of free text where you can. A pattern-based
+redactor catches emails and phone-like numbers and misses names, prose addresses and
+described details, so test it with real examples and describe it as no more than a net.
+A plain sentence next to the box changes what arrives, and not storing the content makes
+repurposing it impossible.

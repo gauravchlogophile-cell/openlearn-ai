@@ -1,0 +1,182 @@
+---
+title: "Two laws, one set of habits"
+description: "The DPDP Act and the GDPR differ in detail and agree on structure. Learn what they share, where they diverge, and which of India's duties are not yet in force."
+track: practitioner
+module: p8
+order: 2
+minutes: 10
+objectives:
+  - "State what the DPDP Act and the GDPR have in common and where they differ in ways that matter to a workflow"
+  - "Say which parts of the Indian law are in force as of this lesson's date, and why to check"
+concepts: ["DPDP Act", "GDPR", "phased commencement", "territorial scope"]
+flashcards:
+  - front: "What do the two laws share in structure?"
+    back: "Roles, notice, a lawful basis for use, security, breach notification, erasure, special care for children, and penalties large enough to matter."
+  - front: "Where is the DPDP Act narrower than the GDPR?"
+    back: "It does not have six lawful bases; it works through consent and a short list of legitimate uses. On the reading here it also sets no separate special tier for categories such as health data."
+  - front: "Are the DPDP Act's main duties in force?"
+    back: "Not yet, on the summaries read for this lesson. The Rules were notified in November 2025 and the main duties start about eighteen months later, around May 2027. Confirm against the Gazette."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Read L1's caveat again before this one. This is general information and not legal
+advice, the sources were reproductions and summaries, and a table in a lesson is a
+simplification.
+
+The useful thing to take from comparing two laws is that most of what they ask is the
+same, so a workflow built with good habits meets much of both.
+
+## What they share
+
+> **Roles.** Someone decides why and how data is used and is answerable for it;
+> someone else may process it for them.
+>
+> **A reason to use it.** You may not simply use personal data because you have it.
+>
+> **Telling people.** What you collect, why, and how to complain or withdraw.
+>
+> **Security.** Reasonable measures to prevent a breach.
+>
+> **Breach notification.** Telling the regulator and, in some cases, the people.
+>
+> **Erasure.** Deleting data when its purpose has ended, or when consent is withdrawn.
+>
+> **Children.** Extra care, and a parent's say for the youngest.
+>
+> **Reach beyond borders.** Both can apply to organisations outside their own
+> territory.
+
+If you build with all eight in mind, differences in detail become adjustments rather
+than redesigns.
+
+## Where they differ in ways that matter
+
+**The reason to use data.** The GDPR names six lawful bases, among them consent,
+contract, legal obligation and legitimate interests. The DPDP Act works through two
+routes: consent, or a short list of listed *legitimate uses*. If you are used to
+relying on a broad "legitimate interests" reason, there is no direct equivalent in the
+Indian law.
+
+**Special categories.** The GDPR gives extra protection to certain kinds of data,
+such as health, beliefs and biometrics. The DPDP Act, as read for this lesson, does
+not create a separate tier by category. That does not make health data safe to be
+casual with; it means the extra care comes from the general duties and from sector
+rules rather than from a special-category rule.
+
+**Children.** Covered in L6. In short, the DPDP Act treats everyone under eighteen as
+a child and also bars tracking, behavioural monitoring and targeted advertising aimed
+at them. The GDPR's age for a child's own consent to online services is sixteen by
+default, with member states free to lower it to no less than thirteen.
+
+**Penalties.** Both are large, and they are structured differently.
+
+| | Maximum |
+|---|---|
+| DPDP: failing to keep reasonable security safeguards | up to ₹250 crore |
+| DPDP: failing to notify a breach, or children's obligations | up to ₹200 crore |
+| DPDP: most other contraventions | up to ₹50 crore |
+| GDPR: the most serious infringements (principles, rights, transfers) | up to €20 million or 4% of worldwide annual turnover, whichever is higher |
+| GDPR: many operational duties (security, breach, impact assessments) | up to €10 million or 2%, whichever is higher |
+
+Every one of those is a ceiling, and the DPDP figures read "may extend to". Real
+penalties depend on the facts and on how the regulator weighs them. Treat the numbers
+as a measure of how seriously the lawmakers regard the duty, and not as a prediction.
+
+## Where each stands in time
+
+**The GDPR** has applied since 2018 and is established, with years of regulator
+decisions to read.
+
+**The DPDP Act** is newer, and its position is more subtle than "in force" or "not".
+It was passed in 2023 and its Rules were notified in November 2025. On the summaries
+read for this lesson, commencement is staged:
+
+> **Immediately** (November 2025): the parts setting up the Data Protection Board and
+> the definitions.
+>
+> **After about twelve months** (around November 2026): the rules on registering
+> consent managers, and one provision on consent withdrawal.
+>
+> **After about eighteen months** (around May 2027): the main duties on data
+> fiduciaries, including notice, security safeguards, breach notification and
+> children's data.
+
+Those summaries disagree with each other by a day on the dates and on exactly which
+sections fall in which phase. So the right reading is: the substantial obligations
+described in this module are, as of 15 October 2026, **not yet in force in India**,
+they are close, and the exact list should be taken from the Gazette notification.
+
+That is no reason to wait. A workflow built now will still be running when they apply,
+and retrofitting data minimisation into something already live is much harder than
+building it in.
+
+## Who is covered
+
+Neither law stops at a border.
+
+The **GDPR** applies to organisations established in the EU, and also to those
+offering goods or services to people there or monitoring their behaviour there.
+
+The **DPDP Act** applies to processing in India, and, as understood for this lesson,
+to some processing outside India connected with offering goods or services to people in
+India. The exact wording of that provision should be read.
+
+A site anyone in the world can open, such as Lrnon, should therefore assume more than
+one regime can be relevant, and build to the stricter habits. Which law actually
+applies to a given project is a legal question, and the right answer needs advice.
+
+## Try it now (10 minutes)
+
+For one workflow, tick the eight shared items: roles, reason to use, telling people,
+security, breach notification, erasure, children, and cross-border reach. Beside each
+write where you currently stand: done, partly, or not started.
+
+The ones marked "not started" are your list. They are also, almost always, the same
+list under both laws.
+
+<Quiz client:visible items={[
+  {
+    q: "A workflow relies on 'legitimate interests' as its reason for using data. Which statement is accurate?",
+    options: [
+      "The DPDP Act has the same broad legitimate-interests basis as the GDPR",
+      "The DPDP Act works through consent or a short list of listed legitimate uses, with no direct equivalent",
+      "Neither law permits any reason other than consent"
+    ],
+    answer: 1,
+    explain: "The GDPR names six lawful bases, including legitimate interests. The DPDP Act's two routes are consent and listed legitimate uses."
+  },
+  {
+    q: "Roughly when do the DPDP Act's main duties on data fiduciaries start, according to the summaries read?",
+    options: [
+      "They have applied since 2023",
+      "Staged, with the main duties around eighteen months after the Rules were notified in November 2025",
+      "They only apply to organisations based in India"
+    ],
+    answer: 1,
+    explain: "The summaries disagree by a day on the dates and on the section lists, so the Gazette notification is the thing to read. Not yet in force is no reason to wait to build well."
+  },
+  {
+    q: "What does a penalty figure like 'up to 250 crore rupees' tell you?",
+    options: [
+      "The usual penalty for any breach of the Act",
+      "A ceiling that shows how seriously the lawmakers regard the duty, not a prediction",
+      "A fixed fine that applies automatically"
+    ],
+    answer: 1,
+    explain: "Every figure reads 'may extend to'. Actual penalties depend on the facts and on how the regulator weighs them."
+  }
+]} />
+
+## Recap
+
+The two laws share a structure, namely roles, a reason to use data, notice, security,
+breach notification, erasure, care for children and reach beyond borders, so good
+habits meet much of both. They differ on lawful bases, special categories, the age of
+a child and the shape of penalties, all of which are ceilings. The GDPR is established.
+The DPDP Act's main duties were, on the summaries read, not yet in force on 15 October
+2026 and arrive around May 2027, but a workflow built now will outlive that date.
+Neither law stops at a border, and which one applies to you is a question for advice.

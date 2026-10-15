@@ -1,0 +1,192 @@
+---
+title: "When it goes wrong"
+description: "A personal data breach has a clock. Decide in advance how to notice one, contain it, judge whether it must be reported, and who tells whom."
+track: practitioner
+module: p8
+order: 8
+minutes: 10
+objectives:
+  - "Recognise what counts as a personal data breach and what each law requires on notification"
+  - "Prepare a breach response plan before one is needed"
+concepts: ["personal data breach", "notification", "containment", "incident log"]
+flashcards:
+  - front: "What does GDPR Article 33 require after a breach?"
+    back: "Notify the supervisory authority without undue delay and, where feasible, within 72 hours of becoming aware, unless it is unlikely to risk people's rights and freedoms. Processors tell the controller without undue delay."
+  - front: "What does the DPDP Act require?"
+    back: "Under section 8(6), intimation of the breach to the Data Protection Board and to each affected Data Principal, in the form and manner prescribed by the Rules, which should be read directly."
+  - front: "Why document breaches you decide not to report?"
+    back: "The GDPR expects every breach to be recorded with its facts, effects and actions. A recorded judgement that it was low risk is a defensible position; an unrecorded one is not."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+A personal data breach is an event where personal data is lost, altered, disclosed or
+accessed without authority. Not only a hack. An email sent to the wrong list, a
+spreadsheet shared too widely, a laptop left on a train, an API key in a place it should
+not be, a log file exposed.
+
+The reason to plan is that it arrives with a clock running and nobody calm.
+
+## What the laws require
+
+**The GDPR, Article 33.** Where a breach occurs, the controller must notify the
+supervisory authority without undue delay and, where feasible, not later than 72 hours
+after becoming aware of it, unless the breach is unlikely to result in a risk to people's
+rights and freedoms. A late notification must give reasons for the delay. A processor must
+tell the controller without undue delay on becoming aware. Every breach, including ones
+not reported, is to be documented.
+
+Where the risk to individuals is high, the people themselves must be told too, in plain
+language (Article 34).
+
+**The DPDP Act, section 8(6).** In the event of a breach, the Data Fiduciary must give the
+Data Protection Board and each affected Data Principal intimation of it, in the form and
+manner prescribed. The Rules set the detail, and the summaries read for this lesson describe a tight clock,
+one of them giving 72 hours. The exact periods should be taken from the Rules themselves,
+and these duties were not yet in force when this was written.
+
+Failing to notify under the DPDP Act sits in the second penalty band, as a ceiling of
+₹200 crore, and failing to keep reasonable security safeguards in the top band at ₹250
+crore.
+
+Note the difference in who is told. The GDPR leads with the regulator and tells people
+where risk is high. The DPDP Act, as read, names both the Board and each affected person.
+
+## Decide before, not during
+
+When a breach is discovered, the first hours decide how it goes. Prepare four things.
+
+### How you would notice
+
+Breaches are often found by someone else, such as a user or a researcher, and weeks late.
+The monitoring from P7 is part of this: failures named and kept long enough, a weekly look,
+alerts for what cannot wait. Give outsiders a way to tell you, and a contact that is read.
+
+### Who decides
+
+One named person decides whether it is a reportable breach, with a backup. Not a committee.
+Write down who, how to reach them, and what they can decide alone.
+
+### What to do first
+
+> **Contain.** Stop the leak: revoke the key, disable the share, take the page down, pull
+> the connection. This is the L3 lesson from P5, "know the single action that cuts it
+> off".
+>
+> **Preserve.** Keep logs and evidence before cleaning up. A tidy-up that destroys the
+> trail makes the assessment impossible.
+>
+> **Assess.** What data, whose, how many, how sensitive, who could have seen it, and
+> whether it was protected, for instance encrypted.
+>
+> **Decide** whether notification is required, and to whom.
+>
+> **Notify** within the time allowed, and tell the people affected where required.
+>
+> **Record** everything, with times.
+
+### Whom to tell
+
+Have the contacts ready. The relevant regulator for each law that may apply, your
+processors' incident contacts, your own people, and the text of a notice to individuals
+written in advance, in plain words, so that you are editing and not composing at 3am.
+
+## What counts: a worked judgement
+
+Take an incident from this project, treated carefully.
+
+The assistant's API key was, for a time, entered as a build variable where dependencies
+install, rather than as a runtime secret. Nothing suggests it was exposed. Was that a
+personal data breach?
+
+The key is a credential for the model service. It is not itself personal data, and
+nothing indicates anyone's data was accessed, lost or disclosed. So on the facts known,
+probably not a *personal data* breach, though it was a security weakness that was
+corrected. That conclusion, and the reasoning, is what a record of the incident should
+hold.
+
+Compare a different case: an exported spreadsheet of volunteers, shared with a link that
+anyone could open. Personal data, disclosed without authority, to an unknown audience.
+That is a breach, and the assessment is about how many people, what the sheet contained,
+and who might have found it.
+
+The first is a near miss worth learning from. The second is an incident with a clock.
+Writing the judgement down, in both cases, is the habit.
+
+## Security safeguards are the other half
+
+Both laws penalise failing to prevent a breach as well as failing to report one. The
+DPDP Act's highest penalty ceiling attaches to failing to keep reasonable security
+safeguards (section 8(5)).
+
+"Reasonable" is judged against the data and the risk. The measures this course has
+covered, such as least privilege, scoped credentials, secrets in the right place, a
+stop control that works, logs that hold no content and a tested deletion path, are the
+practical content of the phrase. They are also what makes the first hour of an incident
+manageable.
+
+## Rehearse it
+
+Run a short exercise once a year, or after any significant change.
+
+Pose a scenario: *"The volunteers sheet has been shared publicly for a month."* Walk the
+steps out loud. Who decides? What gets revoked? What do we tell people? Which regulator,
+and what do we say?
+
+You will find the contact that does not exist, the key nobody knows how to revoke, and the
+notice that has never been drafted. Every one is cheaper to find in a rehearsal.
+
+## Try it now (20 minutes)
+
+Write a one-page breach plan for something you run. It should name the decider and their
+backup, the first containing action for each system, the regulators and contacts, and a
+draft notice to affected people.
+
+Then run the scenario from above against it, and write down what you could not do.
+
+<Quiz client:visible items={[
+  {
+    q: "What does GDPR Article 33 require after a personal data breach?",
+    options: [
+      "Notify every affected person within 24 hours",
+      "Notify the supervisory authority without undue delay and, where feasible, within 72 hours, unless it is unlikely to risk people's rights and freedoms",
+      "Notify the regulator only if more than a thousand people are affected"
+    ],
+    answer: 1,
+    explain: "A late notification must give reasons, a processor must tell the controller without undue delay, and every breach is to be documented, including ones not reported."
+  },
+  {
+    q: "Why preserve evidence before cleaning up after a breach?",
+    options: [
+      "Regulators demand an unmodified server",
+      "A tidy-up that destroys the trail makes it impossible to assess what happened and who was affected",
+      "Evidence is needed to sell to insurers"
+    ],
+    answer: 1,
+    explain: "Contain first, then preserve, then assess. Assessment depends on the logs."
+  },
+  {
+    q: "A credential was stored in the wrong place, with no sign anyone's data was accessed. What should be recorded?",
+    options: [
+      "Nothing, since no breach occurred",
+      "The facts, the judgement that it was probably not a personal data breach, and the reasoning, as a near miss to learn from",
+      "A notification to the regulator as a precaution"
+    ],
+    answer: 1,
+    explain: "A recorded judgement is a defensible position and an unrecorded one is not. A near miss is worth learning from and writing down."
+  }
+]} />
+
+## Recap
+
+A personal data breach is any loss, alteration, disclosure or unauthorised access, from an
+email to the wrong list to a leaked key. The GDPR requires notifying the authority within
+72 hours where feasible unless risk is unlikely, with processors telling controllers
+promptly and every breach documented. The DPDP Act requires intimation to the Board and to
+each affected person in the manner the Rules prescribe, and those duties were not yet in
+force on 15 October 2026. Decide in advance how you would notice, who decides, what you do
+first and whom you tell, rehearse it, and write down every judgement, including the ones
+that turn out to be near misses.

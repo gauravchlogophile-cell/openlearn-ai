@@ -1,0 +1,185 @@
+---
+title: "The provider is a recipient"
+description: "A model provider receives what you send, under terms that differ by plan. Read the terms for your plan, and never promise users more than those terms say."
+track: practitioner
+module: p8
+order: 4
+minutes: 10
+objectives:
+  - "Find out what a model provider does with submitted content on the plan you are actually using"
+  - "Write assurances to users that are true on that plan"
+concepts: ["processor", "data processing terms", "training on inputs", "sub-processors"]
+tools: ["gemini"]
+flashcards:
+  - front: "Why does the plan you use matter for privacy?"
+    back: "Providers often treat free and paid usage differently. On a free tier, content may be used to improve products and read by reviewers; on a paid tier it usually is not."
+  - front: "What do both laws expect when a processor handles data?"
+    back: "A written agreement setting out what the processor may do, and the controller or fiduciary stays answerable. The GDPR spells the contents out in Article 28; the DPDP Act requires a valid contract."
+  - front: "What must a statement to users satisfy?"
+    back: "It must be true on the plan actually in use, today. An assurance that is true only on a plan you have not bought is a false statement."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+When your workflow calls a model, whatever you send goes to someone else's computers.
+In the language of both laws, that someone is a processor, and the act of sending is a
+disclosure you are responsible for.
+
+Most builders never read the terms. This lesson is about why the terms differ more than
+people expect, and what that does to the promises you make.
+
+## What both laws expect
+
+**The GDPR** requires a binding written contract between a controller and a processor
+(Article 28). It must set out the subject matter and duration of the processing, its
+nature and purpose, the types of data and the categories of people, and the controller's
+rights and duties. The controller may only use processors that give sufficient
+guarantees, and a processor may not engage a further processor without the controller's
+authorisation.
+
+**The DPDP Act** lets a Data Fiduciary engage a Data Processor only under a valid
+contract (section 8(2)), and keeps the fiduciary responsible for compliance whatever
+that contract says (section 8(1)). Section 8(7) also requires the fiduciary to cause its
+processor to erase data when the purpose has ended.
+
+In practice, with a large model provider you do not negotiate a contract. You accept
+its terms, and its data processing terms are the nearest thing to the agreement the laws
+describe. The job is to read them.
+
+## The plan changes the terms
+
+This is the part people miss.
+
+Many providers have separate terms for free and for paid use, and the differences
+bear directly on privacy. For Google's Gemini API, the published terms, as excerpted for
+this lesson, draw the line this way.
+
+> **Unpaid use** (the free quota): submitted content and generated responses may be
+> used to provide, improve and develop Google's products and machine learning
+> technologies. Human reviewers may read, annotate and process input and output, after
+> it has been disconnected from the account and key. Users are advised not to submit
+> sensitive, confidential or personal information.
+>
+> **Paid use:** prompts and responses are described as not used to improve Google's
+> products, and are logged for a limited period for detecting abuse and meeting legal
+> disclosures.
+
+Treat that as a pointer and not as a quotation: the paid-plan wording was seen only in a
+third-party copy of the terms, the excerpts were truncated, and providers revise these
+documents. The lesson is the shape. **The same API call, with the same code, can be
+under quite different data terms depending on whether billing is switched on.**
+
+Other providers draw the lines elsewhere, and some distinguish consumer products from
+business or API access. Read the terms for the plan you are actually on, and read them
+again when the plan or the terms change.
+
+## A case from this project
+
+Lrnon's assistant footer, on every answer, used to end with *"Nothing you type is used
+to train anything."*
+
+That sentence was written as reassurance and it was never checked. The question goes to
+an outside provider, and the quota errors seen in testing, about ten calls a minute and
+a message to check the plan and billing, are consistent with the free tier. Whether the
+project's key is on the free tier had not been confirmed when this was written.
+
+If it is, the provider's own terms contradict the footer. The sentence promised learners
+something that Lrnon had no authority to promise, about the questions of people who
+include children.
+
+The footer now says only what holds on any plan: that the question is sent to an outside
+AI service, and that people should not type personal details. The comment beside the
+string records why, and says to restore a training claim only after the plan and its
+current terms have been checked and dated.
+
+The generalisable rule:
+
+> **An assurance to users must be true on the plan you actually use, today.** If it
+> depends on a setting you have not checked, you do not yet have the assurance.
+
+## What to read in the terms
+
+For any provider, find answers to these, and write down where you found them and when.
+
+1. **Is submitted content used to train or improve the provider's products?** On which
+   plans?
+2. **Can people at the provider read it?** Under what conditions?
+3. **How long is it kept,** and why?
+4. **Where is it processed?** Regions matter for cross-border transfer rules, and for
+   whether a provider serves your users at all (P7·L6, and P10).
+5. **Who are the sub-processors?**
+6. **Can you delete it,** and how do you ask?
+7. **What happens to your data if you stop using the service?**
+
+If the answers are not findable, that is itself an answer.
+
+## What to do about it
+
+**Match the plan to the data.** If the work involves personal data from other people, a
+plan whose terms tell you not to submit personal data is the wrong plan. Moving to a paid
+tier, or to a provider with business terms, is often cheap against the risk.
+
+**Or change the data.** L3's measures reduce what is sent, so that the plan matters less.
+Neither replaces the other.
+
+**Say what is true.** Whatever you tell users should survive being read next to the
+provider's terms.
+
+**Keep a dated note** of what the terms said and what plan you were on. When an
+assurance is challenged, "we checked on 15 October and this is what it said" is a very
+different position from "we assumed".
+
+## Try it now (15 minutes)
+
+For a provider you use, find the data terms for your plan and answer the seven
+questions above, with the date.
+
+Then read every statement you have made to users about their data, in your footer, your
+privacy page, your help text, and test each one against the answers. Anything that
+depends on something you did not check is a promise to remove or verify.
+
+<Quiz client:visible items={[
+  {
+    q: "Why might the same API call have different privacy terms from one month to the next?",
+    options: [
+      "Providers change the model weights monthly",
+      "Terms can differ by plan, so switching billing on or off can change what happens to submitted content",
+      "Terms are only applied to the first call in a session"
+    ],
+    answer: 1,
+    explain: "The same code can sit under quite different data terms depending on the plan. Read the terms for the plan you are actually on."
+  },
+  {
+    q: "What must an assurance to users satisfy?",
+    options: [
+      "It must be reassuring and short",
+      "It must be true on the plan actually in use, today",
+      "It must match what competitors say"
+    ],
+    answer: 1,
+    explain: "An assurance that is true only on a plan you have not bought is a false statement, and a promise about children's questions that might be false is worse than none."
+  },
+  {
+    q: "Under the DPDP Act, does a processor contract move responsibility away from the Data Fiduciary?",
+    options: [
+      "Yes, a valid contract transfers it",
+      "No, the fiduciary remains responsible whatever the contract says",
+      "Only for processing done abroad"
+    ],
+    answer: 1,
+    explain: "Section 8(1) keeps the fiduciary answerable irrespective of any agreement to the contrary."
+  }
+]} />
+
+## Recap
+
+A model provider is a recipient, and both laws expect an agreement governing what it may
+do while keeping you answerable. With a large provider the agreement is its terms, which
+often differ by plan: on a free tier, content may be used to improve products and read by
+reviewers, while paid terms commonly say otherwise. Lrnon's own footer promised no
+training without that having been checked. Read the terms for the plan you use, answer
+seven specific questions with the date, match the plan to the data, and make every
+statement to users true on that plan.

@@ -3,6 +3,12 @@
   "entries": [
     {
       "date": "2026-10-15",
+      "kind": "New module",
+      "where": "Practitioner · P8",
+      "what": "Data Protection for Workflows published — eight lessons on what India’s Digital Personal Data Protection Act and the EU’s GDPR ask of whoever builds a workflow that touches personal data. Drawing the path data takes, including the model provider and the logs; what the two laws share and where they differ, with the DPDP Act’s main duties not yet in force on this date; sending less, and what a pattern-based redaction step can and cannot catch; why the provider is a recipient whose terms differ by plan; every second copy of the data and how long each is kept; children, who under the DPDP Act means anyone under eighteen; answering a request to see or erase what you hold; and what to do in the first hours of a breach. The module states plainly that it is general information and not legal advice, and that its sources were reproductions of the statutes and law-firm summaries rather than the official texts, which should be read before any figure is relied on. It also records a correction to Lrnon itself: the assistant’s footer promised that nothing typed was used to train anything, which had not been checked against the provider’s terms for the plan in use, and now says only what holds on any plan. Practitioner is now eight of its eleven modules."
+    },
+    {
+      "date": "2026-10-15",
       "kind": "Content updated",
       "where": "Practitioner · module counts",
       "what": "Corrected how the entries for P2, P3, P4, P5 and P6 describe the size of the Practitioner track. Each said Practitioner was a number of modules of twelve. Practitioner has eleven modules, P1 to P11; the twelfth in that figure is the first Builder module, B1, which belongs to a different track. The correct reading of the earlier entries is a number of eleven Practitioner modules. Those entries are left as they were published, wrong count included, because a correction belongs in a new dated entry and not in a quiet edit to an old one."

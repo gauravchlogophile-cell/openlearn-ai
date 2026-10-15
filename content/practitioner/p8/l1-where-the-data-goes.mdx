@@ -1,0 +1,177 @@
+---
+title: "Where the data goes"
+description: "Map every place personal data enters, travels and rests in a workflow, including the model provider and the logs. You cannot protect a flow you have not drawn."
+track: practitioner
+module: p8
+order: 1
+minutes: 9
+objectives:
+  - "Draw the path personal data takes through a workflow, including the places people forget"
+  - "Say who holds the data at each point and whether you control what they do with it"
+concepts: ["personal data", "data flow", "controller and processor", "data map"]
+flashcards:
+  - front: "What is personal data, in practice?"
+    back: "Anything that relates to an identifiable person: a name, an email, a phone number, an account ID, and often text that describes them. Identifiable means they could be picked out, not only that they are named."
+  - front: "Why draw the data path before reading any law?"
+    back: "Every obligation attaches to something you hold or send. If you cannot say where the data goes, you cannot say which duties apply or whether you are meeting them."
+  - front: "Which places do people forget?"
+    back: "Logs, backups, the model provider, error reports, analytics, a colleague's exported spreadsheet, and the text of the questions themselves."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+This module is about personal data in the workflows you build in P5 and P6, and
+what two laws in particular, India's Digital Personal Data Protection Act and the
+EU's General Data Protection Regulation, ask of whoever builds them.
+
+Read this first, because it shapes everything after.
+
+> **This is general information and not legal advice.** Whether a law applies to
+> you, and what it requires, depends on facts about your situation that a lesson
+> cannot know. For a real obligation, ask someone qualified, and read the primary
+> text.
+
+## What this was checked against
+
+This site's rule is that claims are sourced and dated, and the honest account for
+this module is a limited one. On 15 October 2026:
+
+- The DPDP Act's sections 8, 9 and 16 and its penalties Schedule were read from a
+  reproduction of the Act on a third-party website, not from the official gazette.
+- The DPDP Rules' timetable comes from law-firm summaries, which disagree with each
+  other by a day on dates and on exactly which sections fall in which phase.
+- The GDPR articles quoted were read from text mirrors, not from EUR-Lex.
+- Google's data terms for its model API were read from search excerpts.
+
+None of that is the authoritative text. Where a figure or a date matters to a
+decision of yours, read the official version. Laws are also amended and
+interpreted, and this will age.
+
+## Start with the picture
+
+Obligations attach to data you hold or send. So before any law, draw the path.
+
+For a workflow, mark every place the data **enters**, **travels**, and **rests**:
+
+> **Enters.** A form, an inbox, an upload, an API, a person typing a question.
+>
+> **Travels.** Each step of the chain, each connection, each call to the model.
+>
+> **Rests.** The database, the logs, the backups, the exports, the cache, the error
+> reports, the analytics tool, and the copy someone saved to their own drive.
+
+Then add the column that matters: **who holds it here, and do I control what they do
+with it?**
+
+## Personal data is wider than a name
+
+It means information relating to an identifiable person. Identifiable includes being
+named, and also being picked out: an email, a phone number, an account number, a
+handle, a face, and often a free-text description that only one person fits.
+
+Two consequences catch people.
+
+**The question itself can be personal data.** Someone asking an assistant *"I have
+chest pain and I'm 14, what should I do"* has just supplied health information and an
+age. You asked for neither. Free-text boxes collect what people volunteer, and what
+they volunteer is rarely what you planned for.
+
+**"Anonymous" is a claim to test.** Removing a name does not make a record anonymous
+if the remaining details still point at one person. A record with an age, a town and a
+rare condition may be as identifying as one with a name.
+
+## The roles
+
+Both laws sort the parties by what they decide.
+
+| | DPDP Act (India) | GDPR (EU) |
+|---|---|---|
+| Decides why and how data is used | **Data Fiduciary** | **Controller** |
+| Handles it on their behalf | **Data Processor** | **Processor** |
+| The person it is about | **Data Principal** | **Data Subject** |
+
+That sorting decides who is answerable. Under the DPDP Act, section 8(1) makes the
+Data Fiduciary responsible for compliance, including for processing done on its
+behalf by a processor, *irrespective of any agreement to the contrary*. Hiring
+someone to handle the data does not hand over the responsibility.
+
+When you build a workflow that sends customer data to a model provider, you are
+usually the fiduciary or controller, and the provider is a processor. L4 is about what
+that makes you responsible for.
+
+## A path with a gap in it
+
+Lrnon's assistant is a useful picture because it is small enough to draw.
+
+> A learner types a question.
+> → It crosses a basic redaction step (L3).
+> → It is sent, with four lesson passages, to an outside model provider.
+> → An answer returns and is shown.
+> → A row is written recording tokens, time, success and failure reason.
+
+What rests where is worth stating. The row records no question and no learner
+identity. The passages are public lessons. The question text exists in the request and
+at the provider, and the provider's handling of it is governed by the provider's
+terms, which L4 covers.
+
+The point of drawing it is that the sensitive link in this chain is the one that
+leaves Lrnon's control: the call to the provider. It does not appear in the database,
+and it would be easy to leave off a diagram that began and ended at the project's own
+systems.
+
+## Try it now (15 minutes)
+
+Pick one workflow. Draw it on paper with three columns: enters, travels, rests.
+
+For every box, write who holds the data at that point and whether you control what
+they do with it. Then circle every box that is **outside your systems**: a provider, an
+analytics tool, a mailbox, someone's laptop.
+
+The circled boxes are where L4 to L8 will apply. If you have none, check again. There
+is nearly always at least one.
+
+<Quiz client:visible items={[
+  {
+    q: "Why draw the data's path before reading any law?",
+    options: [
+      "Laws are easier to understand with diagrams",
+      "Obligations attach to data you hold or send, so you cannot say which duties apply without knowing where it goes",
+      "Regulators require a diagram before an investigation"
+    ],
+    answer: 1,
+    explain: "Every duty attaches to something you hold or send. The path shows which duties apply and where you cannot currently check you are meeting them."
+  },
+  {
+    q: "Why can the text of a question put to an assistant be personal data?",
+    options: [
+      "Assistants are required to log every question",
+      "People volunteer details in free-text boxes, such as an age and a symptom, that you never asked for",
+      "Questions are always linked to a user account"
+    ],
+    answer: 1,
+    explain: "What people volunteer is rarely what you planned for. The question can contain health information, a name or an age."
+  },
+  {
+    q: "Under the DPDP Act, does engaging a processor to handle data move responsibility to the processor?",
+    options: [
+      "Yes, once a valid contract is signed",
+      "No, the Data Fiduciary stays responsible, irrespective of any agreement to the contrary",
+      "Only for processing done outside India"
+    ],
+    answer: 1,
+    explain: "Section 8(1) keeps the fiduciary answerable for processing done on its behalf by a processor. Hiring someone does not hand over the responsibility."
+  }
+]} />
+
+## Recap
+
+This is general information, not legal advice, and it was checked on 15 October 2026
+against reproductions and summaries rather than the official texts, so read those
+before relying on a figure. Draw the path personal data takes: where it enters, where
+it travels and where it rests, including the model provider, logs and backups. Personal
+data is wider than a name, and the question a person types can itself be personal.
+Both laws sort parties into the one who decides, the one who processes for them, and
+the person concerned, and hiring a processor does not move the responsibility.

@@ -1,0 +1,316 @@
+{
+  "module": "p8",
+  "title": "Data Protection for Workflows — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "p8-01",
+      "q": "Why draw the path personal data takes before reading any law?",
+      "options": [
+        "Laws are easier to understand with diagrams",
+        "Obligations attach to data you hold or send, so you cannot say which duties apply without knowing where it goes",
+        "Regulators require a diagram before an investigation"
+      ],
+      "answer": 1,
+      "explain": "Every duty attaches to something you hold or send. The path shows which duties apply and where you cannot currently check you are meeting them."
+    },
+    {
+      "id": "p8-02",
+      "q": "Why can the text of a question put to an assistant be personal data?",
+      "options": [
+        "Assistants are required to log every question",
+        "People volunteer details in free-text boxes, such as an age and a symptom, that you never asked for",
+        "Questions are always linked to a user account"
+      ],
+      "answer": 1,
+      "explain": "What people volunteer is rarely what you planned for. The question can contain health information, a name or an age."
+    },
+    {
+      "id": "p8-03",
+      "q": "Under the DPDP Act, does engaging a processor to handle data move responsibility to the processor?",
+      "options": [
+        "Yes, once a valid contract is signed",
+        "No, the Data Fiduciary stays responsible, irrespective of any agreement to the contrary",
+        "Only for processing done outside India"
+      ],
+      "answer": 1,
+      "explain": "Section 8(1) keeps the fiduciary answerable for processing done on its behalf by a processor. Hiring someone does not hand over the responsibility."
+    },
+    {
+      "id": "p8-04",
+      "q": "Which of these is a place people commonly forget when mapping where personal data rests?",
+      "options": [
+        "The main production database",
+        "Logs, backups, exports and the model provider",
+        "The login page"
+      ],
+      "answer": 1,
+      "explain": "Logs, backups, error reports, analytics, exports saved to a laptop, and the provider are second copies that nobody decided to create."
+    },
+    {
+      "id": "p8-05",
+      "q": "A workflow relies on 'legitimate interests' as its reason for using data. Which statement is accurate?",
+      "options": [
+        "The DPDP Act has the same broad legitimate-interests basis as the GDPR",
+        "The DPDP Act works through consent or a short list of listed legitimate uses, with no direct equivalent",
+        "Neither law permits any reason other than consent"
+      ],
+      "answer": 1,
+      "explain": "The GDPR names six lawful bases, including legitimate interests. The DPDP Act's two routes are consent and listed legitimate uses."
+    },
+    {
+      "id": "p8-06",
+      "q": "Roughly when do the DPDP Act's main duties on data fiduciaries start, according to the summaries read?",
+      "options": [
+        "They have applied since 2023",
+        "Staged, with the main duties around eighteen months after the Rules were notified in November 2025",
+        "They only apply to organisations based in India"
+      ],
+      "answer": 1,
+      "explain": "The summaries disagree by a day on dates and on section lists, so the Gazette notification is what to read. Not yet in force is no reason to wait to build well."
+    },
+    {
+      "id": "p8-07",
+      "q": "What does a penalty figure such as 'up to 250 crore rupees' tell you?",
+      "options": [
+        "The usual penalty for any breach of the Act",
+        "A ceiling that shows how seriously the lawmakers regard the duty, not a prediction",
+        "A fixed fine that applies automatically"
+      ],
+      "answer": 1,
+      "explain": "Every figure reads 'may extend to'. Actual penalties depend on the facts and on how the regulator weighs them."
+    },
+    {
+      "id": "p8-08",
+      "q": "Who does each law's own territory limit?",
+      "options": [
+        "Only organisations physically located there",
+        "Neither stops at a border; both can reach organisations offering services to people in their territory",
+        "Only organisations above a size threshold"
+      ],
+      "answer": 1,
+      "explain": "A site anyone in the world can open should assume more than one regime can be relevant, and which law actually applies is a question for advice."
+    },
+    {
+      "id": "p8-09",
+      "q": "Why is minimisation the cheapest protection available?",
+      "options": [
+        "Regulators exempt organisations that hold little data",
+        "Data you never collected cannot be breached, needs no erasure on request, and needs no contract with a recipient",
+        "Smaller datasets are always more accurate"
+      ],
+      "answer": 1,
+      "explain": "Every duty is easier to meet if you hold less. It is also good engineering and not only a legal duty."
+    },
+    {
+      "id": "p8-10",
+      "q": "A redactor catches email-shaped and phone-shaped text. What does it miss?",
+      "options": [
+        "Nothing that matters",
+        "Names, addresses written in prose, and details described in words",
+        "Anything longer than one sentence"
+      ],
+      "answer": 1,
+      "explain": "A pattern is a net and not a wall. It reduces the obvious cases and leaves the rest, so describe it as no more than that."
+    },
+    {
+      "id": "p8-11",
+      "q": "A step summarises complaints. What is the best way to keep customer names away from the model?",
+      "options": [
+        "Ask the model not to repeat names",
+        "Give each record an opaque reference and let your code join the reply back to the customer",
+        "Let the model see names but delete its logs"
+      ],
+      "answer": 1,
+      "explain": "The model supplies content and your code supplies the target. The identifying detail stays on the side of the boundary you control."
+    },
+    {
+      "id": "p8-12",
+      "q": "Why does storing the shape of a call and not the question make repurposing impossible?",
+      "options": [
+        "Shapes are encrypted by default",
+        "The content that could be mined was never recorded, which is stronger than a policy against mining it",
+        "Regulators forbid analysis of call shapes"
+      ],
+      "answer": 1,
+      "explain": "Not storing the content removes the retention period, the deletion path, the access controls and the temptation."
+    },
+    {
+      "id": "p8-13",
+      "q": "Why might the same API call be under different privacy terms from one plan to another?",
+      "options": [
+        "Providers change the model weights for paid users",
+        "Terms can differ by plan, so switching billing on or off can change what happens to submitted content",
+        "Terms apply only to the first call in a session"
+      ],
+      "answer": 1,
+      "explain": "The same code can sit under quite different data terms depending on the plan. Read the terms for the plan you are actually on."
+    },
+    {
+      "id": "p8-14",
+      "q": "What must an assurance given to users satisfy?",
+      "options": [
+        "It must be reassuring and short",
+        "It must be true on the plan actually in use, today",
+        "It must match what competitors say"
+      ],
+      "answer": 1,
+      "explain": "An assurance that is true only on a plan you have not bought is a false statement, and a promise about children's questions that might be false is worse than none."
+    },
+    {
+      "id": "p8-15",
+      "q": "What did the footer on Lrnon's assistant promise that could not be verified?",
+      "options": [
+        "That answers were always correct",
+        "That nothing a learner typed was used to train anything, when the provider's terms for the plan in use were unchecked",
+        "That questions were deleted after one hour"
+      ],
+      "answer": 1,
+      "explain": "The footer now states only what holds on any plan: that the question is sent to an outside AI service and that people should not type personal details."
+    },
+    {
+      "id": "p8-16",
+      "q": "If the data involves other people's personal details, which provider plan is the wrong choice?",
+      "options": [
+        "A paid plan whose terms say content is not used to improve products",
+        "A plan whose terms tell users not to submit personal information",
+        "Any plan with a usage limit"
+      ],
+      "answer": 1,
+      "explain": "Match the plan to the data, or change the data. Moving to a paid tier is often cheap against the risk."
+    },
+    {
+      "id": "p8-17",
+      "q": "Why does deleting a record from the main table not delete a person's data?",
+      "options": [
+        "Main tables are read-only",
+        "Logs, backups, exports, caches, analytics and the processor all hold their own copies",
+        "Deletion only takes effect after thirty days"
+      ],
+      "answer": 1,
+      "explain": "Systems make copies without anyone deciding to, and each has its own life. A deletion has to reach all of them."
+    },
+    {
+      "id": "p8-18",
+      "q": "After restoring a backup, what must happen for earlier deletions to hold?",
+      "options": [
+        "Nothing, because backups never contain deleted people",
+        "Deletions made since the snapshot are re-applied, so restored data does not bring deleted people back",
+        "The backup must be re-encrypted"
+      ],
+      "answer": 1,
+      "explain": "This step is the most often missing, and is the difference between a deletion that holds and one that quietly reverses."
+    },
+    {
+      "id": "p8-19",
+      "q": "Under DPDP section 8(7), when must personal data be erased?",
+      "options": [
+        "Only when a court orders it",
+        "When consent is withdrawn or it is reasonable to assume the purpose is no longer served, unless a law requires retention",
+        "After exactly one year in all cases"
+      ],
+      "answer": 1,
+      "explain": "The fiduciary must also cause its processor to erase what it was given."
+    },
+    {
+      "id": "p8-20",
+      "q": "Who counts as a child under the DPDP Act?",
+      "options": [
+        "Anyone under thirteen",
+        "Anyone under sixteen",
+        "Anyone under eighteen"
+      ],
+      "answer": 2,
+      "explain": "That is a higher line than many people assume and covers most teenagers using a service. Section 9 requires verifiable parental consent before processing a child's data."
+    },
+    {
+      "id": "p8-21",
+      "q": "A parent consents to a platform tracking their child's behaviour. What does section 9(3) say?",
+      "options": [
+        "The consent makes the tracking lawful",
+        "The bar on tracking and behavioural monitoring applies to the processing itself, unless a specific exemption is prescribed",
+        "Tracking is allowed for children over sixteen"
+      ],
+      "answer": 1,
+      "explain": "Parental consent does not unlock tracking or behavioural monitoring. The exemptions are narrow and tied to particular purposes."
+    },
+    {
+      "id": "p8-22",
+      "q": "What is the GDPR's default age at which a child may consent themselves to an online service?",
+      "options": [
+        "Thirteen everywhere",
+        "Sixteen, which Member States may lower to no less than thirteen",
+        "Eighteen"
+      ],
+      "answer": 1,
+      "explain": "So the age differs from one EU country to another, and a service operating across Europe has to know which applies."
+    },
+    {
+      "id": "p8-23",
+      "q": "What is the cheapest way to meet rules on children's data?",
+      "options": [
+        "A clause in the terms saying the service is for adults",
+        "Designing so the restricted processing is not done at all",
+        "Asking users to confirm their age"
+      ],
+      "answer": 1,
+      "explain": "A service that needs no account, has no messaging or advertising and records no questions has little for the rules to bite on."
+    },
+    {
+      "id": "p8-24",
+      "q": "Why is a rights request itself a possible route to harm?",
+      "options": [
+        "Requests always overload the support team",
+        "Someone may pose as another person to obtain their data or to have it deleted",
+        "Regulators publish the names of people who make requests"
+      ],
+      "answer": 1,
+      "explain": "Verify proportionately, and do not ask for more identifying detail than you need to confirm who is asking."
+    },
+    {
+      "id": "p8-25",
+      "q": "Why is answering a 'what do you hold about me' request from the main database alone risky?",
+      "options": [
+        "Main databases are slow to search",
+        "It misses copies in logs, exports, backups and the processor, so the answer may be incomplete without saying so",
+        "Databases cannot export data"
+      ],
+      "answer": 1,
+      "explain": "Being incomplete is worse than saying what you could not search. A current data map is what makes a complete answer possible."
+    },
+    {
+      "id": "p8-26",
+      "q": "Is a promise to reply to feedback within two working days the same as a rights-request deadline?",
+      "options": [
+        "Yes, it satisfies the legal period",
+        "No, a rights request has its own clock under the applicable law, separate from a service promise",
+        "Only for requests from outside the country"
+      ],
+      "answer": 1,
+      "explain": "A fast reply to a message is good practice. A rights request has its own deadline, record and consequences if missed."
+    },
+    {
+      "id": "p8-27",
+      "q": "What does GDPR Article 33 require after a personal data breach?",
+      "options": [
+        "Notify every affected person within 24 hours",
+        "Notify the supervisory authority without undue delay and, where feasible, within 72 hours, unless it is unlikely to risk people's rights and freedoms",
+        "Notify the regulator only if more than a thousand people are affected"
+      ],
+      "answer": 1,
+      "explain": "A late notification must give reasons, a processor must tell the controller without undue delay, and every breach is to be documented, including ones not reported."
+    },
+    {
+      "id": "p8-28",
+      "q": "Why preserve evidence before cleaning up after a breach?",
+      "options": [
+        "Regulators demand an unmodified server",
+        "A tidy-up that destroys the trail makes it impossible to assess what happened and who was affected",
+        "Evidence is needed to sell to insurers"
+      ],
+      "answer": 1,
+      "explain": "Contain first, then preserve, then assess. Assessment depends on the logs."
+    }
+  ]
+}

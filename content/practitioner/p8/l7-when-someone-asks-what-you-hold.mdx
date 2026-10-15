@@ -1,0 +1,181 @@
+---
+title: "When someone asks what you hold"
+description: "People have rights to see, correct and erase what you hold about them. Design the workflow so one request can be answered across every copy, on time."
+track: practitioner
+module: p8
+order: 7
+minutes: 9
+objectives:
+  - "Name the main rights a person has over their data and what answering each takes"
+  - "Design a workflow so a single request can be answered across every system that holds the data"
+concepts: ["data subject rights", "access request", "erasure request", "grievance"]
+flashcards:
+  - front: "What can a person ask of you?"
+    back: "Typically to know what you hold and why, to correct it, to have it erased, to withdraw consent, and to complain. The GDPR adds portability and objection."
+  - front: "What is the GDPR's deadline for responding to a rights request?"
+    back: "Without undue delay and within one month, extendable by up to two further months for complex or numerous requests, with the person told why."
+  - front: "What makes a request quick to answer?"
+    back: "A current data map, one identifier carried through every system, and a known path for each action. Without them, every request is an investigation."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Sooner or later, someone writes: *"What do you hold about me?"* or *"Delete everything."*
+
+At that moment the quality of everything in L1 to L5 shows. If you drew the map, kept
+one identifier, set retention periods and minimised what you collected, the request is
+an afternoon. If you did not, it is an investigation that may not be completable.
+
+## The rights
+
+Both laws give people a set of rights over their data. The wording and detail differ,
+and the core is recognisable.
+
+> **To know.** What you hold about them, why, and who has received it.
+>
+> **To correct.** Fix what is wrong or incomplete.
+>
+> **To erase.** Have it deleted, subject to exceptions.
+>
+> **To withdraw consent.** And have use stop, where consent was the basis.
+>
+> **To complain.** To you first, and then to the regulator.
+>
+> **Further, under the GDPR:** to receive their data in a portable form, to object to
+> certain processing, to restrict it, and not to be subject to certain solely automated
+> decisions with legal or similarly significant effect (Article 22).
+
+Under the GDPR, a response is due without undue delay and in any case within one month,
+extendable by up to two more months for complex or numerous requests, with the person
+told of the extension and the reason. The DPDP Act's rights are in its Chapter III, and
+the timetable and procedure are to be found in the Rules, which should be read directly.
+For a precise period under either law, read the text and not this paragraph.
+
+## What answering takes
+
+Take the commonest request: *"What do you hold about me?"*
+
+You need to be able to:
+
+1. **Identify the person** confidently, and without handing their data to an impostor.
+2. **Find every copy,** across the systems on your map.
+3. **Assemble it** into something readable.
+4. **Check what you may disclose,** since a record may also contain other people's data.
+5. **Reply in time.**
+
+Each step has a way to fail.
+
+**Identity.** The request itself is a route to harm. Someone claiming to be a person to
+obtain their data, or to have it deleted, is a real attack. Verify proportionately, and
+do not ask for more identifying detail than you need to confirm who is asking.
+
+**Completeness.** The ones you forget are the copies in logs, exports, backups and the
+processor. If you answer from the main database alone, the answer is incomplete, and
+being incomplete is worse than saying what you could not search.
+
+**Other people.** A support thread quoting a colleague, a record shared between two
+accounts. Redact what is not theirs.
+
+## Erasure is the hard one
+
+Access is mostly searching. Erasure is changing things, in many places, some of which are
+difficult.
+
+Work through it in the order of L5:
+
+- **Delete from the main store** and every dependent record.
+- **Remove from logs and exports** where they hold the personal data, or confirm they do
+  not.
+- **Handle backups** by letting them expire and re-applying the deletion on restore.
+- **Ask the processor** to erase what it holds, where its terms allow.
+- **Confirm,** by searching each place afterwards.
+- **Tell the person** what was done, and what could not be, and why.
+
+There are legitimate reasons not to erase something, such as a legal duty to keep it,
+and the response should say so plainly rather than quietly omitting it.
+
+## Make it routine, not heroic
+
+A request should follow a known path.
+
+**One page** describing the steps, who does them, and where each system's export and
+delete commands are. Written before the first request.
+
+**A log of requests,** with date received, action taken and date closed. It protects you
+and shows the regulator you take it seriously.
+
+**A named person** who owns it, and a backup.
+
+**A rehearsal.** Pick a test account, ask the question, and see what is missing. This is
+the quickest way to find the copy you forgot.
+
+## Honest about the promise
+
+Lrnon tells people a human answers feedback within two working days. That is a promise
+about how fast a person replies, and it is not the legal period for a rights request,
+which is different and depends on the law that applies.
+
+The two should not be confused. A fast reply to a message is good practice. A rights
+request has its own clock, its own record, and its own consequences if missed.
+
+It is also worth saying what is easy for this project and what is not. A learner who
+never signs in leaves almost nothing server-side, so there is little to find. A learner
+who did sign in has an account, progress, and perhaps a volunteering record, held in
+systems the map should list.
+
+## Try it now (20 minutes)
+
+Run a rehearsal. Use a test account, or yourself, and attempt to answer *"what do you
+hold about me?"* across every place on your map.
+
+Time it. Note every place you could not search, every export you could not produce, and
+every system whose delete command you did not know.
+
+Then write the one page. Include the missing places as "to do", because an honest list of
+gaps is a better position than a confident one that is wrong.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is a rights request a possible route to harm?",
+    options: [
+      "Requests always overload the support team",
+      "Someone may pose as another person to obtain their data or to have it deleted",
+      "Regulators publish the names of people who make requests"
+    ],
+    answer: 1,
+    explain: "Verify proportionately, and do not ask for more identifying detail than you need to confirm who is asking."
+  },
+  {
+    q: "Why is an answer from the main database alone risky?",
+    options: [
+      "Main databases are slower to search",
+      "It misses copies in logs, exports, backups and the processor, so the answer may be incomplete without saying so",
+      "Databases cannot export data"
+    ],
+    answer: 1,
+    explain: "Being incomplete is worse than saying what you could not search. The data map is what makes a complete answer possible."
+  },
+  {
+    q: "Is a promise to reply to feedback within two working days the same as a rights-request deadline?",
+    options: [
+      "Yes, it satisfies the legal period",
+      "No, a rights request has its own clock under the applicable law, separate from a service promise",
+      "Only for requests from outside the country"
+    ],
+    answer: 1,
+    explain: "A fast reply to a message is good practice. A rights request has its own deadline, record and consequences if missed."
+  }
+]} />
+
+## Recap
+
+People can ask what you hold, to correct it, to have it erased, to withdraw consent and to
+complain, and the GDPR adds portability, objection and a limit on solely automated
+decisions. Answering needs a confident identity check, a search of every copy on your map,
+care over other people's data, and a response in time under the law that applies. Erasure
+is the hard case, touching stores, logs, backups and the processor, and ending in a
+confirmation. Make it routine with a one-page procedure, a request log and a named owner,
+and rehearse it on a test account.

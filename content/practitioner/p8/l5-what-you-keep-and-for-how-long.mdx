@@ -1,0 +1,179 @@
+---
+title: "What you keep, and for how long"
+description: "Logs, backups, exports and caches are second copies of the data. Set a retention period for each, and make erasure reach all of them, including the processor."
+track: practitioner
+module: p8
+order: 5
+minutes: 9
+objectives:
+  - "List every second copy of personal data a workflow creates and set a retention period for each"
+  - "Design deletion so that it reaches logs, backups and the processor, not only the main table"
+concepts: ["retention", "storage limitation", "erasure", "backups"]
+flashcards:
+  - front: "Why are logs a privacy risk?"
+    back: "They are a second copy, usually kept longer, read by more people and protected less carefully than the original, and often created without anyone deciding to."
+  - front: "What does the DPDP Act say about erasure?"
+    back: "Under section 8(7), erase personal data when consent is withdrawn or when it is reasonable to assume the purpose is no longer served, unless the law requires retention, and have your processor erase what you gave it."
+  - front: "What is the safest log of a request?"
+    back: "One that never held the personal data. Recording the shape of a call, and not its content, means there is nothing to retain, breach or erase."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Deleting a record from the main table does not delete the person's data. It deletes one
+copy.
+
+Systems make copies without anyone deciding to, and each one has its own life.
+
+## The copies
+
+For a workflow, list where data persists after the step that used it.
+
+> **Logs.** Requests, errors and debug output. Often kept for months, by default.
+>
+> **Backups.** Snapshots of the database, which contain whatever was in it at the time.
+>
+> **Exports.** The spreadsheet someone pulled for a report and saved to their drive.
+>
+> **Caches.** Stored responses and intermediate results.
+>
+> **Monitoring and analytics.** Error trackers and usage tools, which can capture
+> request contents.
+>
+> **The processor.** Whatever the model provider or any other service keeps on its side.
+>
+> **Notification systems.** Email threads and chat messages that quote the data.
+
+None of these is exotic. All are routinely forgotten when someone asks, *"where is the
+data about me?"*
+
+## Retention: say how long, per copy
+
+Both laws expect you not to keep personal data longer than the purpose needs. The GDPR
+calls it storage limitation, and the DPDP Act reaches the same place through its erasure
+duty.
+
+Under section 8(7), a Data Fiduciary must erase personal data when the principal
+withdraws consent, or when it is reasonable to assume the specified purpose is no longer
+being served, whichever is earlier, unless retention is necessary to comply with a law.
+It must also cause its processor to erase what it was given.
+
+To meet that you need a period for each copy. Not "as long as needed", but a number.
+
+| Copy | Typical question to settle |
+|---|---|
+| Logs | How long does debugging really need them, and can they omit the content? |
+| Backups | How long are they kept, and what happens to a deleted person in them? |
+| Exports | Who made them, and when do they get deleted? |
+| Processor | What do the provider's terms say, and can you request deletion? |
+
+A short period, honestly applied, beats a long one nobody enforces.
+
+## Backups are the awkward one
+
+You cannot usually remove one person from a backup without restoring and rewriting it,
+and nobody does that casually.
+
+The common, defensible approach is to let backups expire on a schedule, keep that
+schedule short, and **make sure that restoring a backup does not resurrect deleted
+people**: after any restore, deletions made since the snapshot are re-applied. That
+last step is the one most often missing, and it is the difference between a deletion
+that holds and one that quietly reverses.
+
+Write the approach down, including how long a deleted person can persist in a backup.
+A stated, bounded answer is something you can defend. An unstated one is an assumption.
+
+## The cleanest log holds nothing personal
+
+Every item in the table above gets easier if the content was never recorded.
+
+This is the argument P3·L8 and P7·L4 made for the assistant's records: store the shape
+of a call, not the question. Lrnon's spend table records when a call was made, the model,
+the tokens, whether it succeeded and, if not, why. It holds no question text and carries
+no learner identity.
+
+Consequences worth spelling out:
+
+- **There is nothing in it to breach,** so a leak of the table discloses no one's words.
+- **There is nothing in it to erase** when someone asks, because it was never about them.
+- **It cannot be repurposed** to study what people asked, because it does not contain it.
+
+Compare the alternative. A table of every question would have needed a retention period,
+a deletion path for each person, access controls, a place in the breach plan, and a line
+in the privacy notice. Not creating it removed all of that.
+
+The review table is the one exception, and it is shaped accordingly: the question field
+is optional, written by the reviewer, never captured by the request path.
+
+## Make deletion reach everything
+
+Design deletion as a path, tested end to end.
+
+**One identifier,** carried through. If a person is a different key in each system, you
+cannot find them. An internal ID stored in each copy is what lets a deletion request find
+the lot.
+
+**A list of every place,** kept up to date. This is the data map from L1 doing its job.
+
+**A confirmation,** checked: after a deletion, search each place and see whether the
+person is still there. It is surprising how often they are.
+
+**The processor in the loop.** Know how to ask the provider to delete, and whether it can.
+
+Lrnon has account deletion implemented and learner progress held locally first, with
+accounts optional. That means, for a learner who never signs in, there is very little
+server side to delete, which is the minimisation argument from L3 again.
+
+## Try it now (15 minutes)
+
+For one workflow, build the table: each copy of personal data, how long it is kept, and
+why. Fill in the periods honestly, including the ones that turn out to be "forever by
+default".
+
+Then pick one real or imagined person and trace a deletion through every row. Note each
+place where you would not know how.
+
+<Quiz client:visible items={[
+  {
+    q: "Why does deleting a record from the main table not delete a person's data?",
+    options: [
+      "Main tables are read-only",
+      "Logs, backups, exports, caches, analytics and the processor all hold their own copies",
+      "Deletion only takes effect after thirty days"
+    ],
+    answer: 1,
+    explain: "Systems make copies without anyone deciding to, and each has its own life. A deletion has to reach all of them."
+  },
+  {
+    q: "After restoring a backup, what must happen for deletions to hold?",
+    options: [
+      "Nothing, because backups never contain deleted people",
+      "Deletions made since the snapshot are re-applied, so restored data does not bring deleted people back",
+      "The backup must be re-encrypted"
+    ],
+    answer: 1,
+    explain: "This step is the most often missing, and is the difference between a deletion that holds and one that quietly reverses."
+  },
+  {
+    q: "Why is a log of call shapes, with no question text, easier to handle under privacy law?",
+    options: [
+      "Regulators exempt logs from the law",
+      "There is nothing in it to breach, to erase on request, or to repurpose",
+      "It is stored in a different country"
+    ],
+    answer: 1,
+    explain: "Not creating the personal copy removes the retention period, the deletion path, the access controls and the breach-plan entry that it would have needed."
+  }
+]} />
+
+## Recap
+
+Deleting from the main table deletes one copy. Logs, backups, exports, caches, analytics
+and the processor each hold others, so give each a stated retention period, a number and
+not a phrase. Let backups expire on a short schedule and re-apply deletions after any
+restore. The cleanest log never held the personal data in the first place, which is why
+Lrnon's records hold the shape of a call and not the question. Carry one identifier
+through every system, keep the list of places current, and test a deletion end to end.
