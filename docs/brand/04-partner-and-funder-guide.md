@@ -73,8 +73,9 @@ issuing** — the schema, assessments, published rubric and public verification
 all exist, and `certification_open()` refuses until two named reviewers are in
 place and the guardian path has been tested with real families. Sky, the site
 assistant, is **enabled for staff only** as of 4 September 2026, with a spend
-cap enforced in the database rather than a promise. Practitioner and Builder
-tracks are three modules of a planned twelve.
+cap enforced in the database rather than a promise. The Practitioner track is
+complete at eleven modules; the Builder track has one module planned and none
+published.
 
 This paragraph was itself stale for a fortnight, saying certification was "not
 built" and the assistant "switched off" after both had changed. It is the one

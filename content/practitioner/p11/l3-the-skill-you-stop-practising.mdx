@@ -1,0 +1,176 @@
+---
+title: "The skill you stop practising"
+description: "People who stop doing a task by hand lose the ability, and the day the automation fails is the day you need it. Keep the manual path alive on purpose."
+track: practitioner
+module: p11
+order: 3
+minutes: 8
+objectives:
+  - "Explain why a successful automation creates a hidden dependence on skills that are fading"
+  - "Keep a manual capability alive deliberately"
+concepts: ["skill fade", "manual fallback", "complacency", "practice"]
+flashcards:
+  - front: "What is the hidden cost of a reliable automation?"
+    back: "The better it works, the less anyone does the task by hand, so the skill fades just as the automation becomes the only thing standing between you and the task not being done."
+  - front: "When does the lost skill matter most?"
+    back: "When the automation fails, is switched off, or meets a case it cannot handle. That is exactly when the manual path is needed, and exactly when it has been unpractised longest."
+  - front: "How do you keep a manual capability alive?"
+    back: "Run it by hand on a schedule, keep the written procedure current, rotate who does it, and treat every run as a test of the fallback as well as a task."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Here is a quiet way an automation can go wrong: by working.
+
+The more reliably it runs, the less anyone does the task by hand. Weeks become months.
+The people who knew how move on. New starters never learn. Then the day arrives when the
+automation is down, switched off, or faces a case it cannot handle, and the organisation
+discovers that nobody remembers how to do the thing.
+
+## The mechanism is plain
+
+If you stop doing something, you get worse at it. That is not a research finding to be
+cited. It is ordinary experience of any skill left unused.
+
+For a task handed to a machine, three things follow.
+
+**The skill fades.** The people who did it by hand forget details, shortcuts and judgement.
+
+**The knowledge leaves.** People change roles and organisations. What they knew goes with
+them, unless it was written down, and it usually was not.
+
+**New people never acquire it.** Why train someone on a manual process that has not been
+used in a year?
+
+The result is a dependence that did not exist before, and which nobody chose. The
+automation is no longer a convenience, it is the only way the work gets done.
+
+## The failure arrives at the worst time
+
+Automations fail in correlated ways. The provider has an outage. A key expires. A change
+elsewhere breaks an integration. A volume spike hits a limit. Very often the thing that
+breaks the automation is also something that makes the work urgent.
+
+So the manual path is needed under pressure, by people who have not used it, using a
+procedure that may be out of date.
+
+## Attention fades as well as skill
+
+A related effect: watching a system that nearly always works is difficult.
+
+A person assigned to supervise an automation that is right 999 times in 1,000 will, quite
+reasonably, stop checking carefully. The check feels redundant, because it nearly always
+is. The one time it matters, the attention is not there.
+
+This is the same point as approval fatigue in P5·L6, seen from the other side. A control
+that rarely finds anything stops being exercised, and the control remains in the diagram
+while its value drains away.
+
+## Keeping the manual path alive
+
+The remedy is deliberate and slightly uncomfortable: do the task by hand, sometimes, on
+purpose.
+
+**Schedule manual runs.** Once a month or quarter, a person does a real instance by hand
+from the written procedure. Pick a case that matters little.
+
+**Rotate who does it.** So that more than one person has recently done it, and it does not
+depend on one.
+
+**Keep the procedure current.** Every manual run is a test of it. Where it was wrong or
+missing something, fix it then.
+
+**Treat the run as a test of the fallback.** Record how long it took, what was unclear and
+what was missing. If the manual path would take a week to restore and the automation could be
+down for a day, you need to know that.
+
+**Train new people on it.** Briefly, once, so that the knowledge is not confined to those who
+happen to remember.
+
+It costs time, which is exactly why it gets skipped. The cost is what the insurance
+premium looks like.
+
+## Also keep the ability to judge the output
+
+There is a subtler version. Where an automation produces drafts, summaries or
+recommendations, the person reviewing needs to be able to tell when they are wrong.
+
+That judgement comes from having done the work. A reviewer who has never drafted such a
+reply is badly placed to spot a subtly wrong one. If the automation does all the first-draft
+work, you will in time have reviewers who cannot review.
+
+The answer is not to refuse the tool. It is to keep people doing enough of the underlying
+work, and enough of the checking against independent sources (P6·L4), that the judgement
+survives.
+
+## How Lrnon thinks about it
+
+The assistant is built so that the human path is never the casualty. When it declines or
+fails, the learner is told search still works and a person answers feedback within two
+working days.
+
+That promise only holds if someone actually can answer. A fallback to a person is only a
+fallback while the person exists, has time, and knows how. The project's own account is that
+it is run by one person, which means the fallback and the automation depend on the same
+individual.
+
+That is honest and worth saying here. The value of a manual path is not that it exists on
+paper. It is that someone can really run it.
+
+## Try it now (15 minutes)
+
+For one automation you rely on, answer:
+
+1. **When did a person last do this by hand?**
+2. **Who could do it tomorrow if the automation were gone?**
+3. **Where is the written procedure, and when was it last used?**
+4. **How long would the manual version take at current volume?**
+
+Put a manual run in the calendar for next month. Choose a low-stakes case and a person who
+has not done it recently.
+
+<Quiz client:visible items={[
+  {
+    q: "How can an automation go wrong by working well?",
+    options: [
+      "It becomes too fast for people to follow",
+      "People stop doing the task by hand, so the skill and knowledge fade just as the automation becomes the only way the work gets done",
+      "It generates more work than staff can handle"
+    ],
+    answer: 1,
+    explain: "A dependence nobody chose appears. Then the automation fails and the manual path is needed by people who have never used it."
+  },
+  {
+    q: "Why might a reviewer of drafted work eventually be unable to review it?",
+    options: [
+      "Reviewers are paid less than writers",
+      "Judging whether output is subtly wrong comes from having done the work, which the automation now does for them",
+      "Drafts become too long to read"
+    ],
+    answer: 1,
+    explain: "Keep people doing enough of the underlying work, and enough independent checking, that the judgement survives."
+  },
+  {
+    q: "What is the best way to keep a manual capability alive?",
+    options: [
+      "Write a procedure once and file it",
+      "Run it by hand on a schedule, rotate who does it, and treat each run as a test of the fallback",
+      "Hire a specialist for emergencies"
+    ],
+    answer: 1,
+    explain: "Every manual run is a test of the procedure. Where it was wrong or missing something, fix it then."
+  }
+]} />
+
+## Recap
+
+A reliable automation erodes the skill and knowledge needed to do the task without it, and
+new people never acquire them, so a dependence nobody chose appears. Failures arrive in
+correlated ways and make the work urgent, so the manual path is needed under pressure by
+people who have not used it. Attention fades too: a control that rarely finds anything stops
+being exercised. Keep the manual path alive by running it on purpose on a schedule, rotating
+who does it, keeping the procedure current and treating each run as a test. A fallback to a
+person only holds while that person can really run it.

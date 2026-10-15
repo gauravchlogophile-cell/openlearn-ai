@@ -1,0 +1,192 @@
+---
+title: "A decision you can defend"
+description: "End the track with one page that records why you automated something, what you considered, what could go wrong and how it stops. Write it before you build."
+track: practitioner
+module: p11
+order: 8
+minutes: 9
+objectives:
+  - "Write a one-page decision record for an automation that you could defend to the people it affects"
+  - "Use the whole Practitioner track as a checklist, and know when the answer is to do less"
+concepts: ["decision record", "alternatives", "do nothing", "review"]
+flashcards:
+  - front: "What belongs on a decision record?"
+    back: "The purpose, the alternatives considered including doing nothing, what could go wrong, who is accountable, how it stops, what it touches, and when it will be reviewed."
+  - front: "Why include 'do nothing' as an alternative?"
+    back: "Because it is often the right answer and is rarely written down. If you cannot say why doing nothing is worse, you have not yet justified building anything."
+  - front: "What is the right amount of automation?"
+    back: "Often less than is possible. The aim is not to automate as much as you can, but to automate what is worth the keeping, safely, and to leave the rest to people."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The last lesson of the track is a single page. It is the page you write before you build
+anything, and it pulls the earlier modules into one place where you can read them together.
+
+The point of writing it is not paperwork. It is that a decision you cannot write down, you
+probably cannot defend, and a decision you cannot defend should not be made yet.
+
+## The page
+
+One page, written in plain words, with these parts.
+
+### 1. What this is for
+
+One sentence on the problem, in the words of the people who have it (P9·L1). Then one on what
+success looks like, in observable terms (P9·L2).
+
+### 2. What we considered
+
+A short list of alternatives, and **doing nothing must be on it**.
+
+> A document or template (P4·L8).
+> A script with no model in it (P5·L2).
+> A workflow with one model step (P6·L1).
+> Making the process simpler (P11·L2).
+> Doing nothing.
+
+For each, a line on why it was or was not chosen. If "do nothing" is not clearly worse, say
+so honestly. Often the process is tolerable and the build would cost more than it saves.
+
+### 3. What it touches
+
+The data (P8·L1): what personal data, where it goes, which plan the provider is on, how
+long each copy is kept. The accounts and permissions (P5·L3). The people on the receiving
+end (L5).
+
+### 4. What could go wrong
+
+The worst single call of each tool (P6·L3), the cost on a bad day (P7·L1), the quiet
+failures (P5·L5), what injection could do (P3·L4), and what a wrong output costs the person
+affected.
+
+### 5. Who answers for it
+
+One named person, with authority and a backup (L4). And how an affected person reaches a
+human.
+
+### 6. How it stops
+
+The control, who may press it, when it was tested while running, and the manual path behind it
+(L6).
+
+### 7. What it depends on
+
+The vendors, the exit plan and the triggers for using it (P10).
+
+### 8. When we will look again
+
+A date. Six months is a reasonable start. On that date: is it still needed, still correct, still
+used, and still the right size?
+
+## Why do it before building
+
+It changes decisions.
+
+The act of writing "what could go wrong" often reveals that the answer is "something we cannot
+repair", and that moves the task into L1's territory. Writing "doing nothing" occasionally
+shows that the problem was smaller than the solution.
+
+And a page written before the build is honest in a way one written afterwards is not. After
+the work is done, the rationale drifts to justify what was built.
+
+## The checklist behind it
+
+The track can be read as a set of questions, each answered on the page.
+
+> **P1 and P2:** is the prompt, and the grounding, as good as it can be?
+> **P3:** what happens when the text it reads is hostile?
+> **P4:** is the configuration owned, tested and portable?
+> **P5 and P6:** is the chain or the agent bounded, and is the person where the damage is?
+> **P7:** what does it cost, and how would we know it was failing?
+> **P8:** where does the data go and are we entitled to send it?
+> **P9:** will anyone use it, and have we told them the truth about it?
+> **P10:** what happens when a vendor changes?
+> **P11:** should this be automated at all?
+
+You will not need every question for every task. The point is that having asked them, you
+know which ones you skipped.
+
+## The right amount
+
+The ending of the track is the same sentence as the beginning of this module, said more
+carefully.
+
+**The right amount of automation is often less than is possible.** Not because the tools are
+poor, but because every automation is a commitment: to own it, keep it true, watch it, answer
+for it, and to retire it properly. Commitments should be made where the return is worth it.
+
+That judgement, about what to build and what to leave, is the skill this whole track has been
+approaching from different sides. It is also the one that does not age when the tools change.
+
+## A page from Lrnon
+
+The project's own record has several of these pages in embryo. The commit messages explain
+the reasoning behind each change, including what was wrong and what was corrected. The code
+comments record why a thing is the way it is. The guides state what is built, what is
+switched off and why.
+
+What it lacks is the one page for the assistant in the form above, written before it was
+built. If it had existed, several things this track has taken as lessons would have been
+asked in advance: the plan and what it implies for what learners are told, the reviewer who
+would do the reading, the failure the console could not see, and the gate that was enforced
+only in the interface.
+
+That is the use of the page. Not that you get it all right, but that you ask early and cheaply
+what was asked late and expensively here.
+
+## Try it now (45 minutes)
+
+Choose an automation you have built, or one you are considering. Write the page: eight
+headings, a few lines each.
+
+Give it to one person who would be affected and one who would maintain it. Ask each what is
+missing.
+
+If writing it makes you want to change the plan, it has already done its job.
+
+<Quiz client:visible items={[
+  {
+    q: "Why should 'do nothing' appear among the alternatives on a decision record?",
+    options: [
+      "It satisfies a formal requirement",
+      "It is often the right answer and is rarely written down; if you cannot say why it is worse, you have not justified building",
+      "It shows the decision was taken carefully"
+    ],
+    answer: 1,
+    explain: "Sometimes the process is tolerable and the build would cost more than it saves."
+  },
+  {
+    q: "Why write the decision record before building rather than afterwards?",
+    options: [
+      "Records written afterwards are rejected by regulators",
+      "After the work is done the rationale drifts to justify what was built, and writing it first changes decisions",
+      "It is quicker to write before the details are known"
+    ],
+    answer: 1,
+    explain: "Writing what could go wrong often reveals something that cannot be repaired, and writing do-nothing sometimes shows the problem was smaller than the solution."
+  },
+  {
+    q: "What is the right amount of automation?",
+    options: [
+      "As much as the tools make possible",
+      "Often less than is possible, since every automation is a commitment to own, watch, keep true and retire",
+      "Whatever saves the most time"
+    ],
+    answer: 1,
+    explain: "Make commitments where the return is worth it. The judgement about what to build and what to leave is the skill that does not age when the tools change."
+  }
+]} />
+
+## Recap
+
+End with one page written before you build: what it is for, the alternatives including doing
+nothing, what it touches, what could go wrong, who answers for it, how it stops, what it
+depends on, and when you will look again. Writing it first changes decisions, because the
+rationale otherwise drifts to justify what was built. The earlier modules are the questions
+behind it. The right amount of automation is often less than is possible, because every
+automation is a commitment, and judging which ones are worth making is the skill that outlasts
+the tools.

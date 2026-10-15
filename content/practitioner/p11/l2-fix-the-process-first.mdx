@@ -1,0 +1,160 @@
+---
+title: "Fix the process first"
+description: "Automating a muddled process makes it faster and harder to change. Understand, simplify and write it down before a machine does it for you."
+track: practitioner
+module: p11
+order: 2
+minutes: 8
+objectives:
+  - "Recognise a process that is not ready to be automated"
+  - "Simplify and document a process before building anything around it"
+concepts: ["process mapping", "simplification", "exceptions", "documentation"]
+flashcards:
+  - front: "What does automating a bad process do?"
+    back: "It makes the flaws faster and harder to see, and it sets them in code that people are reluctant to change. The cheapest moment to fix a process is before anything is built on it."
+  - front: "How do you test whether a process is ready?"
+    back: "Can a new colleague do it correctly from the written steps alone? If not, either the steps are not written or the process depends on knowledge nobody has recorded."
+  - front: "What do exceptions tell you?"
+    back: "How much of the real process is not in the official one. If a quarter of cases are handled by workaround, the automation will cover the three quarters that were easy."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+A common order of events: someone dislikes a slow, irritating process and decides to
+automate it. A tool is built. The process is now fast, irritating and set in code.
+
+The fault was in the process, and it was never examined, because the automation went
+straight for the symptom.
+
+## Automation preserves what it finds
+
+An automation does what the process does. If the process includes an unnecessary approval, a
+duplicated entry or a step that exists because of a system retired five years ago, the
+automation reproduces all of it, quickly and without complaint.
+
+Worse, it makes the flaws harder to change. A manual process is adjusted by telling people.
+An automated one needs someone to find the code, understand it and alter it, and for most
+teams that someone is busy or has moved on. The fault is now infrastructure.
+
+## Are the steps actually written down?
+
+Test whether you know the process.
+
+> Can a new colleague do this correctly using only the written steps?
+
+If yes, you probably understand it. If not, one of two things is true: the steps are not
+written, or the work depends on knowledge nobody has recorded. Both mean you cannot yet
+tell an automation what to do, because you cannot tell a person.
+
+Writing the steps down is not preparation for the project. It is often most of the benefit.
+Teams who document a process properly frequently find they can cut a third of it before
+touching any technology.
+
+## Walk the real process, not the official one
+
+The version on paper and the version people follow differ. Find the second.
+
+**Shadow the work** (P9·L1). Sit with someone and watch. Notice every step they take that
+the documentation omits: the message to a colleague, the spreadsheet they keep on the side,
+the check they always make because it caught something once.
+
+**Count the exceptions.** Pull a sample of recent cases and see how many were handled in the
+standard way. If most were, the process is stable. If a large share needed a workaround, the
+official process describes the easy cases, and an automation built from it will handle only
+those.
+
+Exceptions carry knowledge. Each is a trace of something the official process did not
+anticipate, and often a clue to what the process is really for.
+
+## Delete before you automate
+
+For each step in the walked process, ask:
+
+1. **Does anyone use its output?** Reports that nobody reads, fields nobody consults.
+2. **Why does it exist?** If nobody knows, find out. It may be a protection (L1) or a leftover.
+3. **Could two steps merge?**
+4. **Could it happen earlier,** when the information is fresh, or later, when it is not needed?
+
+A step you delete costs nothing to run, nothing to maintain and cannot go wrong. It is the
+best automation there is.
+
+Be careful with the second question. Deleting a step whose purpose you do not understand
+is how protections disappear, and it is the reason to ask and to check with someone who has
+been there longest.
+
+## Stabilise it
+
+A process that changes every month is a poor target. Each change requires the automation to
+change with it.
+
+If the process is still settling, such as a new product line or a reorganisation, wait. Run
+it by hand until it stops moving, and write down what you learn. The automation you build
+afterwards will be smaller and correct.
+
+## What this looks like in miniature
+
+Lrnon's own history has a version of this. The readiness gates in the admin console were
+built before the process they were meant to represent was settled. They were a fixed list
+that could not become true, representing a review process that did not yet exist as a habit.
+
+The automation of the *display* ran ahead of the *process*. The mechanism for recording
+reviews, and the gates computed from them, were built later and are only now meaningful, and
+when this was written the process of actually reviewing answers had not started.
+
+It would have been cheaper to settle what the review is, who does it, and how often, before
+building the console around an imagined version.
+
+## Try it now (30 minutes)
+
+Choose a process you want to automate. Write the steps as they are really done, from
+watching someone do it, and count what the official version leaves out.
+
+Then mark every step with one of: keep, delete, merge, unsure. For each "unsure", find the
+person who knows why it exists.
+
+If more than a few steps are "unsure", the process is not ready.
+
+<Quiz client:visible items={[
+  {
+    q: "Why does automating a flawed process make the flaws harder to change?",
+    options: [
+      "Automated processes cannot be edited",
+      "A manual process is adjusted by telling people, while an automated one needs someone to find and alter the code, so the fault becomes infrastructure",
+      "Automation hides the flaws from view"
+    ],
+    answer: 1,
+    explain: "Fixing a process is cheapest before anything is built on it."
+  },
+  {
+    q: "What does a high share of exceptions tell you about a process?",
+    options: [
+      "The staff are poorly trained",
+      "The official process describes the easy cases, and an automation built from it will handle only those",
+      "The process is ready to automate"
+    ],
+    answer: 1,
+    explain: "Each exception is a trace of something the official process did not anticipate, and often a clue to what the process is really for."
+  },
+  {
+    q: "A step in a process exists and nobody knows why. What should you do before deleting it?",
+    options: [
+      "Delete it immediately to save time",
+      "Find out why it exists, since it may be a protection, by asking whoever has been there longest",
+      "Automate it as it stands"
+    ],
+    answer: 1,
+    explain: "Deleting a step whose purpose you do not understand is how protections disappear."
+  }
+]} />
+
+## Recap
+
+Automation preserves the flaws of what it finds and makes them harder to change. Test whether
+a process is ready by asking whether a new colleague could follow it from the written steps.
+Walk the real process, not the official one, and count the exceptions. Delete before you
+automate, taking care over steps whose purpose nobody knows, since they may be protections.
+Wait for a changing process to settle. Lrnon built a display for a review process that did
+not yet exist as a habit.

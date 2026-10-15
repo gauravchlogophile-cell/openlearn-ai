@@ -91,8 +91,9 @@ no technical background, works on a phone, and does not require an account.
   per-IP traffic shaping. That is the stronger fix, and worth stating
   accurately rather than letting the old sentence stand.
 - **One maintainer.** Say "a small team" only if it stops being one person.
-- **Practitioner and Builder are incomplete.** P1 to P10 exist; P11 and B1
-  are planned. The roadmap shows this honestly and marketing copy must match
+- **The Practitioner track is complete; Builder is not.** All eleven Practitioner
+  modules, P1 to P11, exist. The Builder track has one module, B1, planned and
+  none published. The roadmap shows this honestly and marketing copy must match
   it. This sentence had already gone stale once — it still said "P1 exists"
   after P2 shipped, because claims.json was updated and the guide was not. The
   staleness check reads the repo and compares it against claims.json, so it

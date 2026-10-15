@@ -1,0 +1,175 @@
+---
+title: "The people on the receiving end"
+description: "Automation saves you effort and can cost them agency. Say when a machine is involved, offer a human, and take extra care where people cannot walk away."
+track: practitioner
+module: p11
+order: 5
+minutes: 8
+objectives:
+  - "Judge an automation from the position of the person it is done to"
+  - "Disclose it, offer an alternative, and take extra care where people have no choice"
+concepts: ["disclosure", "consent", "alternatives", "vulnerable users"]
+flashcards:
+  - front: "What is the test of fairness for an automation?"
+    back: "Would the person on the receiving end be comfortable knowing exactly what was happening? If not, either change it or tell them, and be ready for their answer."
+  - front: "What should people be told?"
+    back: "That a machine is involved, what it does, and how to reach a person. Disclosure is about their ability to make an informed choice, not about covering yourself."
+  - front: "When does the duty of care rise?"
+    back: "When the people affected cannot easily walk away, such as children, patients, applicants, the poor or the dependent, because the choice to leave is not really theirs."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The usual assessment of an automation is from the operator's side: cost saved, time saved,
+errors reduced. There is a second ledger that is rarely written.
+
+On the other side of every automated interaction is a person. The automation saves you
+effort. What does it cost them?
+
+## Ask from where they stand
+
+Take a customer, a learner, an applicant or a patient. Walk through the interaction as they
+experience it.
+
+**Do they know a machine is involved?** Many people assume a person wrote the message or made
+the call. Finding out later feels like deception, and often is.
+
+**Can they reach a person?** If the only route is another loop through the automation, they
+are stuck.
+
+**Did they have a choice?** Opting in, opting out, or choosing a different route.
+
+**What does it ask of them?** An automated process often moves work to the person: filling in
+forms, repeating information, working out how to get the system to understand them. Efficiency
+for you can be effort for them.
+
+**What happens if it gets them wrong?** And how easy is it to say so?
+
+This is a different question from whether the output is good. It can be good and still be
+done to people in a way they would object to.
+
+## The comfort test
+
+A simple test captures most of it.
+
+> **Would they be comfortable knowing exactly what is happening?**
+
+If a customer read the full description of how their message was handled, would they be
+unbothered, or would they feel misled? If a learner knew what the assistant did with their
+question, would that be acceptable?
+
+If the answer is no, you have two options. Change what you do. Or tell them and see what
+they say. What you should not do is carry on in the hope that they will not find out,
+because they usually do, and the discovery costs far more than the honesty would have.
+
+## Disclosure
+
+Tell people, plainly, at the point where it matters.
+
+> That a machine is involved.
+> What it does, in a sentence.
+> What it was not told, or what it is not for.
+> How to reach a person.
+
+Keep it short and where it will be seen. A statement in terms that nobody reads does not
+count. The test is whether a person in the moment knows what they are dealing with.
+
+This connects to earlier lessons. Explorer E8·L2 covers the ethics of disclosing that you
+used a tool. P8·L1 covered what goes where. P9·L5 covered being honest with your own team.
+This is the same principle extended to the public.
+
+## Offer a human
+
+Wherever the stakes justify it, make a person available.
+
+This does not have to be instant or universal. It has to be real and findable. *"If you would
+rather speak to someone, here is how"* costs little to provide and changes how the whole
+interaction feels.
+
+For some groups it is not optional. Some people cannot use the automated route: no connection,
+no confidence, a disability, a language the system handles badly (Explorer E10). An automation
+without a human alternative excludes them. That is a cost you impose without seeing it.
+
+## When people cannot walk away
+
+The duty of care rises with how little choice the person has.
+
+Someone choosing between two shops can leave. A patient waiting for a decision, an applicant
+for a benefit, a child at school, a person dependent on a service, cannot easily.
+
+For those, the usual defences of consumer choice do not apply. The only protection is what you
+build in: disclosure, a human route, and restraint about what you automate in the first place
+(L1).
+
+Children are the clearest case, and P8·L6 set out how both laws treat them.
+
+## Lrnon's version
+
+The assistant tells people what it is. The footer states that the question is sent to an
+outside AI service and asks people not to type personal details. When it cannot or will not
+answer, it says so and points to search and a person.
+
+It declines to give medical, legal, financial or personal-safety advice, and says that needs
+a person. That is a deliberate refusal to occupy a role where a person on the receiving end
+might be harmed by trusting it.
+
+The platform's rooms for learners are kept shut until a named safeguarding owner and a deputy
+exist, and the design has no private messaging at all. The reasoning is the one in this
+lesson: for children, the project does not rely on their ability to walk away from a problem.
+
+The honest limits: the assistant is open to staff only for now, and what it has been asked
+to do is much smaller than what the lesson describes, so these choices have not been tested
+at scale.
+
+## Try it now (15 minutes)
+
+Pick an automation that reaches other people. Write out the interaction from their side,
+step by step, including what they are told.
+
+Then apply the comfort test. If you hesitated, write what you would change or what you would
+disclose. If you did not, show it to someone outside the project and watch their face.
+
+<Quiz client:visible items={[
+  {
+    q: "What is the simplest test of whether an automation treats people fairly?",
+    options: [
+      "Whether it saves more than it costs",
+      "Whether they would be comfortable knowing exactly what is happening",
+      "Whether it complies with the terms of service"
+    ],
+    answer: 1,
+    explain: "If not, change what you do or tell them and see what they say. Carrying on in the hope they will not find out costs far more than honesty would have."
+  },
+  {
+    q: "Why does the duty of care rise for people who cannot easily walk away?",
+    options: [
+      "They are more likely to complain",
+      "The usual protection of choosing elsewhere does not apply, so the only protection is what you build in",
+      "Regulators inspect those services more often"
+    ],
+    answer: 1,
+    explain: "Patients, applicants, children and the dependent are protected by disclosure, a human route and restraint about what is automated."
+  },
+  {
+    q: "Why can an automation without a human alternative be exclusionary?",
+    options: [
+      "Humans are always faster",
+      "Some people cannot use the automated route, through connection, confidence, disability or language",
+      "Regulators require a human alternative everywhere"
+    ],
+    answer: 1,
+    explain: "It is a cost you impose without seeing it. A real, findable human route need not be instant to change how the interaction feels."
+  }
+]} />
+
+## Recap
+
+Judge an automation from the position of the person it is done to: do they know a machine is
+involved, can they reach a person, did they have a choice, and what does it ask of them.
+Apply the comfort test, whether they would be unbothered knowing exactly what is happening.
+Disclose plainly at the point that matters, offer a real human route, and raise your care
+where people cannot easily walk away. Lrnon's assistant says what it is, declines advice that
+needs a person, and keeps learner spaces closed until named safeguarding people exist.

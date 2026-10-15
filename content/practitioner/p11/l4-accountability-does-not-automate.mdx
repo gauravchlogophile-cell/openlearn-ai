@@ -1,0 +1,177 @@
+---
+title: "Accountability does not automate"
+description: "A system can decide, but it cannot answer for the decision. Name a person who does, give affected people a route to one, and keep a record they can read."
+track: practitioner
+module: p11
+order: 4
+minutes: 8
+objectives:
+  - "Explain why 'the system decided' is not an acceptable answer to the person affected"
+  - "Put a named person, an appeal route and a readable record behind any automated decision"
+concepts: ["accountability", "automated decisions", "appeal", "audit trail"]
+flashcards:
+  - front: "Why is 'the system decided' not an answer?"
+    back: "Someone chose to build, deploy and rely on the system. The person affected is owed an answer from a human who can explain, reconsider and put it right."
+  - front: "What does the GDPR say about solely automated decisions?"
+    back: "Article 22 gives a right not to be subject to a decision based solely on automated processing that has legal or similarly significant effects, subject to exceptions and safeguards. Check the text for your case."
+  - front: "What three things should sit behind an automated decision?"
+    back: "A named person who is accountable, a route for the affected person to reach a human who can reconsider it, and a record of what happened that can be read and explained."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+There is a sentence that should be retired from every organisation that uses automation:
+*"I'm sorry, the system says no."*
+
+It sounds like an explanation. It is an abdication. A system has no standing to be asked a
+question, held responsible or put right. A person does, and the person is the one who
+decided to build it and rely on it.
+
+## What responsibility means here
+
+When something goes wrong because of an automated step, a customer is wrongly refused, a
+learner is misdirected, a record is corrupted, somebody has to be able to do four things:
+
+> **Explain** what happened and why.
+> **Reconsider** it, with a real ability to change the outcome.
+> **Put it right** for the person affected.
+> **Learn** from it, so it happens less.
+
+None of these can be done by a system. So each needs a named person to do it.
+
+## Who is accountable
+
+Decide before launch, in writing:
+
+**One accountable person** for each automation, with a backup. Not a team and not a vendor.
+P4·L5 made this argument for a shared assistant and it holds for any automated process.
+
+**Their authority matches their responsibility.** Someone held accountable who cannot
+change the process, or override its output, is a scapegoat in waiting.
+
+**The users of the tool remain accountable for what they send on.** P9·L4 put it plainly:
+the person who uses the tool and sends the result is answerable for it.
+
+## A route to a human
+
+The person affected needs to be able to reach someone.
+
+**Say clearly how.** In the message that tells them the outcome, not in a policy page. *"If
+you think this is wrong, reply to this message and a person will look at it."*
+
+**Make sure a person looks.** An appeal route that goes back to the same automation is a
+loop and not a route.
+
+**Give it a realistic timescale** and meet it.
+
+**Make reconsidering genuine.** A human who can only confirm the system's output is a
+rubber stamp. They need the information and the authority to disagree.
+
+The more serious the consequence for the person, the more this matters. For decisions
+that affect someone's money, access, education, employment or safety, it is the central
+safeguard.
+
+## The law has a view
+
+Both laws from P8 touch this. The GDPR, in Article 22, gives people a right not to be
+subject to a decision based solely on automated processing that produces legal effects or
+similarly significantly affects them, with exceptions and safeguards, including the ability
+to obtain human intervention and contest the decision. Whether a particular decision falls
+within it, and whether an exception applies, are questions for advice on your facts.
+
+The point for design is simpler than the legal analysis. If your automation makes decisions
+about people that matter to them, assume you owe them a human who can reconsider, and build
+that in from the start. It is the right thing to do, and it is much cheaper than retrofitting.
+
+## A readable record
+
+For a person to explain a decision, the decision has to be reconstructable.
+
+P6·L7 covered the trace of an agent's run: every tool call and result, written by your own
+code, kept long enough. The same applies to any automated decision. Record:
+
+- What input it received.
+- What it did, and which rules or model output it relied on.
+- What it decided.
+- When, and which version of the automation.
+
+Then a person asked to explain can do so from a record and not from memory or guesswork.
+
+Note the privacy interaction. That record may itself contain personal data. P8 covers how
+to hold it with minimal content and a defined retention period. Record the shape of the
+decision where you can, and keep the full detail only where the consequence justifies it.
+
+## Where this shows in Lrnon
+
+Certification is the clearest case. A result on a certificate says something about a
+person. The project's design has the assessment reviewed by named people, who must be two
+different individuals who have agreed on a set of sample answers before it opens. Results use
+bands such as "not yet" and "nearly" and not a bare pass or fail, with a reviewer able to
+upgrade a borderline one on request.
+
+That is accountability built into the structure: the decision has an owner, there is a route
+to reconsideration, and the language is chosen so that "not yet" is a position and not a
+verdict.
+
+The assistant is the reverse case, and is held back for a related reason. It produces
+answers and not decisions about people, and it is still not open to learners until its
+answers have been reviewed by hand, because someone must be able to stand behind what it
+says.
+
+## Try it now (15 minutes)
+
+For an automation that affects people, answer in writing:
+
+1. **Who is accountable,** by name, and can they change the output?
+2. **How does an affected person reach a human,** and what exactly do they see?
+3. **Can that human genuinely overrule it?**
+4. **Could you explain a specific decision from last month using only the record?**
+
+Where any answer is "not really", that is the next piece of work, and it is more urgent
+than any improvement to the automation's accuracy.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is 'the system decided' not an acceptable answer to the person affected?",
+    options: [
+      "Systems are often wrong",
+      "A system cannot be asked, held responsible or put right; someone chose to build and rely on it, and that person owes an answer",
+      "It is forbidden by every privacy law"
+    ],
+    answer: 1,
+    explain: "The affected person is owed an answer from a human who can explain, reconsider and put it right."
+  },
+  {
+    q: "What makes an appeal route genuine?",
+    options: [
+      "It is documented in a policy page",
+      "A person looks at it, with the information and the authority to disagree with the system",
+      "It is handled by the same automation to ensure consistency"
+    ],
+    answer: 1,
+    explain: "An appeal route that goes back to the same automation is a loop, and a human who can only confirm the output is a rubber stamp."
+  },
+  {
+    q: "Why should the record behind an automated decision be written by your own code?",
+    options: [
+      "Models cannot produce logs",
+      "A person asked to explain a decision needs a reconstructable record, not memory or guesswork",
+      "Records are cheaper when automated"
+    ],
+    answer: 1,
+    explain: "Record the input, what it did, what it decided, when and which version. Hold it with minimal content and a defined retention, as P8 explains."
+  }
+]} />
+
+## Recap
+
+"The system decided" is an abdication: someone chose to build and rely on it, and that person
+owes the affected an answer. Behind any automated decision put one named accountable person
+with the authority to change it, a route to a human who can genuinely reconsider, and a
+record written by your own code that lets a person explain what happened. The GDPR's
+Article 22 reflects the same instinct for solely automated decisions with significant effects.
+Lrnon's certification has an owner, bands rather than bare verdicts and a route to upgrade a
+borderline result.

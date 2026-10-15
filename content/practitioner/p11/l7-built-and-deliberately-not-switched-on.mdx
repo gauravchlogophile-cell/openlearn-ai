@@ -1,0 +1,180 @@
+---
+title: "Built, and deliberately not switched on"
+description: "Having built something is not a reason to launch it. Write the conditions for opening it, and enforce them where a single flipped flag cannot bypass them."
+track: practitioner
+module: p11
+order: 7
+minutes: 9
+objectives:
+  - "Write the conditions for launching something and hold a line when it already works"
+  - "Tell a condition enforced by the system from one enforced only by the interface"
+concepts: ["readiness conditions", "launch restraint", "enforcement layer", "conjunctive gate"]
+flashcards:
+  - front: "Why is 'it works' not a reason to switch it on?"
+    back: "Technical success and readiness are different. The conditions around a feature, such as people, review, safeguards and consent, can be missing while the code is flawless."
+  - front: "What is a conjunctive gate?"
+    back: "A condition that requires several things to be true at once, so that no single flag or person can open it alone. Each missing piece keeps it shut."
+  - front: "Where should a launch condition be enforced?"
+    back: "In the layer that cannot be bypassed, usually the database or server. A condition enforced only by a disabled button is advice, not a control."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The hardest moment in a project is not building the thing. It is looking at a finished,
+working feature and deciding not to launch it yet.
+
+The pressure runs the other way. It works. People are waiting. The time has been spent. A
+flag is one line away from "on".
+
+This lesson is about the discipline of restraint, and about making it stick.
+
+## Working is not ready
+
+A feature can be technically complete and not ready.
+
+**The people are not there.** Nobody to moderate, review, answer or be on call.
+
+**The safeguards are untested.** A path for guardians or for reports exists in code and has
+never been used with real families.
+
+**The measurements have not happened.** The quality gates cannot be met, because the review
+that would meet them has not been done.
+
+**The wrong people could be hurt.** And the cost of discovering that by launching is paid by
+them, not by you.
+
+In each case, the code is not the thing that is missing. The missing piece is around it.
+
+## Write the conditions down
+
+The first discipline is to say, in advance, what must be true before it opens.
+
+> Two named reviewers, who have agreed on a stated number of sample answers.
+> A named owner and a deputy.
+> A path tested with real examples.
+> A quality threshold, measured.
+
+Write them while you are calm and before the pressure arrives. A condition written after the
+fact bends to fit what is convenient; one written beforehand does not.
+
+Make them specific enough to be checked. "When we are confident" is not a condition. "When two
+different reviewers have each recorded agreement on twenty sample answers" is.
+
+## Where to enforce them
+
+This is where most projects stop, and it is the important part. A condition that lives in a
+document, or only in an interface, can be bypassed by someone in a hurry.
+
+**Conjunctive, in the database.** Lrnon's certification shows the strong form. The function
+that decides whether certification may open for a module is true only if the issuing switch is
+not off *and* two named reviewers exist *and* they are different people *and* the rubric is
+published *and* a sample agreement has been recorded *and* the guardian path has been tested
+*and* the copy has been corrected. Its own comment says that a boolean flipped in isolation
+opens nothing.
+
+Every one of those must hold. Remove any and it stays shut. That is a gate the person in a
+hurry cannot talk their way through, because the answer is computed from facts.
+
+Learner rooms work the same way. The function that says whether they are open is true only if
+they are switched on *and* a safeguarding owner exists *and* a deputy exists. Without both
+people, nothing opens however the switch is set.
+
+## Where the project falls short
+
+Honesty requires the third case, which is the contrast.
+
+Widening the assistant to everyone is meant to be locked behind four readiness gates and to
+need a second owner's approval. In the console, the button is disabled until the gates are met.
+
+The function behind the button, however, checks only that the caller is the owner. It does not
+look at the gates and does not look for a second approver. The conditions exist in the page
+and nowhere else.
+
+So there are two kinds of lock in the same project. Two are enforced in the database and cannot
+be flipped past. One is enforced by the interface and is a hint. The risk today is small,
+because the only person able to call it is the person who would be the approver. The lesson is
+the general one: a safeguard is only as real as the layer that enforces it.
+
+The straightforward fix is to compute the same conditions in the database function and refuse
+otherwise, as the other two do. It has not been done, and it is a decision for the owner,
+because it changes who can do what.
+
+## Hold the line socially, too
+
+Technical enforcement helps with a person in a hurry. It does not help with a person in a
+meeting.
+
+**Name the owner of the decision.** Someone who can say "not yet" and is accountable for it.
+
+**Publish the conditions.** When the criteria are visible, "not yet" is a statement of fact
+about the criteria and not an opinion of the owner.
+
+**Say what would change the answer.** Not "later" but "when these three things are true".
+
+**Accept the cost.** Holding back has a price: delay, disappointment, something others could
+have used. Say that it is a price and not pretend it is free.
+
+## Restraint is a product decision
+
+None of this is timidity. It is a view about where the risk lies.
+
+For features that touch children, money, reputation or safety, the cost of launching too early
+is paid by other people and is hard to reverse. The cost of waiting is paid by you, in time.
+When the first is larger, waiting is the sound decision, and a project that can make it
+repeatedly is more trustworthy than one that cannot.
+
+It also keeps the useful thing: what was built is not wasted. It is ready for the day the
+conditions are met, with the work already done.
+
+## Try it now (20 minutes)
+
+Pick something you have built and not launched, or something you are tempted to launch. Write
+its opening conditions as a list of checkable facts.
+
+Then mark each: enforced by the system, enforced by the interface, or enforced by nothing but
+intention. Move one from the third or second group to the first.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is 'it works' not a sufficient reason to switch a feature on?",
+    options: [
+      "Working code is rarely stable",
+      "Technical success and readiness differ: people, safeguards, measurements and consent can be missing while the code is flawless",
+      "Launching later always produces a better product"
+    ],
+    answer: 1,
+    explain: "The missing piece is around the feature, not in it. For features touching children, money or safety, the cost of launching early is paid by others."
+  },
+  {
+    q: "What is a conjunctive gate?",
+    options: [
+      "A gate controlled by two administrators",
+      "A condition requiring several things to be true at once, so no single flag can open it alone",
+      "A gate that opens automatically after a deadline"
+    ],
+    answer: 1,
+    explain: "Certification opens only if the switch is on and two different reviewers exist and have agreed and the other conditions hold. Remove any one and it stays shut."
+  },
+  {
+    q: "A launch condition is enforced only by a disabled button in the interface. What is it?",
+    options: [
+      "A strong control, because users cannot click it",
+      "A hint, since the layer behind the button does not check it",
+      "A legal requirement"
+    ],
+    answer: 1,
+    explain: "A safeguard is only as real as the layer that enforces it. Put the condition in the database function or server code that cannot be bypassed."
+  }
+]} />
+
+## Recap
+
+A finished feature is not a ready one: people, safeguards, measurements and consent can all be
+missing while the code works. Write the opening conditions in advance as checkable facts, and
+enforce them in a layer that cannot be bypassed. Lrnon's certification and learner rooms open
+only when several conditions hold at once, in the database, while widening the assistant is
+enforced only by a disabled button, an honest gap the owner has yet to close. Hold the line
+socially too: name an owner, publish the conditions, and accept the cost of waiting.

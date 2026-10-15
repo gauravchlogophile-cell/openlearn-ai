@@ -4,6 +4,12 @@
     {
       "date": "2026-10-15",
       "kind": "New module",
+      "where": "Practitioner · P11",
+      "what": "When Not to Automate published, which completes the Practitioner track at eleven modules. Eight lessons on the decision that comes before everything else in the track. Five kinds of work worth leaving with a person, namely where the judgement, the relationship, the irreversibility, the rarity or the protective friction is the point; fixing a process before building around it, since automation preserves flaws and makes them harder to change; the skill that fades when a reliable automation stops being practised by hand; why accountability does not automate, and what must stand behind an automated decision; the people on the receiving end, and the comfort test of whether they would be unbothered knowing exactly what is happening; switching an automation off, with a stop control tested while running and a manual path that still works; things built and deliberately not switched on, and where such conditions should be enforced; and a one-page decision record written before building. Lrnon is the worked example throughout, including a candid contrast between two launch conditions enforced in the database and one, widening the assistant, enforced only in the console. The Builder track has one module planned and none published."
+    },
+    {
+      "date": "2026-10-15",
+      "kind": "New module",
       "where": "Practitioner · P10",
       "what": "Vendor Risk and Portability published — eight lessons on what happens over a long enough time when the companies a workflow depends on stop behaving as assumed. Drawing the dependency map in layers, including the people, and asking what happens if each is gone for a day, a week and for good; six ways a vendor relationship changes against you without the vendor leaving, and what a free tier does and does not promise; lock-in as a gradient of six kinds, each estimated in person-days; an exit plan and why only a rehearsal on a small slice makes it more than a hope; how thin an abstraction layer should be and what it cannot hide; open-weight models as an exit, with what they remove and what they add; the clauses in a vendor agreement that decide whether you can leave or recover, with a note that this is general information and not legal advice; and concentration of risk, exit triggers and an annual review. Lrnon is the worked example, including a plain list of what the project does not yet have, among them a rehearsed exit. Practitioner is now ten of its eleven modules."
     },

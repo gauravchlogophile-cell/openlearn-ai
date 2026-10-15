@@ -1,0 +1,316 @@
+{
+  "module": "p11",
+  "title": "When Not to Automate — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "p11-01",
+      "q": "What is the first question to ask of a task you are thinking of automating?",
+      "options": [
+        "How much time would it save?",
+        "What is this work for, beyond its output?",
+        "Which tool is cheapest?"
+      ],
+      "answer": 1,
+      "explain": "If the answer is only the output, automate with care. If it includes what the work does to the people involved, slow down."
+    },
+    {
+      "id": "p11-02",
+      "q": "What is protective friction?",
+      "options": [
+        "A slow tool that frustrates users",
+        "A deliberate slowness or extra step that exists to prevent harm, such as a second approval or a waiting period",
+        "The cost of switching vendors"
+      ],
+      "answer": 1,
+      "explain": "Removing it for efficiency removes the protection too. The giveaway is that people complain and nobody remembers why it was there. Find out first."
+    },
+    {
+      "id": "p11-03",
+      "q": "Why is a task done three times a year a poor candidate for automation?",
+      "options": [
+        "Rare tasks are easier to do by hand",
+        "Automation pays back through repetition, and one that runs rarely will have rotted between runs",
+        "Rare tasks are not important"
+      ],
+      "answer": 1,
+      "explain": "The cost of building, testing and keeping it exceeds the saving, and the manual version stays fresh by being used."
+    },
+    {
+      "id": "p11-04",
+      "q": "Why should a decision about whether to hire someone not be made by a tool alone?",
+      "options": [
+        "Tools are not allowed to process applications",
+        "The decision must be one a person can make, justify and own, and if the tool decides, the thing that gave it legitimacy has gone",
+        "Tools are slower than people at reading applications"
+      ],
+      "answer": 1,
+      "explain": "A tool can inform the decision. Where why did you decide that must have a human answer, the human has to decide."
+    },
+    {
+      "id": "p11-05",
+      "q": "Why does automating a flawed process make the flaws harder to change?",
+      "options": [
+        "Automated processes cannot be edited",
+        "A manual process is adjusted by telling people, while an automated one needs someone to find and alter the code, so the fault becomes infrastructure",
+        "Automation hides the flaws from view"
+      ],
+      "answer": 1,
+      "explain": "Fixing a process is cheapest before anything is built on it."
+    },
+    {
+      "id": "p11-06",
+      "q": "How do you test whether a process is ready to be automated?",
+      "options": [
+        "Check whether a vendor offers a template for it",
+        "Ask whether a new colleague could do it correctly from the written steps alone",
+        "Count how many people currently do it"
+      ],
+      "answer": 1,
+      "explain": "If not, either the steps are unwritten or the work depends on knowledge nobody has recorded, and you cannot yet tell an automation what to do."
+    },
+    {
+      "id": "p11-07",
+      "q": "What does a high share of exceptions tell you about a process?",
+      "options": [
+        "The staff are poorly trained",
+        "The official process describes the easy cases, and an automation built from it will handle only those",
+        "The process is ready to automate"
+      ],
+      "answer": 1,
+      "explain": "Each exception is a trace of something the official process did not anticipate, and often a clue to what the process is really for."
+    },
+    {
+      "id": "p11-08",
+      "q": "A step in a process exists and nobody knows why. What should you do before deleting it?",
+      "options": [
+        "Delete it immediately to save time",
+        "Find out why it exists, since it may be a protection, by asking whoever has been there longest",
+        "Automate it as it stands"
+      ],
+      "answer": 1,
+      "explain": "Deleting a step whose purpose you do not understand is how protections disappear."
+    },
+    {
+      "id": "p11-09",
+      "q": "How can an automation go wrong by working well?",
+      "options": [
+        "It becomes too fast for people to follow",
+        "People stop doing the task by hand, so the skill and knowledge fade just as the automation becomes the only way the work gets done",
+        "It generates more work than staff can handle"
+      ],
+      "answer": 1,
+      "explain": "A dependence nobody chose appears. Then the automation fails and the manual path is needed by people who have never used it."
+    },
+    {
+      "id": "p11-10",
+      "q": "Why might a reviewer of drafted work eventually be unable to review it?",
+      "options": [
+        "Reviewers are paid less than writers",
+        "Judging whether output is subtly wrong comes from having done the work, which the automation now does for them",
+        "Drafts become too long to read"
+      ],
+      "answer": 1,
+      "explain": "Keep people doing enough of the underlying work, and enough independent checking, that the judgement survives."
+    },
+    {
+      "id": "p11-11",
+      "q": "What is the best way to keep a manual capability alive?",
+      "options": [
+        "Write a procedure once and file it",
+        "Run it by hand on a schedule, rotate who does it, and treat each run as a test of the fallback",
+        "Hire a specialist for emergencies"
+      ],
+      "answer": 1,
+      "explain": "Every manual run is a test of the procedure. Where it was wrong or missing something, fix it then."
+    },
+    {
+      "id": "p11-12",
+      "q": "Why is 'the system decided' not an acceptable answer to the person affected?",
+      "options": [
+        "Systems are often wrong",
+        "A system cannot be asked, held responsible or put right; someone chose to build and rely on it, and that person owes an answer",
+        "It is forbidden by every privacy law"
+      ],
+      "answer": 1,
+      "explain": "The affected person is owed an answer from a human who can explain, reconsider and put it right."
+    },
+    {
+      "id": "p11-13",
+      "q": "What makes an appeal route against an automated decision genuine?",
+      "options": [
+        "It is documented in a policy page",
+        "A person looks at it, with the information and the authority to disagree with the system",
+        "It is handled by the same automation to ensure consistency"
+      ],
+      "answer": 1,
+      "explain": "An appeal route that goes back to the same automation is a loop, and a human who can only confirm the output is a rubber stamp."
+    },
+    {
+      "id": "p11-14",
+      "q": "Why should the record behind an automated decision be written by your own code?",
+      "options": [
+        "Models cannot produce logs",
+        "A person asked to explain a decision needs a reconstructable record, not memory or guesswork",
+        "Records are cheaper when automated"
+      ],
+      "answer": 1,
+      "explain": "Record the input, what it did, what it decided, when and which version. Hold it with minimal content and a defined retention, as P8 explains."
+    },
+    {
+      "id": "p11-15",
+      "q": "What is the simplest test of whether an automation treats the people it affects fairly?",
+      "options": [
+        "Whether it saves more than it costs",
+        "Whether they would be comfortable knowing exactly what is happening",
+        "Whether it complies with the vendor's terms"
+      ],
+      "answer": 1,
+      "explain": "If not, change what you do or tell them and see what they say. Carrying on in the hope they will not find out costs far more than honesty would have."
+    },
+    {
+      "id": "p11-16",
+      "q": "Why does the duty of care rise for people who cannot easily walk away?",
+      "options": [
+        "They are more likely to complain",
+        "The usual protection of choosing elsewhere does not apply, so the only protection is what you build in",
+        "Regulators inspect those services more often"
+      ],
+      "answer": 1,
+      "explain": "Patients, applicants, children and the dependent are protected by disclosure, a human route and restraint about what is automated."
+    },
+    {
+      "id": "p11-17",
+      "q": "Why can an automation without a human alternative be exclusionary?",
+      "options": [
+        "Humans are always faster",
+        "Some people cannot use the automated route, through connection, confidence, disability or language",
+        "Regulators require a human alternative everywhere"
+      ],
+      "answer": 1,
+      "explain": "It is a cost you impose without seeing it. A real, findable human route need not be instant to change how the interaction feels."
+    },
+    {
+      "id": "p11-18",
+      "q": "Why is a stop control tested only against an already-broken system worthless?",
+      "options": [
+        "Broken systems ignore stop commands",
+        "Stopped and already broken look identical, so the test reports success either way",
+        "The control needs live traffic to initialise"
+      ],
+      "answer": 1,
+      "explain": "The observation that means something is: running, press it, confirm it stops."
+    },
+    {
+      "id": "p11-19",
+      "q": "Why must a stop control come with a manual path?",
+      "options": [
+        "Regulators require one",
+        "Stopping an automation without a way to do the work just turns a malfunction into an outage",
+        "Manual paths are cheaper to run"
+      ],
+      "answer": 1,
+      "explain": "Write the procedure, have a person who can run it, and tell affected people what to do instead."
+    },
+    {
+      "id": "p11-20",
+      "q": "Why is disabling a workflow without revoking its connection an incomplete retirement?",
+      "options": [
+        "Disabled workflows are still billed",
+        "The credential stays live with no owner or purpose, a standing grant waiting to be misused",
+        "The platform re-enables it after a month"
+      ],
+      "answer": 1,
+      "explain": "Revoke at the service itself, delete or archive the credentials, update the inventory and tell the people who relied on it."
+    },
+    {
+      "id": "p11-21",
+      "q": "Why is 'it works' not a sufficient reason to switch a feature on?",
+      "options": [
+        "Working code is rarely stable",
+        "Technical success and readiness differ: people, safeguards, measurements and consent can be missing while the code is flawless",
+        "Launching later always produces a better product"
+      ],
+      "answer": 1,
+      "explain": "The missing piece is around the feature, not in it. For features touching children, money or safety, the cost of launching early is paid by others."
+    },
+    {
+      "id": "p11-22",
+      "q": "What is a conjunctive gate?",
+      "options": [
+        "A gate controlled by two administrators",
+        "A condition requiring several things to be true at once, so no single flag can open it alone",
+        "A gate that opens automatically after a deadline"
+      ],
+      "answer": 1,
+      "explain": "Certification opens only if the switch is on and two different reviewers exist and have agreed and the other conditions hold. Remove any one and it stays shut."
+    },
+    {
+      "id": "p11-23",
+      "q": "A launch condition is enforced only by a disabled button in the interface. What is it?",
+      "options": [
+        "A strong control, because users cannot click it",
+        "A hint, since the layer behind the button does not check it",
+        "A legal requirement"
+      ],
+      "answer": 1,
+      "explain": "A safeguard is only as real as the layer that enforces it. Put the condition in the database function or server code that cannot be bypassed."
+    },
+    {
+      "id": "p11-24",
+      "q": "Why write the conditions for opening a feature before the pressure to launch arrives?",
+      "options": [
+        "Regulators require written conditions",
+        "A condition written after the fact bends to fit what is convenient, while one written beforehand does not",
+        "It speeds up the launch"
+      ],
+      "answer": 1,
+      "explain": "Make each condition specific enough to check. When confident is not a condition; two reviewers have each recorded agreement on twenty sample answers is."
+    },
+    {
+      "id": "p11-25",
+      "q": "Why should 'do nothing' appear among the alternatives on a decision record?",
+      "options": [
+        "It satisfies a formal requirement",
+        "It is often the right answer and is rarely written down; if you cannot say why it is worse, you have not justified building",
+        "It shows the decision was taken carefully"
+      ],
+      "answer": 1,
+      "explain": "Sometimes the process is tolerable and the build would cost more than it saves."
+    },
+    {
+      "id": "p11-26",
+      "q": "Why write the decision record before building rather than afterwards?",
+      "options": [
+        "Records written afterwards are rejected by regulators",
+        "After the work is done the rationale drifts to justify what was built, and writing it first changes decisions",
+        "It is quicker to write before the details are known"
+      ],
+      "answer": 1,
+      "explain": "Writing what could go wrong often reveals something that cannot be repaired, and writing do-nothing sometimes shows the problem was smaller than the solution."
+    },
+    {
+      "id": "p11-27",
+      "q": "What is the right amount of automation?",
+      "options": [
+        "As much as the tools make possible",
+        "Often less than is possible, since every automation is a commitment to own, watch, keep true and retire",
+        "Whatever saves the most time"
+      ],
+      "answer": 1,
+      "explain": "Make commitments where the return is worth it. The judgement about what to build and what to leave is the skill that does not age when the tools change."
+    },
+    {
+      "id": "p11-28",
+      "q": "In what position is a person who is on the receiving end of an automated decision and cannot reach a human?",
+      "options": [
+        "Protected by the system's accuracy",
+        "Stuck, since an appeal route that loops back to the same automation is not a route",
+        "Able to demand a refund"
+      ],
+      "answer": 1,
+      "explain": "Give affected people a clear, findable way to reach a person who can genuinely reconsider, and a realistic timescale that you meet."
+    }
+  ]
+}

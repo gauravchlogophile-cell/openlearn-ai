@@ -1,0 +1,175 @@
+---
+title: "Switching it off"
+description: "Plan how an automation stops before you start it: one control, a manual path that still works, and a clean retirement when its time has passed."
+track: practitioner
+module: p11
+order: 6
+minutes: 9
+objectives:
+  - "Design a stop control that works while the system is running, and test it there"
+  - "Decommission an automation cleanly, leaving a manual path that works"
+concepts: ["kill switch", "decommissioning", "manual fallback", "degradation"]
+flashcards:
+  - front: "What makes a stop control real?"
+    back: "One action, no deployment, operable by whoever is present, and tested while the system is running. A switch tested only on a broken system has confirmed nothing."
+  - front: "What must exist after the switch is pressed?"
+    back: "A manual path that works. Stopping the automation without a way to do the work just moves the problem. Say what people should do instead."
+  - front: "How do you retire an automation cleanly?"
+    back: "Disable the trigger, revoke its connections at the service, remove it from the inventory with a note of why, delete or archive its credentials, and tell the people who relied on it."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+This module's tagline promises "how to switch things off". Earlier modules covered the
+pieces; this lesson puts them in order, because stopping is a design problem as much as
+starting is.
+
+Every automation will be turned off one day: in an emergency, because it is no longer
+needed, or because something better replaces it. Whether that day is calm or frantic depends
+on what you built beforehand.
+
+## Two kinds of stopping
+
+**Stopping in an emergency.** Something is going wrong right now. The need is speed and
+certainty: make it stop, immediately, without waiting for anyone.
+
+**Retiring on purpose.** The automation has done its job. The need is thoroughness: leave
+nothing running, nothing connected and nothing forgotten.
+
+They are different tasks and need different preparation.
+
+## The emergency stop
+
+P3·L8 gave four properties, P5·L7 tested them, and P6·L6 applied them to agents. Together:
+
+> **One control.** Not "revoke the key, redeploy and clear the cache".
+>
+> **No deployment.** A build in the path means minutes you do not have.
+>
+> **Operable by whoever is there,** not only the builder.
+>
+> **Tested while the system is working.**
+
+The fourth is the one that gets skipped. A switch tried only against a system that was
+already broken will report success either way, because "stopped" and "already broken" look
+identical. The observation that means something is: running, press it, confirm it stops.
+
+Lrnon's own switch for the assistant is a worked example, with the honest history. For a time
+it recorded a log row and changed nothing, while the console said the assistant was off. It
+was then rebuilt so that the stricter of the deployed setting and the recorded stage applies.
+Until 5 September every press had been made while the assistant was already failing for other
+reasons. It was tested properly that day, with the assistant answering, and the log shows the
+stop and the restore three minutes apart.
+
+## Stopping must not strand the work
+
+Pressing the switch is the easy part. The question that matters is what happens next.
+
+If the automation was doing a job, that job still needs doing. Stopping it without a way to
+carry on turns a malfunction into an outage.
+
+So the stop control comes with a **manual path**: a written procedure, a person who can run
+it, and a message to the people affected that says what to do instead.
+
+Lrnon's assistant shows the shape. When it is off, whether by the switch, a cap or a failure,
+a learner is told it is off, that search still works, and that a person answers feedback
+within two working days. L3 made the point that this only counts while the person can really
+answer.
+
+Plan the **degraded mode** deliberately. Between fully on and fully off there are often useful
+middle states: read-only, staff-only, a reduced feature set, drafts without sending. The
+assistant's rollout has exactly this: off, staff, a slice of learners, everyone. Stepping down
+a rung is often better than switching everything off.
+
+## Who may press it
+
+The asymmetry from P5·L6 applies: make the dangerous direction hard and the safe direction
+instant.
+
+Widening an automation should need care and sign-off. Stopping it should need nobody's
+permission, because a stop that requires approval is not a stop. Lrnon's console says this in
+as many words: one click, no approval, for turning the assistant off.
+
+Be honest about the corollary. Anyone who can stop the automation can deny the service, so
+decide who has the control, and keep a record of who pressed it and when. The rollout log
+here records every change with the person responsible.
+
+## Retiring one properly
+
+When an automation has finished its life, the tidy-up is more than switching it off.
+
+1. **Disable the trigger,** so that nothing starts it.
+2. **Revoke its connections at the service itself,** not only in the platform. A disabled
+   workflow with a live credential is a standing grant waiting to be misused.
+3. **Remove it from the inventory** with a note of when and why (P5·L8).
+4. **Delete or archive its credentials and its data** according to your retention rules (P8·L5).
+5. **Tell the people who relied on it,** and say what replaces it.
+6. **Keep what you learned:** the problem, the test cases, what worked and what did not.
+
+Do not leave it disabled but present. A dormant automation with access is a risk that tends
+to be rediscovered at the worst moment.
+
+## Keep the manual path warm
+
+L3 argued that skill fades. It matters most at this point, because the moment you press the
+switch is the moment the manual path becomes essential.
+
+A stop control with no usable manual path behind it is like a fire door that opens onto a wall.
+Rehearse the fallback as well as the switch, together, at least once a year.
+
+## Try it now (20 minutes)
+
+For one automation you rely on, write down:
+
+1. **The stop control,** where it is, and who may press it.
+2. **When you last pressed it while the system was running.** If never, plan that test.
+3. **What people do while it is off,** in a sentence they could follow.
+4. **The retirement checklist** from above, with the services it would need to be revoked from.
+
+Then run the stop test, with the people who would be affected told in advance. Time it.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is a stop control tested only against a broken system worthless?",
+    options: [
+      "Broken systems ignore stop commands",
+      "Stopped and already broken look identical, so the test reports success either way",
+      "The control needs live traffic to initialise"
+    ],
+    answer: 1,
+    explain: "The observation that means something is: running, press it, confirm it stops."
+  },
+  {
+    q: "Why must a stop control come with a manual path?",
+    options: [
+      "Regulators require one",
+      "Stopping an automation without a way to do the work just turns a malfunction into an outage",
+      "Manual paths are cheaper to run"
+    ],
+    answer: 1,
+    explain: "Write the procedure, have a person who can run it, and tell affected people what to do instead."
+  },
+  {
+    q: "Why is disabling a workflow without revoking its connection an incomplete retirement?",
+    options: [
+      "Disabled workflows are still billed",
+      "The credential stays live with no owner or purpose, a standing grant waiting to be misused",
+      "The platform re-enables it after a month"
+    ],
+    answer: 1,
+    explain: "Revoke at the service itself, delete or archive the credentials, update the inventory and tell the people who relied on it."
+  }
+]} />
+
+## Recap
+
+Plan to stop an automation before you start it. For an emergency, one control that needs no
+deployment, can be pressed by whoever is present, and has been tested while the system was
+running. Pair it with a manual path and a message to affected people, and design useful
+middle states between on and off. Let stopping be instant and widening be careful. Retire on
+purpose by disabling the trigger, revoking connections at the service, updating the inventory,
+removing credentials and telling those who relied on it, and rehearse the fallback with the
+switch.

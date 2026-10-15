@@ -1,0 +1,167 @@
+---
+title: "What is worth leaving alone"
+description: "Some work should stay with a person, because the judgement, the relationship or the friction is the point. Learn to recognise it before you automate it."
+track: practitioner
+module: p11
+order: 1
+minutes: 8
+objectives:
+  - "Recognise the kinds of work where automation removes the thing that mattered"
+  - "Apply a short test before automating anything"
+concepts: ["automation fit", "judgement", "relationship", "protective friction"]
+flashcards:
+  - front: "When is the manual step the point?"
+    back: "When the judgement, the relationship or the pause is what gives the work its value. Automating it keeps the output and loses the thing the output was for."
+  - front: "What is protective friction?"
+    back: "A slowness or extra step that exists to prevent harm, such as a second approval or a waiting period. Removing it for efficiency removes the protection with it."
+  - front: "What is the first question to ask of a candidate task?"
+    back: "What is this work for? If the answer is the output alone, automate with care. If it is also what the work does to the people involved, think harder."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Ten modules have been about doing this well. This one is about when to decline.
+
+That is not an afterthought. The most valuable skill in the whole track may be the ability to
+look at something that could be automated and say, with reasons, that it should not be.
+
+## The question underneath
+
+Every automation rests on an assumption that the work is its output: a report, a reply, a
+record, a decision. Produce the output faster or cheaper and you have gained.
+
+For a lot of work that is true. For some it is not, because the output was never the whole
+point.
+
+> **What is this work for?**
+
+If the answer is *"to produce the thing"*, automation is a reasonable candidate and the
+earlier modules apply. If the answer includes *what the work does to the people involved*,
+slow down.
+
+## Five kinds of work to leave alone
+
+### Where the judgement is the point
+
+A decision that a person must be able to make, justify and own. Hiring, discipline,
+diagnosis, anything where "why did you decide that?" has to have a human answer. A tool can
+inform it. If the tool decides, the thing that gave the decision its legitimacy has gone.
+
+### Where the relationship is the point
+
+A condolence message, an apology, a check-in with a struggling colleague, a thank-you. The
+words are the smallest part. The fact that a person chose to spend attention is the content.
+A flawless automated version carries less than a clumsy real one, and recipients usually
+know.
+
+### Where the cost of a mistake cannot be undone
+
+P3·L6 and P5·L6 covered this: irreversible actions get a person. This is the stronger
+form. Where an error is severe and cannot be repaired, such as a safeguarding decision, a
+medical judgement or a legal filing, the question is not how to make the automation
+reliable enough. It is whether anything short of a person is acceptable.
+
+### Where it happens rarely
+
+Automation pays back through repetition. A task done three times a year costs more to
+build, test and keep than it saves, and is done so rarely that the automation will have
+rotted between runs (P5·L8). The manual version stays fresh by being used.
+
+### Where the friction is protective
+
+Some slowness is deliberate. A second signature, a waiting period before a transfer, a
+review before publishing, a pause before a deletion. Remove it for efficiency and you
+remove the protection along with it.
+
+The giveaway is that people complain about it and nobody can quite remember why it was
+there. That is the moment to find out, before removing it.
+
+## A short test
+
+Before building, ask five questions about the task.
+
+1. **What is it for,** beyond its output?
+2. **If it is wrong, what is the worst outcome,** and can it be repaired?
+3. **Who is on the receiving end,** and would they mind if they knew?
+4. **How often does it happen,** and will the automation outlive its usefulness?
+5. **Is anything slow here on purpose?**
+
+A "yes, and it matters" to the first, third or fifth, or a "severe and unrepairable" to the
+second, is a reason to stop and think. It is not always a reason to refuse, and it is
+always a reason to decide deliberately.
+
+## Lrnon's choices
+
+The project makes this concrete in several places.
+
+Certification is **reviewed by named people**. The assessment is built, with a rubric and a
+verification page, and it will not open until two different reviewers have agreed on
+twenty sample answers. A mark on a certificate is a judgement about a person, and the
+project has decided a person should make it.
+
+Safeguarding is **a person's job**. Learner-to-learner spaces stay closed until a named
+safeguarding owner and a deputy exist. The design explicitly forbids private messaging at
+all. An urgent report hides the content at once, which automates only the safe direction
+and leaves the response itself to people.
+
+The assistant **declines** to give medical, legal, financial or personal-safety advice and
+says it needs a person. That is written into its rules, and the attack corpus has a case for
+it, a medical question, which needs a person to judge whether the refusal was the right kind
+and had not yet been judged when this was written.
+
+In each case the work could have been automated further. The reason it was not is not
+technical. It is that the output was not what the work was for.
+
+## Try it now (15 minutes)
+
+List five tasks you or your team have considered automating. Put each through the five
+questions.
+
+For any task where an answer made you hesitate, write one sentence on what you would lose,
+and who would lose it. That sentence is worth keeping, because it is the argument you will
+need when someone says it would be so much faster.
+
+<Quiz client:visible items={[
+  {
+    q: "What is the first question to ask of a task you are thinking of automating?",
+    options: [
+      "How much time would it save?",
+      "What is this work for, beyond its output?",
+      "Which tool is cheapest?"
+    ],
+    answer: 1,
+    explain: "If the answer is only the output, automate with care. If it includes what the work does to the people involved, slow down."
+  },
+  {
+    q: "What is protective friction?",
+    options: [
+      "A slow tool that frustrates users",
+      "A deliberate slowness or extra step that exists to prevent harm, such as a second approval or a waiting period",
+      "The cost of switching vendors"
+    ],
+    answer: 1,
+    explain: "Removing it for efficiency removes the protection too. The giveaway is that people complain and nobody remembers why it was there. Find out first."
+  },
+  {
+    q: "Why is a task done three times a year a poor candidate for automation?",
+    options: [
+      "Rare tasks are easier to do by hand",
+      "Automation pays back through repetition, and one that runs rarely will have rotted between runs",
+      "Rare tasks are not important"
+    ],
+    answer: 1,
+    explain: "The cost of building, testing and keeping it exceeds the saving, and the manual version stays fresh by being used."
+  }
+]} />
+
+## Recap
+
+Automation assumes that the work is its output. Some work is not: where the judgement is
+the point, where the relationship is the point, where a mistake cannot be undone, where it
+happens too rarely to repay the keeping, and where the friction is protective. Ask what the
+work is for beyond its output, what the worst outcome is, who is on the receiving end, how
+often it happens and whether anything is slow on purpose. Lrnon keeps certification
+decisions, safeguarding and medical advice with people for exactly these reasons.
