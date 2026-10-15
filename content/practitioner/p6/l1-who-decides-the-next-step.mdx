@@ -1,0 +1,178 @@
+---
+title: "Who decides the next step"
+description: "A workflow follows a path you fixed. An agent chooses its own. The difference is one question, and most things sold as agents should be workflows."
+track: practitioner
+module: p6
+order: 1
+minutes: 8
+objectives:
+  - "Tell a workflow from an agent by asking who decides the next step"
+  - "Place a given system on the spectrum between them and say what that placement costs"
+concepts: ["workflow", "agent", "autonomy", "control flow"]
+flashcards:
+  - front: "What is the one question that separates a workflow from an agent?"
+    back: "Who decides the next step. In a workflow you did, in advance. In an agent the model does, at run time, from what it has seen so far."
+  - front: "What does handing the choice to a model buy?"
+    back: "Flexibility on tasks you could not map in advance. What it costs is predictability, because the path is no longer something you can read before it runs."
+  - front: "Why start with a workflow even if you want an agent?"
+    back: "A workflow shows you which single step genuinely needs a choice. Promote that step only, and the rest stays exact, cheap and testable."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+P5 built chains: a trigger, some steps, an action. Every step in them was placed
+by a person, in advance, in a fixed order. The model did a job at one position
+and the path was never in doubt.
+
+This module is about what happens when you remove that last certainty. You hand
+the model not just a task but the **choice of what to do next**.
+
+## One question
+
+> **Who decides the next step?**
+
+If you did, when you drew the chain, it is a **workflow**. The order is fixed and
+you can read it before anything runs.
+
+If the model does, at run time, from whatever it has seen so far, it is an
+**agent**. The order is whatever it turns out to be.
+
+Everything else people say about agents is a consequence of that. Autonomy,
+flexibility, the occasional startling failure: all follow from the path having
+moved out of your hands and into a system that decides it fresh each time.
+
+## It is a spectrum, not a switch
+
+Real systems sit between the two, and it helps to see where.
+
+> **Fixed path.** Every step and its order are yours. The model fills in content
+> at set positions. A support triage chain.
+>
+> **Fixed path with a branch the model picks.** You wrote three routes; the model
+> chooses which one applies. The routes are still yours.
+>
+> **A loop with a short list of tools.** The model decides what to call next and
+> when to stop, but the list of things it can call is small and yours.
+>
+> **Open-ended.** The model plans, picks from many tools, and can revise its
+> plan. You describe a goal.
+
+Each step right gives up some predictability for some flexibility. Neither is
+better. They suit different jobs, and the skill is in choosing the leftmost
+position that does the work.
+
+## What the flexibility actually buys
+
+It buys the ability to handle tasks you could not map in advance.
+
+*"Find out why this customer's invoice is wrong"* might need a lookup, then a
+second lookup depending on the first, then a check against a policy, then a
+different path entirely if the account is old. You cannot draw that chain
+beforehand because the shape depends on what turns up.
+
+That is a real use. It is narrower than the marketing suggests.
+
+## What it costs
+
+**You cannot read the path before it runs.** A workflow can be reviewed, tested
+case by case, and reasoned about. An agent's route is discovered, so the same
+input may produce different routes on different days.
+
+**Failures are harder to place.** In a chain you know which step broke. In an
+agent the fault may be a choice twelve turns earlier that looked reasonable at
+the time.
+
+**Cost and time are not bounded by design.** A chain runs its steps and stops. A
+loop runs until the model decides it has finished, which is a different
+guarantee. L2 and L6 are about that.
+
+**The capability list becomes the whole risk.** What an agent can do is the set
+of tools you gave it, and it will choose among them using text it has read. P3
+applies directly, and L3 returns to it.
+
+## Most should be workflows
+
+This is the claim worth taking away, and it is a practical one rather than a
+fashionable one.
+
+When people describe a task as needing an agent, a closer look often reveals a
+fixed path with one step that really does need a choice. A refund request:
+validate the order, look up the policy, decide whether it qualifies, issue it or
+decline. Four fixed steps and one judgement.
+
+Build that as a workflow with a model in the third step. You keep the exactness
+of the other three, and you have confined the unpredictability to the one place
+it belongs.
+
+Promote a step to a loop only when you can state why a fixed branch cannot do
+it. If you cannot state it, it is a workflow.
+
+## Lrnon's own answer
+
+Sky is deliberately **not** an agent.
+
+For each question it does the same things in the same order: score the lesson
+passages by rule, take the best few, make **one** call to the model, check that
+the answer cites a passage, and record the cost. There is no loop. The model is
+never asked what to do next, and has no tools to choose from.
+
+That was a choice, and the reasoning is stated in L8. For now the point is the
+shape: a route you can read from top to bottom, with a single place where the
+model is trusted to use judgement.
+
+## Try it now (10 minutes)
+
+Take something you described to yourself as "an agent", or that you have seen
+sold as one. Write the path as you would draw it.
+
+Then ask: **at which points does the next step genuinely depend on something I
+cannot know in advance?** Count them.
+
+If the answer is zero, it is a workflow with a mistaken name. If it is one or
+two, those positions are the only places a model should be choosing.
+
+<Quiz client:visible items={[
+  {
+    q: "What separates a workflow from an agent?",
+    options: [
+      "Whether a language model is involved at all",
+      "Who decides the next step: you in advance, or the model at run time",
+      "How many tools are connected to the system"
+    ],
+    answer: 1,
+    explain: "A workflow's path is fixed and readable before it runs. In an agent the model decides it from what it has seen so far, so the route is discovered."
+  },
+  {
+    q: "A refund process has four fixed steps and one judgement call. How should it be built?",
+    options: [
+      "As an agent, because a judgement call is involved",
+      "As a workflow with a model in the one step that needs judgement",
+      "As an agent, to leave room for unusual refund cases"
+    ],
+    answer: 1,
+    explain: "You keep the exactness of the fixed steps and confine the unpredictability to the one place it belongs."
+  },
+  {
+    q: "Why is an agent's failure often harder to place than a chain's?",
+    options: [
+      "Agents produce no logs",
+      "The fault may be a choice many turns earlier that looked reasonable when it was made",
+      "Agents run on separate infrastructure from chains"
+    ],
+    answer: 1,
+    explain: "In a chain you know which step broke. In an agent the route is discovered, so the cause can sit far from where the symptom appeared."
+  }
+]} />
+
+## Recap
+
+The line between a workflow and an agent is who decides the next step. It is a
+spectrum, and each move towards the agent end trades predictability for
+flexibility on tasks you could not map in advance. The costs are a path you
+cannot read beforehand, failures that are harder to place, no built-in bound on
+cost or time, and a capability list that becomes the whole risk. Most things
+described as agents are workflows with one real judgement in them, and the
+sensible build keeps the fixed steps fixed.

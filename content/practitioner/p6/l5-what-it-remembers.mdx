@@ -1,0 +1,177 @@
+---
+title: "What it remembers"
+description: "An agent's memory is the window it is shown. It fills, it gets summarised, and everything it read earlier stays in it, including text you'd rather it forgot."
+track: practitioner
+module: p6
+order: 5
+minutes: 9
+objectives:
+  - "Explain what an agent actually remembers and what happens as the window fills"
+  - "Keep durable state outside the model and treat everything earlier in the run as still present"
+concepts: ["context window", "summarisation", "state", "persistence of injected text"]
+flashcards:
+  - front: "What does an agent remember?"
+    back: "Only what is in the window it is shown on this turn. Anything not included, because it was trimmed or summarised away, no longer exists for it."
+  - front: "What goes wrong when a long run is summarised?"
+    back: "Detail is lost, and the model cannot know what it lost. A constraint stated at the start can quietly disappear while the summary reads as complete."
+  - front: "Why does earlier hostile text matter for the rest of a run?"
+    back: "It stays in the window. Something fetched at turn three is still being read at turn thirty, so an injection does not expire when the step that fetched it ends."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+L2 explained that an agent re-reads its whole history on every turn, because the
+model remembers nothing between calls. That has a consequence worth following all
+the way down: **the history is the memory.**
+
+What an agent knows is whatever it is shown this turn. Nothing else.
+
+## Windows are finite
+
+The amount of text a model can be shown at once is limited. A long run adds to it
+every turn, and eventually the history no longer fits.
+
+Something has to give, and platforms handle it in a few ways.
+
+**Truncation.** Drop the oldest material. Simple, and often loses the original
+goal and the early constraints, which are exactly what the run needed to keep.
+
+**Summarisation.** Replace older turns with a short summary. Better, and it
+introduces its own risk.
+
+**Retrieval.** Keep the full history elsewhere and fetch relevant pieces back as
+needed. Powerful, and it inherits every limit from P2, since a missed passage is
+as good as forgotten.
+
+## The summary problem
+
+When older turns are summarised, **detail is lost, and the model cannot know what
+it lost.**
+
+The summary reads as complete. It is fluent, and sounds like a faithful account.
+But it is a compression made by the same kind of system that is about to rely on
+it, and the things most likely to be dropped are the ones that seemed minor at the
+time.
+
+A constraint stated at the start is the classic casualty: *"never contact the
+customer directly"*, *"only touch files in this folder"*, *"the budget is £500"*.
+It was a short sentence in a long history, and it is not in the summary. From then
+on the agent behaves as though it had never been said.
+
+Three defences.
+
+**Keep standing rules out of the history.** Put constraints in the system
+instructions, which are re-sent in full every turn and never summarised. The
+history is for what happened; the rules belong somewhere that cannot be trimmed.
+
+**Restate the goal.** Include the original request at the end of each turn's
+input. It costs little and prevents the slow drift away from what was asked.
+
+**Check what a summary dropped.** If you rely on summarisation, test it. Run a long
+task, read the summary, and see whether the constraints survived.
+
+## State belongs outside the model
+
+Anything that must be right should not live only in the conversation.
+
+If an agent has processed 140 of 300 records, that fact should be in a table, a
+file or a database that your code reads. If it exists only as a sentence in the
+history, a summary can lose it and the agent will start again, or stop early, or
+confidently report completion.
+
+> The model **reasons**. Your code **remembers.**
+
+Keep a record the model can read and cannot rewrite on its own: what has been done,
+what remains, what was decided. Check it when the run resumes. That makes a
+failed run recoverable, which L4 argued for, and a long run resumable.
+
+## Everything it read is still there
+
+The part that connects most directly to P3.
+
+Text fetched at turn three is in the window at turn thirty. A web page, an email, a
+document, a tool result: once it has been read, it sits in the history and is
+re-read on every turn that follows.
+
+So an injected instruction does not expire when the step that fetched it ends. It
+keeps being offered to the model, turn after turn, for the rest of the run. An
+agent can read a hostile page early, handle it correctly at the time, and be
+swayed by it much later, when the context around it has changed and the original
+caution has been summarised away.
+
+Three implications.
+
+**Read untrusted material in a separate, short-lived context.** Have a sub-task read
+the page and return only the facts needed, as a structured value (P5·L4). The main
+run then never holds the hostile text.
+
+**Remove material you have finished with.** If the platform lets you, drop a fetched
+document from the history once its facts are extracted.
+
+**Assume the earliest hostile text is still in play.** When reviewing a run that went
+wrong, look at everything it read, not only what it read just before the error.
+
+## Lrnon's version
+
+Sky has no memory in this sense. Each question starts from nothing: the system
+instructions, the question, and four freshly fetched passages. Nothing from a
+previous question carries forward, and nothing a passage said survives past the one
+answer.
+
+That is a limitation, since it cannot follow up on what a learner asked a moment
+ago. It is also the reason that a poisoned passage affects one answer and not a
+conversation. The two are the same property viewed from either side.
+
+## Try it now (12 minutes)
+
+If you can run a long task on an agent platform, give it a constraint in the first
+message and a long task after it. Around the point where the history is summarised
+or trimmed, test the constraint: ask it to do something the constraint forbids.
+
+Then answer: where does a rule that must always hold live in your design? If the
+answer is "in the first message", move it to the system instructions today.
+
+<Quiz client:visible items={[
+  {
+    q: "What does an agent remember between turns?",
+    options: [
+      "Everything it has ever been shown, stored by the model",
+      "Only what is in the window it is shown on this turn",
+      "Whatever the platform marks as important"
+    ],
+    answer: 1,
+    explain: "The model remembers nothing between calls. The history is the memory, so anything trimmed or summarised away no longer exists for it."
+  },
+  {
+    q: "Why is a constraint stated in the first message vulnerable in a long run?",
+    options: [
+      "Models give less weight to instructions given first",
+      "Summarisation can drop a short sentence from a long history while the summary still reads as complete",
+      "Constraints expire after a fixed number of turns"
+    ],
+    answer: 1,
+    explain: "Standing rules belong in the system instructions, which are re-sent in full each turn and never summarised."
+  },
+  {
+    q: "Why does hostile text fetched at turn three matter at turn thirty?",
+    options: [
+      "Models retain suspicious text in a separate long-term store",
+      "It stays in the window and is re-read on every later turn, so an injection does not expire",
+      "Later turns re-fetch the same page automatically"
+    ],
+    answer: 1,
+    explain: "Read untrusted material in a short-lived sub-task that returns only the facts needed, so the main run never holds it."
+  }
+]} />
+
+## Recap
+
+An agent remembers only the window it is shown, so the history is its memory. When
+that fills, truncation and summarisation lose detail the model cannot know it lost,
+and a constraint stated early can quietly vanish. Keep standing rules in the system
+instructions and durable state in a store your code controls: the model reasons and
+your code remembers. Everything an agent has read stays in play, which means hostile
+text from early in a run can still be shaping it much later.

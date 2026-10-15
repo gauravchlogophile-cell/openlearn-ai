@@ -1,0 +1,185 @@
+---
+title: "Limits, stopping, and being stuck"
+description: "Define done before the run starts, cap it in code, and decide what happens when it repeats itself or cannot proceed."
+track: practitioner
+module: p6
+order: 6
+minutes: 9
+objectives:
+  - "State a completion condition that a check can verify, not one the model declares"
+  - "Detect a stuck run and send it to a person instead of letting it continue"
+concepts: ["completion criteria", "loop detection", "escalation", "allowlist"]
+flashcards:
+  - front: "Why should 'done' be defined before the run?"
+    back: "A model asked whether it has finished will often say yes. A completion condition checked by code, such as a file existing or a test passing, cannot be talked into agreeing."
+  - front: "What does a stuck run usually look like?"
+    back: "The same tool called with the same arguments repeatedly, or a cycle between two states, each turn consuming budget and producing nothing new."
+  - front: "What should happen when the run cannot proceed?"
+    back: "It stops and hands over to a person with what it tried and where it stopped. Persisting, or improvising a way round, is the dangerous option."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+L2 covered the caps that bound a run from outside. This lesson is about the other
+end of it: how a run is supposed to finish, and what to do when it will not.
+
+An agent that does not stop is expensive. One that stops at the wrong moment is
+worse, and one that cannot stop and finds a creative way round the obstacle is the
+reason this lesson exists.
+
+## Define done before you start
+
+Write the completion condition down first, and make it something a check can
+verify.
+
+> **Weak:** "Stop when the research is thorough."
+>
+> **Better:** "Stop when the summary cites at least five sources and each cited
+> source was actually fetched during this run."
+>
+> **Strongest:** "Stop when the test suite passes."
+
+The weak version leaves the judgement with the model. A model asked whether it has
+finished tends to say yes, sometimes early because it is satisfied by its own work,
+sometimes never because it keeps finding more to do.
+
+A condition your code checks does not depend on the model's opinion. The file
+exists, the count is reached, the tests pass, the record is in the table. Where the
+condition cannot be made that mechanical, the final judgement is a person's, not
+the agent's.
+
+## What stuck looks like
+
+Agents get stuck in recognisable ways, and most are detectable by code.
+
+**Repetition.** The same tool called with the same arguments, twice, three times.
+The model is not learning from the result, and every turn spends budget producing
+nothing new.
+
+**Oscillation.** A cycle between two states: try A, fail, try B, fail, try A. Each
+step looks like progress and the run is not moving.
+
+**Thrashing.** Many different actions, none connected to the goal. The agent is
+busy and the situation is not changing.
+
+**Quiet stalling.** It stops calling tools and produces a long, plausible account
+of why it cannot proceed, then keeps going anyway.
+
+Detection can be simple. Keep a record of recent tool calls and arguments, and end
+the run if the same pair appears three times. Count turns since the last piece of
+new information. These are rules, and they work without the model's cooperation.
+
+## Stop rather than improvise
+
+The most important instruction an agent can follow when blocked is the plainest.
+
+> When you cannot proceed, **stop and say what you tried and where you got to.**
+
+This runs against the grain of a system trained to be helpful. Faced with a
+blocked path, the instinct is to find a way round: use a different tool, relax a
+constraint, take a shortcut. Sometimes that is useful. When the blockage was put
+there deliberately, such as a permission refused or an approval withheld, finding
+a way round is the failure.
+
+So say so, and enforce it where you can.
+
+**Make refusal a stopping condition, not an obstacle.** If a tool returns *"not
+permitted"*, the run should end with that reported, not continue by trying other
+routes to the same effect.
+
+**Do not give it tools that bypass the ones it was refused.** A refused write and
+an available "run any command" tool are the same thing with extra steps.
+
+**Hand over, with the trail.** On stopping, send a person what was asked, what was
+done, what was attempted, and the exact point it stopped. Someone can resume from
+there in a minute. Without it, they start again.
+
+## Allowlists
+
+Where the set of permitted actions is small and known, **list them and refuse
+everything else**, in code.
+
+An allowlist is a stronger statement than a blocklist. *"Only these four tools, only
+these three folders, only these two domains"* leaves the model no room for a fifth.
+A blocklist names the things you thought of, and the model finds one you did not.
+
+## Time and money, once more
+
+The caps from L2 apply to stopping as well, and the order of operations matters.
+
+When a cap is hit, the run ends **cleanly**: record what had been done, release any
+reservation, tell someone. A run killed by a timeout mid-write leaves half a job
+behind. Where a stage cannot be left half-finished, finish it before checking
+whether to continue, and size the caps to allow that.
+
+## A stop control that works while it is running
+
+P5·L7 argued for testing the stop control while the system is working, and agents
+make the case stronger. A run in progress is the moment you most need to be able
+to end it, and the system that is meant to end it must not depend on the agent's
+cooperation.
+
+Lrnon's own switch for the assistant is read on every request and combined with the
+deployed setting by taking whichever is stricter. It once recorded a log row and
+changed nothing, while reporting that the assistant was off, which is why it was
+tested against a running system. A stop that only takes effect if the agent agrees
+is a request.
+
+## Try it now (10 minutes)
+
+For a run you are planning, write four things.
+
+1. **The completion condition**, phrased so that code could check it.
+2. **The three stuck signatures** you would detect, and the rule for each.
+3. **What it does when refused**, in one sentence. If the sentence includes the
+   words "tries another way", change it.
+4. **The hand-over message**, field by field.
+
+Then run it once on purpose against a task that cannot succeed, and watch what it
+does. The failure you see is the one your caps and rules need to handle.
+
+<Quiz client:visible items={[
+  {
+    q: "Why should the completion condition be one that code can check?",
+    options: [
+      "Models cannot recognise when a task is finished",
+      "A model asked whether it has finished tends to say yes, while a mechanical check cannot be talked into agreeing",
+      "Checkable conditions run faster than model-judged ones"
+    ],
+    answer: 1,
+    explain: "A file existing, a count reached or a test passing does not depend on the model's opinion. Where it cannot be mechanical, the final judgement is a person's."
+  },
+  {
+    q: "Which of these is a cheap, reliable sign that a run is stuck?",
+    options: [
+      "The model's replies become longer",
+      "The same tool called repeatedly with the same arguments",
+      "The run takes longer than the previous one"
+    ],
+    answer: 1,
+    explain: "Keep recent calls and arguments and end the run if the same pair appears three times. It is a rule, and it works without the model's cooperation."
+  },
+  {
+    q: "A write tool returns 'not permitted'. What should the agent do?",
+    options: [
+      "Try another tool that achieves the same effect",
+      "Stop, and report what it tried and where it stopped",
+      "Retry with different arguments until it succeeds"
+    ],
+    answer: 1,
+    explain: "When the blockage was put there deliberately, finding a way round is the failure. A refusal should be a stopping condition, not an obstacle."
+  }
+]} />
+
+## Recap
+
+Define done before the run, as a condition your code can check, because a model's
+view of whether it has finished is not evidence. Stuck runs have recognisable
+shapes, namely repetition, oscillation, thrashing and quiet stalling, and most are
+detectable by simple rules. When blocked the right behaviour is to stop and hand
+over with the trail, and a refusal should end the run rather than invite a detour.
+Use allowlists in preference to blocklists, end runs cleanly when a cap is hit, and
+keep a stop control that does not depend on the agent agreeing.

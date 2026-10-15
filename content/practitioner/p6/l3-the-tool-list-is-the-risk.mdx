@@ -1,0 +1,190 @@
+---
+title: "The tool list is the risk"
+description: "An agent can do exactly what its tools allow. Design them narrow, split reading from writing, fix the targets, and describe them as carefully as a prompt."
+track: practitioner
+module: p6
+order: 3
+minutes: 9
+objectives:
+  - "Design a tool so that its worst single call is acceptable"
+  - "Split read tools from write tools and keep targets under your control"
+concepts: ["tool design", "least privilege", "read and write separation", "tool description"]
+flashcards:
+  - front: "What bounds what an agent can do?"
+    back: "Its tool list and nothing else. A model can only act through the tools it was given, so each tool is a grant of capability."
+  - front: "What is the test of a well-designed tool?"
+    back: "Its worst single call, with the worst arguments an attacker could choose, is one you can live with. Judge the tool by that call, not by the typical one."
+  - front: "Why is a tool description part of the security surface?"
+    back: "The model decides when to call a tool from its description, and descriptions are read as text. A vague one invites misuse; a precise one narrows the behaviour."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+P3·L4 said impact is capability, not cleverness. For an agent that sentence has a
+concrete form: **the tool list.**
+
+A model cannot do anything except produce text. Everything an agent does to the
+world, it does by asking a tool to do it. So the set of tools is the set of
+things that can happen, and designing it is the most important security decision
+in the build.
+
+## Judge a tool by its worst call
+
+The temptation is to judge a tool by how it is meant to be used. A tool for
+looking up orders looks harmless because you imagine it looking up an order.
+
+Judge it differently. **What is the worst single call, with the worst arguments an
+attacker could choose?** This is P3·L4's question, asked of each tool one at a
+time.
+
+> **`lookup_order(id)`** — worst call: reads one order. Acceptable.
+>
+> **`send_email(to, subject, body)`** — worst call: sends anything to anyone. Not
+> acceptable as written.
+>
+> **`run_sql(query)`** — worst call: anything the credential permits. Not a tool;
+> a hole with a name.
+>
+> **`refund(order_id, amount)`** — worst call: refunds any order for any amount.
+> Acceptable only if the amount and the order are checked by code.
+
+A tool whose worst call you cannot accept is not ready, however well the average
+call behaves.
+
+## Narrow beats general
+
+The general tool is easier to write and impossible to defend.
+
+`run_sql` covers every question you can think of, and every one you cannot.
+`get_order_status(order_id)` covers one question and cannot be made to answer
+another. The second takes ten minutes longer to build and removes an entire class
+of misuse.
+
+The same holds for files, web access and messaging. A tool that can *"read any
+file"* is a different object from one that can *"read the three documents in this
+folder"*. Make the second one.
+
+If you find yourself needing a general tool, ask whether the agent is really
+doing one task or six, and whether six small tools would serve.
+
+## Split reading from writing
+
+Treat the two as different kinds of thing, because their failure costs differ by
+an order of magnitude.
+
+**Read tools** can leak information and waste money. They cannot change anything.
+A wrong read produces a wrong answer, which a person can see.
+
+**Write tools** change the world, and some cannot be undone. A wrong write
+produces a consequence, often silently.
+
+Give an agent read tools freely, within what it should see. Give it write tools
+sparingly, one at a time, each justified, and each with the safeguards from P5·L6
+before it: shown effect, easy refusal, and a person where it cannot be undone.
+
+A common and sound pattern is an agent that reads widely and writes only to a
+**draft**, which a person then releases. The valuable part, the thinking and
+assembling, needs no dangerous capability.
+
+## Fix the target
+
+P3·L6 and P5·L4 both made the same point, and it is the most useful single habit
+for tool design. **The model supplies content; your code supplies the target.**
+
+If a write tool takes a record ID, a recipient or a file path from the model,
+whoever influenced the model chose it. Take the ID from the authenticated session
+instead. Let the model choose *what to say* and never *where it goes*.
+
+Where the model must name something, validate it against a list you control
+before the tool runs, not after.
+
+## A tool description is a prompt
+
+Easy to overlook: the model decides when and how to call a tool by reading its
+**description**. That text is part of the prompt, and it shapes behaviour.
+
+A vague description invites misuse. *"Sends messages"* gives the model no idea of
+limits, and it will try.
+
+A precise one narrows the behaviour: *"Sends a short plain-text reply to the
+person who opened this ticket. Cannot send to anyone else. Use only after the
+reply has been approved."* Then the description and the code agree, and the
+description reduces how often the code has to refuse.
+
+Descriptions are also read by the model as instructions, which means a tool
+description is a place an attacker would like to write. Treat descriptions from
+third parties, such as those in a connected service, with the suspicion P3 asked
+for everywhere else.
+
+## The tools Lrnon's assistant does not have
+
+The shape here is easiest to see by what is absent.
+
+The model in Sky has no tools at all. It cannot fetch, send, write or look anything
+up beyond the passages handed to it for the one question being asked. Every
+capability in the list above is one it was never given.
+
+The server around the model does touch a few things: a spending counter, the
+rollout switch, a rate limiter. All of them are called by the server's own code,
+never by the model. The model cannot choose to call them, cannot change what they
+record, and has no way of knowing they exist.
+
+That is the strongest form of a narrow tool list: not narrow tools, but **no tools
+the model can reach**, with every privileged operation kept on the other side of
+the boundary.
+
+## Try it now (12 minutes)
+
+List every tool an agent you are planning would have. For each, write the worst
+single call and decide: acceptable, or not yet.
+
+For every one that is not yet, choose one fix: narrow it, fix its target in code,
+split it into a read and a write, or remove it.
+
+Then rewrite two descriptions so that each says what the tool cannot do as well as
+what it can.
+
+<Quiz client:visible items={[
+  {
+    q: "How should you judge whether an agent's tool is safe to give it?",
+    options: [
+      "By how it is intended to be used",
+      "By its worst single call with the worst arguments an attacker could choose",
+      "By how often it is expected to be called"
+    ],
+    answer: 1,
+    explain: "A tool whose worst call you cannot accept is not ready, however well the average call behaves."
+  },
+  {
+    q: "Why is a tool called run_sql described as a hole with a name?",
+    options: [
+      "It is slower than purpose-built tools",
+      "Its worst call is anything the credential permits, so it bounds nothing",
+      "Database tools are not supported by most agent platforms"
+    ],
+    answer: 1,
+    explain: "get_order_status covers one question and cannot be made to answer another. The general tool covers every question, including ones you never considered."
+  },
+  {
+    q: "Why does a tool's description belong to the security surface?",
+    options: [
+      "Descriptions are published to users of the system",
+      "The model decides when and how to call the tool from that text, so it shapes behaviour like any prompt",
+      "Descriptions determine which credentials a tool can use"
+    ],
+    answer: 1,
+    explain: "A vague description invites misuse and a precise one narrows it. Descriptions from third-party services are also text an attacker would like to write."
+  }
+]} />
+
+## Recap
+
+An agent can only act through its tools, so the tool list bounds everything it
+can do. Judge each tool by its worst single call, prefer narrow tools to general
+ones, and split reading from writing, giving writes sparingly and behind the
+safeguards from P5. The model supplies content and your code supplies the target.
+Write descriptions as carefully as prompts, stating limits as well as uses.
+Lrnon's assistant is the strongest case: it has no tools the model can reach.

@@ -1,0 +1,190 @@
+---
+title: "The report is not the work"
+description: "An agent's account of what it did is another output from the same system. Check the world, not the report, and keep a trace you can replay."
+track: practitioner
+module: p6
+order: 7
+minutes: 9
+objectives:
+  - "Verify an agent's work against the state of the world instead of its own summary"
+  - "Keep a trace of every tool call so a run can be reviewed afterwards"
+concepts: ["verification", "trace", "audit", "reported versus actual state"]
+flashcards:
+  - front: "Why is an agent's report weak evidence of what happened?"
+    back: "It is generated text, produced by the same system that did the work. It can describe an action that did not occur, or claim success after a failure."
+  - front: "What do you verify instead?"
+    back: "The state of the world the work was meant to change: the file, the record, the sent message. The report is a pointer to look, not the thing to believe."
+  - front: "What should be recorded for every run?"
+    back: "Every tool call with its arguments and result, in order, with timestamps. Written by your code, so it cannot be edited by the thing it records."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+When an agent finishes, it reports. *"I have updated all 140 records, sent the
+confirmation emails, and archived the originals."*
+
+It reads well, and you will be tempted to believe it. This lesson is about why you
+should check the thing it describes and not the description.
+
+## The report is generated text
+
+An agent's final message is produced by the same kind of system that did the work,
+and it is subject to the same failures.
+
+It may describe an action that never happened: a tool call that failed, followed by
+a summary written as though it had succeeded. It may claim to have checked
+something it only intended to check. It may round *"137 of 140"* up to *"all"*.
+
+It does this without any intent to mislead. The model writes the most plausible
+account of a run, and a successful-sounding account is more plausible than a messy
+one. When a tool returns an error the model has read past, the summary can come out
+cleanly anyway.
+
+So the report is an **output**, with the same status as any other. It tells you
+where to look. It is not the evidence.
+
+## Check the world
+
+For every claim the report makes, there is somewhere the effect should be visible.
+Go and look.
+
+> *"Updated 140 records"* → count the records with the new value.
+>
+> *"Sent the emails"* → check the outbox or the provider's log, not the agent's
+> memory of sending.
+>
+> *"Archived the originals"* → list the folder.
+>
+> *"Fixed the bug"* → run the failing case.
+
+Automate it wherever you can. A verification step written as code, which reads the
+state after the run and compares it with what the report claimed, is cheap and
+catches the whole class. It is the independent check from L4, applied at the end.
+
+Where the check is genuinely expensive, sample. Look at five of the 140 and decide
+whether to trust the rest. Sampling is not as good as checking everything, and it
+is far better than reading the summary.
+
+## When a lock says it is locked
+
+The classic version of this problem has been in Lrnon's own console.
+
+The kill switch for the assistant once wrote a row to its log and changed nothing
+else. The console said Sky was off, but the server ignored the recorded stage and
+followed only the setting it was deployed with. The report and the state had come
+apart: the log recorded the *intention*, the behaviour was unchanged, and
+everything the console displayed was true about the first and silent about the
+second.
+
+The question that exposes it is the one this lesson recommends. Not *"what does the
+console say?"* but *"what does a request do now?"*
+
+Lrnon's deployment pipeline did the same in a quieter way. A build log read
+*Success* in full, with a fresh version number, while the newest commit had not been
+built. Each record was accurate about the thing it described. None was a record of
+the thing that mattered.
+
+## Keep a trace
+
+Verification at the end tells you whether the result was right. A trace tells you
+**how the run got there**, which is what you need when it was not.
+
+Record, for every run, in order:
+
+- **Each tool call**, with its arguments.
+- **Each result**, including errors.
+- **A timestamp** for each.
+- **Which run it belonged to**, and who or what started it.
+
+Three properties make it useful.
+
+**Your code writes it, not the model.** If the agent narrates its own history, the
+trace shares the report's weaknesses. A log written at the point where the tool is
+called is a fact about what happened.
+
+**It is append-only.** The agent cannot edit it, and neither can the tool it calls.
+A record that the recorded thing can change is not a record.
+
+**It is kept long enough.** One refusal from the provider on a single day went
+unseen here for five weeks, because the console's window was seven days and
+had named nothing. A trace you cannot find the relevant part of, because it has
+aged out, has the same effect as no trace.
+
+## Read the trace sometimes
+
+Having a trace and reading it are different things.
+
+Make a habit of reading a few runs, the successful ones as well as the failures.
+You will find, reliably, that the route taken is not the route you imagined: an extra
+lookup, a tool called with surprising arguments, a retry that happened to succeed.
+Those are the places the next failure will come from.
+
+Pay particular attention to **anything the agent read** during the run (L5), and
+**anything it was refused**. The first tells you what shaped it; the second shows
+where it pushed against a boundary.
+
+## Replay it
+
+The strongest use of a trace is to run it again.
+
+If your tools record their results, you can replay a failed run against the stored
+results and see exactly what the model decided at each step, without touching the
+real world again. That turns a vague *"it went wrong on Tuesday"* into something you
+can step through, and lets you test a fix against the case that actually failed.
+
+## Try it now (12 minutes)
+
+Take any agent run you can inspect. Write down every claim in its final report. For
+each, write where the effect should be visible and how you would check.
+
+Then do the checks for two of them. Note how long it took, and whether anything
+differed.
+
+Finally, ask where the trace of that run lives, who can edit it, and how long it
+will exist. If the answer to the second is "the agent", you do not yet have one.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is an agent's final report weak evidence of what it actually did?",
+    options: [
+      "Agents are instructed to exaggerate their results",
+      "It is generated text from the same system that did the work, and may describe an action that never happened",
+      "Reports are written before the last steps complete"
+    ],
+    answer: 1,
+    explain: "The model writes the most plausible account of a run, and a clean success is more plausible than a messy one. The report tells you where to look; it is not the evidence."
+  },
+  {
+    q: "Which check follows the lesson's advice?",
+    options: [
+      "Ask the agent to confirm that it completed the work",
+      "Count the records that now hold the new value",
+      "Read the report carefully for signs of doubt"
+    ],
+    answer: 1,
+    explain: "Check the state of the world the work was meant to change. Where that is expensive, sample rather than reading the summary."
+  },
+  {
+    q: "Why must the trace of a run be written by your code and not by the model?",
+    options: [
+      "Models cannot produce structured logs",
+      "A trace the agent narrates shares the weaknesses of its report, while a log written where the tool is called is a fact",
+      "Platforms charge extra for model-generated logs"
+    ],
+    answer: 1,
+    explain: "It should also be append-only, so neither the agent nor the tool it calls can edit what it records."
+  }
+]} />
+
+## Recap
+
+An agent's report is generated text from the system that did the work, so it can
+describe actions that did not happen. Check the state of the world instead, with
+automated verification where possible and sampling where not. Lrnon's own kill
+switch and build log both reported success about the wrong thing. Keep a trace
+written by your code, append-only and retained long enough to find what matters,
+read some of your successful runs as well as the failures, and use the trace to
+replay a bad run against its stored results.

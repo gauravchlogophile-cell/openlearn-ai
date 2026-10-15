@@ -1,0 +1,197 @@
+---
+title: "Errors compound"
+description: "A step that is right ninety-five times in a hundred sounds fine. Chain ten of them and the whole is right about six times in ten."
+track: practitioner
+module: p6
+order: 4
+minutes: 9
+objectives:
+  - "Estimate the reliability of a multi-step run from the reliability of its steps"
+  - "Shorten, checkpoint and independently verify a run so that early errors cannot ride to the end"
+concepts: ["compounding error", "reliability", "checkpoint", "independent verification"]
+flashcards:
+  - front: "A step is right 95% of the time. What is the chance ten in a row are all right?"
+    back: "About 60 percent. Reliability multiplies down a chain, so a run of steps that each sound dependable is, as a whole, a coin that lands your way a little over half the time."
+  - front: "Why do early errors matter most?"
+    back: "Later steps treat earlier output as true. A wrong fact at step two is built upon by steps three to ten, and nothing downstream is positioned to notice."
+  - front: "What makes a verification step worth having?"
+    back: "It checks against something independent of the step it is checking: a source, a rule, a test. The same model reviewing its own work shares its blind spots."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+There is a piece of arithmetic that every agent builder meets sooner or later,
+usually after a demonstration that worked perfectly and a deployment that does
+not.
+
+## The multiplication
+
+If each step in a chain is right with probability *p*, the chance that *n* steps
+in a row are all right is *p* multiplied by itself *n* times.
+
+> **99% per step, ten steps:** about 90% overall.
+>
+> **95% per step, ten steps:** about 60% overall.
+>
+> **90% per step, ten steps:** about 35% overall.
+>
+> **95% per step, twenty steps:** about 36% overall.
+
+Read the middle line again. A step that is right nineteen times in twenty sounds
+dependable. Ten of them in sequence produce a run that is wrong roughly four
+times in ten.
+
+This is the gap between a demo and a deployment. A demo is one run, chosen for
+working. A deployment is thousands of runs, and the arithmetic shows up in the
+tail.
+
+The numbers are illustrations, not measurements. Real steps are not independent
+and not equally reliable. But the direction is not in doubt: **longer chains are
+less reliable, and the loss is steeper than intuition suggests.**
+
+## It is worse than the number says
+
+The multiplication assumes each error is independent and equally damaging. In
+practice two things make it harsher.
+
+**Early errors are built upon.** A later step treats earlier output as true. If
+step two gets a fact wrong, steps three to ten reason carefully from the wrong
+fact. Nothing downstream is positioned to notice, because from where it stands the
+input looks entirely normal.
+
+**Agents explain their errors away.** A model that has made a mistake and then
+meets evidence against it often finds a way to keep going. The mistake becomes a
+premise, and the rest of the run is consistent with it.
+
+The result is the characteristic agent failure: a long, fluent, confident run that
+is wrong in a way established in the first few turns.
+
+## Four ways to push it back
+
+### Fewer steps
+
+The most effective move is also the least exciting. Every step you remove from a
+chain raises the reliability of the whole.
+
+Ask of each step whether a rule could do it (P5·L2), whether two could merge, and
+whether it is needed at all. A run of five that does the same job as a run of
+twelve is not only cheaper, it is substantially more reliable.
+
+### Checkpoints
+
+Break a long run into stages and **check at the boundaries**. After stage one,
+before anything downstream starts, confirm the output has the right shape and
+plausible content.
+
+A checkpoint catches an early error while it is still one error and not a
+foundation. It also turns a failed run into a recoverable one: you restart from
+the last good stage rather than from the beginning.
+
+### Verify against something independent
+
+A verification step is only worth having if it can disagree with the step it
+checks.
+
+A model asked to review its own output shares its blind spots, and tends to agree
+with itself. Better to verify against something outside the loop:
+
+- **A source.** The claimed figure appears in the attached document.
+- **A rule.** The date is in the future; the total equals the sum of the lines.
+- **A test.** The code runs and the checks pass.
+- **A second view.** A different method reaches the same answer.
+
+The strongest tasks for agents are the ones with cheap independent verification,
+which is why they work so well for code with tests. The weakest are those where
+the only check is another opinion.
+
+### Keep a person at the real junctions
+
+Not everywhere. At the points where a wrong answer is expensive and a human can
+tell, as P5·L6 described. The multiplication tells you where the run is most
+likely to have gone wrong, which is at the end, and the cost of being wrong is
+highest there too.
+
+## What a long run looks like when it goes wrong
+
+Worth knowing the signature, because it is distinctive.
+
+> The run was **confident throughout**. No step expressed doubt.
+>
+> It was **internally consistent**. Each step follows from the one before.
+>
+> The error is **early**, usually a misread instruction or a wrong first lookup.
+>
+> The final report **sounds like success**.
+
+None of those is a warning sign, which is the problem. A run that went wrong and a
+run that went right look identical from the outside unless something external
+checks them.
+
+## Lrnon's own short chain
+
+Sky is a deliberately short run. One retrieval by rule, one model call, one
+mechanical check that the answer cites a passage that was actually supplied.
+
+Short, because the arithmetic applies to it too, and the way to survive it was not
+to make each step better but to have fewer of them. The check at the end, whether
+the citation points at something real, is the independent verification from above:
+it does not ask the model whether it is right, it tests a property of the answer
+that can be tested.
+
+## Try it now (10 minutes)
+
+Take a run you have built or planned. Count its model steps, and write down a
+rough reliability for each. Be pessimistic.
+
+Multiply them. Then do three things in order: remove a step, add one
+checkpoint after the riskiest stage, and replace one self-review with a check
+against a source or a rule.
+
+Multiply again. The difference is what the exercise buys, and it is usually larger
+than improving any single step would have been.
+
+<Quiz client:visible items={[
+  {
+    q: "A step is right 95% of the time. Roughly how reliable are ten of them in a row?",
+    options: [
+      "About 95%, since each step is individually reliable",
+      "About 60%, because the probabilities multiply down the chain",
+      "About 85%, since errors partly cancel each other"
+    ],
+    answer: 1,
+    explain: "Ninety-five percent multiplied by itself ten times is about sixty. A demo is one run chosen for working; a deployment is thousands, and the arithmetic shows up in the tail."
+  },
+  {
+    q: "Why are early errors in a long run especially damaging?",
+    options: [
+      "Early steps are more expensive than later ones",
+      "Later steps treat earlier output as true and build on it, and nothing downstream can notice",
+      "Agents re-run early steps if they detect a fault"
+    ],
+    answer: 1,
+    explain: "From where a later step stands, a wrong input looks entirely normal. The run becomes consistent with the mistake."
+  },
+  {
+    q: "What makes a verification step worth having?",
+    options: [
+      "It uses a more capable model than the step being checked",
+      "It checks against something independent of the step it is checking, such as a source, a rule or a test",
+      "It runs after every single step"
+    ],
+    answer: 1,
+    explain: "A model reviewing its own output shares its blind spots. Verification must be able to disagree with what it checks."
+  }
+]} />
+
+## Recap
+
+Reliability multiplies down a chain, so ten steps at ninety-five percent each give
+a run that is right about six times in ten. Real runs are harsher, since early
+errors are built upon and a model tends to explain a mistake away. Push back with
+fewer steps, checkpoints that catch an error while it is still one error,
+verification against something independent of the step being checked, and a
+person at the junctions where being wrong is expensive. Remember that a wrong run
+and a right one look identical from outside.

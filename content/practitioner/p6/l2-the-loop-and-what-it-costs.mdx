@@ -1,0 +1,173 @@
+---
+title: "The loop, and what it costs"
+description: "An agent is a model in a loop. Every turn re-reads everything before it, so cost climbs faster than the number of turns."
+track: practitioner
+module: p6
+order: 2
+minutes: 9
+objectives:
+  - "Describe an agent's loop and what each turn consumes"
+  - "Reserve a budget for the whole run before it begins, rather than discovering the bill afterwards"
+concepts: ["agent loop", "context growth", "token cost", "budget reservation"]
+flashcards:
+  - front: "What is an agent mechanically?"
+    back: "A model in a loop: read the situation, pick a tool or finish, run the tool, add the result to the history, repeat. Nothing more exotic than that."
+  - front: "Why does cost grow faster than the number of turns?"
+    back: "Each turn sends the whole history again, and the history is longer every time. Ten turns do not cost ten times one turn; they cost roughly the sum of one through ten."
+  - front: "When should the budget be set?"
+    back: "Before the run, as a worst case, with a cap on turns, tokens and time. A bill you discover afterwards has already been spent."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Strip away the vocabulary and an agent is a small and unglamorous machine.
+
+> 1. Show the model the goal, the tools it may use, and everything that has
+>    happened so far.
+> 2. The model replies with either *"call this tool with these arguments"* or
+>    *"I have finished"*.
+> 3. If it called a tool, run it, and add the result to the history.
+> 4. Go back to step 1.
+
+That is the whole mechanism. The apparent intelligence is the model's; the
+structure is a `while` loop. Seeing it plainly makes the costs easy to predict.
+
+## Each turn re-reads everything
+
+The model has no memory between calls. To continue, it must be given the
+entire story again, every time: the goal, the tool descriptions, and every action
+and result so far.
+
+So the history grows, and each new turn sends **all of it** once more.
+
+Suppose each turn adds about the same amount of text, which we will call one
+unit. Turn one sends one unit. Turn two sends two, because it carries turn one
+along with it. Turn ten sends ten. The total the model reads across the run is not
+ten units but the *sum* of one through ten, which is 55, and the gap widens
+quickly as runs lengthen.
+
+> A five-turn run reads roughly 15 units of history. A ten-turn run reads about
+> 55. A twenty-turn run reads about 210.
+
+Doubling the turns roughly quadruples the cost. Some providers discount text they
+have seen very recently, which softens this without removing the shape.
+
+## Turns also cost time
+
+Each turn is a model call, and a model call takes seconds. A twenty-turn run is
+well over a minute even when nothing goes wrong, and a person watching it will
+not wait.
+
+This matters for design. A task that takes a human thirty seconds can take an
+agent four minutes and cost a hundred times as much, for a result that is
+occasionally worse. Whether that trade is worth it depends on the task, and
+L8 is about choosing.
+
+## Set the budget before it starts
+
+The common failure is discovering the cost afterwards. A run goes into a loop, or
+chases a poor idea for thirty turns, and the first evidence is a bill.
+
+So decide in advance, and enforce it outside the model:
+
+> **A cap on turns.** Stop after, say, fifteen, whatever the model thinks.
+>
+> **A cap on tokens.** The total across the run, counted by your code.
+>
+> **A cap on time.** A wall-clock limit after which the run is abandoned.
+
+All three, because each catches a failure the others miss. A run can burn tokens
+quickly in few turns, or take little money and hang for ten minutes.
+
+The caps must live in code the model cannot reach. An instruction to *"stop after
+fifteen steps"* is a request; a counter that ends the loop at fifteen is a limit.
+
+## Reserve the worst case first
+
+The strongest version of budgeting is to **reserve** before you spend.
+
+Lrnon's assistant does this for every question. Before it calls the model, it
+reserves the *worst case* from a spending counter in the database: the full
+output ceiling, not an estimate. If that reservation would exceed the day's cap,
+the call never happens. Afterwards the reservation is corrected down to what was
+actually used.
+
+The order matters. Counting the cost after the call means a burst of requests all
+pass the check together and the bill arrives anyway. Reserving first, under a
+lock, means they cannot.
+
+An agent run is the same problem at larger scale. Reserve a budget for the
+**whole run** before the first turn, and have each turn draw it down. When it
+reaches zero the run ends, and nothing about the model's opinion can extend it.
+
+## The loop in Lrnon's own tooling
+
+There is a loop in this project, and where it lives is instructive.
+
+When the admin console runs the injection corpus, it works through 27 cases one
+after another. That loop runs in the **browser**, one request per case, and not
+inside the server. The reason was a limit: twenty-seven model calls in a single
+server invocation would sit close to its wall-clock ceiling, and a run that times
+out half way reports nothing about the half it completed.
+
+Putting the loop outside, with each iteration a bounded call, kept every
+individual step small and meant that stopping was as simple as closing the page.
+The same shape suits an agent: a short, bounded unit of work, repeated under
+control you can interrupt.
+
+## Try it now (10 minutes)
+
+Work out a rough cost for a run before you build one. Take a plausible case:
+
+- How much text does one turn add?
+- How many turns would a typical task need, and an unusually hard one?
+- What is the total text read across the run, using the sum rather than the
+  product?
+
+Then write the three caps you would set, and where each is enforced. If any of
+them is "I'd ask the model to stop", it is not a cap yet.
+
+<Quiz client:visible items={[
+  {
+    q: "Mechanically, what is an agent?",
+    options: [
+      "A model with persistent memory of earlier conversations",
+      "A model in a loop: choose a tool or finish, run it, add the result to the history, repeat",
+      "A set of cooperating models, each responsible for one task"
+    ],
+    answer: 1,
+    explain: "The apparent intelligence belongs to the model, but the structure is a while loop. Seeing it plainly makes the costs easy to predict."
+  },
+  {
+    q: "Why does a twenty-turn run cost far more than twice a ten-turn run?",
+    options: [
+      "Later turns use more expensive models",
+      "Each turn re-sends the whole history, which is longer every time, so the total grows roughly with the square of the turns",
+      "Providers charge a premium for long-running sessions"
+    ],
+    answer: 1,
+    explain: "Ten turns read roughly the sum of one through ten. Twenty turns read about four times as much, because the history keeps growing."
+  },
+  {
+    q: "Why must the limits on an agent run live in code the model cannot reach?",
+    options: [
+      "Models cannot count their own turns",
+      "An instruction to stop is a request; a counter that ends the loop is a limit",
+      "Platforms prevent models reading their own configuration"
+    ],
+    answer: 1,
+    explain: "A cap enforced by the same system it is meant to constrain is only a suggestion."
+  }
+]} />
+
+## Recap
+
+An agent is a model in a loop, and every turn re-reads the whole history, so cost
+climbs roughly with the square of the turns and time climbs with them. Decide the
+budget before the run: caps on turns, tokens and time, enforced in code the model
+cannot reach. Reserve the worst case first and correct it afterwards, as Lrnon's
+assistant does for every question. Keep each iteration small and bounded, and put
+the loop where you can interrupt it.

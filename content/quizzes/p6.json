@@ -1,0 +1,316 @@
+{
+  "module": "p6",
+  "title": "Multi-Step Workflows and Agents — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "p6-01",
+      "q": "What separates a workflow from an agent?",
+      "options": [
+        "Whether a language model is involved at all",
+        "Who decides the next step: you in advance, or the model at run time",
+        "How many tools are connected to the system"
+      ],
+      "answer": 1,
+      "explain": "A workflow's path is fixed and readable before it runs. In an agent the model decides it from what it has seen so far, so the route is discovered."
+    },
+    {
+      "id": "p6-02",
+      "q": "A refund process has four fixed steps and one judgement call. How should it be built?",
+      "options": [
+        "As an agent, because a judgement call is involved",
+        "As a workflow with a model in the one step that needs judgement",
+        "As an agent, to leave room for unusual refund cases"
+      ],
+      "answer": 1,
+      "explain": "You keep the exactness of the fixed steps and confine the unpredictability to the one place it belongs."
+    },
+    {
+      "id": "p6-03",
+      "q": "Why is an agent's failure often harder to place than a chain's?",
+      "options": [
+        "Agents produce no logs",
+        "The fault may be a choice many turns earlier that looked reasonable when it was made",
+        "Agents run on separate infrastructure from chains"
+      ],
+      "answer": 1,
+      "explain": "In a chain you know which step broke. In an agent the route is discovered, so the cause can sit far from where the symptom appeared."
+    },
+    {
+      "id": "p6-04",
+      "q": "When should an existing workflow step be promoted into a loop?",
+      "options": [
+        "When the team wants the system to feel more capable",
+        "Only when you can state why a fixed branch cannot do the job",
+        "As soon as the workflow has more than five steps"
+      ],
+      "answer": 1,
+      "explain": "If you cannot state it, it is a workflow. Promote only the step that genuinely needs a choice, and keep the rest exact."
+    },
+    {
+      "id": "p6-05",
+      "q": "Mechanically, what is an agent?",
+      "options": [
+        "A model with persistent memory of earlier conversations",
+        "A model in a loop: choose a tool or finish, run it, add the result to the history, repeat",
+        "A group of cooperating models, each responsible for a single task"
+      ],
+      "answer": 1,
+      "explain": "The apparent intelligence belongs to the model, but the structure is a while loop. Seeing it plainly makes the costs easy to predict."
+    },
+    {
+      "id": "p6-06",
+      "q": "Why does a twenty-turn run cost far more than twice a ten-turn run?",
+      "options": [
+        "Later turns use more expensive models",
+        "Each turn re-sends the whole history, which is longer every time, so the total grows roughly with the square of the turns",
+        "Providers charge a premium for long-running sessions"
+      ],
+      "answer": 1,
+      "explain": "Ten turns read roughly the sum of one through ten, which is 55 units. Twenty turns read about 210, nearly four times as much."
+    },
+    {
+      "id": "p6-07",
+      "q": "Why must limits on an agent run live in code the model cannot reach?",
+      "options": [
+        "Models cannot count their own turns",
+        "An instruction to stop is a request; a counter that ends the loop is a limit",
+        "Platforms prevent models from reading their own configuration"
+      ],
+      "answer": 1,
+      "explain": "A cap enforced by the same system it is meant to constrain is only a suggestion."
+    },
+    {
+      "id": "p6-08",
+      "q": "Why reserve the worst-case budget before a call instead of counting the cost afterwards?",
+      "options": [
+        "Reservations make the provider's invoice smaller",
+        "Counting afterwards lets a burst of requests all pass the check together, and the bill arrives anyway",
+        "Providers require reservations for any request above a minimum size"
+      ],
+      "answer": 1,
+      "explain": "Reserving first, under a lock, means the burst cannot all pass. The reservation is corrected down to actual use afterwards."
+    },
+    {
+      "id": "p6-09",
+      "q": "What bounds everything an agent can do to the world?",
+      "options": [
+        "The instructions in its system prompt",
+        "Its list of tools, since it can only act through them",
+        "The model's own sense of what is appropriate"
+      ],
+      "answer": 1,
+      "explain": "A model can only produce text. Everything it does beyond that, it does by asking a tool, so the tool list is the set of things that can happen."
+    },
+    {
+      "id": "p6-10",
+      "q": "How should you judge whether a tool is safe to give an agent?",
+      "options": [
+        "By how it is intended to be used",
+        "By its worst single call with the worst arguments an attacker could choose",
+        "By how often it is expected to be called"
+      ],
+      "answer": 1,
+      "explain": "A tool whose worst call you cannot accept is not ready, however well the average call behaves."
+    },
+    {
+      "id": "p6-11",
+      "q": "Why is a tool called run_sql described as a hole with a name?",
+      "options": [
+        "It is slower than purpose-built tools",
+        "Its worst call is anything the credential permits, so it bounds nothing",
+        "Most agent platforms do not support database tools"
+      ],
+      "answer": 1,
+      "explain": "A tool such as get_order_status covers one question and cannot be made to answer another. The general tool covers every question, including ones you never considered."
+    },
+    {
+      "id": "p6-12",
+      "q": "Why does a tool's description belong to the security surface?",
+      "options": [
+        "Descriptions are published to the users of the system",
+        "The model decides when and how to call the tool from that text, so it shapes behaviour like any prompt",
+        "Descriptions determine which credentials a tool may use"
+      ],
+      "answer": 1,
+      "explain": "A vague description invites misuse and a precise one narrows it. Descriptions supplied by third-party services are also text an attacker would like to write."
+    },
+    {
+      "id": "p6-13",
+      "q": "A step is right 95% of the time. Roughly how reliable are ten of them in a row?",
+      "options": [
+        "About 95%, since each step is individually reliable",
+        "About 60%, because the probabilities multiply down the chain",
+        "About 85%, since errors partly cancel each other"
+      ],
+      "answer": 1,
+      "explain": "Ninety-five percent multiplied by itself ten times is about sixty. A demonstration is one run chosen for working; a deployment is thousands of runs."
+    },
+    {
+      "id": "p6-14",
+      "q": "Why are early errors in a long run especially damaging?",
+      "options": [
+        "Early steps are more expensive than later ones",
+        "Later steps treat earlier output as true and build on it, and nothing downstream can notice",
+        "Agents re-run early steps if they detect a fault"
+      ],
+      "answer": 1,
+      "explain": "From where a later step stands, a wrong input looks entirely normal. The run becomes consistent with the mistake."
+    },
+    {
+      "id": "p6-15",
+      "q": "What makes a verification step worth having?",
+      "options": [
+        "It uses a more capable model than the step being checked",
+        "It checks against something independent of the step being checked, such as a source, a rule or a test",
+        "It runs after every single step"
+      ],
+      "answer": 1,
+      "explain": "A model reviewing its own output shares its blind spots. Verification must be able to disagree with what it checks."
+    },
+    {
+      "id": "p6-16",
+      "q": "Which change most reliably raises the reliability of a long run?",
+      "options": [
+        "Making each step's prompt longer and more detailed",
+        "Removing steps, since every step removed raises the reliability of the whole",
+        "Asking the model to double-check its own work at the end"
+      ],
+      "answer": 1,
+      "explain": "A run of five that does the same job as a run of twelve is cheaper and substantially more reliable, which usually beats improving any single step."
+    },
+    {
+      "id": "p6-17",
+      "q": "What does an agent remember between turns?",
+      "options": [
+        "Everything it has ever been shown, stored by the model",
+        "Only what is in the window it is shown on this turn",
+        "Whatever the platform marks as important"
+      ],
+      "answer": 1,
+      "explain": "The model remembers nothing between calls. The history is the memory, so anything trimmed or summarised away no longer exists for it."
+    },
+    {
+      "id": "p6-18",
+      "q": "Why is a constraint stated in the first message vulnerable in a long run?",
+      "options": [
+        "Models give less weight to instructions that come first",
+        "Summarisation can drop a short sentence from a long history while the summary still reads as complete",
+        "Constraints expire after a fixed number of turns"
+      ],
+      "answer": 1,
+      "explain": "Standing rules belong in the system instructions, which are re-sent in full each turn and never summarised."
+    },
+    {
+      "id": "p6-19",
+      "q": "In the lesson's phrase, what does the model do and what does your code do about state?",
+      "options": [
+        "The model remembers and your code reasons",
+        "The model reasons and your code remembers",
+        "Both reason, and neither remembers"
+      ],
+      "answer": 1,
+      "explain": "Anything that must be right, such as how many records are done, should live in a store your code reads, not only as a sentence in the history."
+    },
+    {
+      "id": "p6-20",
+      "q": "Why does hostile text fetched early in a run still matter much later?",
+      "options": [
+        "Models keep suspicious text in a separate long-term store",
+        "It stays in the window and is re-read on every later turn, so an injection does not expire",
+        "Later turns fetch the same page again automatically"
+      ],
+      "answer": 1,
+      "explain": "Read untrusted material in a short-lived sub-task that returns only the facts needed, so the main run never holds the hostile text."
+    },
+    {
+      "id": "p6-21",
+      "q": "Why should the completion condition be one that code can check?",
+      "options": [
+        "Models cannot recognise when a task is finished",
+        "A model asked whether it has finished tends to say yes, while a mechanical check cannot be talked into agreeing",
+        "Checkable conditions run faster than model-judged ones"
+      ],
+      "answer": 1,
+      "explain": "A file existing, a count reached or a test passing does not depend on the model's opinion. Where it cannot be mechanical, the final judgement belongs to a person."
+    },
+    {
+      "id": "p6-22",
+      "q": "Which is a cheap, reliable sign that a run is stuck?",
+      "options": [
+        "The model's replies become longer",
+        "The same tool called repeatedly with the same arguments",
+        "The run takes longer than the previous one"
+      ],
+      "answer": 1,
+      "explain": "Keep recent calls and arguments and end the run if the same pair appears three times. It is a rule, and it works without the model's cooperation."
+    },
+    {
+      "id": "p6-23",
+      "q": "A write tool returns 'not permitted'. What should the agent do?",
+      "options": [
+        "Try another tool that achieves the same effect",
+        "Stop, and report what it tried and where it stopped",
+        "Retry with different arguments until it succeeds"
+      ],
+      "answer": 1,
+      "explain": "When the blockage was put there deliberately, finding a way round is the failure. A refusal should be a stopping condition, not an obstacle."
+    },
+    {
+      "id": "p6-24",
+      "q": "Why is an allowlist of permitted actions stronger than a blocklist?",
+      "options": [
+        "Allowlists are quicker to evaluate",
+        "A blocklist names what you thought of, and the model finds the thing you did not",
+        "Blocklists are not supported by most platforms"
+      ],
+      "answer": 1,
+      "explain": "Only these four tools, only these three folders, only these two domains leaves the model no room for a fifth."
+    },
+    {
+      "id": "p6-25",
+      "q": "Why is an agent's final report weak evidence of what it actually did?",
+      "options": [
+        "Agents are instructed to exaggerate their results",
+        "It is generated text from the same system that did the work, and may describe an action that never happened",
+        "Reports are written before the final steps complete"
+      ],
+      "answer": 1,
+      "explain": "The model writes the most plausible account of a run, and a clean success is more plausible than a messy one. The report tells you where to look; it is not the evidence."
+    },
+    {
+      "id": "p6-26",
+      "q": "Why must the trace of a run be written by your code and not by the model?",
+      "options": [
+        "Models cannot produce structured logs",
+        "A trace the agent narrates shares the weaknesses of its report, while a log written where the tool is called is a fact",
+        "Platforms charge extra for model-generated logs"
+      ],
+      "answer": 1,
+      "explain": "It should also be append-only, so neither the agent nor the tool it calls can edit what it records."
+    },
+    {
+      "id": "p6-27",
+      "q": "Which question about a task best predicts whether an agent suits it?",
+      "options": [
+        "Whether the task is currently done by a person",
+        "Whether the result can be checked cheaply and independently",
+        "Whether the task already involves a language model"
+      ],
+      "answer": 1,
+      "explain": "Errors compound, and the cure is verification that can disagree with the step it checks. Where checking is cheap and mechanical, an agent can try, be told, and try again."
+    },
+    {
+      "id": "p6-28",
+      "q": "How should autonomy be introduced into a system?",
+      "options": [
+        "Build the open-ended agent first and constrain it as problems appear",
+        "Start with a workflow and promote only the step that genuinely needs a choice, widening as evidence accumulates",
+        "Grant full autonomy once a demonstration works reliably"
+      ],
+      "answer": 1,
+      "explain": "Evidence means a trace you have read and a verified success rate. A feeling that it seems to be doing well is not evidence."
+    }
+  ]
+}

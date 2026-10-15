@@ -1,0 +1,180 @@
+---
+title: "Where an agent is the right answer"
+description: "Open-ended tasks with cheap, independent checking suit an agent. Anything irreversible, expensive to check, or fixed in shape does not."
+track: practitioner
+module: p6
+order: 8
+minutes: 9
+objectives:
+  - "Judge whether a task suits an agent using four questions about its shape"
+  - "Grow from a workflow by promoting a single step, rather than starting open-ended"
+concepts: ["task suitability", "verification cost", "reversibility", "incremental autonomy"]
+flashcards:
+  - front: "Which four questions decide whether a task suits an agent?"
+    back: "Does the path genuinely vary? Can the result be checked cheaply and independently? Can mistakes be undone? Is the value worth the cost and time?"
+  - front: "Why do coding tasks suit agents so well?"
+    back: "The result can be verified cheaply and independently, because the tests pass or they do not, and mistakes are reversible in version control."
+  - front: "How should autonomy be introduced?"
+    back: "Start with a workflow, find the one step that really needs a choice, and promote only that. Widen as evidence accumulates, not as confidence does."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Seven lessons on the ways agents go wrong. This one asks where they go right,
+because there are such places and it would be dishonest to leave the impression
+that there were not.
+
+## Four questions
+
+### Does the path genuinely vary?
+
+If the steps are the same every time, you want a workflow (L1), which is cheaper,
+faster, and exact. An agent earns its cost only where the next action depends on
+what turned up, and cannot be drawn beforehand.
+
+*"Investigate why this build fails"* varies. *"Convert this file and email it"*
+does not.
+
+### Can the result be checked cheaply, and independently?
+
+This is the most predictive question of all. L4 explained why: errors compound, and
+the cure is verification that can disagree with the step it checks.
+
+Where checking is cheap and mechanical, an agent can try, fail, be told, and try
+again. Where the only check is another opinion, it cannot, and its confidence is
+unearned.
+
+### Can mistakes be undone?
+
+A wrong action that can be reversed is an experiment. One that cannot be reversed
+is an incident.
+
+Prefer tasks where everything the agent does can be rolled back, reviewed before
+release, or confined to a sandbox. The more irreversible the action, the more the
+agent's role should shrink to proposing.
+
+### Is it worth the cost and the time?
+
+L2 was blunt about this. A task that takes a person thirty seconds can take an
+agent minutes and cost a good deal more. That only pays if the task is frequent
+enough, the person's time dear enough, or the quality better.
+
+Do the arithmetic before building. It is not usually favourable for small tasks.
+
+## Where the four line up
+
+**Writing and changing code.** The path varies, tests check the result mechanically
+and independently, every change is reversible in version control, and the time saved
+is worth the cost. This is why agents are strongest here, and it is a property of
+the task rather than of the agent.
+
+**Research with a human at the end.** The path varies, a person checks the sources,
+nothing irreversible happens, and gathering is slow work for a person. The proviso
+is real: the check has to actually be done, not assumed.
+
+**Exploration in a sandbox.** Trying configurations, probing an unfamiliar system,
+sifting a large pile. Reversible, cheap to discard, and open-ended by nature.
+
+## Where they do not
+
+**Anything with money, messages or records that cannot be recalled,** and no person
+in the way. Fine if the agent drafts; not fine if it sends.
+
+**Tasks whose only check is another model.** Self-review shares blind spots, and a
+long fluent run is the signature of a confident error.
+
+**Fixed-shape work.** If you can draw the chain, draw it. Calling it an agent
+makes it slower and less reliable for no gain.
+
+**High-volume, low-value work.** The loop cost (L2) is multiplied by every run.
+
+## Promote one step
+
+The advice that follows from all of this is practical.
+
+Do not start by building an agent for a goal. **Start with a workflow, run it,
+and watch where it needs a choice that you cannot encode.**
+
+That step, and only that step, can become a small loop with a short tool list, its
+own budget, a checkable completion condition, and a hand-over when stuck. The rest
+of the chain stays fixed.
+
+Widen autonomy as **evidence** accumulates rather than as **confidence** does. A
+trace you have read and a verified success rate are evidence. A feeling that it
+seems to be doing well is not, and the demonstration was always going to work.
+
+## Lrnon's choice, and what would change it
+
+Sky is a workflow with one judgement in it, and the reasoning is plain.
+
+The path does not vary: every question is answered from retrieved passages in the
+same way. There is no cheap independent check on an answer's *truth*, only on
+whether it cites a passage it was given, which is why the readiness gates ask for
+two hundred answers reviewed by hand. And a wrong answer cannot be unsaid to
+someone who has read it, and some of those readers are children.
+
+That is the first three questions each pointing away from an agent, and the fourth,
+cost, adds nothing to the case for one. If one day Sky needed to look things up across
+several sources and reconcile them, that step might justify a small loop. It would
+arrive with the bounds from this module: a tool list of one or two read-only
+tools, a turn cap, a budget reserved up front, a completion condition checked in
+code, and a trace.
+
+Until then the honest answer to *"should it be an agent?"* is no, and the question
+has been answered rather than skipped.
+
+## Try it now (10 minutes)
+
+Choose a task you think needs an agent. Answer the four questions in writing, with
+a sentence each.
+
+If any answer is "no" or "I don't know", write down what you would build instead
+and what evidence would make you revisit it.
+
+Then identify the one step in the task that genuinely varies. That is the only
+candidate for a loop.
+
+<Quiz client:visible items={[
+  {
+    q: "Which question about a task best predicts whether an agent suits it?",
+    options: [
+      "Whether the task is currently done by a person",
+      "Whether the result can be checked cheaply and independently",
+      "Whether the task involves a language model already"
+    ],
+    answer: 1,
+    explain: "Errors compound, and the cure is verification that can disagree with the step it checks. Where checking is cheap and mechanical, an agent can try, be told, and try again."
+  },
+  {
+    q: "Why do coding tasks suit agents so well?",
+    options: [
+      "Code is the kind of text models handle best",
+      "The result is checked mechanically by tests and every change is reversible, which is a property of the task",
+      "Agents have privileged access to development environments"
+    ],
+    answer: 1,
+    explain: "The path varies, verification is cheap and independent, mistakes can be rolled back, and the time saved is worth the cost."
+  },
+  {
+    q: "How should autonomy be introduced into a system?",
+    options: [
+      "Build the open-ended agent first and constrain it as problems appear",
+      "Start with a workflow and promote only the step that genuinely needs a choice, widening as evidence accumulates",
+      "Grant full autonomy once a demonstration works reliably"
+    ],
+    answer: 1,
+    explain: "Evidence means a trace you have read and a verified success rate. A feeling that it seems to be doing well is not evidence."
+  }
+]} />
+
+## Recap
+
+Four questions decide whether a task suits an agent: does the path genuinely vary,
+can the result be checked cheaply and independently, can mistakes be undone, and is
+it worth the cost and time. Code, supervised research and sandboxed exploration line
+up; irreversible actions, self-reviewed work, fixed-shape tasks and high-volume
+low-value ones do not. Start with a workflow, promote only the step that needs a
+choice, and widen autonomy as evidence accumulates rather than as confidence does.
