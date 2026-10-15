@@ -90,6 +90,20 @@ no technical background, works on a phone, and does not require an account.
   increment happen in one statement under a row lock, and KV was left doing
   per-IP traffic shaping. That is the stronger fix, and worth stating
   accurately rather than letting the old sentence stand.
+
+  **Before Sky widens beyond staff, three things must be true, and none is yet.**
+  (1) The model-provider plan and its current data terms are confirmed and dated.
+  The assistant's footer used to say "Nothing you type is used to train
+  anything", which could not be known: the quota behaviour is consistent with a
+  free tier, and the provider's published terms for unpaid use say content may be
+  used to improve its products and read by human reviewers. The footer was
+  changed on 15 October 2026 to say only what holds on any plan, and a training
+  claim should return only after the plan is checked. (2) `/privacy` is updated
+  to say that questions go to an outside provider; it currently does not mention
+  Sky. (3) The four gates and the "second owner" approval are enforced in
+  `set_sky_mode`, which today checks only that the caller is the owner; they exist
+  in the console and nowhere else. Certification and the rooms already enforce
+  their conditions in the database and are the pattern to copy.
 - **One maintainer.** Say "a small team" only if it stops being one person.
 - **The Practitioner track is complete; Builder is not.** All eleven Practitioner
   modules, P1 to P11, exist. The Builder track has one module, B1, planned and
