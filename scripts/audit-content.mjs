@@ -182,7 +182,11 @@ for (const file of [...walk('content/explorer'), ...walk('content/practitioner')
   }
 
   const lawsNamed = [...new Set(volatile.filter((v) => v.kind === 'law-or-regulation').map((v) => v.match))];
-  const urls = [...new Set([...src.matchAll(/https?:\/\/[^\s)"'<>\]]+/g)].map((m) => m[0].replace(/[.,;]+$/, '')))];
+  /* Reserved example hosts (RFC 2606) appear on purpose — P3·L4 shows an
+     exfiltration URL — and must not be reported as dead links. */
+  const RESERVED = /^https?:\/\/(?:[^/]*\.)?(?:example|test|invalid|localhost)(?:\.[a-z]+)?(?:[:/]|$)/i;
+  const urls = [...new Set([...src.matchAll(/https?:\/\/[^\s)"'<>\]]+/g)].map((m) => m[0].replace(/[.,;]+$/, '')))]
+    .filter((u) => !RESERVED.test(u));
 
   lessons.push({
     file: rel, module: fm.module, order: Number(fm.order), title: fm.title, lastVerified: fm.lastVerified, ageDays: days,

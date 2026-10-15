@@ -45,7 +45,7 @@ if (packet.trim()) lines.push('## Review packet', '', packet.replace(/^# .*\n/, 
 lines.push('---',
   'Full per-lesson detail is in the `content-audit` artifact of this workflow run (`content-audit.md`).',
   'How to work through this: `docs/handbook/content-freshness.md`.',
-  'Re-read the lesson, change what is wrong, set `lastVerified` to the day you actually checked, and run `node scripts/check-sources.mjs --update` so the baseline records that a person looked.');
+  'Re-read the lesson, change what is wrong, set `lastVerified` to the day you actually checked, then run this workflow by hand with `accept_baseline` ticked so the baseline records that a person looked.');
 
 let body = lines.join('\n');
 if (body.length > 60000) body = body.slice(0, 60000) + '\n\n…truncated; see the artifact for the rest.';

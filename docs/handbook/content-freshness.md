@@ -49,9 +49,12 @@ the secret the job runs fine and lists evidence only.
    generated. Never bump it without reading the lesson.
 4. If the lesson states a fact about a law or a vendor's terms, add or refresh
    its `sources:` entry (below).
-5. Run `node scripts/check-sources.mjs --update` and commit
-   `registry/_fingerprints.json`. That records that a person looked; until then
-   the same change is reported again every Monday.
+5. Run the **Content freshness** workflow by hand from the Actions tab with
+   *accept_baseline* ticked. It records the pages as they read from the CI runner
+   and commits `registry/_fingerprints.json`. Until then the same change is
+   reported again every Monday. (Do not run `--update` on your own machine: the
+   same page can read differently from another country, and the weekly comparison
+   would then report geography as change.)
 
 ## `sources:` — outside facts
 

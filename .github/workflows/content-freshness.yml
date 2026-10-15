@@ -11,13 +11,42 @@ on:
   schedule:
     - cron: '0 6 * * 1'        # Mondays 06:00 UTC
   workflow_dispatch:
+    inputs:
+      accept_baseline:
+        description: "I have read this week's source changes and updated any lesson that needed it. Record the pages as reviewed (commits registry/_fingerprints.json)."
+        type: boolean
+        default: false
 
 permissions:
   contents: read
   issues: write
 
 jobs:
+  # The baseline is written here, not on a laptop, because the same page can read
+  # differently from a different country or network (Google's API terms measured
+  # 3,062 words from one and 3,711 from another). Comparing a CI run with a
+  # baseline from a person's machine reported changes that were only geography.
+  accept-baseline:
+    if: ${{ inputs.accept_baseline }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22 }
+      - run: node scripts/check-sources.mjs --update || true
+      - name: Commit the baseline
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add registry/_fingerprints.json
+          git diff --cached --quiet && echo "Baseline unchanged" && exit 0
+          git commit -m "Record vendor and cited source pages as reviewed ($(date -u +%F))"
+          git push
+
   freshness:
+    if: ${{ !inputs.accept_baseline }}
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
