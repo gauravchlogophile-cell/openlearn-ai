@@ -1,0 +1,165 @@
+---
+title: "Build it without the model first"
+description: "Make the plumbing work with plain rules, then add a model only at the step that needs judgement. Two unknowns at once cannot be debugged."
+track: practitioner
+module: p5
+order: 2
+minutes: 8
+objectives:
+  - "Build an automation's plumbing and rules before introducing a model step"
+  - "Decide whether a step needs judgement or only a rule"
+concepts: ["deterministic first", "judgement versus transformation", "debugging", "model step"]
+flashcards:
+  - front: "Why build the chain with no model first?"
+    back: "Two unknowns at once cannot be separated. If the plumbing works with fixed answers, any later fault is in the model step and nowhere else."
+  - front: "How do you decide whether a step needs a model?"
+    back: "Ask whether a rule could do it. Extracting a date, filtering by sender or routing on a keyword is a rule. Reading tone or summarising a long thread is judgement."
+  - front: "What are the three costs of a model step?"
+    back: "It is the slowest step, the dearest per run, and the only one whose output you cannot predict. Keep the count of them small."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+P4·L8 ended on a question: would a document or a script do this better? This
+lesson takes the same instinct inside an automation, where the answer is often
+*yes, for most of the steps*.
+
+The rule is short. **Build the whole chain with no model first.**
+
+## Why order matters
+
+An automation has two kinds of uncertainty, and they should never arrive
+together.
+
+**Does the plumbing work?** Does the trigger fire, does the data reach the next
+step in the shape it expects, do permissions allow the final write, does the
+message actually arrive?
+
+**Does the model do the right thing?** Is the classification correct, is the
+summary faithful, does the draft read well?
+
+If you build both at once and it fails, you do not know which broke. You will
+spend an evening adjusting a prompt that was fine, because the real fault was a
+field name two steps earlier. This is not rare. It is the ordinary experience of
+building these.
+
+Put a fixed value where the model step will go. Make the classifier return
+*"billing"* every time. Get the whole chain working end to end with that: the
+trigger fires, the right branch runs, the right row is written, the right person
+is told. Only then replace the fixed value with a real step.
+
+Now any new fault is in the model step. There is nowhere else for it to be.
+
+## Is it judgement, or is it a rule?
+
+Most steps people hand to a model are rules in disguise.
+
+> **A rule can do it:** extract an order number that follows "Order #", route
+> messages from a known address, discard anything with an attachment, check a
+> date is in the future, look up a customer by email, format a number as
+> currency.
+>
+> **Judgement is needed:** decide whether an email is angry, summarise a long
+> thread into three lines, draft a reply in a house voice, work out which of five
+> vague categories a request belongs to.
+
+The test is whether you could write the rule down so that another person would
+reach the same answer every time. If you can, write it. A rule is instant, free,
+exact, and does the same thing on Tuesday as on Monday.
+
+A model is the right tool where writing the rule is the hard part. It is the
+wrong tool for work that a pattern could do, and the mistake is attractive
+because a model gets a working version faster. P4·L8 made the distinction: a
+model is an excellent way to *write* the rule and a poor way to *be* the rule.
+
+## What a model step costs
+
+Count the cost honestly, because it is easy to add one and hard to see what it
+added.
+
+**It is the slowest step.** A fixed lookup takes milliseconds; a model call takes
+seconds, and sometimes much longer.
+
+**It is the dearest step.** Rules are free to run. A model call costs something
+every time, which is invisible at ten runs a day and not at ten thousand. P7
+deals with this properly.
+
+**It is the only step you cannot predict.** Every other step does the same thing
+with the same input. This one does not, and sometimes varies in ways that only
+show up on the fifth run.
+
+Keep the number of model steps small, and put each one where nothing else will
+do. An automation with one model step and six rules is easier to trust than one
+with six model steps and a rule.
+
+## The same shape in Lrnon's assistant
+
+Sky has exactly one model step, and the work around it is deliberately not a
+model.
+
+Finding which lesson passages are relevant is **not** done by a model. It is a
+keyword scorer that gives rare words more weight, which is a rule, and is why
+the project could measure it, tune it, and notice when a lesson containing the
+phrase "the capital of France" as a word-prediction example scored higher than
+any genuine question.
+
+The model writes the answer from four passages it has been handed. That is the
+one step where judgement is the whole job. Everything before it is plumbing,
+and the plumbing was made to work first.
+
+## Try it now (12 minutes)
+
+Take the chain you drew in L1 and mark each step **rule** or **judgement**. Be
+strict. For every step you marked judgement, write the rule you would need to
+replace it, and ask whether it is genuinely hard to write.
+
+Then build it, if you can, with a fixed value where each judgement step goes.
+Run it end to end ten times. Only when that is boring, introduce the model.
+
+You will find faults in the plumbing. Better to find them while the model cannot
+be blamed.
+
+<Quiz client:visible items={[
+  {
+    q: "Why build an automation's chain with fixed values before adding a model?",
+    options: [
+      "Fixed values run faster than models during testing",
+      "Two unknowns at once cannot be separated; if the plumbing works first, any later fault lies in the model step",
+      "Platforms require a working chain before a model can be attached"
+    ],
+    answer: 1,
+    explain: "Otherwise you spend an evening adjusting a prompt that was fine, because the real fault was a field name two steps earlier."
+  },
+  {
+    q: "Which of these genuinely needs a model rather than a rule?",
+    options: [
+      "Extracting an order number that follows 'Order #'",
+      "Deciding which of five vague categories a request belongs to",
+      "Formatting a number as currency"
+    ],
+    answer: 1,
+    explain: "If you can write a rule that another person would apply identically every time, write the rule. A model is for work where writing the rule is the hard part."
+  },
+  {
+    q: "What distinguishes a model step from every other step in a chain?",
+    options: [
+      "It is the only step that can fail",
+      "It is the only one whose output you cannot predict from its input",
+      "It is the only one that needs credentials"
+    ],
+    answer: 1,
+    explain: "Every other step does the same thing with the same input. A model step is also the slowest and the dearest, which is why you keep the count small."
+  }
+]} />
+
+## Recap
+
+Build the chain with fixed values first, so the plumbing is proven before a
+model can be blamed for anything. Most steps people hand to a model are rules
+in disguise, and a rule is instant, free and identical every time. Use a model
+only where writing the rule is the hard part. It is the slowest, dearest and
+least predictable step, so keep their number small and place each where nothing
+else will do.

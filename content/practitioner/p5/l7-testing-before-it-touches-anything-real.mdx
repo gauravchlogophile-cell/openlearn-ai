@@ -1,0 +1,181 @@
+---
+title: "Testing before it touches anything real"
+description: "Sample data, a test recipient, a dry run, a shadow run and a staged rollout. Test the failure paths, and test the off switch while it is working."
+track: practitioner
+module: p5
+order: 7
+minutes: 10
+objectives:
+  - "Move an automation from sample data to real use in stages, each with a way back"
+  - "Test the failure paths and the stop control, not only the working case"
+concepts: ["dry run", "shadow mode", "staged rollout", "kill switch"]
+tools: ["n8n"]
+flashcards:
+  - front: "What is a dry run?"
+    back: "A run that records what it would have done without doing it. It exercises the whole chain except the final action."
+  - front: "What is shadow mode?"
+    back: "The automation runs alongside the manual process on real input, and you compare its output with what a person did, before it is allowed to act."
+  - front: "Why test the stop control while the chain is working?"
+    back: "A switch tested only against a broken system reports success either way. The observation that means something is: running, press it, confirm it stops."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The first real run of an automation should not be the first time it has run.
+That sounds obvious and is routinely ignored, because the build feels finished
+the moment the last box is connected and the pull towards switching it on is
+strong.
+
+The cost of that first real run is asymmetric. If it works, you saved an
+afternoon. If it does not, it sent something to a customer, or changed a record,
+or posted to a channel the whole company reads.
+
+## A ladder, with a way down at every rung
+
+Move up one rung at a time, and know how to step back down from each.
+
+### 1. Sample data
+
+Run the chain on text you pasted in, with the final action pointed at nothing.
+Check that each step receives what the previous one produced. Many platforms let
+you run a single step or the whole chain on test input; look for that first.
+
+Use **awkward** samples, as in P4·L6: a badly phrased message, an empty field, an
+unexpectedly long one, text in another language, one containing a link.
+
+### 2. A test target
+
+Point the action at somewhere harmless: your own address, a scratch sheet, a
+channel only you are in. Now the chain does everything for real except reach
+anybody.
+
+### 3. A dry run
+
+Have the chain record what it **would have done** and not do it. A log line per
+action: *would send to X, would set field Y to Z*. Run it against live input for
+a few days and read the log. This is where you meet the inputs you did not
+imagine.
+
+### 4. Shadow mode
+
+Let it run **alongside the manual process**. A person still handles every case;
+the automation also produces its answer, which nobody sees yet. Afterwards,
+compare.
+
+This is the most informative rung and the most often skipped. The disagreements
+are your real error rate, measured on real inputs, with a person's answer as the
+reference.
+
+### 5. A staged rollout
+
+Let it act for a small, low-stakes slice first: one team, one category, ten
+percent of cases. Widen only when the narrower stage has run cleanly for a while.
+
+## Lrnon's own ladder
+
+The assistant has a rollout console with exactly this shape. The stages are
+**off, staff, a slice of learners, and everyone**. Each change is recorded with
+who made it and when. Stepping back is instant for any administrator, and
+widening is for the owner alone.
+
+It is currently at **staff**, and that is an honest place to be: the gates that
+would justify more are not yet met, because the first of them needs two hundred
+answers reviewed by hand and none has been. A ladder is only useful if you are
+willing to stay on a rung.
+
+One caveat belongs next to that. The readiness gates are enforced by the console,
+which disables the button, and not yet by the database function behind it (L6
+explains the gap). Staying on a rung is currently a decision the owner holds
+rather than a rule the system holds, and that is worth knowing about your own
+ladders too.
+
+## Test the unhappy paths
+
+Everything above finds out whether the chain works. Almost no one tests whether
+it **fails well**, and L5 argued that failure is where the damage is.
+
+Break things on purpose:
+
+- **Make a step fail.** Point it at a wrong address. Does anyone get told?
+- **Send it garbage.** Empty input, enormous input, input in the wrong format.
+- **Send it the same event twice.** Does a dedupe key hold?
+- **Take away a permission.** Revoke the connection. What does the chain do?
+- **Make the model step return nonsense.** A label not on the list. Does it reach
+  a person, or the next action?
+
+Each of those has an answer you should know before you rely on the chain.
+
+## Test the stop control
+
+The last test is the one most often skipped, and it is a single sentence.
+
+> **While the automation is running, press the stop control, and confirm that it
+> stops.**
+
+The qualifier matters. A switch tested only against a chain that was already
+broken proves nothing, because "stopped" and "was already broken" look identical.
+
+Lrnon's own kill switch is a case in point. Until 5 September every press had
+been made while the assistant was already refusing for other reasons, and so
+every press looked like it worked. It was tested properly that day, with the
+assistant answering, and the log shows the stop and the restore three minutes
+apart. Before that, the claim that it worked was an assumption.
+
+Know where the stop is, who can press it, and what it leaves behind. A chain
+disabled mid-run may have done half of what it started. Find out what that
+looks like while it is a rehearsal.
+
+## Try it now (15 minutes)
+
+For a chain you have built, write the ladder with the rung you are currently on.
+Then write the **step down** for that rung: exactly what you would do, in order,
+if it misbehaved right now.
+
+Then actually do the stop test once: run it, press stop, and confirm the next
+trigger produces nothing. Note how long it took, and whether anything half-done
+was left behind.
+
+<Quiz client:visible items={[
+  {
+    q: "What does shadow mode give you that a dry run does not?",
+    options: [
+      "It runs faster than a dry run",
+      "A comparison between the automation's answers and what a person actually did on real input",
+      "It allows the automation to act on a small slice of cases"
+    ],
+    answer: 1,
+    explain: "The disagreements are your real error rate, measured on real inputs with a person's answer as the reference. It is the most informative rung and the one most often skipped."
+  },
+  {
+    q: "Why test an automation's failure paths, not only its working case?",
+    options: [
+      "Failure paths run more frequently than success paths",
+      "Failure is where the damage is, and the answers should be known before relying on the chain",
+      "Platforms require failure tests before activation"
+    ],
+    answer: 1,
+    explain: "Make a step fail, send garbage, send the same event twice, remove a permission. Each has an answer you should know in advance."
+  },
+  {
+    q: "Why is a stop control tested against an already-broken chain worthless?",
+    options: [
+      "Broken chains ignore stop commands",
+      "Stopped and already-broken look identical, so the test reports success either way",
+      "The control needs live traffic to initialise"
+    ],
+    answer: 1,
+    explain: "The observation that means something is: chain running, press stop, confirm it stops."
+  }
+]} />
+
+## Recap
+
+Climb a ladder with a way down at every rung: sample data, a harmless target, a
+dry run, shadow mode against a person's real answers, and a staged rollout. Be
+willing to stay on a rung until the evidence justifies the next. Test the
+unhappy paths, since failure is where damage happens, and test the stop control
+while the chain is running, because a switch tried only on a broken system has
+proved nothing.

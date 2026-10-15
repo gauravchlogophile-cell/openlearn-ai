@@ -1,0 +1,176 @@
+---
+title: "What you hand over when you connect"
+description: "Connecting an account is granting authority. Scopes, whose account it is, where the keys live, and how to cut it off in one step."
+track: practitioner
+module: p5
+order: 3
+minutes: 9
+objectives:
+  - "Read a permission request as a grant of authority and choose the narrowest that works"
+  - "Decide whose account an automation runs as and where its credentials are kept"
+concepts: ["OAuth scope", "service account", "credential storage", "least privilege"]
+tools: ["n8n"]
+flashcards:
+  - front: "What does clicking 'allow' on a connection actually do?"
+    back: "It gives the automation whatever the listed scopes permit, indefinitely, acting as you. Read the scope line the way you would read a contract clause."
+  - front: "Why prefer a dedicated account over your own?"
+    back: "Your own account carries your full reach, attributes every action to you, and stops working or does something odd the day you leave."
+  - front: "Where does a credential in an automation platform put your risk?"
+    back: "In the platform. Whoever can read its stored credentials, or compromise it, holds everything connected. Self-hosting changes who the operator is, not whether there is one."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The moment an automation does anything useful, it has to be allowed to. It needs
+to read a mailbox, write to a sheet, post to a channel, call an API. The step
+where you permit that is a few clicks and a consent screen, and it is the most
+consequential thing in the whole build.
+
+Connecting an account is **granting authority**. P3·L4 called the assistant a
+confused deputy: it holds your credentials and acts on text it did not write.
+This lesson is about deciding how much it holds.
+
+## Read the scope line
+
+Most connections use a permission request listing exactly what is being granted.
+The wording varies; the pattern does not.
+
+> *"See and download your files"*
+> *"Read, compose, send and permanently delete all your email"*
+> *"Post messages to channels you can access"*
+
+Notice how different the first and second are, and how little the consent screen
+conveys it. A scope is a grant to the automation of everything that line allows,
+for as long as the connection exists, performed as you.
+
+Ask one question of every line: **does this chain need that, or is it simply the
+option the platform offered?**
+
+Platforms tend to request broad scopes because broad scopes work for everyone.
+If your automation only needs to *read* a mailbox and the request says *read and
+send*, you have granted a send capability you do not need. Many services offer a
+narrower option if you look. Where they do not, that is itself worth knowing
+before you build on it.
+
+## Whose account is it?
+
+The easy path is to connect your own. It works immediately and costs nothing.
+It also causes three problems, none of which show up on day one.
+
+**It carries your full reach.** The automation can touch everything you can,
+including things unrelated to its job. A chain that only needed one folder has
+been given your whole drive.
+
+**Everything is attributed to you.** Messages it posts and records it edits show
+your name. When something goes wrong, you are the person who did it.
+
+**It leaves when you do.** The day your account is suspended, the chain stops, or
+quietly runs with stale permissions, and nobody knows it was yours to move.
+
+The alternative is a **dedicated account**: a shared mailbox, a service user, an
+account created for this purpose with only the access the chain needs. It takes
+twenty minutes to set up and belongs to the team, not to a person.
+
+## Where the keys live
+
+An automation platform stores your credentials so it can use them later. That is
+what it is for, and it has a consequence worth saying plainly.
+
+**The platform now holds the keys to everything you connected.** If it is
+compromised, or someone with access to it is careless, the blast radius is every
+connected service at once.
+
+This is not an argument against them. It is an argument for knowing what you
+connected, and for choosing the platform with that in mind. Self-hosting changes
+*who the operator is*; it does not remove the operator. Running n8n on your own
+server means the credential store is yours to protect, update and back up, which
+is a real saving in some respects and a real obligation in others. A hosted
+service means somebody else carries that, and you are trusting them to.
+
+Neither is safer by default. The honest comparison is which operator you trust
+to do that job well.
+
+## Keep them out of the wrong rooms
+
+Lrnon's own build taught this directly. The assistant's API key was, for a time,
+entered as a *build* variable rather than a *runtime* secret. The difference
+matters: a build variable is present in the environment while dependencies are
+installed and the site is built, where any package that runs a script during
+installation can read it. A runtime secret is never there.
+
+Nothing suggests the key leaked. It was in a room it had no reason to be in, and
+moving it cost two minutes. The general rule is the one from P3·L6: a credential should be
+present only where something genuinely needs it, and absent everywhere else.
+
+## One credential per job
+
+If five automations share one connection, revoking it for one revokes it for all,
+and a flaw in any one exposes the others. Give each its own, so each can be cut
+off alone and each reveals only what it was given.
+
+## Know how to cut it off
+
+Before you rely on any automation, answer this: **if it began misbehaving right
+now, what is the single action that stops it from touching anything?**
+
+Revoking the connection at the service itself is the strongest answer, because
+it works even if the platform is unavailable. Disabling the workflow in the
+platform is faster but depends on the platform. Know both, and know where each
+lives.
+
+## Try it now (10 minutes)
+
+Open your automation platform and list every connected account. For each, write:
+
+1. **The scope it holds.** Look it up; do not assume.
+2. **Whose account it is.** A person, or a dedicated one?
+3. **What would be lost if it were revoked tonight.** A shorter list than expected
+   usually means an unused connection you can remove now.
+
+Remove anything unused immediately. An idle connection with broad access costs
+nothing to keep and is entirely downside.
+
+<Quiz client:visible items={[
+  {
+    q: "What does approving a connection's permission request actually do?",
+    options: [
+      "Allows a single action, after which the permission expires",
+      "Grants the automation everything those scopes allow, as you, until the connection is removed",
+      "Gives the platform read-only access to check the account exists"
+    ],
+    answer: 1,
+    explain: "It is a standing grant of authority. A request for 'read, send and delete' is a very different grant from 'read', and the consent screen makes them look alike."
+  },
+  {
+    q: "Why connect a dedicated account instead of your own?",
+    options: [
+      "Dedicated accounts run requests faster",
+      "Your account carries your whole reach, attributes actions to you, and leaves when you do",
+      "Platforms refuse to connect personal accounts in production"
+    ],
+    answer: 1,
+    explain: "A dedicated account holds only the access the chain needs, belongs to the team, and survives a change of staff."
+  },
+  {
+    q: "Why was a key entered as a build variable in the wrong place, even though it never leaked?",
+    options: [
+      "Build variables are charged at a higher rate",
+      "A build variable is present while dependencies install, where any package running an install script can read it",
+      "Build variables are visible in the public site's source"
+    ],
+    answer: 1,
+    explain: "It was in a room it had no reason to be in. A credential should be present only where something needs it, and absent everywhere else."
+  }
+]} />
+
+## Recap
+
+Connecting an account grants authority, so read each scope line and take the
+narrowest that works. Prefer a dedicated account to your own, which carries your
+whole reach and leaves when you do. The platform holds the keys to everything
+connected, and self-hosting only changes who operates that store. Give each
+automation its own credential, keep keys out of places that do not need them, and
+know the single action that cuts an automation off.

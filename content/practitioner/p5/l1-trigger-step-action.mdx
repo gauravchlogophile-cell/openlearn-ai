@@ -1,0 +1,163 @@
+---
+title: "Trigger, step, action"
+description: "Every automation is a chain with something that starts it and something it changes. Draw the chain first, and notice where text from other people gets in."
+track: practitioner
+module: p5
+order: 1
+minutes: 8
+objectives:
+  - "Describe any automation as a trigger, a sequence of steps and a final action"
+  - "Identify which link in the chain lets text from outside enter, and which can change something"
+concepts: ["trigger", "action", "workflow", "input surface"]
+tools: ["n8n"]
+flashcards:
+  - front: "What are the three parts of an automation?"
+    back: "A trigger that starts it, steps that transform or decide, and an action that changes something. The model, if any, is one step among them."
+  - front: "Why does the trigger matter for safety?"
+    back: "It decides who can start the chain and whose text enters it. A form, an inbox or a webhook lets strangers supply the first input."
+  - front: "Where do most of the benefit and most of the risk sit?"
+    back: "In the plumbing around the model, not in the model. The connections, permissions and final actions decide what a mistake costs."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+P4 was about one assistant that people talk to. This module is about the other
+kind of thing: a system that does something **without anyone talking to it**.
+
+An email arrives and a row appears in a spreadsheet. A form is submitted and a
+draft reply lands in someone's folder. A file is saved and a summary is posted
+to a channel. Nobody asked in the moment. The thing was set up once and now runs.
+
+Platforms for this exist in large numbers, from visual canvases that connect apps
+with boxes and arrows to plain scripts on a schedule. n8n is one of them: an
+open-source workflow platform with a visual node canvas, which you can host
+yourself or use as a hosted service. The names differ and the shape underneath
+is the same everywhere.
+
+## Three parts
+
+> **A trigger.** Something that starts a run. A message arrives, a form is sent,
+> a time is reached, a file changes, a button is pressed.
+>
+> **Steps.** Things that transform or decide. Look up a record, extract fields,
+> classify, summarise, branch on a condition.
+>
+> **An action.** The step that changes something outside the chain. Write a row,
+> send a message, create a ticket, move money, publish a page.
+
+That is all of it. A model, when there is one, is a **step**. It is not the
+system, and describing an automation as "an AI agent that handles our support
+email" hides the structure that decides whether it is safe.
+
+## The trigger decides who is in the room
+
+Triggers come in three kinds, and they differ in a way people overlook.
+
+**Something happened.** An event: a message, a submission, a sale. These put
+someone else's text at the start of the chain. A support inbox, a contact form
+and a webhook are all open to whoever chooses to write to them.
+
+**A time was reached.** A schedule. Nobody supplies anything; the chain reads
+whatever it reads on its own. These are the quietest, and the easiest to forget
+exist.
+
+**A person pressed a button.** Manual. The person is the input, and is usually
+someone you know.
+
+P3·L1 asked who decides what the text says. For an automation, the trigger is
+usually the answer, and an event trigger is nearly always an untrusted input
+surface. Everything P3 said about text you did not write applies to the first
+box, and then to every box after it, because each step passes along whatever it
+received.
+
+## Draw it before you build it
+
+Before opening any platform, write the chain on paper, one line per link:
+
+1. **Trigger** — what starts it, and who can cause that.
+2. **Each step** — what it reads and what it produces.
+3. **The action** — what it changes, and whether that can be undone.
+
+Then add a column that platforms do not show you: for every link, **what is the
+worst thing it could do with the input it received?**
+
+You are not predicting an attack. You are finding which link carries the
+consequence, because it is almost never the one that looks clever. The step with
+the model in it tends to attract all the attention, and the step that sends the
+email tends to cause all the damage.
+
+## A worked example that has no model in it
+
+Lrnon's own deployment is an automation, and a plain one.
+
+- **Trigger:** a push to the main branch.
+- **Steps:** install, validate content, build the site, generate headers.
+- **Action:** upload the result to the live Worker.
+
+There is no model anywhere in it, and it is still the automation that has
+surprised this project most. In one stretch a build log read *Success* while the
+newest commit had never been built, apparently because a retry in the dashboard
+had re-run the previous one. L5 returns to that, because it is the clearest
+example of a quiet failure available.
+
+For now the point is simpler. The chain was always there, whether or not anyone
+had drawn it, and drawing it is how you see where a mistake would land.
+
+## Try it now (10 minutes)
+
+Pick something you do by hand every week that you wish a machine did. Write it as
+a chain: trigger, steps, action.
+
+Then mark two things.
+
+- **Which link lets text from outside in?** That is where P3 applies.
+- **Which link changes something you cannot take back?** That is where L6
+  applies.
+
+If they are the same link, or one feeds the other directly with nothing between,
+note it. That adjacency is the shape of most automation incidents.
+
+<Quiz client:visible items={[
+  {
+    q: "Where does a model sit in a typical automation?",
+    options: [
+      "It is the system, and the rest is configuration around it",
+      "It is one step in a chain of triggers, steps and actions",
+      "It replaces the trigger by deciding when to run"
+    ],
+    answer: 1,
+    explain: "Calling it an AI agent that handles the inbox hides the structure that decides whether it is safe. The model is a step; the connections and final action carry the consequence."
+  },
+  {
+    q: "Why does the kind of trigger matter for safety?",
+    options: [
+      "Some triggers run faster than others",
+      "An event trigger lets other people put text at the start of the chain",
+      "Scheduled triggers cannot be stopped once set"
+    ],
+    answer: 1,
+    explain: "A support inbox, a contact form and a webhook are open to whoever chooses to write to them, so the first input is often untrusted."
+  },
+  {
+    q: "When you map a chain, which link usually needs the most attention?",
+    options: [
+      "The step containing the model, because it is the most complex",
+      "The final action, because it carries the consequence",
+      "The trigger, because it runs most often"
+    ],
+    answer: 1,
+    explain: "The model step attracts attention and the step that sends the message causes the damage. Ask of every link what the worst thing is that it could do with the input it received."
+  }
+]} />
+
+## Recap
+
+An automation is a trigger, some steps and an action, and a model is one step
+among them. The trigger decides whose text enters the chain, and an event
+trigger usually means strangers supply the first input. Draw the chain before
+building it, and ask of each link what the worst thing is that it could do with
+what it received. The link that looks clever and the link that causes harm are
+rarely the same one.

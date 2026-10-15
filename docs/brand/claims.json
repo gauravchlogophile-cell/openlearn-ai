@@ -41,9 +41,9 @@
     {
       "id": "practitioner-modules-live",
       "probe": "practitionerModulesLive",
-      "expect": 4,
+      "expect": 5,
       "saidIn": ["03"],
-      "guideText": "Part B: \"P1 to P4 exist; P5–P11 and B1 are planned.\"",
+      "guideText": "Part B: \"P1 to P5 exist; P6–P11 and B1 are planned.\"",
       "onDrift": "Update Part B. Once several are live, 'incomplete' may stop being the honest framing and the marketing copy can say more."
     },
     {

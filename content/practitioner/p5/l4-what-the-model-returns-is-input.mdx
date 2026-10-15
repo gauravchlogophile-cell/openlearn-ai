@@ -1,0 +1,173 @@
+---
+title: "What the model returns is input"
+description: "The next step should treat a model's output the way it would treat anything from outside: constrained, validated, and never trusted to choose its own target."
+track: practitioner
+module: p5
+order: 4
+minutes: 9
+objectives:
+  - "Constrain a model step's output to a shape the next step can check"
+  - "Keep targets and identifiers under the control of your rules rather than the model's"
+concepts: ["output validation", "structured output", "allowlist", "trust boundary"]
+flashcards:
+  - front: "Why is a model's output untrusted input to the next step?"
+    back: "If the model read text someone else wrote, that text shaped the output. The step after it receives something an outsider influenced, presented as your own."
+  - front: "What shape should a classifier's output take?"
+    back: "One value from a fixed list. Anything not on the list goes to a human, not to the next step, and certainly not to an interpreter."
+  - front: "Which fields must a model never be allowed to choose?"
+    back: "The recipient, the record, the file path, the URL. Your rules pick the target; the model supplies content for it."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+In an automation the model's output goes somewhere. It becomes a field in a
+record, the body of a message, a filter in a query, an argument to the next
+step. This is the point where P3 stops being a topic about assistants and starts
+being about plumbing.
+
+The rule fits in a sentence. **What a model returns is input to the next step,
+and gets the same suspicion as any input from outside.**
+
+## Why it is not yours
+
+It feels like your own data. Your model, in your workflow, produced it.
+
+But consider what the model read. If a step in the chain fed it a customer's
+email, a fetched page or an uploaded document, that text shaped the output. A
+sentence in the email asking for something particular may now be reflected in
+what comes out, in a field the next step trusts because it came from inside.
+
+P3·L1 noted that chaining models passes along whatever each hop absorbed. A
+chain of plain steps does the same thing more quietly, because nothing in the
+platform marks the boundary. The output of step three looks exactly like the
+output of step one.
+
+## Constrain the shape
+
+The most effective defence is to leave the model very little room.
+
+**Ask for a value, not prose.** A classifier should return one label from a fixed
+list, such as `billing`, `technical`, `account`, `other`. It should not return
+a sentence explaining its choice, because a sentence can carry anything.
+
+**Use the platform's structured output where it exists.** P1·L2 covered getting
+output you can rely on. In a chain it matters more, because a malformed answer
+does not just look odd. It breaks the step that reads it, or worse, mostly works.
+
+**Reject anything off the list.** If the label is not one of the four, do not
+guess what was meant and do not pass it on. Route it to a person. A rejected
+output costs a minute of someone's attention; an interpreted one can cost a
+great deal more.
+
+## Check before the action
+
+Between a model step and a step that changes something, put a check that is
+**not a model**.
+
+The check can be small and boring. Is the label on the list? Is the amount a
+number, and under the ceiling? Does the recipient end in the company's domain?
+Is the text under a sensible length and free of a link you did not expect?
+
+Each is a rule, which L2 argued is the right tool wherever a rule will do, and
+here it is also the thing that holds when the model does not behave.
+
+## Never let it choose the target
+
+This is the single most useful habit in the lesson.
+
+A model can reasonably supply the *content* of an action. It should almost never
+supply the *target*.
+
+> The model drafts the reply. **Your rules** decide it goes to the sender of the
+> original message.
+>
+> The model summarises the ticket. **Your rules** decide which ticket it is
+> written against.
+>
+> The model suggests a filename. **Your rules** decide the folder, and the
+> extension.
+
+If the recipient, record, path or URL is produced by the model, then whoever
+influenced the model chose it. Fix the target in code from something the model
+did not touch, and an attack that fully succeeds can change what is written but
+not where. P3·L6 made the same argument about record identifiers.
+
+## Four places free text must never go
+
+Wherever a model's output could reach one of these, stop and restructure.
+
+- **A command line or script.** Free text in a shell command is an invitation.
+- **A database query.** The old lesson, in new clothes.
+- **A URL the platform will fetch.** It becomes an outbound request to a place
+  the model, or an attacker, chose.
+- **The recipient field of a message.** The most direct way to send data to a
+  stranger.
+
+## The same pattern in Lrnon
+
+When the admin console runs the injection corpus, the browser sends a case
+**identifier** and nothing else. The attack text itself lives in a file bundled
+into the Worker at build time, and the route reads it from there. No payload
+travels from a client.
+
+That was a deliberate use of exactly this rule. What crosses the boundary is an
+identifier chosen from a fixed list, and the thing that could do harm is looked
+up on the safe side of it. The route gained no ability to put arbitrary text in
+front of the model, which was the property worth protecting.
+
+## Try it now (10 minutes)
+
+Find every model step in a chain you have built or drawn. For each, answer:
+
+1. **What shape does the output take?** If the answer is "a paragraph", can it be
+   a label or a number instead?
+2. **What checks it before the next action?** A rule, not another model.
+3. **Does the model choose any target?** A recipient, record, path or URL. If so,
+   move that choice into your rules.
+
+The third is usually quick to fix and removes the worst case entirely.
+
+<Quiz client:visible items={[
+  {
+    q: "Why should a model's output be treated as untrusted input to the next step?",
+    options: [
+      "Models are less accurate than hand-written rules",
+      "If the model read text someone else wrote, that text shaped the output, which now looks like your own data",
+      "Platforms do not log model outputs"
+    ],
+    answer: 1,
+    explain: "Nothing in the platform marks the boundary. The output of step three looks exactly like the output of step one."
+  },
+  {
+    q: "A classifier returns a label that is not on its allowed list. What should happen?",
+    options: [
+      "The next step interprets the closest match",
+      "It goes to a human rather than onward to an action",
+      "The step is retried until a valid label appears"
+    ],
+    answer: 1,
+    explain: "A rejected output costs a minute of attention. An interpreted one can cost far more. Do not guess what was meant."
+  },
+  {
+    q: "A model drafts a reply. Who or what should decide the recipient?",
+    options: [
+      "The model, since it read the original message",
+      "Your rules, so the model supplies content and never the target",
+      "Whoever approves the draft, by typing an address"
+    ],
+    answer: 1,
+    explain: "If the model chooses the target, whoever influenced the model chose it. Fixed targets mean a successful attack can change what is written but not where."
+  }
+]} />
+
+## Recap
+
+Treat a model's output as input from outside, because text it read shaped it and
+nothing marks that boundary. Constrain it to a value from a fixed list, reject
+anything off the list to a person, and put a rule-based check before any action
+that changes something. Let the model supply content and never the target:
+recipient, record, path and URL belong to your rules. Free text should never
+reach a shell, a query, a fetch or a recipient field.

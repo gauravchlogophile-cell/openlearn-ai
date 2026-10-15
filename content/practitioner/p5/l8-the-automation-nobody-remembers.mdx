@@ -1,0 +1,197 @@
+---
+title: "The automation nobody remembers"
+description: "Automations outlive the attention that built them. An inventory, a one-page description, a review date, and a clean way to retire one."
+track: practitioner
+module: p5
+order: 8
+minutes: 9
+objectives:
+  - "Keep an inventory of automations with an owner, a purpose and a way to stop each"
+  - "Retire an automation cleanly instead of leaving it to decay"
+concepts: ["inventory", "ownership", "review cadence", "retirement"]
+tools: ["n8n"]
+flashcards:
+  - front: "Why do automations outlast the attention that built them?"
+    back: "They run without anyone watching, which is the point. So the person who understood one moves on, and it continues, unreviewed, on permissions that no longer match its job."
+  - front: "What belongs on the one-page description?"
+    back: "What it does, what it touches, who owns it, how to stop it, and when it was last reviewed. Short enough that someone will actually write it."
+  - front: "What is a zombie automation?"
+    back: "One that is still running but no longer needed, no longer correct, or no longer owned. It costs little and holds permissions, which is the worst combination to leave."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Every lesson so far has been about building an automation. This one is about the
+longest part of its life, which is everything after.
+
+An automation is built in an afternoon and runs for years. The attention it
+received at the start is the most it will ever get, and the gap between the two
+is where problems live.
+
+## How they get forgotten
+
+The mechanism is unremarkable.
+
+You build one. It works. You stop thinking about it, which is its entire purpose.
+Eighteen months later you have moved teams. The inbox it watches has been
+reorganised. The folder it writes to now holds something else. The connection
+still works, holding the same broad permission it was given, as a person who
+no longer works on this.
+
+Nothing has failed. It is just running, on assumptions that stopped being true.
+
+## Keep a list
+
+Start with the simplest thing, because everything else depends on it.
+
+A list of every automation you have: **a name, an owner, what it does, what it
+touches.** One row each.
+
+It will feel pointless while you have three. It becomes the only way to answer
+two important questions once you have thirty:
+
+- **What would be affected if this account were revoked?**
+- **What do we have that touches customer data?**
+
+You cannot answer either from memory. Platforms will show you the workflows
+inside them, and none will show you the ones in another tool, a colleague's
+account, or a scheduled script on someone's laptop. Those are usually the
+forgotten ones.
+
+## One page for each
+
+For anything that matters, write a single page. It should answer five questions:
+
+1. **What does it do?** In a sentence a stranger would follow.
+2. **What does it touch?** Accounts, files, services, and what it can change.
+3. **Who owns it?** A name, with a backup.
+4. **How do I stop it?** Exactly, in order.
+5. **When was it last reviewed?** A date.
+
+Keep it short enough that somebody will actually write it. A page that exists is
+worth ten that were planned.
+
+The fourth question is the valuable one. It is written in calm and read in a
+hurry, and the person reading may not be the person who built the chain.
+
+## A review date
+
+Put a date on the calendar, six months out, with one purpose: *is this still
+needed, still correct, and still at the right scope?*
+
+The questions are quick.
+
+- **Needed?** Does anybody still use the output? If nobody would notice it
+  stopping, that is information.
+- **Correct?** Has the process around it changed? A chain built for last year's
+  refund policy is wrong now, and quietly.
+- **Scoped?** Does it still need every permission it holds? Permissions are easy
+  to grant and rarely revisited.
+
+Lrnon applies a version of this to its content. A tool description older than 120
+days fails the build, so staleness stops a deploy instead of waiting to be
+noticed. Most automations have nothing like that, which is why the date has to be
+written down by a person and not left to the platform.
+
+## Retire cleanly
+
+When an automation has finished its job, turn it off properly. There are four
+steps, and people usually do the first.
+
+1. **Disable the trigger.**
+2. **Revoke its connections** at the service itself, not only in the platform.
+3. **Remove it from the list**, with a note of when and why.
+4. **Delete or archive the credentials** it held.
+
+Skipping the second and fourth leaves a live key with no owner and no purpose,
+which is the least useful thing to own. A disabled workflow with its connection
+still active is a standing grant waiting for anyone who finds the credential.
+
+## Who runs the platform itself?
+
+One more owner is easy to miss: whoever operates the platform.
+
+If you use a hosted service, it is the provider, and you are trusting them to
+patch and secure it. If you self-host, as the free option for n8n allows, it is
+you: updates, backups, access control, and uptime. Self-hosting is not free in
+effort. It trades a bill for an obligation, and the obligation lands on the same
+person who is also the owner of every chain.
+
+Neither is wrong. They are different ways of owning the same problem, and the
+inventory should say which one you chose.
+
+## The honest version for Lrnon
+
+Lrnon has one maintainer. The deployment pipeline, the database, the secrets, the
+assistant and the rollout console all rest with a single person, and the brand
+guides say so in the same plain terms.
+
+That is a fair account of the **bus factor** here, and it is the most important
+fact about the project's automation. Nothing about it is hidden, but the risk is
+real: if that person is unavailable, the pipeline runs unreviewed, and whatever
+is not written down is lost with them.
+
+That is why this project keeps its decisions in commit messages, its test
+rationale in the tests, and its guides in the repository. Not as virtue. As the
+inventory and the one-pagers, done in the only form that survives one person.
+
+## Try it now (15 minutes)
+
+Make the list. Write down every automation you can think of, including the ones
+on someone else's account and any that run on a schedule you set up once.
+
+For each, fill in owner and purpose. Then look for two kinds of row.
+
+- **No owner.** Assign one, today, or retire it.
+- **No answer to "who would notice if it stopped?"** That is a candidate for the
+  retirement steps above.
+
+Write the one-pager for the most consequential, and put a review date in the
+calendar.
+
+<Quiz client:visible items={[
+  {
+    q: "Why do automations tend to outlast the attention that built them?",
+    options: [
+      "Platforms prevent users from deleting workflows",
+      "They run without anyone watching, so the builder moves on and the chain continues on assumptions that stopped being true",
+      "Their permissions are renewed automatically each year"
+    ],
+    answer: 1,
+    explain: "Nothing has failed. It is simply running on assumptions that stopped being true, with permissions that no longer match its job."
+  },
+  {
+    q: "Which question does the one-page description answer most usefully in an emergency?",
+    options: [
+      "What does it do?",
+      "How do I stop it?",
+      "When was it last reviewed?"
+    ],
+    answer: 1,
+    explain: "It is written in calm and read in a hurry, and the reader may not be the builder. The steps to stop it, in order, are the part that earns its place."
+  },
+  {
+    q: "Why is disabling a workflow without revoking its connection an incomplete retirement?",
+    options: [
+      "Disabled workflows are billed the same as active ones",
+      "The credential stays live with no owner or purpose, a standing grant for anyone who finds it",
+      "Platforms re-enable disabled workflows after thirty days"
+    ],
+    answer: 1,
+    explain: "Revoke at the service itself, and delete or archive the credential. A live key with no owner is the least useful thing to own."
+  }
+]} />
+
+## Recap
+
+Automations run for years and receive their most attention on the first day.
+Keep a list with an owner, a purpose and what each touches, because it is the
+only way to answer what a revoked account would affect. Write a one-page
+description including how to stop it, set a six-monthly review for need,
+correctness and scope, and retire cleanly: disable the trigger, revoke the
+connection at the service, update the list and delete the credentials. Record
+who operates the platform itself, because every choice transfers the obligation
+somewhere.

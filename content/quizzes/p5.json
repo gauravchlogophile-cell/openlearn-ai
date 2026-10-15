@@ -1,0 +1,316 @@
+{
+  "module": "p5",
+  "title": "Connecting Tools — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "p5-01",
+      "q": "Where does a model sit in a typical automation?",
+      "options": [
+        "It is the system, with the rest being configuration around it",
+        "It is one step in a chain of triggers, steps and actions",
+        "It replaces the trigger by deciding when a run should start"
+      ],
+      "answer": 1,
+      "explain": "Describing an automation as an AI agent that handles the inbox hides the structure that decides whether it is safe. The model is a step; the connections and the final action carry the consequence."
+    },
+    {
+      "id": "p5-02",
+      "q": "Why does the kind of trigger matter for safety?",
+      "options": [
+        "Some triggers execute faster than others",
+        "An event trigger lets other people put text at the very start of the chain",
+        "Scheduled triggers cannot be stopped once they are set"
+      ],
+      "answer": 1,
+      "explain": "A support inbox, a contact form and a webhook are open to whoever chooses to write to them, so the first input is often untrusted."
+    },
+    {
+      "id": "p5-03",
+      "q": "When you map an automation, which link usually deserves the most attention?",
+      "options": [
+        "The step containing the model, because it is the most complex",
+        "The final action, because it carries the consequence",
+        "The trigger, because it runs most often"
+      ],
+      "answer": 1,
+      "explain": "The model step attracts attention and the step that sends the message causes the damage. Ask of every link what the worst thing is that it could do with the input it received."
+    },
+    {
+      "id": "p5-04",
+      "q": "Why build an automation's chain with fixed values before adding a model?",
+      "options": [
+        "Fixed values run faster than models during testing",
+        "Two unknowns at once cannot be separated, so a later fault can be placed in the model step",
+        "Platforms refuse to attach a model until the chain runs end to end"
+      ],
+      "answer": 1,
+      "explain": "Otherwise you spend an evening adjusting a prompt that was fine, because the real fault was a field name two steps earlier."
+    },
+    {
+      "id": "p5-05",
+      "q": "Which of these steps really needs judgement rather than a rule?",
+      "options": [
+        "Extracting an order number that follows the text 'Order #'",
+        "Deciding which of five vague categories a request belongs to",
+        "Formatting a number as currency"
+      ],
+      "answer": 1,
+      "explain": "If you can write a rule that another person would apply identically every time, write the rule. A model is for work where writing the rule is the hard part."
+    },
+    {
+      "id": "p5-06",
+      "q": "What distinguishes a model step from every other step in a chain?",
+      "options": [
+        "It is the only step that can ever fail",
+        "It is the only one whose output cannot be predicted from its input",
+        "It is the only one that requires stored credentials"
+      ],
+      "answer": 1,
+      "explain": "Every other step does the same thing with the same input. A model step is also the slowest and the dearest, which is why the count should be kept small."
+    },
+    {
+      "id": "p5-07",
+      "q": "What does approving a connection's permission request actually do?",
+      "options": [
+        "Allows a single action, after which the permission expires",
+        "Grants the automation everything those scopes allow, as you, until the connection is removed",
+        "Gives the platform read-only access to confirm the account exists"
+      ],
+      "answer": 1,
+      "explain": "It is a standing grant of authority. A request to read, send and delete is a very different grant from a request to read, and the consent screen makes them look alike."
+    },
+    {
+      "id": "p5-08",
+      "q": "Why connect a dedicated account to an automation instead of your own?",
+      "options": [
+        "Dedicated accounts process requests faster",
+        "Your account carries your whole reach, attributes every action to you, and leaves when you do",
+        "Platforms refuse to connect personal accounts for production use"
+      ],
+      "answer": 1,
+      "explain": "A dedicated account holds only the access the chain needs, belongs to the team, and survives a change of staff."
+    },
+    {
+      "id": "p5-09",
+      "q": "Where does an automation platform put your risk once you have connected accounts to it?",
+      "options": [
+        "Nowhere, because each service keeps its own credentials",
+        "In the platform itself, which holds the keys to everything connected",
+        "Only in the services you connected most recently"
+      ],
+      "answer": 1,
+      "explain": "Self-hosting changes who operates the credential store, not whether there is one. The honest comparison is which operator you trust to do that job well."
+    },
+    {
+      "id": "p5-10",
+      "q": "Why give each automation its own credential rather than sharing one?",
+      "options": [
+        "Shared credentials expire more quickly",
+        "Each can then be cut off alone, and a flaw in one exposes only what that one was given",
+        "Platforms limit how many workflows can use a connection"
+      ],
+      "answer": 1,
+      "explain": "If five automations share a connection, revoking it for one revokes it for all, and a flaw in any one exposes the rest."
+    },
+    {
+      "id": "p5-11",
+      "q": "Why is a model's output treated as untrusted input to the next step?",
+      "options": [
+        "Models are less accurate than hand-written rules",
+        "If the model read text someone else wrote, that text shaped the output, which now looks like your own data",
+        "Platforms do not log the output of model steps"
+      ],
+      "answer": 1,
+      "explain": "Nothing in the platform marks the boundary. The output of step three looks exactly like the output of step one."
+    },
+    {
+      "id": "p5-12",
+      "q": "A classifier step returns a label that is not on its allowed list. What should happen next?",
+      "options": [
+        "The next step interprets the closest matching label",
+        "The case goes to a human rather than onward to an action",
+        "The step is retried until a valid label eventually appears"
+      ],
+      "answer": 1,
+      "explain": "A rejected output costs a minute of someone's attention. An interpreted one can cost far more, so do not guess what was meant."
+    },
+    {
+      "id": "p5-13",
+      "q": "A model drafts a reply to an incoming message. What should decide the recipient?",
+      "options": [
+        "The model, since it has read the original message",
+        "Your rules, so the model supplies content and never the target",
+        "The approver, by typing an address into the confirmation"
+      ],
+      "answer": 1,
+      "explain": "If the model chooses the target, whoever influenced the model chose it. Fixed targets mean a successful attack can change what is written but not where."
+    },
+    {
+      "id": "p5-14",
+      "q": "Why can an error alert not catch a trigger that never fires?",
+      "options": [
+        "Alerts only work on scheduled triggers",
+        "Nothing ran, so there is no failure to report; only an expected-run check detects an absence",
+        "Platforms disable alerts for event triggers by default"
+      ],
+      "answer": 1,
+      "explain": "A heartbeat alerts when a chain that should have run has not. It is the only defence against silence."
+    },
+    {
+      "id": "p5-15",
+      "q": "Which of these steps is safe to run twice?",
+      "options": [
+        "Send the customer a confirmation email",
+        "Set the ticket's status field to Resolved",
+        "Add one hundred points to the learner's balance"
+      ],
+      "answer": 1,
+      "explain": "Setting a field to a value gives the same result however many times it runs. For steps that cannot be repeated safely, guard them with a dedupe key."
+    },
+    {
+      "id": "p5-16",
+      "q": "What is a dedupe key for?",
+      "options": [
+        "Encrypting a duplicated message before it is stored",
+        "Checking whether this exact event has already been handled, and skipping it if so",
+        "Choosing which of two copies of a record to keep"
+      ],
+      "answer": 1,
+      "explain": "Triggers fire more than once more often than people expect, because senders retry and runs overlap. Without a key, forty customers receive the same email."
+    },
+    {
+      "id": "p5-17",
+      "q": "A long run waits a full minute after hitting a rate limit and appears frozen. What tends to go wrong?",
+      "options": [
+        "The platform times out the whole run",
+        "Someone presses the button again, starting a second loop that competes for the same quota",
+        "The provider raises its limit for callers that wait"
+      ],
+      "answer": 1,
+      "explain": "The fix is to make the run resumable, so results accumulate and a re-run covers only the gaps."
+    },
+    {
+      "id": "p5-18",
+      "q": "Why store the reason for a failure beside the record that it happened?",
+      "options": [
+        "Reasons are required by most platform audit rules",
+        "Otherwise diagnosis depends on someone relaying what a log showed, which loses detail",
+        "Failure reasons compress better than success records"
+      ],
+      "answer": 1,
+      "explain": "Once the provider's own words sat in the same table as the failure, the cause was one query away instead of several rounds of guessing."
+    },
+    {
+      "id": "p5-19",
+      "q": "Where does a human approval step belong in an automation?",
+      "options": [
+        "At the start, to vet each incoming request",
+        "Immediately before the irreversible action, showing its real effect",
+        "After the action, to review what was done"
+      ],
+      "answer": 1,
+      "explain": "At the start, nobody can see what the chain will do. Approving an input is not approving an outcome."
+    },
+    {
+      "id": "p5-20",
+      "q": "Why do approval steps tend to stop protecting anything over time?",
+      "options": [
+        "Approvers are rotated and lose context",
+        "Firing constantly on mostly fine cases turns them into reflexes that people click through",
+        "Platforms remove approvals that are always granted"
+      ],
+      "answer": 1,
+      "explain": "The fix is to ask less, not to exhort harder: auto-handle the clear cases and send only the unusual to a person."
+    },
+    {
+      "id": "p5-21",
+      "q": "Why choose which cases go to a person by rules rather than by the model's stated confidence?",
+      "options": [
+        "Models cannot produce confidence scores",
+        "Stated confidence is a poor guide to being right, and an injected instruction can change it",
+        "Rules cost less to evaluate than a second model call"
+      ],
+      "answer": 1,
+      "explain": "Conditions such as an amount over a ceiling, a new recipient or an outside sender are checkable and cannot be talked round."
+    },
+    {
+      "id": "p5-22",
+      "q": "An approval request waits a day with no answer. What should happen?",
+      "options": [
+        "The action proceeds so that work is not blocked",
+        "Nothing, and somebody is told it is waiting",
+        "The request is sent again at a higher priority"
+      ],
+      "answer": 1,
+      "explain": "A request that times out and proceeds is a delayed action with a pretence of oversight. Silence must mean no."
+    },
+    {
+      "id": "p5-23",
+      "q": "What does shadow mode give you that a dry run does not?",
+      "options": [
+        "Faster execution than a dry run",
+        "A comparison between the automation's answers and what a person actually did on real input",
+        "Permission to act on a small slice of live cases"
+      ],
+      "answer": 1,
+      "explain": "The disagreements are your real error rate, measured on real inputs with a person's answer as the reference. It is the most informative rung and the one most often skipped."
+    },
+    {
+      "id": "p5-24",
+      "q": "Why test an automation's failure paths and not only its working case?",
+      "options": [
+        "Failure paths execute more often than success paths",
+        "Failure is where the damage is, and the answers should be known before relying on the chain",
+        "Platforms require failure tests before activation"
+      ],
+      "answer": 1,
+      "explain": "Make a step fail, send garbage, send the same event twice, remove a permission. Each has an answer you should know in advance."
+    },
+    {
+      "id": "p5-25",
+      "q": "Why is testing a stop control against an already-broken chain worthless?",
+      "options": [
+        "Broken chains ignore stop commands",
+        "Stopped and already broken look identical, so the test reports success either way",
+        "The control needs live traffic to initialise"
+      ],
+      "answer": 1,
+      "explain": "The observation that means something is: chain running, press stop, confirm it stops."
+    },
+    {
+      "id": "p5-26",
+      "q": "Why do automations tend to outlast the attention that built them?",
+      "options": [
+        "Platforms prevent users from deleting workflows",
+        "They run without anyone watching, so the builder moves on and the chain continues on assumptions that stopped being true",
+        "Their permissions are renewed automatically each year"
+      ],
+      "answer": 1,
+      "explain": "Nothing has failed. It is simply running on assumptions that are no longer true, with permissions that no longer match its job."
+    },
+    {
+      "id": "p5-27",
+      "q": "Which part of a one-page description is most valuable in an emergency?",
+      "options": [
+        "What the automation does",
+        "How to stop it, in order",
+        "When it was last reviewed"
+      ],
+      "answer": 1,
+      "explain": "It is written in calm and read in a hurry, and the reader may not be the builder. The steps to stop it earn their place."
+    },
+    {
+      "id": "p5-28",
+      "q": "Why is disabling a workflow without revoking its connection an incomplete retirement?",
+      "options": [
+        "Disabled workflows are billed like active ones",
+        "The credential stays live with no owner or purpose, a standing grant for anyone who finds it",
+        "Platforms re-enable disabled workflows after thirty days"
+      ],
+      "answer": 1,
+      "explain": "Revoke at the service itself, and delete or archive the credential. A live key with no owner is the least useful thing to own."
+    }
+  ]
+}

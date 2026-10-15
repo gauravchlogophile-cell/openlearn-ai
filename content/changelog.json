@@ -2,6 +2,12 @@
   "_comment": "Every change to the learning content, dated — including the ones that make us look bad. A lesson that was wrong is more useful to a learner as a published correction than as a quiet edit. Hand-maintained on purpose: git history records what changed, not why it mattered or who caught it. Newest first. 'kind' must be one of the values scripts/validate-content.mjs allows.",
   "entries": [
     {
+      "date": "2026-10-15",
+      "kind": "New module",
+      "where": "Practitioner · P5",
+      "what": "Connecting Tools published — eight lessons on automations that act without anyone talking to them. Every automation as a trigger, steps and an action, with the model as one step among them and the trigger deciding whose text enters; building the chain with fixed values first so the plumbing and the model cannot be blamed for each other; what connecting an account hands over, including scopes, whose account it is and where the keys are kept; treating what a model returns as input to the next step, and never letting it choose the target; the three ways an automation fails quietly, running a step twice, and rate limits; where a human approval belongs and why it decays into a reflex; a ladder from sample data through shadow mode to a staged rollout; and the inventory, one-page description and clean retirement that stop an automation being forgotten. Lrnon is the worked example throughout, including a place where the rollout console describes a safeguard that the database does not enforce, which the module states plainly. Practitioner is now five modules of twelve."
+    },
+    {
       "date": "2026-10-14",
       "kind": "New module",
       "where": "Practitioner · P4",

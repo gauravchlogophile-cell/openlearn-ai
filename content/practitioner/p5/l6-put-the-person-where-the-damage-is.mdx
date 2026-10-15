@@ -1,0 +1,186 @@
+---
+title: "Put the person where the damage is"
+description: "A human step is only worth its delay if it sits before something that cannot be undone, shows the real effect, and defaults to doing nothing."
+track: practitioner
+module: p5
+order: 6
+minutes: 9
+objectives:
+  - "Place an approval step before the irreversible action rather than at the start of the chain"
+  - "Design the approval so it is read rather than clicked, and so silence means no"
+concepts: ["human in the loop", "approval fatigue", "default deny", "escalation by rule"]
+flashcards:
+  - front: "Where does a human step belong in a chain?"
+    back: "Immediately before the action that cannot be undone, showing exactly what will happen. Approving at the start means approving something not yet visible."
+  - front: "What happens to an approval that fires forty times a day?"
+    back: "It becomes a reflex. People approve without reading, and the control remains in the diagram while the protection is gone."
+  - front: "What should happen if nobody answers an approval request?"
+    back: "Nothing. A request that times out and proceeds is not an approval, it is a delay followed by the action."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+P3·L6 said that irreversible actions should be proposed by a model and
+authorised by a person. In an automation that sentence becomes a design
+question, because the whole purpose of the chain was to remove the person.
+
+So where do you put them back?
+
+## Not at the start
+
+The tempting place is the beginning. *"A human reviews the incoming request, and
+then the automation takes over."*
+
+That reviews the wrong thing. At the start, nobody can see what the chain will
+do. They are approving an input, and the model has not yet produced the draft,
+chosen the label, or decided the amount. By the time something consequential
+happens, the person's judgement is several steps behind.
+
+Put the human **immediately before the action that cannot be undone**, with the
+real consequence in front of them.
+
+## What the approval shows
+
+A weak approval says *"Send reply?"* and offers two buttons.
+
+A real one shows the effect:
+
+> **To:** m.rao@customer.example
+> **Subject:** Re: Refund for order 4471
+> **Body:** (the full text)
+> **Also:** marks ticket 4471 as resolved, issues a refund of £38.00
+
+Three properties make it work.
+
+**It names the specifics.** Recipient, amount, which record. The wrong thing has
+to be legible in it, or approving is just agreeing with the arrow.
+
+**Refusal is cheap and normal.** If declining takes four clicks and a reason,
+people approve to avoid the trouble.
+
+**It does not batch.** Ten actions behind one button is a single decision about
+ten things, and the ninth is where the surprise sits.
+
+## The reflex problem
+
+Every approval step has a half-life. The first week people read each one. By the
+fourth they approve at a glance. By the tenth the approval is a reflex, and the
+step remains in the diagram, still looking like a safeguard, doing nothing.
+
+This is not laziness. It is the predictable result of asking a person to judge
+the same thing forty times a day, where nearly all are fine.
+
+The fix is to ask less, not to exhort harder. **Auto-handle the clear cases and
+send only the unusual to a person.**
+
+## Escalate by rule, not by confidence
+
+The obvious way to pick which cases go to a human is to ask the model how sure
+it is. Avoid it. A model's stated confidence is a poor guide to whether it is
+right, and an injected instruction can lower or raise it at will.
+
+Use rules, which are checkable and cannot be talked round:
+
+- The amount is over a ceiling.
+- The recipient has never been written to before.
+- The message came from outside the company domain.
+- The category came back as *other*.
+- It is outside working hours.
+- The text contains a link, or an attachment.
+
+Each is a condition that a plain step can test. Routine cases flow through, the
+ones with a reason to look get a person, and the person sees few enough that
+they read them.
+
+## Who approves, and what happens if nobody does
+
+**The approver has to be able to judge.** Not whoever is nearest. A person
+signing off a refund needs the order history in front of them, or the approval
+is a rubber stamp with a name on it.
+
+**Silence must mean no.** If a request waits a day and then proceeds, it was
+never an approval. It was a delayed action with a pretence of oversight. Set the
+timeout to *do nothing* and tell somebody it is waiting.
+
+**Name a backup.** An approval that depends on one person who is on leave is
+indistinguishable from a broken chain.
+
+## The same rule at the project level, and where it is only half built
+
+Lrnon's rollout console follows the asymmetry. Turning Sky **off** is open to any
+administrator and needs nobody's approval, because a kill switch that requires
+sign-off is not one. Widening it to **everyone** is for the owner alone.
+
+The principle is to make the dangerous direction hard and the safe direction
+instant. Part of this is real, and part is not, and the difference is the useful
+bit.
+
+The console says opening Sky to everyone "needs a second owner to approve", and
+the button is disabled until four readiness gates are met. When this lesson was
+written, the database function behind that button was read, and it checks only
+that the caller is the owner. It does not look for a second approver and it does
+not look at the gates. Both exist in the page and nowhere else.
+
+That is a lock in the interface, which is a hint rather than a control. The
+practical risk is small, since the one person able to call it is the person who
+would also approve it. The lesson is the general one from P3·L6: a safeguard is
+only as real as the layer that enforces it, and it is worth reading the layer
+behind the button before describing what the button does.
+
+## Try it now (10 minutes)
+
+Pick the most consequential action in a chain you have drawn. Write what the
+approval screen would show, field by field.
+
+Then count how often it would fire in a normal week. If the answer is more than
+a handful, write the rule that would let the routine cases through, and keep
+the person for the rest.
+
+Finally, state what happens at the timeout. If it is anything other than nothing,
+change it.
+
+<Quiz client:visible items={[
+  {
+    q: "Where does a human approval step belong in an automation?",
+    options: [
+      "At the start, to vet each incoming request",
+      "Immediately before the irreversible action, showing its real effect",
+      "After the action, to review what was done"
+    ],
+    answer: 1,
+    explain: "At the start, nobody can see what the chain will do. Approving an input is not approving an outcome."
+  },
+  {
+    q: "Why escalate to a person by rules rather than by the model's stated confidence?",
+    options: [
+      "Models cannot produce confidence scores",
+      "Stated confidence is a poor guide to being right, and an injected instruction can change it",
+      "Rules are cheaper than a second model call"
+    ],
+    answer: 1,
+    explain: "Rules such as an amount over a ceiling, a new recipient or an outside sender are checkable and cannot be talked round."
+  },
+  {
+    q: "An approval request waits a day with no answer. What should happen?",
+    options: [
+      "The action proceeds so that work is not blocked",
+      "Nothing, and somebody is told it is waiting",
+      "The request is re-sent with a higher priority"
+    ],
+    answer: 1,
+    explain: "A request that times out and proceeds is a delayed action with a pretence of oversight. Silence must mean no."
+  }
+]} />
+
+## Recap
+
+Place the person immediately before the action that cannot be undone, not at the
+start of the chain. Show the real effect, make refusal cheap, and never batch.
+Approvals decay into reflexes if they fire constantly, so auto-handle the clear
+cases and send only the unusual to a human, chosen by rules rather than by the
+model's confidence. Make sure the approver can judge, name a backup, and let
+silence mean no. Make the dangerous direction hard and the safe direction
+instant.

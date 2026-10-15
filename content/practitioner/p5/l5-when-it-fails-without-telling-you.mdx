@@ -1,0 +1,181 @@
+---
+title: "When it fails without telling you"
+description: "The worst automation failure is silence. Quiet failures, running twice, rate limits, and how to make nothing-happened visible."
+track: practitioner
+module: p5
+order: 5
+minutes: 10
+objectives:
+  - "Distinguish the three ways an automation fails quietly and add a signal for each"
+  - "Design a step so that running it twice does no harm"
+concepts: ["silent failure", "idempotency", "rate limit", "heartbeat"]
+flashcards:
+  - front: "What are the three quiet failures?"
+    back: "The trigger never fires, a step fails and the chain stops without a word, or a step reports success while doing nothing. Each needs its own signal."
+  - front: "What does idempotent mean for a step?"
+    back: "Running it twice has the same effect as running it once. Sending an email is not; setting a field to a value is."
+  - front: "How do you detect that nothing happened?"
+    back: "A heartbeat: an expected-run check that alerts when a chain that should run daily has not. A failure alert cannot fire for an event that never occurred."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+A loud failure is a nuisance. A message says it broke, you fix it, and you move
+on. The failure that does damage is the one that makes no sound.
+
+An automation runs without anyone watching, which is the point of it. That is
+also why it can stop working for weeks and nobody finds out until a person
+notices that something which used to happen has not been happening.
+
+## Three ways to fail quietly
+
+**The trigger never fires.** The webhook was changed, the schedule was paused,
+the connection expired, the inbox filter now excludes it. Nothing ran, so there
+is nothing in the log. An error alert cannot report an event that did not occur.
+
+**A step fails and the chain just stops.** Many platforms record this somewhere
+and tell no one. The run ends in the middle, the downstream steps never execute,
+and unless somebody opens the execution history, it looks like a quiet day.
+
+**A step reports success and did nothing.** The hardest, because everything
+says it worked.
+
+Lrnon's own pipeline produced the third one. A build log read *Success* in full,
+with a new version number, while the newest commit had never been built. From
+what the deployed code contained, a retry in the dashboard had apparently
+re-run the previous commit. The platform did what it was asked and was entirely
+honest; the intent and the action had come apart.
+
+## Running it twice
+
+Triggers fire more than once more often than people expect. A sender retries a
+webhook because it did not get a reply fast enough. A schedule overlaps with a
+slow previous run. Someone presses the button twice.
+
+The question to ask of every step is: **what happens if this runs again?**
+
+> **Safe to repeat:** set this field to *Resolved*. Write this row if no row with
+> this ID exists. Overwrite this file.
+>
+> **Not safe to repeat:** send this email. Add 100 to this balance. Create a new
+> ticket. Post this message.
+
+A step that is safe to repeat is called **idempotent**. Make as many steps
+idempotent as you can, and for the ones that cannot be, guard them with a
+**dedupe key**: before acting, check whether this exact event has already been
+handled, and skip if so. The key can be as plain as the message ID.
+
+Without it, the day a sender retries, forty customers receive the same email.
+
+## Limits that arrive in the middle
+
+Services refuse calls that come too fast, and automations are very good at
+coming too fast.
+
+This project hit it directly. A test of 27 model calls, spaced 4.5 seconds apart,
+kept failing, on cases that changed from one run to the next. The provider's
+refusal, once it was read from the database rather than guessed at, said *quota
+exceeded*, and across three consecutive runs the pattern was the same: **eight
+calls succeeded in a minute, then everything else that minute was refused.** The
+failing cases were simply whichever happened to fall after the eighth.
+
+The fix was to pace to the measured limit rather than a guessed one, and to make
+a rate-limit retry wait a full minute, since a per-minute limit cannot clear in
+twenty seconds. It also brought a second lesson. A pause that long looks like a
+freeze, so people press the button again, which starts a second loop competing
+for the same quota. The answer was to make the run resumable: results accumulate,
+and a button re-runs only the gaps.
+
+Three habits follow. **Find the real limit** and stay under it. **Retry once,
+after waiting the right amount**, not forever. **Make a long run safe to resume**,
+because someone will interrupt it.
+
+## Make silence visible
+
+For each failure, a signal.
+
+**An alert on error**, sent to a place a human reads. An email to a shared inbox
+nobody opens is not an alert.
+
+**A heartbeat for the quiet case.** If a chain should run every weekday, set up a
+check that fires when it has not run by a certain hour. This is the only defence
+against a trigger that never fires, because it detects an absence.
+
+**A reason in the record.** When this project's model calls failed, the cause
+sat unrecorded for several rounds of guessing. Once the provider's own words were
+written into the same table that recorded the failure, the answer was one query
+away. Store why it failed beside the fact that it did.
+
+**A window long enough to find things.** A single refusal on 9 September, saying
+the provider did not serve the region the request left from, went unseen for five
+weeks. The console counted failures over seven days and named none of them, so
+the evidence scrolled out of existence before anybody looked. A number that
+disappears is not detection.
+
+## Try it now (12 minutes)
+
+Take a chain you run and break it on purpose. Disable the trigger, or point one
+step at a wrong address.
+
+Then answer honestly: **who would find out, and how long would it take?** If the
+answer is "someone would eventually notice a thing had stopped", you have found
+the gap.
+
+Add one alert and one heartbeat before anything else. They are small, and they
+are the difference between a chain you run and a chain you merely started.
+
+<Quiz client:visible items={[
+  {
+    q: "Why can an error alert not catch a trigger that never fires?",
+    options: [
+      "Alerts only work on scheduled triggers",
+      "Nothing ran, so there is no failure to report; only an expected-run check detects an absence",
+      "Platforms disable alerts for event triggers"
+    ],
+    answer: 1,
+    explain: "A heartbeat alerts when a chain that should have run has not. It is the only defence against silence."
+  },
+  {
+    q: "Which of these steps is safe to run twice?",
+    options: [
+      "Send the customer a confirmation email",
+      "Set the ticket's status field to Resolved",
+      "Add 100 points to the learner's balance"
+    ],
+    answer: 1,
+    explain: "Setting a field to a value gives the same result however many times it runs. For steps that cannot be repeated safely, guard them with a dedupe key."
+  },
+  {
+    q: "A long run waits a full minute after a rate limit and looks frozen. What goes wrong?",
+    options: [
+      "The platform times out the whole run",
+      "Someone presses the button again, starting a second loop that competes for the same quota",
+      "The provider raises its limit for patient callers"
+    ],
+    answer: 1,
+    explain: "The fix was to make the run resumable, so results accumulate and a re-run covers only the gaps."
+  },
+  {
+    q: "A build log said Success while the newest commit had never been built. What kind of failure is this?",
+    options: [
+      "The trigger never fired",
+      "A step reported success and did nothing, because a retry re-ran the previous commit",
+      "A step failed and the chain stopped silently"
+    ],
+    answer: 1,
+    explain: "The platform was honest and did what it was asked. Intent and action had come apart, which is the hardest quiet failure to see."
+  }
+]} />
+
+## Recap
+
+The failure that does damage makes no sound. It comes in three forms: the
+trigger never fires, a step fails and the chain stops, or a step reports success
+and did nothing. Make steps safe to run twice, and guard the rest with a dedupe
+key. Find the real rate limit rather than guessing, retry once after the right
+wait, and make long runs resumable. Then give each kind of silence a signal: an
+alert, a heartbeat for absences, the reason stored beside the failure, and a
+window long enough that evidence does not scroll away.
