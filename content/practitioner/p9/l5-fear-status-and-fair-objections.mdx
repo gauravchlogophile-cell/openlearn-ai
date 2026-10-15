@@ -1,0 +1,181 @@
+---
+title: "Fear, status and fair objections"
+description: "People resist for reasons that are often reasonable: jobs, quality, privacy, fairness. Listen first, promise only what you can keep, and never hide monitoring."
+track: practitioner
+module: p9
+order: 5
+minutes: 9
+objectives:
+  - "Distinguish the kinds of objection people raise and respond to the reasonable ones on their merits"
+  - "Avoid promises you cannot keep and monitoring nobody agreed to"
+concepts: ["resistance", "job security", "trust", "surveillance"]
+flashcards:
+  - front: "Why is resistance to an AI rollout often reasonable?"
+    back: "People may have real concerns about job security, quality, privacy or fairness. Treating objections as obstacles to be managed loses the information in them."
+  - front: "What should you never promise?"
+    back: "That nobody's job will change or be lost, unless you control that and mean it. A reassurance you cannot keep is worse than honest uncertainty."
+  - front: "Why must any monitoring of use be disclosed?"
+    back: "Quietly tracking how individuals use a tool, or using it to rank them, destroys trust the moment it is found. If you monitor, say so and say what for."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+A rollout meets resistance, and the way you read it decides what happens next.
+
+The easy reading is that people are afraid of change and need persuading. Sometimes that is
+true. More often, at least part of what they say is correct, and a plan that treats
+objections as obstacles throws away the most useful information available.
+
+## The objections, sorted
+
+They fall into a few families, and each deserves a different response.
+
+### "Will this take my job?"
+
+The most important fear and the one most often handled badly.
+
+Do not say *"no, of course not"* unless you control the answer and mean it. If you do not
+know how the work will change, say so. If the tool is being introduced partly to reduce
+cost, saying otherwise is a lie that will be found out, and everything you say after it is
+discounted.
+
+What you can honestly say is specific: what the tool is for, what it will not be used for,
+what you do not yet know, and what you commit to. A concrete commitment such as *"this will
+not be used to decide who stays"* is worth more than a general assurance, and only worth
+making if it is true.
+
+### "The quality will suffer."
+
+Often correct. These tools produce fluent errors, and the people who do the work know
+where the subtle mistakes live.
+
+Treat it as expertise. Ask where they expect it to go wrong, and put those cases in your
+test set (P4·L6). People who contribute the failure cases tend to become the ones who make
+it work, because they have a stake in its being right.
+
+### "What about our data and our customers?"
+
+A privacy or confidentiality concern is a good sign: someone is thinking about the risks you
+need thought about. P8 covers the substance. The response is a specific answer about what
+goes where, under which plan, and with which safeguards, and not reassurance.
+
+### "This isn't fair."
+
+A fairness concern can be about who benefits, who carries the extra checking work, who is
+measured against the tool, or whether it treats some customers or colleagues differently.
+Take it seriously and ask what specifically seems unfair. It is frequently a real asymmetry
+that you can fix.
+
+### "I don't want to."
+
+Sometimes it is plain preference, sometimes ethics, sometimes discomfort with how the
+tools were built. These are legitimate positions, and an organisation can decide how much
+room to give them. Being clear about what is optional and what is not is kinder than
+leaving it ambiguous.
+
+## Status is part of it
+
+Tools shift who is valued. A person whose expertise was knowing where to find things may
+find a tool does that. A person whose skill was drafting may find a first draft is now
+free.
+
+That is real, and ignoring it is a mistake. Name it. Ask what becomes more valuable, such
+as judgement, knowledge of the customer, or checking, and give people a route to it. A
+rollout that implies "the thing you were good at no longer matters" will meet resistance
+that no training fixes.
+
+## The monitoring question
+
+Almost every tool can report who used it, how often and what for. The temptation to use
+that is strong.
+
+Be careful, because this is where trust is most easily destroyed.
+
+**Do not track individuals in secret.** Usage reports quietly consulted in a performance
+discussion, or a league table nobody agreed to, are discovered sooner or later, and the
+discovery damages far more than the data was worth.
+
+**If you measure, say so and say why.** Aggregate numbers to learn whether the tool is
+helping are reasonable. Say that is what they are for, and keep to it.
+
+**Never rank people by use.** High usage is not high value, and a low user may be
+exercising exactly the judgement you want.
+
+**Consider the law.** Monitoring people's activity can engage rules on workplace
+surveillance and data protection (P8). That is a reason to be open, and to get advice
+before collecting.
+
+## Honest uncertainty beats confident reassurance
+
+The strongest position available is also the plainest.
+
+> *"I don't know exactly how this will change our work. Here is what I do know, here is
+> what I'm going to find out, and here is how you can tell me what you're seeing."*
+
+It is less comforting than a promise and more believed. People can tell the difference
+between someone who is managing them and someone who is level with them.
+
+## A note from Lrnon
+
+Lrnon's guide for responding to challenge says to reply with the mechanism and not with
+protest, and to look at a specific complaint the same day. The same attitude applies here.
+When someone objects, ask which sentence, which case, which fear, and then look.
+
+The project's own account of its limits, in its guides, is also a version of this. It says
+it is run by one person, that certification is built and switched off, and that the
+assistant is open to staff only. Not all of that is in the public-facing text, and some
+sits in internal and funder guides, but none of it is flattering, and all of it is more
+credible than a claim of completeness would be.
+
+## Try it now (20 minutes)
+
+List the objections you expect from your team, in their words. For each, write what you
+would honestly say, including what you do not know.
+
+Then check the draft for three things: any promise you do not control, any reassurance you
+would not repeat if the facts changed, and any monitoring you have not mentioned.
+
+<Quiz client:visible items={[
+  {
+    q: "Someone asks whether the tool will take their job and you do not know. What is the strongest response?",
+    options: [
+      "Assure them it will not, to calm the situation",
+      "Say what you know, what you do not, and what you commit to, with specifics you can keep",
+      "Change the subject to the benefits of the tool"
+    ],
+    answer: 1,
+    explain: "A reassurance that is later found false discounts everything you said. Honest uncertainty with a concrete commitment is believed."
+  },
+  {
+    q: "Why is a quality concern from the people doing the work worth treating as expertise?",
+    options: [
+      "It usually means they dislike the tool",
+      "They know where the subtle mistakes live, and their failure cases make the best test set",
+      "Quality concerns can be ignored once training is complete"
+    ],
+    answer: 1,
+    explain: "People who contribute the cases tend to become the ones who make it work, because they have a stake in its being right."
+  },
+  {
+    q: "Why is secretly tracking individual usage a risk?",
+    options: [
+      "Usage data is too inaccurate to be useful",
+      "It is discovered sooner or later, and the damage to trust far outweighs the value of the data",
+      "Platforms prohibit exporting usage data"
+    ],
+    answer: 1,
+    explain: "If you measure, say so and say why. Aggregate numbers to learn whether the tool helps are reasonable; ranking people by use is not."
+  }
+]} />
+
+## Recap
+
+Objections to a rollout often have a real core, so sort them: job security, quality, data
+and customers, fairness, and plain preference. Do not promise what you do not control, and
+prefer honest uncertainty with specific commitments to confident reassurance. Notice that
+tools shift status, and show people where value now lies. Never track individuals in secret
+or rank them by use; if you measure, say so and say why. Ask what, specifically, someone is
+worried about, and then look.

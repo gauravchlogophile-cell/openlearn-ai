@@ -1,0 +1,196 @@
+---
+title: "When it does not take"
+description: "Sometimes people do not adopt it, and that is information. Diagnose why, withdraw without blame, and keep what you learned."
+track: practitioner
+module: p9
+order: 8
+minutes: 8
+objectives:
+  - "Diagnose why a rollout failed to take, separating the tool, the task and the situation"
+  - "Withdraw or reshape a rollout without blaming the people who did not adopt it"
+concepts: ["adoption failure", "diagnosis", "sunk cost", "withdrawal"]
+flashcards:
+  - front: "What are the commonest reasons a rollout fails to take?"
+    back: "It solved a problem people did not have, a bad first experience ended the trial, there was no time to learn it, or nobody was permitted to change how they worked."
+  - front: "Whose fault is it when people do not adopt a tool?"
+    back: "Treat it as information about the tool, the task or the situation, not about the people. Blaming users stops you finding the cause."
+  - front: "What should survive a withdrawn rollout?"
+    back: "What you learned: the problem as people described it, the test cases, the objections, and an honest record of why it did not work."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Sometimes you do everything in the last seven lessons well and people still do not use
+it. That is not a disaster. It is one of the most useful things that can happen to a
+project, provided you can read it.
+
+## What it tells you
+
+Non-adoption is data, and it points in a few directions. Work through them in order.
+
+### The problem was not theirs
+
+The most common reason. L1 was about this: the tool solved a problem you identified and
+the team did not feel. They were asked to adopt a solution to a difficulty they did not
+have.
+
+**Test:** ask people what the hardest part of their week is. If your tool does not touch
+it, you have your answer.
+
+### The first experience went badly
+
+P4·L2's point: a person who gets a poor answer on the first attempt does not file a bug,
+they decide the thing is not for them.
+
+**Test:** ask what happened the first time they tried it. If a significant number describe
+a bad first answer, the tool may be fine and the entrance wrong. Check what a new user
+sees first, and whether the first request they would plausibly make works.
+
+### It costs more than it saves
+
+L6: the whole cost, including checking and rework. People often reach this verdict
+quickly and correctly, and without saying so.
+
+**Test:** time the task with and without. If the tool is slower in practice, they were right.
+
+### There was no time, or no permission
+
+People may want to use it and have no room. They are busy, nobody has told them they may
+change how they work, or their manager expects things done the old way.
+
+**Test:** ask whether they have been told they can spend time on it, and what happens if
+the first attempts are slower than usual.
+
+### Trust was damaged
+
+A single visible mistake, a worry about monitoring (L5), or a sense that it was imposed.
+
+**Test:** listen for stories. People repeat the one time it went wrong long after the
+rest is forgotten.
+
+### It is not for them
+
+Some people do work for which the tool is not suited. That is a valid outcome, and it may
+mean the use case is narrower than you hoped.
+
+## Do not blame the users
+
+It is tempting to conclude that people are resistant, lazy or afraid of change.
+
+Even when that is partly true, it is a conclusion that ends the investigation. If
+non-adoption is the users' fault, there is nothing to find. If it is information, there is
+a great deal.
+
+Ask yourself what you would have to believe for their behaviour to be reasonable. Usually
+there is a version of that sentence you can complete.
+
+## Decide: reshape, narrow, or withdraw
+
+Once you know why, there are three honest choices.
+
+**Reshape.** If the problem was real and the entrance was wrong, fix the entrance. Better
+first-use examples, a clearer scope, an easier route in. Then pilot again.
+
+**Narrow.** If it works for part of the team or part of the task, keep that. A tool used
+well by four people for one job is a success, even if it was meant for forty.
+
+**Withdraw.** If it solves nothing anyone has, or costs more than it saves, stop. Do so
+cleanly, as P5·L8 described: turn it off, revoke access, remove it from the list, tell
+people.
+
+Withdrawing is not failure, and a project that can do it is more trustworthy than one that
+cannot.
+
+## Beware sunk cost
+
+The effort already spent is not an argument for continuing.
+
+You built it, trained people, wrote the page, ran the pilot. All of that is gone whether
+you continue or not. The only question is whether continuing is worth the cost from here.
+
+The pressure not to withdraw is strongest when you built the thing, which is exactly when
+your judgement is least reliable. Ask someone who did not.
+
+## Keep what you learned
+
+A withdrawn rollout still produced valuable material.
+
+> The problem as people described it, in their words.
+> The test cases that exposed the tool's weaknesses.
+> The objections, and which were right.
+> An honest note on why it did not take.
+
+Write it up briefly. Next time someone proposes the same idea, you will be able to say what
+was tried and what happened, which is a far better position than starting again from
+enthusiasm.
+
+## Lrnon's retreats
+
+The project has several examples of deliberately holding back, and they are worth reading
+as decisions and not as setbacks.
+
+Certification is built, with its assessments, rubric and verification page, and switched
+off until two named reviewers exist and the guardian path has been tested with real
+families. Community rooms are built and closed until a named safeguarding owner and deputy
+exist. The assistant is open to staff only because its readiness gates are unmet.
+
+In each case the thing works, and the project judged that the conditions around it were not
+ready. None of that is a withdrawal exactly, and all of it is the discipline this lesson
+describes: noticing that a technical success is not a readiness to roll out, and being
+willing to say so.
+
+It also corrected itself. The assistant's footer made a promise that could not be verified,
+and was changed to say only what was true. That is the same instinct at a smaller scale.
+
+## Try it now (15 minutes)
+
+Think of a tool or process that did not take, in your organisation or elsewhere. Work
+through the six causes above and write a sentence on each.
+
+Then ask the sunk-cost question honestly: if it did not exist yet, and you knew what you
+know now, would you build it?
+
+<Quiz client:visible items={[
+  {
+    q: "What is the commonest reason a rollout fails to take?",
+    options: [
+      "People resist all change",
+      "It solved a problem the team did not feel they had",
+      "The tool was too expensive"
+    ],
+    answer: 1,
+    explain: "They were asked to adopt a solution to a difficulty they did not have. Ask what the hardest part of their week is."
+  },
+  {
+    q: "Why is blaming users for non-adoption unhelpful?",
+    options: [
+      "Users are rarely at fault",
+      "It ends the investigation, since if the fault is theirs there is nothing to find",
+      "It may cause legal difficulties"
+    ],
+    answer: 1,
+    explain: "Ask what you would have to believe for their behaviour to be reasonable. Usually there is a version of that sentence you can complete."
+  },
+  {
+    q: "Why is the effort already spent not a reason to continue a failing rollout?",
+    options: [
+      "The effort cannot be measured",
+      "That effort is gone either way; the only question is whether continuing is worth the cost from here",
+      "Continuing always costs more than stopping"
+    ],
+    answer: 1,
+    explain: "Pressure not to withdraw is strongest when you built the thing, which is when your judgement is least reliable. Ask someone who did not."
+  }
+]} />
+
+## Recap
+
+When a rollout does not take, treat it as information. Work through the causes: the problem
+was not theirs, the first experience went badly, it cost more than it saved, there was no
+time or permission, trust was damaged, or it is not for them. Do not blame the users.
+Choose to reshape, narrow or withdraw, set aside sunk cost, and keep what you learned. Lrnon
+has built several things and deliberately not switched them on, which is the same discipline
+applied before launch.

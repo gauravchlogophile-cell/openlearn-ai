@@ -1,0 +1,184 @@
+---
+title: "Did it actually help"
+description: "Measure against a baseline, count the checking and rework, distrust self-reported savings, and be ready to conclude that it did not."
+track: practitioner
+module: p9
+order: 6
+minutes: 9
+objectives:
+  - "Measure whether a rollout helped using a baseline and the full cost, including checking"
+  - "Avoid metrics that look like evidence and are not"
+concepts: ["baseline", "rework", "self-reported savings", "vanity metrics"]
+flashcards:
+  - front: "Why take a baseline first?"
+    back: "Without a measurement of how the work went before, any 'improvement' is a feeling. The baseline is what makes a before-and-after comparison possible."
+  - front: "What does 'time saved' leave out?"
+    back: "The time spent writing the request, reading the output, checking it, and fixing what was wrong. A tool that drafts in a minute and needs fifteen to verify has not saved fourteen."
+  - front: "Why are logins and usage counts weak evidence?"
+    back: "They measure activity, not benefit. A tool people are told to use will be used, and heavy use may mean it is hard to get right."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+At the end of a pilot someone will ask: *did it work?* The honest answer depends on whether
+you decided in advance what working meant (L2) and measured it fairly.
+
+Most rollouts measure the wrong things, because the right ones are harder to collect and
+less flattering.
+
+## Start with a baseline
+
+You cannot show improvement without knowing where you started.
+
+Before the pilot, measure the task as it is done now. How long it takes, how often it is
+done again, what the error rate is, how satisfied the people doing it are. Roughly will do,
+as long as you measure it the same way afterwards.
+
+Without a baseline, you have testimonials. They are not worthless, and they are not evidence.
+
+## Count the whole cost
+
+A tool saves the time it takes to produce a draft. It costs the time it takes to use.
+
+> **Writing the request:** often longer than expected for a good result.
+> **Reading the output:** all of it, carefully.
+> **Checking it:** P6·L7's point that the report is not the work applies to every output.
+> **Fixing what was wrong:** sometimes more than starting fresh.
+> **Dealing with the consequences** of an error that got through.
+
+A tool that produces a draft in one minute and needs fifteen to verify has not saved
+fourteen. It may have saved some, or it may have cost some. You only find out by counting
+the whole of the work.
+
+## Be sceptical of self-reported savings
+
+Asking people how much time they saved produces a number, and it is not reliable.
+
+People overestimate savings from something new and exciting. They remember the one spectacular
+success and forget the three attempts that went nowhere. They are also reluctant to tell the
+person who built the thing that it did not help.
+
+Better evidence is observed rather than recalled: timings taken during the work, the number
+of rounds of correction a document needed, error rates found in review. Where you must ask,
+ask about specific recent tasks and not general impressions, and ask neutrally.
+
+## Measure quality, not just speed
+
+A faster process that produces worse work is not an improvement.
+
+Decide how you will judge quality. Review a sample of outputs against a standard. Count the
+errors that reached the next stage. Ask the recipients, if there are any, whether they
+noticed a change.
+
+The P4·L6 test set is part of this, and P3·L7's point is relevant: a result that passed
+once is one sample. Look at enough cases to see the spread.
+
+## Metrics that look like evidence
+
+Some numbers are easy to collect and nearly meaningless.
+
+**Logins and active users.** A tool people are told to use will be used. Activity measures
+compliance.
+
+**Number of prompts or queries.** More could mean more value, or more struggle.
+
+**Satisfaction surveys alone.** People report liking things that save them nothing, and
+dislike things that help.
+
+**Anecdotes from enthusiasts.** The most motivated people produce the best stories, and are
+not typical.
+
+These are not useless as context. They are dangerous as proof, because they flatter.
+
+## Decide what failure looks like
+
+Back to L2: write down in advance the result that would make you say it did not work.
+
+This is the hardest part and the most important. If the only outcomes you will accept are
+good, the exercise is a ceremony. A real test can fail, and you should be able to say what
+failing would look like before you look.
+
+If the pilot shows no clear benefit, that is a result, and a useful one. It saved the
+organisation from rolling out something that did not help.
+
+## A gate that cannot change is not a gate
+
+Lrnon's assistant offers a worked example, because the project got this wrong first.
+
+The readiness gates in the admin console, for an assistant to be opened more widely, were a
+hard-coded list with three of the four permanently false. They could not become true.
+No amount of real review would have moved them. A gate that cannot change is a decoration,
+and a measure that cannot move cannot tell you whether anything helped.
+
+They are now computed from recorded reviews: the count of answers reviewed, and the rate
+judged wrong, with the rate shown as *unknown* and not zero when there are no reviews. That
+last detail is the baseline lesson in a different form: a rate of zero from no data would
+read as "nothing is wrong" when it means "nothing is known".
+
+When this was written those gates stood at zero reviews, because the part that needs a
+person's time had not yet happened. The measurement can now move. Whether it will is a
+matter of whether anyone reviews.
+
+## Report it honestly
+
+When you write up the result, put the unflattering parts in.
+
+State the baseline and how it was measured. Report the whole cost, including checking. Say
+how many people, for how long, and what the sample could not show. If the benefit was
+modest, say it was modest. If it did not help, say that.
+
+Honest reporting is also what makes the next proposal believable. A team that sees you
+report a disappointing result will trust the next good one.
+
+## Try it now (20 minutes)
+
+For a use case you are considering, write the measurement plan. Include the baseline, the
+whole-cost list, the quality check, and the failure criterion.
+
+Then ask: if the result came back as "no clear benefit", would I report it, and would the
+organisation let me? If not, that is the thing to fix first.
+
+<Quiz client:visible items={[
+  {
+    q: "Why can a tool that drafts in a minute fail to save any time?",
+    options: [
+      "Drafting speed is irrelevant to productivity",
+      "Writing the request, reading, checking and fixing can take longer than the draft saved",
+      "Drafts are always shorter than hand-written text"
+    ],
+    answer: 1,
+    explain: "A tool that produces a draft in one minute and needs fifteen to verify has not saved fourteen. Count the whole of the work."
+  },
+  {
+    q: "Why is login or active-user count weak evidence that a tool helped?",
+    options: [
+      "Counts are rarely recorded accurately",
+      "It measures activity and compliance, not benefit, since a tool people are told to use will be used",
+      "Platforms do not release usage data"
+    ],
+    answer: 1,
+    explain: "Heavy use may mean the tool is hard to get right. Measure outcomes such as time, corrections and errors."
+  },
+  {
+    q: "Why does a 'rate' shown as unknown matter more than a rate shown as zero when no reviews exist?",
+    options: [
+      "Zero is mathematically undefined",
+      "A zero reads as 'nothing is wrong' when it actually means 'nothing is known'",
+      "Unknown values load faster"
+    ],
+    answer: 1,
+    explain: "The same lesson as a baseline: a measure with no data behind it must not look like good news."
+  }
+]} />
+
+## Recap
+
+Take a baseline before the pilot, because without one you have testimonials. Count the whole
+cost: writing the request, reading, checking, fixing and the consequences of errors. Distrust
+self-reported savings, measure quality as well as speed, and avoid logins, query counts and
+enthusiasts' anecdotes as proof. Decide in advance what failure looks like and report
+honestly, including a disappointing result. Lrnon's gates were once unable to change, and now
+compute from reviews and show unknown rather than zero when there is no data.

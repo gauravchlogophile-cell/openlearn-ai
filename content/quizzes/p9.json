@@ -1,0 +1,316 @@
+{
+  "module": "p9",
+  "title": "Rolling It Out to a Team — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "p9-01",
+      "q": "Why is a tool that works not the same as a tool that is adopted?",
+      "options": [
+        "Working tools are rarely well designed",
+        "People already have a way of working, the first experience decides, and nobody has spare time to learn something new",
+        "Adoption depends mainly on the price of the tool"
+      ],
+      "answer": 1,
+      "explain": "A tool has to beat what people already do, in their hands, on a busy day. A poor first answer ends the trial, usually permanently."
+    },
+    {
+      "id": "p9-02",
+      "q": "Which question produces the most honest picture of someone's work?",
+      "options": [
+        "Would you find AI useful for this task?",
+        "Walk me through the last time you did this",
+        "How much time do you think this takes per week?"
+      ],
+      "answer": 1,
+      "explain": "People describe real work honestly and give polite guesses to hypothetical preferences."
+    },
+    {
+      "id": "p9-03",
+      "q": "Someone says reports take too long, but watching shows the writing takes twenty minutes and the rest is chasing numbers. What follows?",
+      "options": [
+        "A faster writing tool will solve the problem",
+        "The named problem is not the real one, and a tool that writes faster saves nothing that matters",
+        "The person is exaggerating how long reports take"
+      ],
+      "answer": 1,
+      "explain": "Keep asking what happens next until you reach a step someone would pay to avoid. That step is the candidate."
+    },
+    {
+      "id": "p9-04",
+      "q": "What is the honest base rate for a tool built and handed to a team?",
+      "options": [
+        "Most colleagues adopt it after a demonstration",
+        "The author uses it and nobody else does, unless the work was understood first",
+        "Adoption depends mainly on how well the tool is designed"
+      ],
+      "answer": 1,
+      "explain": "Colleagues have their own habits and did not ask for it. Starting from their real problem is what changes the odds."
+    },
+    {
+      "id": "p9-05",
+      "q": "Why include a sceptic in a pilot group?",
+      "options": [
+        "Sceptics are easier to convince and then convert others",
+        "Their objections are the ones the wider team will raise later, and hearing them early is valuable",
+        "It keeps the group size balanced"
+      ],
+      "answer": 1,
+      "explain": "A willing sceptic is worth several enthusiasts. Enthusiasts forgive a great deal and will tell you it is wonderful."
+    },
+    {
+      "id": "p9-06",
+      "q": "Why write the success and failure criteria before a pilot starts?",
+      "options": [
+        "Regulators require written criteria",
+        "It is hard to see your own work fail, and a criterion written beforehand cannot be adjusted to fit the result",
+        "It shortens the pilot"
+      ],
+      "answer": 1,
+      "explain": "Without it, every result gets read as success by the person who built the thing."
+    },
+    {
+      "id": "p9-07",
+      "q": "Why is choosing an easy task for a pilot a trap?",
+      "options": [
+        "Easy tasks produce too little data",
+        "It gives a good result that vanishes on contact with real work",
+        "Participants find easy tasks boring"
+      ],
+      "answer": 1,
+      "explain": "A pilot task should be representative of the actual work, not flattering to the tool."
+    },
+    {
+      "id": "p9-08",
+      "q": "Which four properties make a good pilot task?",
+      "options": [
+        "Urgent, high-value, complex and unusual",
+        "Frequent, low-stakes, checkable and representative",
+        "Cheap, quick, popular and new"
+      ],
+      "answer": 1,
+      "explain": "Frequent enough to produce data, low-stakes so mistakes are annoying not harmful, checkable quickly, and typical of the real work."
+    },
+    {
+      "id": "p9-09",
+      "q": "Why are tool-specific tutorials a poor use of training time?",
+      "options": [
+        "Tools are too simple to need training",
+        "Interfaces change every few weeks, while a habit of checking output works on any tool",
+        "Participants prefer theory"
+      ],
+      "answer": 1,
+      "explain": "A screen-by-screen walk-through is out of date almost at once, and it teaches people to follow steps rather than notice wrong output."
+    },
+    {
+      "id": "p9-10",
+      "q": "What is the most useful way to tell a team what not to paste into a tool?",
+      "options": [
+        "A general instruction to be careful with personal information",
+        "A short list of concrete examples tied to their own data",
+        "A long policy document to read before first use"
+      ],
+      "answer": 1,
+      "explain": "People reason from cases better than from principles. Customer names, account numbers and HR files are examples they can recognise."
+    },
+    {
+      "id": "p9-11",
+      "q": "Why include a deliberate failure in training?",
+      "options": [
+        "To discourage people from using the tool",
+        "Seeing it fail in a way that looks right is more persuasive than being told it can",
+        "Failures are easier to demonstrate than successes"
+      ],
+      "answer": 1,
+      "explain": "A failure drawn from the team's own area is best. It builds the checking habit that matters most."
+    },
+    {
+      "id": "p9-12",
+      "q": "Why make it safe for people to say they do not know how the tool works?",
+      "options": [
+        "It reduces the number of questions asked",
+        "Mistakes people fear to admit never reach you, and you cannot fix what you cannot see",
+        "It shortens training sessions"
+      ],
+      "answer": 1,
+      "explain": "Treat errors found by checking as the system working. If someone catches the tool being wrong, the right response is thanks."
+    },
+    {
+      "id": "p9-13",
+      "q": "What typically happens when an organisation bans AI tools outright?",
+      "options": [
+        "Use stops completely",
+        "Use continues out of sight on personal accounts, so you lose the ability to advise on or protect against it",
+        "Productivity rises because people focus on other work"
+      ],
+      "answer": 1,
+      "explain": "Shadow use has every risk of the sanctioned version plus the one that you cannot see it. A policy that steers beats one that forbids."
+    },
+    {
+      "id": "p9-14",
+      "q": "Why name the plan, and not only the tool, in an acceptable-use note?",
+      "options": [
+        "Plans determine how fast the tool responds",
+        "Data terms can differ sharply between a business account and a free personal one",
+        "Plans decide which features are visible"
+      ],
+      "answer": 1,
+      "explain": "'Use the company account, not a personal one' can be the most protective line on the page."
+    },
+    {
+      "id": "p9-15",
+      "q": "Who is accountable for work produced with a tool?",
+      "options": [
+        "The tool's vendor",
+        "The person who uses the tool and sends the result on",
+        "Whoever approved the tool"
+      ],
+      "answer": 1,
+      "explain": "'The tool wrote it' is not an answer to a customer or a regulator. Saying so in advance removes ambiguity about who owns a mistake."
+    },
+    {
+      "id": "p9-16",
+      "q": "Someone asks whether the tool will take their job and you do not know. What is the strongest response?",
+      "options": [
+        "Assure them it will not, to calm the situation",
+        "Say what you know, what you do not, and what you commit to, with specifics you can keep",
+        "Change the subject to the benefits of the tool"
+      ],
+      "answer": 1,
+      "explain": "A reassurance that is later found false discounts everything you said. Honest uncertainty with a concrete commitment is believed."
+    },
+    {
+      "id": "p9-17",
+      "q": "Why is a quality concern from the people doing the work worth treating as expertise?",
+      "options": [
+        "It usually means they dislike the tool",
+        "They know where the subtle mistakes live, and their failure cases make the best test set",
+        "Quality concerns can be ignored once training is complete"
+      ],
+      "answer": 1,
+      "explain": "People who contribute the cases tend to become the ones who make it work, because they have a stake in its being right."
+    },
+    {
+      "id": "p9-18",
+      "q": "Why is secretly tracking individual usage a risk?",
+      "options": [
+        "Usage data is too inaccurate to be useful",
+        "It is discovered sooner or later, and the damage to trust far outweighs the value of the data",
+        "Platforms prohibit exporting usage data"
+      ],
+      "answer": 1,
+      "explain": "If you measure, say so and say why. Aggregate numbers to learn whether the tool helps are reasonable; ranking people by use is not."
+    },
+    {
+      "id": "p9-19",
+      "q": "Why take a baseline before a pilot?",
+      "options": [
+        "Baselines are required to purchase a licence",
+        "Without a measurement of how the work went before, any improvement is a feeling",
+        "Baselines make the pilot run faster"
+      ],
+      "answer": 1,
+      "explain": "Measure the task as it is done now, and measure it the same way afterwards."
+    },
+    {
+      "id": "p9-20",
+      "q": "Why can a tool that drafts in a minute fail to save any time?",
+      "options": [
+        "Drafting speed is irrelevant to productivity",
+        "Writing the request, reading, checking and fixing can take longer than the draft saved",
+        "Drafts are always shorter than hand-written text"
+      ],
+      "answer": 1,
+      "explain": "A tool that produces a draft in one minute and needs fifteen to verify has not saved fourteen. Count the whole of the work."
+    },
+    {
+      "id": "p9-21",
+      "q": "Why is login or active-user count weak evidence that a tool helped?",
+      "options": [
+        "Counts are rarely recorded accurately",
+        "It measures activity and compliance, not benefit, since a tool people are told to use will be used",
+        "Platforms do not release usage data"
+      ],
+      "answer": 1,
+      "explain": "Heavy use may mean the tool is hard to get right. Measure outcomes such as time, corrections and errors."
+    },
+    {
+      "id": "p9-22",
+      "q": "Why show a rate as unknown, not zero, when there is no data behind it?",
+      "options": [
+        "Zero is mathematically undefined",
+        "A zero reads as 'nothing is wrong' when it actually means 'nothing is known'",
+        "Unknown values load faster"
+      ],
+      "answer": 1,
+      "explain": "A measure with no data behind it must not look like good news."
+    },
+    {
+      "id": "p9-23",
+      "q": "Why are reported failures described as a gift?",
+      "options": [
+        "They show that the users are paying attention",
+        "Each is a real input from a real task where the tool failed, and a test case that cost nothing",
+        "They reduce the support team's workload"
+      ],
+      "answer": 1,
+      "explain": "Put each in the test set with a note of what it broke, so that an escape which is fixed does not return unrecorded."
+    },
+    {
+      "id": "p9-24",
+      "q": "What does a short running log of changes do?",
+      "options": [
+        "Satisfies a regulatory requirement",
+        "Shows the thing is being tended, explains changes in behaviour, and makes 'it used to work' answerable",
+        "Replaces the need for version control"
+      ],
+      "answer": 1,
+      "explain": "Two lines per change is enough. It is also searchable when someone reports that something has got worse."
+    },
+    {
+      "id": "p9-25",
+      "q": "What is the commonest way a rollout ends?",
+      "options": [
+        "A dramatic failure that forces it to be withdrawn",
+        "A quiet fade, with people returning to the old way without announcing it",
+        "A formal decision by management to cancel it"
+      ],
+      "answer": 1,
+      "explain": "Nobody complains because nobody is invested. The guard is to look: check use and satisfaction at intervals and treat a decline as information."
+    },
+    {
+      "id": "p9-26",
+      "q": "What is the commonest reason a rollout fails to take?",
+      "options": [
+        "People resist all change",
+        "It solved a problem the team did not feel they had",
+        "The tool was too expensive"
+      ],
+      "answer": 1,
+      "explain": "They were asked to adopt a solution to a difficulty they did not have. Ask what the hardest part of their week is."
+    },
+    {
+      "id": "p9-27",
+      "q": "Why is blaming users for non-adoption unhelpful?",
+      "options": [
+        "Users are rarely at fault",
+        "It ends the investigation, since if the fault is theirs there is nothing to find",
+        "It may cause legal difficulties"
+      ],
+      "answer": 1,
+      "explain": "Ask what you would have to believe for their behaviour to be reasonable. Usually there is a version of that sentence you can complete."
+    },
+    {
+      "id": "p9-28",
+      "q": "Why is effort already spent not a reason to continue a failing rollout?",
+      "options": [
+        "The effort cannot be measured",
+        "That effort is gone either way; the only question is whether continuing is worth the cost from here",
+        "Continuing always costs more than stopping"
+      ],
+      "answer": 1,
+      "explain": "Pressure not to withdraw is strongest when you built the thing, which is when your judgement is least reliable. Ask someone who did not."
+    }
+  ]
+}

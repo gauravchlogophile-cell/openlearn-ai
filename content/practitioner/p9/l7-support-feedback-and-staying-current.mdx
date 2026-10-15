@@ -1,0 +1,180 @@
+---
+title: "Support, feedback and staying current"
+description: "A rollout needs somewhere to ask, a way to hear failures, and a visible record of what changed. Without them it decays quietly after the launch."
+track: practitioner
+module: p9
+order: 7
+minutes: 8
+objectives:
+  - "Give a rollout a named place to ask and a route for failures to reach the person who can fix them"
+  - "Keep the rules, instructions and training current in the open"
+concepts: ["support", "feedback loop", "change log", "currency"]
+flashcards:
+  - front: "What does a rollout need after launch?"
+    back: "A place to ask, a named owner, a way for failures to reach the person who can fix them, and a visible record of what changed so people trust it is being looked after."
+  - front: "Why are reported failures valuable?"
+    back: "They are the free test cases. Each one is a real input where the tool failed, and each belongs in the test set and often in the instructions."
+  - front: "What happens to a rollout nobody tends?"
+    back: "It decays: instructions go stale, rules stop matching practice, the knowledge ages, and people quietly return to the old way without telling anyone."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The launch is not the end of a rollout. It is the point at which the hardest part begins,
+which is keeping the thing true and useful after the attention moves on.
+
+The pattern from P5·L8 holds for people as much as for automations: what is not tended
+decays.
+
+## A place to ask
+
+People will have questions, and where they put them decides whether they ask.
+
+**One obvious place.** A named channel, an address, a person. Not four options, and not a
+form that goes somewhere nobody reads.
+
+**A named owner,** as P4·L5 argued for assistants. Someone whose job it is to answer, with
+a backup, so that questions do not depend on one person's availability.
+
+**A realistic promise about response.** *"Within a working day"* kept is better than
+*"immediately"* broken. Lrnon tells people a person answers feedback within two working
+days, which is a promise sized to the staffing that exists.
+
+**No punishment for asking.** The questions that matter most are the embarrassing ones: how
+do I get it to stop doing this, I pasted something I shouldn't have. If asking feels risky,
+those never arrive.
+
+## Failures are the gift
+
+When the tool gets something wrong and someone tells you, that is the most valuable thing
+that can happen after launch.
+
+Each reported failure is a real input, from a real task, where the tool did not do what
+was needed. It is a test case that cost you nothing.
+
+**Make reporting easy.** One click or one sentence. A form with eleven fields is a form
+nobody completes.
+
+**Thank people,** visibly and promptly. The next person's willingness to report depends on
+how this one was received.
+
+**Close the loop.** Tell the person what happened to their report. *"We added this to the
+instructions and it now handles it"* turns a complaint into a contribution, and tells
+everyone else that reporting works.
+
+**Put it in the test set.** P4·L6: an escape that is fixed but not recorded returns later.
+Every reported failure should end up as a permanent case, with a note of what it broke.
+
+## Keep what you wrote current
+
+Several things from earlier lessons age, and each needs an owner and a date.
+
+> **The instructions** of any assistant (P4·L5): version-controlled, with a change record.
+>
+> **The attached knowledge** (P4·L3): dated, and replaced when the underlying document
+> changes.
+>
+> **The acceptable-use page** (L4): with a review date.
+>
+> **The training** (L3): the judgement parts age slowly; any tool-specific parts, quickly.
+>
+> **The test set:** re-run periodically, because the model underneath can change.
+
+A line in the calendar for each. Quarterly is usually enough to start.
+
+## Say what changed
+
+When anything above changes, say so, where people can see it.
+
+A short running log does it. *"12 Oct: tightened the instructions so replies no longer
+promise refunds. 3 Oct: updated the returns policy document."* Two lines each.
+
+It does three useful things. It tells people the thing is being looked after. It explains
+changes in behaviour that would otherwise feel like the tool getting worse. And it creates
+a record you can search when someone says *"it used to work"*.
+
+Lrnon keeps a public record of this kind. The changelog is where content corrections and
+new modules are listed, and the project's own rule is that a correction goes in a new
+dated entry and not a quiet edit. This module's neighbours used exactly that: a wrong
+count in earlier entries was corrected by a new entry, with the originals left as
+published.
+
+## Watch for quiet abandonment
+
+The commonest end of a rollout is not a failure. It is a fade.
+
+Usage drops. People go back to the old way without announcing it. Nobody complains,
+because nobody is invested. A year later you discover it has not been used since spring.
+
+The guard is to look. Check use and satisfaction at intervals, by asking people and by
+looking at what is actually happening, and treat a decline as information to act on and not
+as noise. L8 covers what to do when you find it.
+
+## What a small team can do
+
+None of this requires a department.
+
+> One channel for questions.
+> One person who owns the answers, with a backup.
+> A one-line way to report a failure.
+> A running log of changes.
+> A quarterly look at the instructions, the knowledge, the rules and the test set.
+
+That is an hour a month, and it is the difference between a rollout and a launch.
+
+## Try it now (15 minutes)
+
+For something you have rolled out, answer five questions:
+
+1. Where does a person ask, and who answers?
+2. How does a failure reach the person who can fix it?
+3. Where are changes recorded?
+4. When were the instructions, knowledge and rules last reviewed?
+5. How would you know if people had quietly stopped using it?
+
+Anything you cannot answer is the next job.
+
+<Quiz client:visible items={[
+  {
+    q: "Why are reported failures described as a gift?",
+    options: [
+      "They show the users are paying attention",
+      "Each is a real input from a real task where the tool failed, and a test case that cost nothing",
+      "They reduce the support team's workload"
+    ],
+    answer: 1,
+    explain: "Put each in the test set with a note of what it broke, so that an escape which is fixed does not return unrecorded."
+  },
+  {
+    q: "What does a short running log of changes do?",
+    options: [
+      "Satisfies a regulatory requirement",
+      "Shows the thing is being tended, explains changes in behaviour, and makes 'it used to work' answerable",
+      "Replaces the need for version control"
+    ],
+    answer: 1,
+    explain: "Two lines per change is enough. It is also searchable when someone reports that something has got worse."
+  },
+  {
+    q: "What is the commonest way a rollout ends?",
+    options: [
+      "A dramatic failure that forces it to be withdrawn",
+      "A quiet fade, with people returning to the old way without announcing it",
+      "A formal decision by management to cancel it"
+    ],
+    answer: 1,
+    explain: "Nobody complains because nobody is invested. The guard is to look: check use and satisfaction at intervals and treat a decline as information."
+  }
+]} />
+
+## Recap
+
+After launch, give people one obvious place to ask, a named owner with a backup, a realistic
+response promise, and no punishment for asking. Treat reported failures as free test cases:
+make reporting a sentence long, thank people, close the loop and put each in the test set.
+Keep instructions, knowledge, rules, training and tests current with owners and review dates,
+and record each change in a short public log. Watch for quiet abandonment, which is how most
+rollouts actually end.

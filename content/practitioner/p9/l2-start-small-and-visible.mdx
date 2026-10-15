@@ -1,0 +1,178 @@
+---
+title: "Start small and visible"
+description: "Pilot with a few willing people on one use case with a checkable outcome. A small, honest result persuades better than a mandate and is easier to retreat from."
+track: practitioner
+module: p9
+order: 2
+minutes: 8
+objectives:
+  - "Design a pilot that is small enough to retreat from and clear enough to learn from"
+  - "Choose pilot participants and a use case that will produce an honest result"
+concepts: ["pilot", "willing volunteers", "scope", "reversibility"]
+flashcards:
+  - front: "Why pilot with volunteers rather than a mandate?"
+    back: "Willing people give honest feedback and try harder; a mandated group gives compliance. You learn what works for people who want it to, and that is the question a pilot should answer."
+  - front: "What makes a good pilot use case?"
+    back: "Frequent, low-stakes, with an outcome you can check. Not the hardest or the most important task. The aim is a clear result you can trust."
+  - front: "How do you keep a pilot honest?"
+    back: "Decide in advance what would count as success and what would count as failure, write it down, and agree to stop if it fails."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The temptation after building something is to announce it to everyone. Resist it. The
+quickest route to a tool that nobody trusts is a launch to a hundred people before it has
+been tried by five.
+
+P5·L7 described a ladder from sample data to staged rollout. This is the same ladder
+applied to people.
+
+## Small enough to retreat from
+
+A pilot is only worth running if you can stop it cleanly.
+
+**A handful of people.** Three to eight is usually enough to learn a great deal, few
+enough to talk to each of them, and small enough that a bad week does not damage the
+team's trust in what you build next.
+
+**One use case.** Not everything the tool could do. The one thing you found in L1 that
+someone would be glad to lose.
+
+**A fixed period.** Four to six weeks, with an end date, so that "pilot" does not become
+a permanent half-state.
+
+**A way back.** The old process remains available throughout. If people cannot return to
+the previous way, they are not piloting, they are being migrated.
+
+## The right people
+
+Choose volunteers, and be deliberate about the mix.
+
+**Willing, not just enthusiastic.** You want people who are curious and will give honest
+feedback. Enthusiasts forgive a great deal and will tell you it is wonderful.
+
+**Include a sceptic.** Someone who doubts it and is willing to try anyway is worth three
+fans. Their objections are the ones the wider team will raise later, and hearing them
+early is a gift.
+
+**Include someone ordinary.** Not the team's most technical person. If it only works for
+someone who already understands the tools, you have learned something important.
+
+**Not the boss's favourite.** A pilot that looks like a reward for loyalty reads as one,
+and the rest of the team will treat the results accordingly.
+
+## The right task
+
+A good pilot task has four properties.
+
+> **Frequent.** It comes up often enough to produce data within the pilot period.
+>
+> **Low-stakes.** A mistake is annoying and not harmful. Not the client contract, not the
+> safeguarding report.
+>
+> **Checkable.** Someone can tell whether the output was right, quickly. P6·L8's point
+> about cheap, independent verification applies to pilots as much as to agents.
+>
+> **Representative.** Typical of the work, not an easy case chosen to flatter the tool.
+
+The last is a trap. Picking an easy task gives you a good result that vanishes on contact
+with real work.
+
+## Decide what counts, before you start
+
+Write down, before the first day:
+
+1. **What success looks like,** in terms you can observe. Not "people like it" but "the
+   report takes under thirty minutes and needs no more than one round of corrections".
+2. **What failure looks like.** The condition under which you stop and say it did not
+   work.
+3. **What you will measure,** and how (L6 covers this).
+4. **When you will decide.**
+
+This is for your own protection. Without it, every result gets read as success by the
+person who built the thing, because it is very hard to see your own work fail. A
+criterion written beforehand cannot be adjusted to fit the outcome.
+
+## Make it visible
+
+A pilot nobody knows about teaches nobody anything.
+
+**Tell the wider team what is happening,** honestly: who is trying what, why, and for how
+long. Secrecy breeds suspicion.
+
+**Share results as they come,** including the unflattering ones. A short note at the end
+of each week, saying what worked and what did not, builds more trust than a polished
+report at the end.
+
+**Let participants speak for themselves.** Their account of what it was like is worth
+more than yours, and they are more believed.
+
+## Lrnon's staged approach
+
+The assistant has been through a version of this. It is open to staff only, which is a
+pilot with a very small group, and it has stayed there deliberately. The stage is a
+decision the owner holds, with the console showing what it is.
+
+Two honest observations. First, the success criteria were written down in advance: two
+hundred reviewed answers and a wrong-answer rate under two percent. That is the pre-written
+criterion working as intended. Second, the criteria cannot be met without the review, and
+the review has not happened, so the pilot is stalled on exactly the thing that needs a
+person's time. A pilot that lacks someone with time to run it does not progress, however
+good the tool.
+
+## Try it now (20 minutes)
+
+Design a pilot on one page.
+
+- The use case, and why it is frequent, low-stakes, checkable and representative.
+- Four to eight participants, including one sceptic and one ordinary user.
+- Start and end dates.
+- Success and failure criteria, in observable terms.
+- What the old process is, and how people go back to it.
+
+Show it to one participant before you start and ask where it would not work for them.
+
+<Quiz client:visible items={[
+  {
+    q: "Why include a sceptic in a pilot group?",
+    options: [
+      "Sceptics are easier to convince and convert others",
+      "Their objections are the ones the wider team will raise later, and hearing them early is valuable",
+      "It keeps the group size balanced"
+    ],
+    answer: 1,
+    explain: "A willing sceptic is worth several enthusiasts. Enthusiasts forgive a great deal and will tell you it is wonderful."
+  },
+  {
+    q: "Why write the success and failure criteria before the pilot starts?",
+    options: [
+      "Regulators require written criteria",
+      "It is hard to see your own work fail, and a criterion written beforehand cannot be adjusted to fit the result",
+      "It shortens the pilot"
+    ],
+    answer: 1,
+    explain: "Without it, every result gets read as success by the person who built the thing."
+  },
+  {
+    q: "Why is choosing an easy task for a pilot a trap?",
+    options: [
+      "Easy tasks produce too little data",
+      "It gives a good result that vanishes on contact with real work",
+      "Participants find easy tasks boring"
+    ],
+    answer: 1,
+    explain: "A pilot task should be representative of the actual work, not flattering to the tool."
+  }
+]} />
+
+## Recap
+
+Pilot before launching: a handful of volunteers, one use case, a fixed period, and the old
+process kept available. Choose willing people including a sceptic and an ordinary user, and
+a task that is frequent, low-stakes, checkable and representative. Write down success and
+failure before the first day, make the pilot visible with honest weekly notes, and let
+participants speak for themselves. A pilot also needs someone with time to run it, which
+Lrnon's own stalled review shows.

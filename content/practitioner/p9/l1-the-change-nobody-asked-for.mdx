@@ -1,0 +1,166 @@
+---
+title: "The change nobody asked for"
+description: "Building a tool is not the same as people using it. Start from the work they already do and the problem they actually have, before anything is built."
+track: practitioner
+module: p9
+order: 1
+minutes: 8
+objectives:
+  - "Explain why a working tool is not the same as an adopted one"
+  - "Find out what a team's real problem is before proposing a solution"
+concepts: ["adoption", "problem discovery", "current workflow", "user research"]
+flashcards:
+  - front: "Why is a working tool not an adopted one?"
+    back: "People have habits, deadlines and their own ways of working. A tool must beat what they already do, in their hands, on a Tuesday, or it is tried once and abandoned."
+  - front: "What should you do before proposing anything?"
+    back: "Watch the work as it is done now. Ask what is slow, what is dull, and what goes wrong. The problem people name is often not the one you assumed."
+  - front: "What is the safest question to start with?"
+    back: "Not 'would you use AI for this?' but 'walk me through the last time you did this'. People describe real work far more honestly than hypothetical preferences."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+P4 to P8 were about building something well. This module is about what happens when you
+hand it to other people, which is a different problem and often a harder one.
+
+The most useful sentence to start with is an uncomfortable one. P4·L8 said it of custom
+assistants, and it applies to anything you roll out: **the honest base rate is that the
+author uses it and nobody else does.**
+
+## Why working is not enough
+
+A tool that works has cleared the easiest hurdle. The harder ones are human.
+
+**People already have a way.** It may be slow and clumsy, and it is theirs. They know
+its failures and how to work around them. A new tool has to be better than that in
+practice, not in a demonstration.
+
+**The first experience decides.** P4·L2 made the point for assistants. A person who gets
+a poor answer on the first try does not file a bug. They conclude it is not for them,
+and that conclusion is very hard to reverse.
+
+**Nobody has spare time to learn it.** Using a new tool costs attention now in exchange
+for a saving later, and the person bearing the cost is often not the one who sees the
+benefit.
+
+**It was not their idea.** A change handed down by someone who did not ask them is
+received differently from one they requested, even if the tool is identical.
+
+None of this is cynical. It is how reasonable people behave when handed something new
+during a busy week.
+
+## Start with the work
+
+Before proposing anything, find out what the work actually is.
+
+**Watch it.** Sit with someone doing the task, or ask them to share their screen. Do not
+interrupt to suggest improvements. Notice where they pause, copy and paste between
+windows, or check something twice.
+
+**Ask for a recent example.** *"Walk me through the last time you did this"* produces
+real detail. *"Would you find AI useful for this?"* produces a polite guess.
+
+**Ask what goes wrong.** Where do mistakes happen? What do you dread? What gets left
+until Friday?
+
+**Ask what they would not want touched.** Every team has parts of the job that carry
+meaning, judgement or pride. A tool that automates those, however efficiently, will be
+resented.
+
+You are looking for a problem the person already has and would be glad to lose. That is
+a much better foundation than a capability looking for a use.
+
+## The problem named is rarely the problem
+
+Expect a gap between what people say and what is true.
+
+Someone says reports take too long. Watching shows the writing takes twenty minutes and
+the rest is chasing three people for numbers. A tool that writes faster saves nothing
+that matters.
+
+Someone says they need help with email. Watching shows the difficulty is deciding what
+to answer first, and a drafting tool would give them more email to send.
+
+The way through is to keep asking *"and what happens next?"* until you reach a step that
+someone would pay to avoid. That step, and not the one first mentioned, is the candidate.
+
+## Check it is worth automating at all
+
+Before building, run the checks from earlier modules on the candidate.
+
+> Does the path genuinely vary, or is it a fixed chain? (P6·L1)
+> Could a document, template or script do it? (P4·L8)
+> Is it frequent enough to repay the keeping? (P7·L1)
+> What data would it touch? (P8·L1)
+
+If the candidate fails them, you have saved a build. If it passes, you have a better
+brief than most tools start with.
+
+## A caution from Lrnon
+
+The project's assistant is the cleanest example available. It was built, it works, and
+its purpose is sound. Its readiness gates require two hundred answers to be reviewed by
+hand, and when this was written the review buttons had recorded none.
+
+That is not a failure of the tool. It is the same gap in miniature: the mechanism exists
+and the habit of using it does not. Building the means to give feedback did not by itself
+create anyone who gives it, and the person who built it is the one person who knows
+exactly where the buttons are.
+
+## Try it now (20 minutes)
+
+Pick a task someone else does and ask them for a recent example. Take notes without
+suggesting anything. Then ask:
+
+1. What took the longest, and why?
+2. What would you most like never to do again?
+3. What would you not want automated?
+
+Write one sentence describing their real problem. Compare it to what you had assumed
+before the conversation.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is a tool that works not the same as a tool that is adopted?",
+    options: [
+      "Working tools are rarely well designed",
+      "People already have a way of working, the first experience decides, and nobody has spare time to learn something new",
+      "Adoption depends mainly on the price of the tool"
+    ],
+    answer: 1,
+    explain: "A tool has to beat what people already do, in their hands, on a busy day. A poor first answer ends the trial, usually permanently."
+  },
+  {
+    q: "Which question produces the most honest picture of someone's work?",
+    options: [
+      "Would you find AI useful for this task?",
+      "Walk me through the last time you did this",
+      "How much time do you think this takes per week?"
+    ],
+    answer: 1,
+    explain: "People describe real work honestly and give polite guesses to hypothetical preferences."
+  },
+  {
+    q: "Someone says reports take too long. Watching shows the writing takes twenty minutes and the rest is chasing numbers. What follows?",
+    options: [
+      "A faster writing tool will solve the problem",
+      "The named problem is not the real one, and a tool that writes faster saves nothing that matters",
+      "The person is exaggerating how long reports take"
+    ],
+    answer: 1,
+    explain: "Keep asking what happens next until you reach a step someone would pay to avoid. That step is the candidate."
+  }
+]} />
+
+## Recap
+
+A working tool is not an adopted one, because people have their own ways, the first
+experience decides, and learning costs attention now for a saving later. Start from the
+work: watch it, ask for a recent example, and ask what goes wrong and what they would not
+want touched. The problem first named is rarely the real one, so keep asking what happens
+next. Then check the candidate against the earlier modules before building. Lrnon's own
+assistant shows the gap in miniature, with a review mechanism built and nobody yet using
+it.

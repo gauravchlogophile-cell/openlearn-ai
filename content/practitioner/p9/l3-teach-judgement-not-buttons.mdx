@@ -1,0 +1,182 @@
+---
+title: "Teach judgement, not buttons"
+description: "Tool-specific click paths go stale in a month. What lasts is knowing how to check output, what not to paste, and when to distrust a confident answer."
+track: practitioner
+module: p9
+order: 3
+minutes: 9
+objectives:
+  - "Design training around judgement and checking rather than interface steps"
+  - "Use people's own real work as the material, in short sessions with practice"
+concepts: ["training design", "judgement", "verification habit", "hands-on practice"]
+flashcards:
+  - front: "Why do tool-specific tutorials age badly?"
+    back: "Interfaces change every few weeks. A screen-by-screen walk-through is out of date almost at once, while a habit of checking output works on any tool."
+  - front: "What are the three things most worth teaching?"
+    back: "How to check what it gives you, what must never be pasted in, and how to recognise when it is likely to be wrong."
+  - front: "What makes training stick?"
+    back: "Using the person's own real work, in a short session, with a chance to try it and fail safely, followed by a reminder soon after."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+When a team gets a new tool, the instinct is to train people on the tool: where to click,
+which menu, what the button does. It feels concrete and it is the least durable thing you
+can teach.
+
+Lrnon's whole curriculum rests on the opposite belief: that the lasting skill is judgement,
+and that tools are the part that changes.
+
+## Why buttons expire
+
+Interfaces change continually. A set of screenshots is wrong within weeks. A session
+spent on where things are is spent on knowledge with a half-life shorter than the
+session's afterglow.
+
+It also teaches the wrong relationship. A person who learns the tool as a sequence of
+steps follows the sequence, and does not notice when the output is wrong, because
+noticing was never part of the lesson.
+
+## What lasts
+
+Three things stay useful across tools, versions and vendors.
+
+### How to check the output
+
+The single most valuable habit. Explorer's E7 is the full treatment; for a rollout, the
+essentials are:
+
+> **Treat fluency as no evidence.** A confident, well-written answer can be wrong.
+>
+> **Know which claims need checking:** numbers, names, dates, quotations, anything that
+> will be relied on or sent to someone else.
+>
+> **Check against something independent,** not by asking the tool whether it is sure.
+>
+> **Know what a check costs,** and when it is worth paying.
+
+A team that has only this has most of what matters.
+
+### What must never go in
+
+Concrete, specific, and tied to their data. Not "be careful with personal information"
+but "customer names, email addresses, account numbers and anything from the HR folder do
+not get pasted into this tool, and here is what to do instead".
+
+P8 explains why: the provider is a recipient, its terms differ by plan, and what you send
+leaves your control. For a team the useful form is a short list of examples, because
+people reason from cases better than from principles.
+
+### When it is likely to be wrong
+
+Some situations raise the chance of a confident error: obscure facts, recent events,
+specific figures, long or unusual documents, and anything where the tool has to know
+something it was not given. A person who can say *"this is the kind of question where it
+tends to make things up"* will check at the right moments.
+
+## Teach with their own work
+
+Generic examples teach generic skills. People remember what they did with their own
+material.
+
+**Use real tasks.** Have each person bring something they need to do this week and do it
+during the session. It converts training time into work time, which is also the best
+argument for attending.
+
+**Include a failure on purpose.** Show a case where the tool gets something wrong in a way
+that looks right, drawn from the team's own area if you can find one. Seeing it fail is
+more persuasive than being told it can.
+
+**Let them break it.** A safe space to try odd requests and see what happens teaches
+limits faster than a list.
+
+## Short, repeated, soon
+
+How long and how often matters more than most people expect.
+
+**Short sessions.** Forty-five minutes to an hour, with a task to do. A day-long workshop
+is mostly forgotten by the following week.
+
+**Practice inside the session,** not just demonstration. People retain what their hands
+did.
+
+**A reminder soon after.** A follow-up in a week or two, asking what they tried and what
+went wrong. It is the point where the habit either forms or lapses.
+
+**Written notes on one page.** Not a manual. The few things to remember, and where to ask.
+
+## Make it safe to say "I don't know"
+
+A team where everyone pretends to understand the tool is a team making unreported
+mistakes.
+
+Say openly that nobody has this fully worked out, including you. Treat errors found by
+checking as the system working and not as someone's failing. If a person catches the tool
+being wrong, the right response is thanks.
+
+This matters for the quality of what you learn as well. Mistakes people are afraid to admit
+never reach you, and you cannot fix what you cannot see.
+
+## How Lrnon does it
+
+The platform's curriculum is built on this premise: it teaches judgement, not tools. It
+names real products because avoiding them would make the teaching abstract, shows the
+source and date for every description so a reader can check, and returns again and again to
+verification, what not to hand over, and when to stop.
+
+That is why most of it will still read correctly when the products have changed. A lesson
+on checking a claim in two minutes does not depend on any vendor's menu. A lesson on where
+to click in a particular app would need rewriting each season.
+
+## Try it now (15 minutes)
+
+Outline a session for a team. Write the three things you want them to leave with, and for
+each, one exercise using their own real work.
+
+Then check the outline for any slide that is a screenshot of an interface. For each one,
+ask what you could teach instead that would still be true in a year.
+
+<Quiz client:visible items={[
+  {
+    q: "Why are tool-specific tutorials a poor use of training time?",
+    options: [
+      "Tools are too simple to need training",
+      "Interfaces change every few weeks, while a habit of checking output works on any tool",
+      "Participants prefer theory"
+    ],
+    answer: 1,
+    explain: "A screen-by-screen walk-through is out of date almost at once, and it teaches people to follow steps rather than notice wrong output."
+  },
+  {
+    q: "What is the most useful way to tell a team what not to paste into a tool?",
+    options: [
+      "A general instruction to be careful with personal information",
+      "A short list of concrete examples tied to their own data",
+      "A long policy document to read before first use"
+    ],
+    answer: 1,
+    explain: "People reason from cases better than from principles. Customer names, account numbers and HR files are examples they can recognise."
+  },
+  {
+    q: "Why include a deliberate failure in training?",
+    options: [
+      "To discourage people from using the tool",
+      "Seeing it fail in a way that looks right is more persuasive than being told it can",
+      "Failures are easier to demonstrate than successes"
+    ],
+    answer: 1,
+    explain: "A failure drawn from the team's own area is best. It builds the checking habit that matters most."
+  }
+]} />
+
+## Recap
+
+Teach what lasts: how to check output, what must never be pasted in, and when the tool is
+likely to be wrong. Tool-specific click paths expire quickly and teach people to follow
+steps rather than notice errors. Use each person's own real work, include a deliberate
+failure, keep sessions short with practice inside them, and follow up within a couple of
+weeks. Make it safe to say you do not know, since mistakes people fear to admit never reach
+you. Lrnon's curriculum is built on this premise.
