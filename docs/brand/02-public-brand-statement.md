@@ -7,7 +7,7 @@
 
 ## Positioning
 
-> **Lrnon teaches people to use AI well — free, without ads, and without
+> **Lrnon teaches people to use AI well — free for every learner, and without
 > anyone paying us to recommend anything.**
 
 One line beneath it, where more room exists:
@@ -22,8 +22,10 @@ modules covering what these systems are, how to ask them things, where they fit
 in ordinary work, how to verify what they tell you, and where not to use them
 at all — plus tracks for people who want to build with them.
 
-No account required to learn. No ads. No paywalls. Content under CC BY-SA,
-code under MIT.
+No account required to learn. No paywalls. Content under CC BY-SA, code under
+MIT. Sky, a friendly study buddy, is on every page to suggest a next step and show
+your own progress; it is built to be calm, and to work for people with dyslexia
+or sensitivity to light and movement.
 
 ## What Lrnon is not
 
@@ -40,8 +42,13 @@ code under MIT.
 
 ## The five commitments
 
-**No sponsorship, ever.** No vendor pays for placement, ranking or inclusion.
-No affiliate links. If that ever changes, it is published before it happens.
+**Nobody pays to be in a lesson.** No vendor pays for placement, ranking or
+inclusion in a lesson, a tool card or a comparison. No affiliate links, no paid
+reviews. Lrnon takes donations, grants and, under strict published rules,
+advertising, and none of it may touch what is taught. A learner never pays and
+nothing is behind money. Until 15 October 2026 this commitment read "No
+sponsorship, ever" and covered all money; the change was published on `/support`
+the same day.
 
 **Neutral, not silent.** We name real products, because teaching about AI
 without them would be useless. Naming is not endorsing.
@@ -87,8 +94,8 @@ to be flattered.
 ## Boilerplate
 
 **Short:**
-> Lrnon is a free, ad-free curriculum for learning to use AI well. No
-> sponsorship, no affiliate links, and every tool description carries its
+> Lrnon is a free curriculum for learning to use AI well. Nobody pays to be in
+> a lesson, there are no affiliate links, and every tool description carries its
 > source and the date it was checked.
 
 **One line:**

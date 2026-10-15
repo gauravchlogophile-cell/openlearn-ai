@@ -11,7 +11,11 @@
    request and refuses — while the dock still renders. That is precisely the
    symptom that was reported, and it is indistinguishable from a broken login
    unless you know to suspect the cache. */
-const SHELL_V = 'ol-shell-v8';
+/* v9 — Sky became the companion on every page (SkyBuddy replaces the dock), the
+   footer and landing page changed with the funding policy, and sky.css and the
+   Sky colour tokens joined the shell. A returning visitor holding the v8 shell
+   would see the old dock and the old "no ads" footer until it refreshed. */
+const SHELL_V = 'ol-shell-v9';
 const ASSETS = 'ol-assets-v1';
 const SHELL_URLS = ['/', '/home', '/roadmap', '/achievements', '/account', '/offline'];
 

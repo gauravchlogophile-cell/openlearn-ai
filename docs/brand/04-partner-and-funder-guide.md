@@ -8,12 +8,12 @@ prospective volunteers with resources to commit.
 
 ## In one paragraph
 
-Lrnon is a free, ad-free, open-licensed curriculum teaching people to use AI
+Lrnon is a free-for-learners, open-licensed curriculum teaching people to use AI
 competently and safely. It covers the material vendor courses omit — verifying
 output, cost mechanics, accessibility, working outside English, AI embedded in
-software people did not choose, and high-stakes personal decisions. It takes no
-sponsorship, publishes its sources with verification dates, and enforces content
-freshness in its build pipeline rather than promising it.
+software people did not choose, and high-stakes personal decisions. Nobody can pay
+to be in a lesson, it publishes its sources with verification dates, and it
+enforces content freshness in its build pipeline rather than promising it.
 
 ## The gap it fills — evidenced
 
@@ -54,9 +54,17 @@ full database test suite on every change; tool descriptions fail the build at
 **Reach is designed for constraint.** Works on a 320px phone, offline, on a
 metered data plan, with a screen reader.
 
+**The companion is built to the same standard.** Sky, the study buddy, is on every
+page and follows the reader's light or dark theme, high-contrast mode,
+dyslexia-friendly font, text size and reduce-motion setting. It never flashes or
+glows, can read aloud with the device's own voice, and its numbers can be switched
+off.
+
 ## Governance and integrity
 
-- No sponsorship, affiliate revenue or paid placement. Position published.
+- Nobody pays to be in a lesson: no paid placement, ranking or inclusion, no
+  affiliate revenue. Donations, grants and advertising are accepted under
+  published rules, and none may touch the curriculum. Position published.
 - Content CC BY-SA 4.0; code MIT. Nothing is locked in.
 - Corrections published rather than made quietly.
 - Learner progress is local-first; accounts optional; account deletion
@@ -67,6 +75,16 @@ metered data plan, with a screen reader.
 ## What funding would change
 
 Stated honestly, because a funder who discovers the gaps later is a funder lost.
+
+**Funding position, plainly.** Nothing has been raised. Until 15 October 2026
+Lrnon was paid for by its founder alone and promised no advertising and no
+sponsorship; it is now open to donations (from anyone, learners included, never
+required and unlocking nothing), to grants, and to advertising under rules a test
+enforces: three browsing pages only, never in a lesson, quiz, review, assessment or
+Sky, no tracking, no advertising network, and no advertisement for an AI product or
+any vendor the lessons cover. No advertisement is shown or approved. Lrnon is not a
+registered charity, so how gifts and any advertising income are received and taxed
+is an open question for an accountant, and one a funder should raise with us.
 
 **Current constraints:** one maintainer. Certification is **built and not
 issuing** — the schema, assessments, published rubric and public verification
@@ -102,9 +120,12 @@ memory.
 
 ## What we will not do for funding
 
-Accept money conditional on covering, ranking or recommending a product;
-introduce advertising; paywall any part of the curriculum; or add engagement
-mechanics designed to increase time on site rather than learning.
+Accept money conditional on covering, ranking or recommending a product; show
+an advertisement for an AI product or on a learning page; track or profile a
+learner for money; paywall any part of the curriculum; or add engagement
+mechanics designed to increase time on site rather than learning. That last one is
+checked, not promised: Sky, the study buddy, awards nothing, has no timers or
+leaderboard and never mentions losing a streak, and a test fails if that changes.
 
 These are stated up front because they are more useful to a funder before a
 conversation than after one.

@@ -24,3 +24,6 @@ content-audit.json
 freshness-packet.md
 freshness-body.md
 validate-report.txt
+
+# Generated at build time from the lessons (scripts/build-buddy-index.mjs)
+public/buddy-index.json

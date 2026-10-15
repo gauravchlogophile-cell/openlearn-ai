@@ -22,7 +22,8 @@ Never make a claim we cannot point at a mechanism for.
 
 | Claim | Mechanism that backs it |
 |---|---|
-| "No sponsorship, ever" | No commercial agreements exist. Stated on `/`, `/about`. |
+| "Nobody pays to be in a lesson" | No vendor agreements exist. Advertising, if ever shown, is held to the rules in `funding-policy.js`, which `test-funding.mjs` checks. Stated on `/`, `/about`, `/support`. |
+| "Free for every learner, always" | Nothing is behind money; giving unlocks nothing; Sky never asks for money (`test-sky-buddy.mjs`). |
 | "Sourced and dated" | `LessonSources.astro` renders vendor link + `lastVerified` on every lesson naming a tool |
 | "We keep it current" | CUR-7 fails the build at 120 days; `check-sources.mjs` watches vendor docs |
 
@@ -36,8 +37,8 @@ If a mechanism is ever removed, the claim comes down the same day.
 
 **Answer: no, and say why in one line.**
 
-> "Thank you — Lrnon takes no sponsorship and no paid placement of any kind,
-> so there is nothing we could offer. Your product is covered on its merits
+> "Thank you — Lrnon takes no payment for placement, ranking or inclusion of
+> any kind, so there is nothing we could offer. Your product is covered on its merits
 > from your own published documentation. If anything in our description is
 > inaccurate or out of date, tell us and we will correct it — that route is
 > always open and always free."
@@ -49,6 +50,25 @@ are Lrnon* is not.
 
 **If they persist:** repeat once, then stop replying. Do not escalate publicly
 unless they misrepresent us.
+
+### A business asks to advertise
+
+Since 15 October 2026 this is allowed, narrowly. Check the rules on `/support`
+(printed from `src/lib/funding-policy.js`) before replying.
+
+- **An AI product, model or assistant, or any vendor a lesson names:** no, and
+  say why. What we teach cannot be for sale. This is checked against the registry.
+- **A banned category** (gambling, credit, crypto, weight-loss claims, essay
+  services and the rest): no.
+- **Anything else:** possible. It goes in `src/lib/ads.js`, in a commit, with who
+  paid, how much, the dates and who approved it. `npm test` refuses an entry that
+  breaks a rule a machine can check, and the page that shows it is limited to
+  three browsing pages. Never promise placement on a lesson, quiz, review, Sky
+  or any account, privacy, safeguarding or support page; those are not for sale.
+- **Anyone who asks to see or change a lesson, a tool card or a comparison as
+  part of the deal:** no. End the conversation.
+
+Do not negotiate a smaller version of a no.
 
 ### A vendor objects to how we describe them
 
@@ -67,7 +87,7 @@ conversation. That is the exact failure the whole brand is built against.
 
 **Respond with the mechanism, not with protest.**
 
-> "Fair question. We take no sponsorship of any kind, and every tool named in
+> "Fair question. Nobody pays to be in a lesson, and every tool named in
 > a lesson shows the source we used and the date we checked it — so you can
 > verify the description yourself rather than trusting us. Our position is on
 > `/about`. If a specific passage reads as favouritism, point me at it and I
@@ -96,8 +116,11 @@ about other people's sources, and it applies to us first.
 
 ### Press or a funder asks how we are funded
 
-Answer completely and immediately. `/support` states the position. If that
-changes, it is published before it is true, not after.
+Answer completely and immediately. `/support` states the position: donations
+(learners included, never required), grants, and advertising under published
+rules, with none shown today. Nothing has been raised yet and Lrnon is not a
+registered charity; say so before they ask. If the position changes, it is
+published before it is true, not after.
 
 ### A learner reports something harmful or unsafe
 
@@ -110,6 +133,10 @@ deputy exist. **No brand consideration ever delays a safeguarding response.**
 ## What we never do
 
 - Accept payment, equity, credits or perks for coverage.
+- Ask a learner for money inside a lesson, a quiz, a review or Sky, or give a donor
+  anything for giving: no feature, no priority, no badge, no ranking.
+- Show an advertisement for an AI product, or on a learning page, or one that
+  tracks anyone.
 - Rank tools by anything but stated, checkable criteria.
 - Publish a capability claim without a date.
 - Say "AI-powered" about ourselves as a selling point.
@@ -122,7 +149,7 @@ deputy exist. **No brand consideration ever delays a safeguarding response.**
 
 | Use | Avoid |
 |---|---|
-| "free, no ads, no paywalls" | "freemium", "unlock", "premium tier" |
+| "free for every learner, no paywalls" | "freemium", "unlock", "premium tier", and "ad-free" or "no ads" (no longer promised since 15 October 2026) |
 | "we checked this on [date]" | "always up to date" |
 | "we do not know yet" | manufactured certainty |
 | "brand-neutral, not brand-silent" | "unbiased" (unprovable) |

@@ -65,16 +65,40 @@ export const CONTACT_PHONE: string = '+91 81782 31945';
  *               to register interest. No giving mechanism, no ledger.
  *   'published' Everything: the six areas, currency picker and public ledger.
  *
- * Deliberately ships as 'hidden'.
+ * Moved from 'hidden' to 'published' on 2026-10-15, at the owner's instruction,
+ * together with the funding policy in funding-policy.js.
  *
- * Asking the public for money is not a styling decision. Lrnon is not yet a
- * registered charity — the page says so itself — and turning this on has
- * financial and, depending on jurisdiction, legal consequences that are the
- * founder's to weigh and not a side effect of merging a redesign branch. The
- * page is written and ready; flipping this one value publishes it.
+ * It shipped as 'hidden' deliberately. Asking the public for money is not a
+ * styling decision: Lrnon is not yet a registered charity (the page says so
+ * itself), and receiving money has financial and, depending on jurisdiction,
+ * legal and tax consequences that belong to the owner and not to a redesign
+ * branch. The owner has now weighed them and opened giving. Two things are worth
+ * keeping in mind that this file cannot settle: whether an unregistered
+ * initiative may receive gifts from abroad, and how gifts are treated for tax.
+ * Both are questions for an accountant. If giving needs to pause while that is
+ * answered, set this back to 'partial' (the page explains and takes interest
+ * only) and nothing else changes.
  */
 export type FundingMode = 'hidden' | 'partial' | 'published';
-export const FUNDING_MODE: FundingMode = 'hidden';
+export const FUNDING_MODE: FundingMode = 'published';
+
+/**
+ * Advertising. 'off' shows nothing, ever; 'on' lets AdSlot show an approved
+ * entry from ads.js, on the few pages funding-policy.js allows, and nowhere
+ * else.
+ *
+ * Lrnon is open to advertising as of 2026-10-15, under the rules in
+ * funding-policy.js, and shows none today: there is no advertiser, no approved
+ * entry and no ad network. Switching this to 'on' with an empty ads.js still
+ * shows nothing, which is the point: the switch alone cannot put anything in
+ * front of a learner. The rules are checked by scripts/test-funding.mjs.
+ *
+ * Before turning it on for real, update /privacy and /safeguarding to describe
+ * what is shown, and publish the first ledger row. The tests insist the
+ * advertising rules appear on /support, but not that those two pages were read.
+ */
+export type AdMode = 'off' | 'on';
+export const AD_MODE: AdMode = 'off';
 
 /** Display currency for the ledger. The design ships twenty currencies chosen
  *  by how widely they are used; the ledger always records what actually

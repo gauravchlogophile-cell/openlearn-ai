@@ -12,6 +12,9 @@
   --c-reward: #b45309;         /* Amber — streaks, XP */
   --c-reward-soft: #fdf3e6;    /* NEW */
   --c-alert: #c2410c;
+  /* Sky the companion. A leaf green taken from the character, deepened until white
+     text on it passes AA (5.4:1), with a pale tint for its speech bubbles. */
+  --c-sky: #1e7a39; --c-sky-ink: #ffffff; --c-sky-tint: #e9f6ec; --c-sky-line: #b7dcc1;
 
   --c-bg: #fbf9f5;             /* warm paper (was #ffffff) */
   --c-surface: #ffffff;        /* cards sit above the paper */
@@ -61,6 +64,7 @@
   --c-primary: #23236b; --c-primary-soft: #ffffff; --c-primary-line: #23236b;
   --c-progress: #04564c; --c-progress-soft: #ffffff;
   --c-reward: #7a3706; --c-reward-soft: #ffffff;
+  --c-sky: #0b4f21; --c-sky-ink: #ffffff; --c-sky-tint: #ffffff; --c-sky-line: #0b4f21;
 }
 
 /* Dyslexia-friendly: wider letter shapes and looser tracking. Uses fonts the
@@ -106,6 +110,7 @@
   --c-reward: #e0913a;
   --c-reward-soft: #2a1f11;
   --c-alert: #f0713d;
+  --c-sky: #62cf7e; --c-sky-ink: #082410; --c-sky-tint: #14291c; --c-sky-line: #2c5a3d;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -126,6 +131,7 @@
     --c-reward: #e0913a;
     --c-reward-soft: #2a1f11;
     --c-alert: #f0713d;
+    --c-sky: #62cf7e; --c-sky-ink: #082410; --c-sky-tint: #14291c; --c-sky-line: #2c5a3d;
   }
 }
 
@@ -144,6 +150,7 @@
   --c-progress: #5ee0cd; --c-progress-soft: #000000;
   --c-reward: #ffb454; --c-reward-soft: #000000;
   --c-alert: #ff8a5c;
+  --c-sky: #86e89e; --c-sky-ink: #000000; --c-sky-tint: #000000; --c-sky-line: #86e89e;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"])[data-contrast="high"] {
@@ -154,6 +161,7 @@
     --c-progress: #5ee0cd; --c-progress-soft: #000000;
     --c-reward: #ffb454; --c-reward-soft: #000000;
     --c-alert: #ff8a5c;
+    --c-sky: #86e89e; --c-sky-ink: #000000; --c-sky-tint: #000000; --c-sky-line: #86e89e;
   }
 }
 

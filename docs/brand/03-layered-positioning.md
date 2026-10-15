@@ -33,8 +33,10 @@ never chose to use, and where not to use it at all.
 **It is honest by construction.** Staleness fails the build. Corrections are
 published. Community features stay shut until they can be supervised.
 
-**It is free in a way that survives scrutiny.** No ads, no paywall, no
-affiliate revenue, no sponsorship. The funding position is published.
+**It is free in a way that survives scrutiny.** A learner never pays and nothing
+is behind money. Nobody can pay to be in a lesson, and there is no affiliate
+revenue. Lrnon takes donations, grants and, under published rules that a test
+enforces, advertising. The funding position is published.
 
 ## Who it is for
 
@@ -66,8 +68,16 @@ no technical background, works on a phone, and does not require an account.
   none exists, and a mock-up shown to a funder becomes a screenshot we cannot
   retract. The verification page IS demonstrable and is the honest thing to
   show, including the fact that every code currently returns "no record".
-- **Sky is enabled for STAFF ONLY**, as of 4 September 2026. Not for learners,
-  not for the public, and not something to describe as launched. It is at this
+- **The question-answering part of Sky is enabled for STAFF ONLY**, as of 4
+  September 2026. Not for learners, not for the public, and not something to
+  describe as launched.
+
+  Do not confuse it with the study buddy. Since 15 October 2026 Sky is also the
+  friendly character on every page, for everyone: it greets, suggests one next
+  step with how long it takes, and shows the learner's own progress. It answers
+  nothing, costs nothing, sends nothing anywhere, awards nothing and asks for
+  nothing. Describe the two separately, and never let the visible character imply
+  that the assistant is open to learners. It is not. It is at this
   stage for one reason: gates 1 and 3 — 200 reviewed questions and a
   wrong-answer rate under 2% — cannot be measured without it answering, and
   neither has been measured yet.
@@ -91,19 +101,31 @@ no technical background, works on a phone, and does not require an account.
   per-IP traffic shaping. That is the stronger fix, and worth stating
   accurately rather than letting the old sentence stand.
 
-  **Before Sky widens beyond staff, three things must be true, and none is yet.**
+  **Before Sky widens beyond staff, three things must be true; one is done.**
   (1) The model-provider plan and its current data terms are confirmed and dated.
   The assistant's footer used to say "Nothing you type is used to train
   anything", which could not be known: the quota behaviour is consistent with a
   free tier, and the provider's published terms for unpaid use say content may be
   used to improve its products and read by human reviewers. The footer was
   changed on 15 October 2026 to say only what holds on any plan, and a training
-  claim should return only after the plan is checked. (2) `/privacy` is updated
-  to say that questions go to an outside provider; it currently does not mention
-  Sky. (3) The four gates and the "second owner" approval are enforced in
+  claim should return only after the plan is checked. (2) `/privacy` says
+  that questions go to an outside provider and that the provider's terms differ by
+  plan. This was done on 15 October 2026, in words that admit the plan is
+  unconfirmed, and should be replaced by the fact once (1) is settled. (3) The four gates and the "second owner" approval are enforced in
   `set_sky_mode`, which today checks only that the caller is the owner; they exist
   in the console and nowhere else. Certification and the rooms already enforce
   their conditions in the database and are the pattern to copy.
+- **Funding changed on 15 October 2026, and nothing has been raised.** Lrnon is
+  open to donations (learners included, never required), grants and advertising
+  under published rules. No donation has been received, no advertisement is shown
+  or approved, and there is no advertising network. Lrnon is not a registered
+  charity. Say all of that before being asked.
+
+  Never write or say "ad-free" or "no ads": it stopped being a promise on that
+  date, and a funder who finds an old line quoting it will assume the worst. Say
+  "free for every learner, nothing behind money, and nobody can pay to be in a
+  lesson" instead. Do not describe advertising as a revenue plan; nothing exists to
+  support that claim.
 - **One maintainer.** Say "a small team" only if it stops being one person.
 - **The Practitioner track is complete; Builder is not.** All eleven Practitioner
   modules, P1 to P11, exist. The Builder track has one module, B1, planned and
@@ -130,8 +152,21 @@ before the name goes on any certificate or registration. Do not discuss risk
 publicly.
 
 **"Content could be out of date."** Some will be. Point at the 120-day build
-failure and the visible check dates — the answer is the mechanism, not a
-promise.
+failure for tool cards, the 180-day one for lessons, the visible check dates and
+the weekly freshness issue — the answer is the mechanism, not a promise.
+
+**"You said no ads, and now you are open to ads."** True, and it was published
+the day it changed. The answer is what the promise was protecting and how each part
+is still held: learners never pay; nobody can buy a place in a lesson (no AI
+vendors may advertise, checked against the registry); nobody is tracked for money
+(no network scripts, enforced by the content policy); and nothing interrupts
+learning (a few browsing pages only, failing closed). Do not say the old promise
+was unrealistic. It was kept for as long as it was Lrnon's to keep.
+
+**"A cartoon robot is a way to get children hooked."** Fair to ask. Sky awards
+nothing, so there is nothing to chase; it never talks about losing a streak; it
+has no leaderboard, timer, sound or flashing; and numbers can be hidden. Each of
+those is a test, not a statement.
 
 ## Claims that require a lawyer before use
 

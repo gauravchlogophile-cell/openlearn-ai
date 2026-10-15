@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import TryOneQuestion from '../components/TryOneQuestion.tsx';
+import AdSlot from '../components/AdSlot.astro';
 import { getCollection } from 'astro:content';
 import meta from '../../content/modules.json';
 import { BADGES } from '../lib/progress-core.js';
@@ -36,12 +37,13 @@ const tracks = meta.tracks.map((t) => {
 });
 ---
 <Base title="Lrnon — Learn AI. Free. Forever."
-  description="An open-source, vendor-neutral AI curriculum from absolute beginner to builder. No paywalls, no ads, no tricks — free forever, for everyone.">
+  description="An open-source, vendor-neutral AI curriculum from absolute beginner to builder. No paywalls, no tricks — free forever, for every learner.">
 
   <!-- Hero. The energy comes from things that cost nothing to load and never
        hurt legibility: very large type, one hard colour block, and a question
        you can answer before signing up. -->
-  <section class="container" style="padding-block:var(--sp-16) var(--sp-8);">
+  <section class="container" style="padding-block:var(--sp-16) var(--sp-8);display:grid;gap:var(--sp-8);grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));align-items:center;">
+   <div>
     <p style="letter-spacing:0.14em;text-transform:uppercase;font-size:var(--fs-100);color:var(--c-ink-faint);margin:0 0 var(--sp-3);">
       Free forever · open source
     </p>
@@ -68,13 +70,33 @@ const tracks = meta.tracks.map((t) => {
     </div>
 
     <p style="margin:var(--sp-6) 0 0;color:var(--c-ink-faint);font-size:var(--fs-100);">
-      No ads · No paywalls · No dark patterns · No account needed
+      Free for every learner · No paywalls · No dark patterns · No account needed
     </p>
+   </div>
+
+   {/* Sky, up front. The same character that sits at the bottom right of every
+       page, so a visitor meets them before they need them. It is a picture, not
+       an animation: the only movement is a slow float that the device's
+       reduce-motion setting (or Lrnon's own switch) removes. data-decorative
+       lets the data-saver setting skip the download; the alt text stays for
+       anyone who does load it. */}
+   <figure data-decorative style="margin:0;justify-self:center;text-align:center;max-width:320px;">
+    <img class="skyb-float" src="/sky/sky.webp" width="320" height="351" loading="eager" fetchpriority="high"
+      alt="Sky, a friendly green owl-shaped robot with big round eyes, waving." style="max-width:100%;height:auto;" />
+    <figcaption style="margin-top:var(--sp-2);color:var(--c-ink-soft);font-size:var(--fs-100);">
+      Meet <strong>Sky</strong>, your study buddy. Find Sky at the bottom right of any page.
+    </figcaption>
+   </figure>
   </section>
 
   <section class="container" style="padding-block:0 var(--sp-8);max-width:760px;">
     <TryOneQuestion client:load startHref={startHref} />
   </section>
+
+  {/* The one place on this page an advertisement may appear, and only if
+      advertising is switched on AND an approved entry exists. Today it renders
+      nothing. See src/lib/funding-policy.js. */}
+  <div class="container"><AdSlot /></div>
 
   <!-- What actually exists today, counted from the content itself. -->
   <section class="container" style="padding-block:var(--sp-8);">
@@ -97,14 +119,17 @@ const tracks = meta.tracks.map((t) => {
     <h2 style="font-size:var(--fs-400);">Why is this free?</h2>
     <p class="prose" style="color:var(--c-ink-soft);">
       Because knowledge about AI shouldn't depend on the size of your wallet.
-      We're grant- and donation-funded, fully open source, and we publish our
-      finances. Nothing you need is ever behind money — not lessons, not
-      practice, not records, not certificates.
+      Lrnon is funded in the open: by donations from anyone who wants to give
+      (learners included, and never as a condition of anything), by grants, and,
+      under strict published rules, by advertising. We publish our finances.
+      Nothing you need is ever behind money — not lessons, not practice, not
+      records, not certificates, not Sky. Giving buys no extra features, no
+      priority and no badge.
     </p>
     <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:var(--sp-6);">
       {[
-        ['Published finances', 'Every grant and every cost, in the open repository.'],
-        ['Vendor-neutral', 'Tools are covered from an open registry. No sponsorships, ever.'],
+        ['Published finances', 'Every donation, grant and any advertising income, in a public ledger.'],
+        ['Vendor-neutral', 'Nobody pays to be in a lesson, a ranking or a tool card. Ever.'],
         ['Content CC BY-SA 4.0 · code MIT', 'Take it, translate it, teach with it. Attribution is all we ask.'],
       ].map(([title, body]) => (
         <article class="card">

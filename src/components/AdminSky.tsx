@@ -209,12 +209,12 @@ export default function AdminSky() {
 
   /** The whole client path, run for real, reported verbatim.
    *
-   *  Deliberately does NOT reuse Sky.tsx's request code — this must be able to
-   *  tell you that Sky.tsx is the broken part, which it cannot do if it shares
+   *  Deliberately does NOT reuse SkyBuddy.tsx's request code — this must be able to
+   *  tell you that SkyBuddy.tsx is the broken part, which it cannot do if it shares
    *  the same lines. It builds the request from scratch, the way the browser
    *  would, and hides nothing that comes back. */
   /* Deliberately shares selfTest's request code rather than duplicating it —
-     but note selfTest itself still does NOT reuse Sky.tsx's, because a test
+     but note selfTest itself still does NOT reuse SkyBuddy.tsx's, because a test
      that shares the code under test cannot catch a fault inside it. Here the
      code under test is the ROUTE, and both of these are callers. */
   async function ask(payload: Record<string, unknown>) {

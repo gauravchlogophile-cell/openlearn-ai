@@ -1,0 +1,177 @@
+/* Sky the companion.
+ *
+ * Every colour here is a design token, so Sky follows the reader's theme, the
+ * high-contrast setting and the dyslexia-friendly font without a line of
+ * special-casing. Nothing in this file glows, pulses or flashes:
+ *
+ *   · the only movement is one slow float on the large picture (6 seconds a
+ *     cycle, 5px of travel), well under any flash threshold
+ *   · it is removed entirely by the device's reduce-motion setting AND by
+ *     Lrnon's own "Reduce motion" switch, because tokens.css already switches
+ *     off every animation under [data-motion="reduce"]
+ *   · shadows are soft and neutral; there is no neon, no bloom, no sparkle
+ *
+ * Someone who is sensitive to light should be able to keep Sky on screen, which
+ * is why it is quiet by construction rather than by a setting they must find.
+ */
+
+.skyb {
+  position: fixed; right: var(--sp-4); bottom: var(--sp-4); z-index: 40;
+  display: flex; flex-direction: column; align-items: flex-end; gap: var(--sp-2);
+  max-width: calc(100vw - var(--sp-8));
+}
+
+/* ---- the launcher: a face and a word, so it is recognisable without the picture */
+.skyb-fab {
+  display: inline-flex; align-items: center; gap: var(--sp-2);
+  min-height: 56px; padding: 4px var(--sp-4) 4px 4px;
+  border-radius: 999px; border: 2px solid var(--c-sky);
+  background: var(--c-surface); color: var(--c-ink);
+  font: inherit; font-weight: 700; cursor: pointer;
+  box-shadow: 0 3px 0 var(--c-sky), 0 10px 24px rgba(0, 0, 0, 0.12);
+  transition: transform var(--t-fast), box-shadow var(--t-fast);
+}
+.skyb-fab:hover { transform: translateY(-2px); box-shadow: 0 5px 0 var(--c-sky), 0 14px 28px rgba(0, 0, 0, 0.14); }
+.skyb-fab:active { transform: translateY(1px); box-shadow: 0 1px 0 var(--c-sky); }
+.skyb-fab--small { padding: 4px; }
+
+.skyb-av {
+  flex: none; width: 48px; height: 48px; border-radius: 50%; overflow: hidden;
+  background: var(--c-sky-tint); border: 2px solid var(--c-sky-line);
+}
+.skyb-av img { display: block; width: 100%; height: 100%; object-fit: cover; transform: scale(1.14) translateY(5%); }
+
+/* A touch softer in a dark room. The character's own colours are bright on a
+   dark page; this takes the edge off without changing who they are. */
+:root[data-theme="dark"] .skyb img,
+:root[data-theme="dark"] .skyb video { filter: brightness(0.93); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .skyb img,
+  :root:not([data-theme="light"]) .skyb video { filter: brightness(0.93); }
+}
+
+/* ---- the nudge: a plain button with a sentence in it. It stays until it is
+   dismissed or used; it never times out, because text that disappears while
+   someone is still reading it is a barrier. */
+.skyb-nudge {
+  position: relative; display: block; max-width: 270px; text-align: start;
+  padding: var(--sp-3) var(--sp-6) var(--sp-3) var(--sp-4);
+  border-radius: 18px 18px 4px 18px; border: 1px solid var(--c-sky-line);
+  background: var(--c-sky-tint); color: var(--c-ink);
+  font: inherit; font-size: var(--fs-100); line-height: 1.45; cursor: pointer;
+}
+.skyb-nudge:hover { border-color: var(--c-sky); }
+.skyb-x {
+  position: absolute; top: 4px; inset-inline-end: 4px; width: 32px; height: 32px;
+  display: grid; place-items: center; border: 0; border-radius: 50%;
+  background: transparent; color: var(--c-ink-soft); font: inherit; cursor: pointer;
+}
+.skyb-x:hover { background: var(--c-surface-2); color: var(--c-ink); }
+
+/* ---- the panel */
+.skyb-panel {
+  width: min(404px, calc(100vw - var(--sp-8)));
+  max-height: min(78vh, 660px);
+  display: flex; flex-direction: column; overflow: hidden;
+  background: var(--c-surface); color: var(--c-ink);
+  border: 2px solid var(--c-sky-line); border-radius: 24px;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
+}
+.skyb-head {
+  display: flex; align-items: center; gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-4); border-bottom: 1px solid var(--c-border);
+  background: var(--c-sky-tint);
+}
+.skyb-head h2 { margin: 0; font-size: var(--fs-300); line-height: 1.2; }
+.skyb-head h2:focus { outline: none; }
+.skyb-head p { margin: 0; font-size: var(--fs-100); color: var(--c-ink-soft); }
+.skyb-iconbtn {
+  min-width: 44px; min-height: 44px; display: inline-grid; place-items: center;
+  border: 1px solid var(--c-border-strong); border-radius: 14px;
+  background: var(--c-surface); color: var(--c-ink); font: inherit; cursor: pointer;
+}
+.skyb-iconbtn:hover { border-color: var(--c-sky); }
+.skyb-body { padding: var(--sp-4); overflow-y: auto; display: grid; gap: var(--sp-4); align-content: start; }
+
+/* Sky's words: left-aligned, never justified, nothing in capitals or italics. */
+.skyb-say {
+  position: relative; margin: 0; padding: var(--sp-3) var(--sp-4);
+  background: var(--c-sky-tint); border: 1px solid var(--c-sky-line);
+  border-radius: 4px 20px 20px 20px; text-align: start; max-width: 60ch;
+}
+.skyb-say strong { display: block; margin-bottom: var(--sp-1); }
+
+.skyb-hero { display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-4); }
+.skyb-hero button {
+  flex: none; padding: 0; border: 0; background: transparent; cursor: pointer;
+  width: 112px; height: 112px; border-radius: 28px; position: relative;
+}
+.skyb-hero img, .skyb-hero video {
+  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain;
+  border-radius: 28px; background: var(--c-sky-tint);
+}
+.skyb-hero video { opacity: 0; transform: scale(1.3); transform-origin: 50% 58%; transition: opacity 200ms; }
+.skyb-hero.is-playing video { opacity: 1; }
+.skyb-hero.is-playing img { opacity: 0; }
+@keyframes skyb-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-5px); } }
+.skyb-float { animation: skyb-float 6s ease-in-out infinite; }
+
+.skyb-primary {
+  display: flex; align-items: center; justify-content: center; text-align: center;
+  width: 100%; min-height: 52px; padding: var(--sp-3) var(--sp-4);
+  border: 0; border-bottom: 4px solid rgba(0, 0, 0, 0.28); border-radius: 16px;
+  background: var(--c-sky); color: var(--c-sky-ink);
+  font: inherit; font-weight: 700; text-decoration: none; cursor: pointer;
+  transition: transform var(--t-fast);
+}
+.skyb-primary:hover { transform: translateY(-2px); }
+.skyb-primary:active { transform: translateY(2px); border-bottom-width: 2px; }
+.skyb-why { margin: var(--sp-1) 0 0; font-size: var(--fs-100); color: var(--c-ink-soft); text-align: center; }
+
+.skyb-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-2); }
+.skyb-row {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3);
+  width: 100%; min-height: 48px; padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--c-border-strong); border-radius: 16px;
+  background: var(--c-surface); color: var(--c-ink);
+  font: inherit; text-align: start; text-decoration: none; cursor: pointer;
+  transition: border-color var(--t-fast), transform var(--t-fast);
+}
+.skyb-row:hover { border-color: var(--c-sky); transform: translateY(-1px); }
+.skyb-row small { display: block; color: var(--c-ink-soft); font-size: var(--fs-100); }
+.skyb-row[aria-disabled="true"] { cursor: default; color: var(--c-ink-soft); border-style: dashed; }
+.skyb-row[aria-disabled="true"]:hover { transform: none; border-color: var(--c-border-strong); }
+
+.skyb-meter { height: 12px; border-radius: 999px; background: var(--c-surface-2); border: 1px solid var(--c-border); overflow: hidden; }
+.skyb-meter > i { display: block; height: 100%; background: var(--c-sky); }
+.skyb-facts { display: grid; grid-template-columns: 1fr auto; gap: var(--sp-2) var(--sp-4); margin: 0; }
+.skyb-facts dt { color: var(--c-ink-soft); }
+.skyb-facts dd { margin: 0; font-weight: 700; text-align: end; }
+
+.skyb-switch { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
+.skyb-switch p { margin: 0; }
+.skyb-switch small { display: block; color: var(--c-ink-soft); font-size: var(--fs-100); }
+.skyb-toggle {
+  min-width: 72px; min-height: 44px; padding: 0 var(--sp-3); border-radius: 999px;
+  border: 2px solid var(--c-border-strong); background: var(--c-surface); color: var(--c-ink);
+  font: inherit; font-weight: 700; cursor: pointer;
+}
+.skyb-toggle[aria-pressed="true"] { border-color: var(--c-sky); background: var(--c-sky-tint); }
+
+.skyb-input { flex: 1; min-height: 44px; padding: var(--sp-2) var(--sp-3); font: inherit; border: 1px solid var(--c-border-strong); border-radius: 14px; background: var(--c-bg); color: var(--c-ink); }
+.skyb-foot { margin: 0; padding: 0 var(--sp-4) var(--sp-3); font-size: var(--fs-100); color: var(--c-ink-soft); }
+
+@media (max-width: 640px) {
+  .skyb-panel { position: fixed; inset: auto 0 0 0; width: auto; max-height: 86vh; border-radius: 24px 24px 0 0; border-bottom-width: 0; }
+  .skyb--open .skyb-fab, .skyb--open .skyb-nudge { display: none; }
+}
+
+/* Windows high-contrast and similar forced-colour modes: keep the picture as it
+   is and let the system colour the frame. */
+@media (forced-colors: active) {
+  .skyb-fab, .skyb-panel, .skyb-av, .skyb-say, .skyb-row, .skyb-primary { border: 2px solid CanvasText; }
+  .skyb-av img, .skyb-hero img, .skyb-hero video { forced-color-adjust: none; filter: none; }
+}
+
+/* Print: Sky is for the screen. */
+@media print { .skyb { display: none; } }

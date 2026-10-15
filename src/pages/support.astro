@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
-import { CONTACT_EMAIL, FUNDING_MODE, CURRENCY } from '../lib/site-config';
+import { CONTACT_EMAIL, FUNDING_MODE, CURRENCY, AD_MODE } from '../lib/site-config';
+import { AD_RULES, GIVING_TERMS } from '../lib/funding-policy.js';
+import { ADS } from '../lib/ads.js';
 
 /* The founder switch. When funding is hidden the route still builds (a static
    site cannot conditionally omit a page without breaking anything that links
@@ -22,7 +24,7 @@ const notify = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Tell me wh
 const talk = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('About a gift to Lrnon')}`;
 ---
 <Base title="Support Lrnon"
-  description="Where Lrnon stands financially, stated in the open: nothing raised, no invented targets, no progress bars, and every contribution published in a public ledger when giving opens.">
+  description="How Lrnon is funded, stated in the open: donations, grants and advertising under published rules, a public ledger, and free for every learner, always.">
 
   {mode === 'hidden' ? (
     <section class="container" style="padding-block:var(--sp-16) var(--sp-12);max-width:760px;">
@@ -62,8 +64,52 @@ const talk = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('About a gift
           <a class="btn btn--ghost" href={notify}>Tell me when giving opens</a>
         </p>
         <p style="margin-top:var(--sp-4);color:var(--c-ink-faint);font-size:var(--fs-100);">
-          No ads, ever · Nothing goes behind a paywall · Refunds on request
+          Free for every learner, always · Giving unlocks nothing · Refunds on request
         </p>
+      </section>
+
+      <section class="container" style="padding-block:var(--sp-8);">
+        <h2 style="font-size:var(--fs-400);">How Lrnon is funded</h2>
+        <p class="prose" style="color:var(--c-ink-soft);">
+          Until 15 October 2026 Lrnon was paid for by its founder alone, and
+          it promised no advertising and no sponsorship of any kind. That has been replaced,
+          and this is the page that says so. Lrnon is now open to three kinds of money. What has
+          not changed is the part that matters to a learner: <strong>you never pay, and
+          nothing a learner needs is behind money.</strong>
+        </p>
+        <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(240px,1fr));margin-top:var(--sp-4);">
+          <article class="card">
+            <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">Donations</h3>
+            <p style="margin:0;color:var(--c-ink-soft);">From anyone who wants to give, learners included. Never required, never asked for inside a lesson, and unlocking nothing.</p>
+          </article>
+          <article class="card">
+            <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">Grants</h3>
+            <p style="margin:0;color:var(--c-ink-soft);">From funders who share the aim. A grant cannot be conditional on covering, ranking or recommending a product.</p>
+          </article>
+          <article class="card">
+            <h3 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">Advertising</h3>
+            <p style="margin:0;color:var(--c-ink-soft);">Possible, under the strict rules below. {AD_MODE === 'on' && ADS.length > 0 ? 'Some is shown on a few browsing pages.' : 'None is shown today: there is no advertiser and no approved advertisement.'}</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="container" style="padding-block:var(--sp-8);">
+        <h2 style="font-size:var(--fs-400);">What giving does and does not do</h2>
+        <ul class="prose" style="color:var(--c-ink-soft);">
+          {GIVING_TERMS.map((t) => <li>{t}</li>)}
+        </ul>
+      </section>
+
+      <section id="advertising" class="container" style="padding-block:var(--sp-8);">
+        <h2 style="font-size:var(--fs-400);">The rules for advertising</h2>
+        <p class="prose" style="color:var(--c-ink-soft);">
+          These are written so that each one can be checked by a test, and the build
+          fails if one is broken. If an advertisement is ever shown, it will be
+          labelled, and the ledger below will say who paid and who approved it.
+        </p>
+        <ol class="prose" style="color:var(--c-ink-soft);">
+          {AD_RULES.map((r) => <li>{r.text}</li>)}
+        </ol>
       </section>
 
       <section class="container" style="padding-block:var(--sp-8);">
@@ -140,15 +186,15 @@ const talk = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('About a gift
           <section class="container" style="padding-block:var(--sp-8);">
             <h2 style="font-size:var(--fs-400);">The public ledger</h2>
             <p class="prose" style="color:var(--c-ink-soft);">
-              Every contribution appears here, oldest first, with no tiers and no bigger
-              names for bigger cheques. This is the whole table — it is empty because
+              Every contribution, and any advertising income, appears here, oldest first, with no
+              tiers and no bigger names for bigger cheques. This is the whole table — it is empty because
               nothing has come in yet. Totals shown in {CURRENCY.code}.
             </p>
             <div style="overflow-x:auto;">
               <table style="width:100%;border-collapse:collapse;margin-top:var(--sp-4);">
                 <thead>
                   <tr>
-                    {['Date', 'Funder', 'Amount', 'Recorded against'].map((h) => (
+                    {['Date', 'From', 'Amount', 'Recorded against'].map((h) => (
                       <th scope="col" style="text-align:left;padding:var(--sp-3);border-bottom:1px solid var(--c-border);color:var(--c-ink-faint);font-size:var(--fs-100);text-transform:uppercase;letter-spacing:0.08em;font-family:var(--font-body);">{h}</th>
                     ))}
                   </tr>
@@ -156,7 +202,7 @@ const talk = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('About a gift
                 <tbody>
                   <tr>
                     <td colspan="4" style="padding:var(--sp-8);text-align:center;color:var(--c-ink-soft);">
-                      Lrnon is currently independently funded. The first contribution will appear here.
+                      Nothing has been received yet. The first contribution will appear here.
                     </td>
                   </tr>
                 </tbody>

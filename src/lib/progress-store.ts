@@ -226,6 +226,46 @@ export function summary() {
   };
 }
 
+/* ---------- Sky companion preferences ----------
+ * Three switches, all about how much Sky asks of the person looking at it, and
+ * all defaulting to the friendliest setting for someone who has never opened
+ * the panel:
+ *
+ *   numbers  show streak and level talk. Off for anyone for whom a counter is
+ *            pressure rather than encouragement.
+ *   nudges   let Sky offer a next step when a page opens. Off means Sky waits
+ *            to be asked.
+ *   small    show Sky as a small round button without its label.
+ *
+ * Motion is NOT here: it follows the reader preference `motion` and the
+ * device setting, so there is one place to turn movement off, not two. */
+export interface SkyPrefs { numbers: boolean; nudges: boolean; small: boolean }
+export const SKY_PREF_DEFAULTS: SkyPrefs = { numbers: true, nudges: true, small: false };
+
+export function skyPrefs(): SkyPrefs {
+  if (typeof localStorage === 'undefined') return { ...SKY_PREF_DEFAULTS };
+  try {
+    const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? '{}').sky ?? {};
+    return {
+      numbers: typeof saved.numbers === 'boolean' ? saved.numbers : SKY_PREF_DEFAULTS.numbers,
+      nudges: typeof saved.nudges === 'boolean' ? saved.nudges : SKY_PREF_DEFAULTS.nudges,
+      small: typeof saved.small === 'boolean' ? saved.small : SKY_PREF_DEFAULTS.small,
+    };
+  } catch { return { ...SKY_PREF_DEFAULTS }; }
+}
+
+export function setSkyPref(name: keyof SkyPrefs, value: boolean) {
+  const raw = localStorage.getItem(SETTINGS_KEY);
+  let s: Record<string, any> = {};
+  try { s = raw ? JSON.parse(raw) : {}; } catch { /* reset */ }
+  s.sky = { ...(s.sky ?? {}), [name]: value };
+  localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
+  window.dispatchEvent(new CustomEvent('ol:progress'));
+}
+
+/** The review store as it stands, for read-only use by the companion. */
+export function srsSnapshot(): Record<string, any> { return srsLoad(); }
+
 /* ---------------- SRS store (separate key; mirrors server srs_cards) ------ */
 const SRS_KEY = 'ol.srs.v1';
 

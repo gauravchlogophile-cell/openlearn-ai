@@ -17,7 +17,10 @@ import { skyAudience, bucketOf, leastPermissive } from '../src/lib/sky-audience.
 
 const ROOT = fileURLToPath(new URL('..', import.meta.url));
 const route = readFileSync(ROOT + 'src/pages/api/sky.ts', 'utf8');
-const dock = readFileSync(ROOT + 'src/components/Sky.tsx', 'utf8');
+/* The dock is now the companion island. The companion is for everyone; the
+   ASSISTANT inside it is what the audience rule gates, and these assertions are
+   about that gate. */
+const dock = readFileSync(ROOT + 'src/components/SkyBuddy.tsx', 'utf8');
 const base = readFileSync(ROOT + 'src/layouts/Base.astro', 'utf8');
 
 let pass = 0;
@@ -115,7 +118,10 @@ ok(route.includes("request.headers.get('authorization')\n        ? { diagnostic:
 ok(/db\.auth\.getUser\(token\)/.test(route),
    'the token is verified rather than parsed and trusted');
 
-ok(/if \(!mayUse\) return null/.test(dock), 'the dock renders nothing when refused');
+ok(/mayAsk \? \(/.test(dock) && dock.includes('aria-disabled="true"'),
+   'the assistant row opens for an allowed viewer; everyone else sees it closed, with the reason');
+ok((dock.match(/setView\('ask'\)/g) ?? []).length === 1,
+   'the assistant view has exactly one way in, and it sits behind the audience check');
 ok(dock.includes('skyAudience(live, { userId: id, isStaff }'),
    'the dock applies the audience rule to the COMBINED mode, as the route does');
 
@@ -123,8 +129,8 @@ ok(dock.includes('skyAudience(live, { userId: id, isStaff }'),
    correct and saves every visitor the bytes. What was wrong was that it was the
    ONLY check. Assert it no longer presents itself as the audience gate, so the
    next reader does not conclude visibility is settled there. */
-ok(/not who may use it/i.test(base),
-   'Base.astro says plainly that it decides existence, not audience');
+ok(/not who may use the assistant/i.test(base),
+   'Base.astro says plainly that it decides existence, not who may use the assistant');
 
 // ------------------------------------------------- the two switches agree
 /* The kill switch used to write a log row and change nothing, while reporting

@@ -1,0 +1,38 @@
+---
+/** A place where an advertisement may appear, if advertising is on and there is
+ *  an approved advertisement to show. Otherwise it renders nothing at all: no
+ *  empty box, no "your ad here", no reserved space.
+ *
+ *  It decides three things, and each is independent:
+ *    1. advertising must be switched on in site-config.ts (it is off)
+ *    2. this page must be one where advertising is allowed (adSlotAllowed), which
+ *       fails closed
+ *    3. an entry in ads.js must be current and must pass every checkable rule
+ *
+ *  There is deliberately no client-side code here. An advertisement is HTML:
+ *  text or a local image, and a plain link with rel="sponsored noopener".
+ */
+import { AD_MODE } from '../lib/site-config';
+import { ADS } from '../lib/ads.js';
+import { adSlotAllowed, validateAd } from '../lib/funding-policy.js';
+
+/* Every vendor and product the lessons cover, from the registry, so an advertiser
+   cannot be one of them (rule: no-ai-vendors). */
+const cards = Object.values(import.meta.glob('../../registry/[a-z]*.json', { eager: true })).map((m: any) => m.default);
+const vendors = [...new Set(cards.flatMap((c: any) => [c.name, c.vendor]).filter(Boolean))] as string[];
+
+const today = new Date().toISOString().slice(0, 10);
+const allowed = AD_MODE === 'on' && adSlotAllowed(Astro.url.pathname);
+const ad = allowed
+  ? ADS.find((a) => a.startsOn <= today && today <= a.endsOn && validateAd(a, { vendors }).length === 0)
+  : undefined;
+---
+{ad && (
+  <aside aria-label="Advertisement" class="card" style="margin-block:var(--sp-8);">
+    <p style="margin:0 0 var(--sp-2);color:var(--c-ink-faint);font-size:var(--fs-100);">
+      Advertisement · paid for by {ad.advertiser} · <a href="/support#advertising">How advertising works here</a>
+    </p>
+    {ad.image && <img src={ad.image} alt={ad.imageAlt} loading="lazy" style="max-width:100%;height:auto;display:block;margin-bottom:var(--sp-3);" />}
+    <p style="margin:0;"><a href={ad.href} rel="sponsored noopener">{ad.text}</a></p>
+  </aside>
+)}

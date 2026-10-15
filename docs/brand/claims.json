@@ -23,10 +23,10 @@
 
   "reviewEveryDays": 180,
   "guides": {
-    "01": { "file": "01-internal-operating-guide.md", "lastReviewed": "2026-08-26" },
-    "02": { "file": "02-public-brand-statement.md",   "lastReviewed": "2026-08-26" },
-    "03": { "file": "03-layered-positioning.md",      "lastReviewed": "2026-08-26" },
-    "04": { "file": "04-partner-and-funder-guide.md", "lastReviewed": "2026-08-26" }
+    "01": { "file": "01-internal-operating-guide.md", "lastReviewed": "2026-10-15" },
+    "02": { "file": "02-public-brand-statement.md",   "lastReviewed": "2026-10-15" },
+    "03": { "file": "03-layered-positioning.md",      "lastReviewed": "2026-10-15" },
+    "04": { "file": "04-partner-and-funder-guide.md", "lastReviewed": "2026-10-15" }
   },
 
   "claims": [
@@ -75,8 +75,40 @@
       "probe": "skyStage",
       "expect": "staff",
       "saidIn": ["03"],
-      "guideText": "Part B: \"Sky is enabled for STAFF ONLY, as of 4 September 2026. Not for learners, not for the public.\"",
+      "guideText": "Part B: \"The question-answering part of Sky is enabled for STAFF ONLY, as of 4 September 2026. Not for learners, not for the public.\" The study-buddy companion is separate and is on every page (see sky-companion-everywhere).",
       "onDrift": "The deployed ceiling moved. If it went to 'slice' or 'everyone', Part B's 'no learner can reach it' is now false and must change the same day — and before changing a word, check the four gates actually closed on measured data rather than someone editing the GATES array in AdminSky.tsx. If it went back to 'off', say so plainly rather than leaving a claim that it is running."
+    },
+    {
+      "id": "sky-companion-everywhere",
+      "probe": "skyCompanionEverywhere",
+      "expect": true,
+      "saidIn": ["02", "03", "04"],
+      "guideText": "\"Sky, a friendly study buddy, is on every page.\" It is the companion only: it answers nothing, awards nothing and sends nothing.",
+      "onDrift": "Base.astro no longer renders the Sky companion on every page, or renders it conditionally. Guides 02, 03 and 04 say it is on every page; either restore it or take the claim down."
+    },
+    {
+      "id": "funding-open",
+      "probe": "fundingMode",
+      "expect": "published",
+      "saidIn": ["03", "04"],
+      "guideText": "\"Lrnon is open to donations, grants and advertising under published rules.\" Giving is open on /support (FUNDING_MODE = published).",
+      "onDrift": "FUNDING_MODE changed. If it went back to 'partial' or 'hidden', the guides must stop saying giving is open. Nothing has been raised, so say nothing more than the page does."
+    },
+    {
+      "id": "ads-not-shown",
+      "probe": "adMode",
+      "expect": "off",
+      "saidIn": ["03", "04"],
+      "guideText": "\"No advertisement is shown or approved.\" Advertising is permitted under the rules in funding-policy.js and none is shown (AD_MODE = off).",
+      "onDrift": "AD_MODE is no longer 'off'. Before changing a word: check ads.js has a real approved entry, that /privacy and /safeguarding describe what is shown, and that the first ledger row is published. Then update guides 03 and 04, which say none is shown."
+    },
+    {
+      "id": "ads-approved",
+      "probe": "advertisementsApproved",
+      "expect": 0,
+      "saidIn": ["03", "04"],
+      "guideText": "\"No advertisement is shown or approved.\"",
+      "onDrift": "ads.js now contains an entry. If it is real, the guides must say how many and who paid, and the ledger must show it."
     },
     {
       "id": "rooms-closed",
@@ -87,12 +119,12 @@
       "onDrift": "Rooms are open. Every guide claiming they are closed is now wrong, and the safeguarding claims need re-checking against what actually shipped."
     },
     {
-      "id": "no-sponsorship",
+      "id": "no-paid-placement",
       "probe": "sponsorshipMentions",
       "expect": 0,
       "saidIn": ["01", "02", "03", "04"],
-      "guideText": "\"No sponsorship, ever.\" The load-bearing claim in all four guides.",
-      "onDrift": "Something in the codebase now references a sponsor, affiliate or paid placement. If that is real, every guide is wrong and the claim comes down the same day."
+      "guideText": "\"Nobody pays to be in a lesson.\" Until 15 October 2026 this was \"No sponsorship, ever\" and covered all money; it now covers placement, ranking and inclusion only, because donations, grants and advertising are open. The load-bearing claim in all four guides.",
+      "onDrift": "Something in the codebase now references a sponsor, affiliate or paid placement. If that is real, every guide is wrong and the claim comes down the same day. Advertising under the published rules is not this: it is a labelled advertisement in ads.js, never placement in a lesson."
     },
     {
       "id": "staleness-threshold",

@@ -23,7 +23,7 @@ export default function ShareTools({ siteUrl, param }: { siteUrl: string; param:
     }
   }
 
-  const msg = 'I have been learning AI on Lrnon — it is free, open source, and has no ads.';
+  const msg = 'I have been learning AI on Lrnon — it is free, open source, and nobody has to pay to use it.';
   const targets = [
     { name: 'WhatsApp', href: `https://wa.me/?text=${encodeURIComponent(msg + ' ' + link)}` },
     { name: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}` },

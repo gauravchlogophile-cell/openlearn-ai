@@ -1,7 +1,7 @@
 # Lrnon
 
 **Learn AI. Free. Forever.** An open-source, vendor-neutral, gamified AI learning
-platform — from absolute beginner to builder. No paywalls, no ads, no dark patterns.
+platform — from absolute beginner to builder. Free for every learner: no paywalls, no dark patterns.
 
 > Status: **live at [lrnon.org](https://lrnon.org)** — daily spaced-repetition review
 > (/review): SM-2 scheduler, cards unlock with completed lessons, interval

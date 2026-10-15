@@ -113,6 +113,28 @@ const probes = {
     return hits;
   },
 
+  /* Funding. The mode and the advertising switch are constants in site-config.ts,
+     so the probe reads those rather than inferring from copy. */
+  fundingMode: () => read('src/lib/site-config.ts')
+    .match(/FUNDING_MODE: FundingMode = '([a-z]+)'/)?.[1] ?? 'unknown',
+  adMode: () => read('src/lib/site-config.ts')
+    .match(/AD_MODE: AdMode = '([a-z]+)'/)?.[1] ?? 'unknown',
+
+  /* How many advertisements are approved to be shown. Comments are stripped
+     first: the file's own documentation contains an example entry. */
+  advertisementsApproved: () => {
+    const code = read('src/lib/ads.js').replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/gm, '$1');
+    return (code.match(/\bid\s*:\s*'/g) ?? []).length;
+  },
+
+  /* Sky the companion is built into every page, unconditionally. Conditional
+     rendering was how the old dock ended up showing to the wrong audience, so
+     "unconditionally" is part of the claim. */
+  skyCompanionEverywhere: () => {
+    const base = read('src/layouts/Base.astro');
+    return /<SkyBuddy\b/.test(base) && !/\{\s*showSky\s*&&/.test(base);
+  },
+
   stalenessThresholdDays: () => {
     const m = read('scripts/validate-content.mjs').match(/age\s*>\s*(\d+)/);
     return m ? Number(m[1]) : -1;

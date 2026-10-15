@@ -1,29 +1,28 @@
 ---
 import '../styles/tokens.css';
+import '../styles/sky.css';
 import AccessibilityPanel from '../components/AccessibilityPanel.tsx';
 import AccountMenu from '../components/AccountMenu.tsx';
 import PageSearch from '../components/PageSearch.tsx';
 import { CONTACT_EMAIL, CONTACT_PHONE, FUNDING_MODE } from '../lib/site-config';
-import Sky from '../components/Sky.tsx';
-import { SKY_MODE, SKY_COPY } from '../lib/sky-config';
+import SkyBuddy from '../components/SkyBuddy.tsx';
+import { SKY_COPY } from '../lib/sky-config';
 interface Props { title: string; description: string; noindex?: boolean; }
 const { title, description, noindex = false } = Astro.props;
 /* The design's founder switch: when funding is hidden, the Support link is not
    rendered anywhere, not merely hidden with CSS. */
 const showSupport = FUNDING_MODE !== 'hidden';
-/* Whether Sky is built into the page AT ALL — not who may use it.
-   With the mode off, no island is shipped, so a visitor downloads none of it.
+/* Sky is built into every page. That is the companion: a greeting, a next step
+   and a view of progress, for everyone, costing nothing and sending nothing.
 
-   WHO may use it is decided inside the island and again in /api/sky, against
-   the rollout stage. That distinction was missing until now: this line was the
-   only check, so moving the mode to 'staff' — the first step of the rollout —
-   put the dock in front of every anonymous visitor. A stage named "staff and
-   volunteers" was admitting the public.
-
-   Three layers now, and each is independently sufficient to refuse: no island
-   when off, the island hides itself when the stage excludes the viewer, and
-   the route refuses regardless of what the browser was persuaded to render. */
-const showSky = SKY_MODE !== 'off';
+   This decides that Sky EXISTS on the page, not who may use the assistant
+   inside it. The assistant (the part that answers questions, costs money and
+   sends the question to an outside provider) is gated by the rollout stage in
+   three independent layers, none of them here: the island offers it only to
+   the audience the stage admits and shows everyone else why it is closed, the
+   route refuses regardless of what the browser was persuaded to render, and
+   the deployed ceiling in sky-config.ts can only be widened by a commit.
+   Showing the companion to everyone widens none of that. */
 ---
 <!doctype html>
 <html lang="en">
@@ -126,7 +125,7 @@ const showSky = SKY_MODE !== 'off';
               <span>Lrnon</span>
             </p>
             <p style="margin:0;color:var(--c-ink-soft);max-width:30ch;">
-              Learn AI at no cost. Free to use, free of ads, and funded in the open.
+              Learn AI at no cost. Free for every learner, and funded in the open.
             </p>
           </div>
 
@@ -171,7 +170,7 @@ const showSky = SKY_MODE !== 'off';
 
         <p style="margin:var(--sp-8) 0 0;padding-top:var(--sp-4);border-top:1px solid var(--c-border);color:var(--c-ink-soft);">
           © 2026 Lrnon · An independently built initiative, not yet a registered charity.
-          Content CC BY-SA 4.0 · Code MIT. No ads, no paywalls, no dark patterns.
+          Content CC BY-SA 4.0 · Code MIT. Free for learners, always: no paywalls, no dark patterns.
           · <a href="/reading">Reading preferences</a>
           · <a href="/safeguarding">Child safety</a>
           · <a href="/privacy">Privacy</a>
@@ -180,9 +179,9 @@ const showSky = SKY_MODE !== 'off';
       </div>
     </footer>
 
-    {showSky && (
-      <Sky client:idle intro={SKY_COPY.intro} disclaimer={SKY_COPY.disclaimer}
-        suggestions={['Explain this lesson more simply', 'How is Lrnon funded?', 'How do I volunteer?']} />
-    )}
+    {/* Sky, the study buddy. Hidden by the island itself on /admin and on
+        certification pages. */}
+    <SkyBuddy client:idle intro={SKY_COPY.intro} disclaimer={SKY_COPY.disclaimer}
+      suggestions={['Explain this lesson more simply', 'How is Lrnon funded?', 'How do I volunteer?']} />
   </body>
 </html>
