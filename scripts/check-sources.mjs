@@ -82,6 +82,12 @@ function sketchSimilarity(a, b) {
 /** Below this many readable words a page is almost certainly a script-rendered
  *  shell, so "unchanged" would mean nothing. Reported, never trusted. */
 const THIN_WORDS = 150;
+/* Thresholds for calling two fetches "different". Landing pages rotate tiles and
+   shift a few words without anything having been announced: GitHub Copilot's docs
+   page measured 84% alike across two fetches with a 0.3% word-count difference.
+   Tight thresholds turned that into a weekly alert nobody could act on. */
+const DELTA_PCT = 3;
+const SIM_MIN = 0.75;
 
 const cards = readdirSync(REG)
   .filter((f) => f.endsWith('.json') && !f.startsWith('_'))
@@ -206,7 +212,7 @@ for (const card of watched) {
   // report when the readable wording has genuinely diverged.
   const sim = sketchSimilarity(fp.sketch, before.sketch);   // null until a baseline has a sketch
   const delta = before.words ? ((fp.words - before.words) / before.words) * 100 : 0;
-  if (Math.abs(delta) >= 2 || (sim !== null && sim < 0.9)) {
+  if (Math.abs(delta) >= DELTA_PCT || (sim !== null && sim < SIM_MIN)) {
     /* A difference seen once is not yet a change. Some pages return a different
        rendering on each request (Google's API terms measured 3,711, 2,731 and
        2,635 words on three fetches in a row). Fetch twice more: if either looks
@@ -222,7 +228,7 @@ for (const card of watched) {
       } catch { /* a failed re-fetch simply gives us less to compare */ }
     }
     const same = (a, b) =>
-      Math.abs(((a.words - b.words) / (b.words || 1)) * 100) < 2 && (sketchSimilarity(a.sketch, b.sketch) ?? 1) >= 0.9;
+      Math.abs(((a.words - b.words) / (b.words || 1)) * 100) < DELTA_PCT && (sketchSimilarity(a.sketch, b.sketch) ?? 1) >= SIM_MIN;
     if (again.some((a) => same(a, before))) continue;
     if (again.length === 2 && !(same(again[0], again[1]) && same(again[0], fp))) {
       unstable.push(`${card.id}: the page returned different text on repeated requests (${[fp.words, ...again.map((a) => a.words)].join(', ')} words), so wording cannot be compared (${target})`);
