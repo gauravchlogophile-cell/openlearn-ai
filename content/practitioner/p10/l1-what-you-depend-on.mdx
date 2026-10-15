@@ -1,0 +1,175 @@
+---
+title: "What you depend on"
+description: "List every outside service a workflow needs to keep running, including the ones behind the ones you chose. You cannot weigh a risk you have not listed."
+track: practitioner
+module: p10
+order: 1
+minutes: 8
+objectives:
+  - "List the outside services a workflow depends on, at every layer"
+  - "Say for each what happens if it is unavailable for a day, a week, or for good"
+concepts: ["dependency map", "single point of failure", "supply chain", "layers"]
+flashcards:
+  - front: "Why map dependencies before assessing vendor risk?"
+    back: "Because the risk you miss is the one you never listed. Most people name the model provider and forget the host, the database, sign-in, the domain, the libraries and the people."
+  - front: "What three questions apply to each dependency?"
+    back: "What happens if it is gone for a day, for a week, and for good? The answers differ, and the 'for good' answer is the one nobody has written down."
+  - front: "What is the hidden layer?"
+    back: "The dependencies of your dependencies. Your host runs on a cloud, your libraries on other libraries, your provider on someone else's data centre. You inherit those risks without choosing them."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+P7 was about running a model-backed feature without surprises. P8 was about the data. This
+module is about the third thing that goes wrong over a long enough time: the people and
+companies your work depends on stop behaving the way you assumed.
+
+Start where P8 started, with a picture.
+
+## Draw the layers
+
+Most people, asked what a workflow depends on, name the model provider. That is one layer
+of several.
+
+> **The model.** The provider, the specific model, and the plan you are on.
+>
+> **The platform.** Whatever runs the workflow: an automation tool, a hosting service.
+>
+> **The data.** Where it lives: a database, a file store, a spreadsheet.
+>
+> **Identity.** How people sign in, and who vouches for them.
+>
+> **Delivery.** Email, messaging, payments, anything that reaches people.
+>
+> **The domain.** The name people type, with its own registrar and renewal date.
+>
+> **The code and its supply.** The repository, the build service, and every library the
+> code pulls in.
+>
+> **The people.** Who holds the keys, who can recover an account, who knows how it works.
+
+Each is a dependency. The last is the one most often left off the diagram and the one that
+most often fails.
+
+## Three questions for each
+
+For every item, answer three things, in writing.
+
+1. **If it were unavailable for a day, what happens?**
+2. **For a week?**
+3. **If it were gone for good?**
+
+The first answer is usually "some inconvenience". The second often reveals a real cost. The
+third is the one people have not thought about, and it is where the planning belongs.
+
+Be specific. "We would be affected" is not an answer. *"Sign-in would fail, so logged-in
+learners could not save progress, though lessons would still load"* is.
+
+## The layer behind the layer
+
+You do not only depend on what you chose. Your host depends on a cloud. Your libraries
+depend on other libraries, which depend on others. Your provider runs on someone's data
+centres, under someone's jurisdiction.
+
+Those are inherited risks. You cannot remove them, but you can know about them, and a
+surprising amount of "unexpected" failure is the failure of something two layers down that
+you never knew you relied on.
+
+A practical limit: you cannot map everything. Map what you can name, mark what you suspect,
+and revisit the map when something fails, because each failure reveals a dependency you
+had not drawn.
+
+## A map for a small project
+
+Lrnon's own picture, from what its repository and configuration show, is useful because it
+is small enough to hold in your head.
+
+> **Model:** an outside provider's API, reached through a thin adapter.
+>
+> **Platform and hosting:** Cloudflare Workers, with its key-value store, and its build
+> service that deploys on every push.
+>
+> **Data and identity:** Supabase, for the Postgres database and for sign-in.
+>
+> **Sign-in providers:** Google and GitHub, plus an emailed link.
+>
+> **Code:** a repository on GitHub, and a tree of open-source libraries.
+>
+> **Domain:** lrnon.org, with its own registrar and renewal.
+>
+> **People:** one maintainer.
+
+Filling in the three questions is the useful exercise. If Cloudflare were unavailable for a
+day, the site would be down. If the model provider were unavailable, the site would stay up
+and the assistant would degrade to search and a human, which P7·L7 designed for. If the one
+maintainer were unavailable, nothing would break immediately, and nothing would be fixed.
+
+That last answer is the one that matters most.
+
+## Rank by consequence, not by likelihood
+
+It is tempting to worry about what seems likely. A better ordering is by what hurts.
+
+**High consequence, low likelihood:** the host disappears. Rare, and catastrophic. Worth a
+plan even though it probably will not happen.
+
+**Moderate consequence, high likelihood:** a provider changes a model or a limit. Common,
+and costly in time. Worth routine defences, which P7 covered.
+
+**Low consequence, any likelihood:** a font service is slow. Note it and move on.
+
+Spend attention where the consequence is high, whatever the odds.
+
+## Try it now (20 minutes)
+
+Draw the layers for one workflow you run, using the eight headings above. For each
+dependency write the name, the plan or tier you are on, and the answers to the three
+questions.
+
+Then circle every dependency where "gone for good" produces a blank. Those are the subject
+of L4.
+
+<Quiz client:visible items={[
+  {
+    q: "Which layer of dependency do people most often leave off the diagram?",
+    options: [
+      "The model provider",
+      "The people: who holds the keys and who can recover an account",
+      "The database"
+    ],
+    answer: 1,
+    explain: "People are the dependency most often missing from the diagram and the one that most often fails."
+  },
+  {
+    q: "What are the three time horizons to ask of each dependency?",
+    options: [
+      "An hour, a day and a month",
+      "A day, a week and gone for good",
+      "A week, a month and a year"
+    ],
+    answer: 1,
+    explain: "The first usually means some inconvenience, the second often reveals a real cost, and the third is where the planning belongs."
+  },
+  {
+    q: "Why should dependencies be ranked by consequence rather than likelihood?",
+    options: [
+      "Likelihood cannot be estimated",
+      "A rare event with catastrophic consequences still deserves a plan, whatever the odds",
+      "Consequence is easier to measure"
+    ],
+    answer: 1,
+    explain: "Spend attention where the consequence is high, and give routine defences to the common but moderate failures."
+  }
+]} />
+
+## Recap
+
+Dependency risk starts with a list, and the list has layers: the model, the platform, the
+data, identity, delivery, the domain, the code and its supply, and the people. For each,
+write what happens if it is gone for a day, a week and for good, specifically. You inherit
+the dependencies of your dependencies, and each failure reveals one you had not drawn. Rank
+by consequence and not likelihood. For Lrnon, the sharpest answer on the page is the
+last row: one person.

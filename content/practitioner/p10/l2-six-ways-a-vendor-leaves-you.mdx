@@ -1,0 +1,178 @@
+---
+title: "Six ways a vendor leaves you"
+description: "Price, terms, retirement, outage, refusal and ownership. Vendors change without leaving, and free means no commitment. Know how you would find out each one."
+track: practitioner
+module: p10
+order: 2
+minutes: 9
+objectives:
+  - "Name the six ways a vendor relationship changes against you and how you would detect each"
+  - "Recognise what a free tier does and does not promise"
+concepts: ["price change", "deprecation", "suspension", "free tier", "ownership change"]
+tools: ["gemini"]
+flashcards:
+  - front: "What are the six ways a vendor relationship changes?"
+    back: "Price, terms, retirement of what you use, outage, refusal or suspension, and a change of ownership. Each can happen without any announcement you were watching for."
+  - front: "What does a free tier promise?"
+    back: "Usually very little. It is typically offered without service commitments and can change or end. Build on it knowing that, and never promise users more than it can hold."
+  - front: "How do you find out about a change?"
+    back: "Decide in advance: someone reads the vendor's announcements, you stamp versions into your diagnostics, and a periodic test notices behaviour changing before users do."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+A vendor does not need to disappear to leave you worse off. Most of the damage comes from
+vendors who carry on trading and change something you relied on.
+
+There are six patterns. Each is ordinary, and each has happened in some form to this
+project in a few weeks.
+
+## 1. The price changes
+
+A free tier shrinks, a limit drops, a per-token rate rises, a feature moves to a paid
+plan. You find out when a bill arrives or a request is refused.
+
+**Detect it:** read the pricing page on a schedule, or have someone subscribed to
+announcements. Watch your own spend (P7·L4) for a sudden shift.
+
+**Reduce the exposure:** a cap that holds (P7·L3), a second source you could move to, and
+costs expressed per unit of value so you notice when a unit gets dearer.
+
+## 2. The terms change
+
+What the vendor may do with your data, what you may do with the service, who is liable.
+Terms are revised, usually by notice to an address you may not read.
+
+P8·L4 gave the privacy side of this: terms differ by plan, and an assurance to your users
+has to be true under the terms in force today. A change of terms can turn a true
+assurance false overnight.
+
+**Detect it:** subscribe to the notices, and date-stamp what you checked and when so that a
+later change is visible against a record.
+
+## 3. What you use is retired
+
+A model is withdrawn, an API version sunsets, a product is discontinued, an option is no
+longer accepted.
+
+This project met it twice in a few weeks. A model name that the provider's own list still
+contained returned "not found" for generation, and when the configured model was changed to
+a newer one, a request option the old one accepted was rejected outright. P7·L6 told both
+in detail.
+
+**Detect it:** a periodic run of a fixed test set, a version stamp in your diagnostics, and a
+probe that asks the provider what it currently offers. Reading announcements helps but is
+not enough, since the first sign is often a failing call.
+
+## 4. An outage
+
+The service is simply unavailable, for minutes or days.
+
+**Detect it:** your own monitoring (P7·L8), and the vendor's status page, which is often
+later than your users.
+
+**Reduce the exposure:** degrade to something true (P7·L7), and know which of your
+dependencies has no substitute. An outage with a fallback is an inconvenience; one without
+is an incident.
+
+## 5. You are refused
+
+Not an outage: a decision. An account is suspended, a region is unsupported, a use is
+judged to breach a policy, a payment method fails.
+
+This is the one people discount, because it feels personal and unlikely. It is neither.
+Suspensions are often automated, appeals can be slow, and a single flagged event can close
+an account that something important depends on.
+
+A small example from this project: one call failed with a message that the user's location
+was not supported. It did not recur and nobody saw it for five weeks. A Worker's outgoing
+request leaves from the location nearest the visitor, so whether the provider serves it can
+differ by learner, with nothing in your own configuration to explain the difference.
+
+**Reduce the exposure:** know your account's recovery path before you need it, keep a
+second administrator, and do not run everything through one account.
+
+## 6. Ownership changes
+
+A vendor is acquired, merged, or changes direction. Pricing, priorities, support and
+product direction can change with no change of name.
+
+**Detect it:** it is in the news, but only if someone is reading. Treat an acquisition of
+a key dependency as a trigger to review the rest of this list.
+
+## What free means
+
+A free tier deserves its own warning, because it is where the weakest commitments live.
+
+Free usually means no promise of availability, no promise of continuity, a limit that can
+change, and terms that differ from the paid ones. It is an offer, and it can be altered or
+withdrawn.
+
+That does not make it a mistake to use one. It means building on it with open eyes:
+
+**Do not promise users more than it can hold.** An assurance resting on a free tier's
+terms is only as firm as those terms (P8·L4).
+
+**Know the cost of the upgrade,** so that if the free tier closes you know the number.
+
+**Keep your own copy of what matters,** because a free service can end with little notice.
+
+For reference, when checked on 4 September 2026 the project's database organisation was on
+the provider's free plan, and the model provider's quota behaved like a free tier. That is a
+reasonable choice for a project with no income, and it is a fact worth having written down
+rather than discovered.
+
+## Try it now (15 minutes)
+
+Take the map from L1. For each of the six patterns, pick the dependency where it would hurt
+most and write one line:
+
+- how you would find out,
+- how long that would take,
+- what you would do first.
+
+Where the first line is "we would find out when it broke", that is the gap.
+
+<Quiz client:visible items={[
+  {
+    q: "What does a free tier usually promise?",
+    options: [
+      "The same availability as a paid plan",
+      "Very little: no service commitment, and a limit or term that can change or end",
+      "A guaranteed upgrade path at the same price"
+    ],
+    answer: 1,
+    explain: "Build on it with open eyes. Do not promise users more than it can hold, know the cost of upgrading, and keep your own copy of what matters."
+  },
+  {
+    q: "Why is being refused a pattern people discount?",
+    options: [
+      "Refusals are rare in practice",
+      "It feels personal and unlikely, though suspensions are often automated and appeals can be slow",
+      "Vendors always give advance notice"
+    ],
+    answer: 1,
+    explain: "A single flagged event can close an account that something important depends on. Know your recovery path and keep a second administrator."
+  },
+  {
+    q: "A model name still appears in the provider's list but generation returns 'not found'. Which pattern is this?",
+    options: [
+      "A price change",
+      "Something you rely on being retired",
+      "A change of ownership"
+    ],
+    answer: 1,
+    explain: "A periodic test run, a version stamp and a probe of what the provider offers are how you find out before users do."
+  }
+]} />
+
+## Recap
+
+A vendor can leave you worse off without leaving: the price changes, the terms change,
+what you use is retired, the service goes down, you are refused, or ownership changes.
+Decide in advance how you would find out about each. Free tiers carry the weakest
+commitments, so build on them knowingly and never promise users more than they can hold.
+Know your account's recovery path and keep a second administrator before you need them.

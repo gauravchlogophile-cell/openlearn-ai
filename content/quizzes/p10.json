@@ -1,0 +1,316 @@
+{
+  "module": "p10",
+  "title": "Vendor Risk and Portability — Module Quiz",
+  "drawCount": 8,
+  "passThreshold": 0.8,
+  "items": [
+    {
+      "id": "p10-01",
+      "q": "Which layer of dependency do people most often leave off a dependency diagram?",
+      "options": [
+        "The model provider",
+        "The people: who holds the keys and who can recover an account",
+        "The database"
+      ],
+      "answer": 1,
+      "explain": "People are the dependency most often missing from the diagram and the one that most often fails."
+    },
+    {
+      "id": "p10-02",
+      "q": "What are the three time horizons to ask of each dependency?",
+      "options": [
+        "An hour, a day and a month",
+        "A day, a week and gone for good",
+        "A week, a month and a year"
+      ],
+      "answer": 1,
+      "explain": "The first usually means some inconvenience, the second often reveals a real cost, and the third is where the planning belongs."
+    },
+    {
+      "id": "p10-03",
+      "q": "Why rank dependencies by consequence rather than likelihood?",
+      "options": [
+        "Likelihood cannot be estimated",
+        "A rare event with catastrophic consequences still deserves a plan, whatever the odds",
+        "Consequence is easier to measure"
+      ],
+      "answer": 1,
+      "explain": "Spend attention where the consequence is high, and give routine defences to the common but moderate failures."
+    },
+    {
+      "id": "p10-04",
+      "q": "What does inheriting the dependencies of your dependencies mean in practice?",
+      "options": [
+        "You must audit every vendor's suppliers",
+        "Your host, libraries and provider rely on other services you never chose, and their failures become yours",
+        "Vendors are legally responsible for their suppliers' failures to you"
+      ],
+      "answer": 1,
+      "explain": "You cannot map everything, but each failure reveals a dependency you had not drawn, so revisit the map when something breaks."
+    },
+    {
+      "id": "p10-05",
+      "q": "What does a free tier usually promise?",
+      "options": [
+        "The same availability as a paid plan",
+        "Very little: no service commitment, and a limit or term that can change or end",
+        "A guaranteed upgrade path at the same price"
+      ],
+      "answer": 1,
+      "explain": "Build on it with open eyes. Do not promise users more than it can hold, know the cost of upgrading, and keep your own copy of what matters."
+    },
+    {
+      "id": "p10-06",
+      "q": "Why do people discount being refused or suspended by a vendor?",
+      "options": [
+        "Refusals are rare in practice",
+        "It feels personal and unlikely, though suspensions are often automated and appeals can be slow",
+        "Vendors always give advance notice"
+      ],
+      "answer": 1,
+      "explain": "A single flagged event can close an account that something important depends on. Know your recovery path and keep a second administrator."
+    },
+    {
+      "id": "p10-07",
+      "q": "A model name still appears in the provider's list but generation returns 'not found'. Which pattern is this?",
+      "options": [
+        "A price change",
+        "Something you rely on being retired",
+        "A change of ownership"
+      ],
+      "answer": 1,
+      "explain": "A periodic test run, a version stamp and a probe of what the provider offers are how you find out before users do."
+    },
+    {
+      "id": "p10-08",
+      "q": "How does a change in a vendor's terms interact with an assurance you gave users?",
+      "options": [
+        "Assurances are unaffected by vendor terms",
+        "A change of terms can turn a true assurance false overnight",
+        "Vendors notify users directly of changes"
+      ],
+      "answer": 1,
+      "explain": "Date-stamp what you checked and when, so that a later change is visible against a record."
+    },
+    {
+      "id": "p10-09",
+      "q": "Which kind of lock-in is the least visible in the code?",
+      "options": [
+        "Data lock-in",
+        "Behavioural: instructions tuned against one model behave differently on another",
+        "Contract lock-in"
+      ],
+      "answer": 1,
+      "explain": "Nothing in the code reveals the dependence. It shows up when you switch and the outputs change, which is why a test set matters."
+    },
+    {
+      "id": "p10-10",
+      "q": "Why estimate each kind of lock-in in person-days?",
+      "options": [
+        "It satisfies auditors",
+        "The largest number is the real lock-in, and any cell you cannot fill in shows you do not know what leaving involves",
+        "Person-days are the only unit vendors accept"
+      ],
+      "answer": 1,
+      "explain": "The biggest number is often not the one you expected, and an empty cell is a finding."
+    },
+    {
+      "id": "p10-11",
+      "q": "Which kinds of lock-in tend to be the expensive ones nobody budgets for?",
+      "options": [
+        "Data and interface",
+        "Behaviour, workflow and skills, since they do not live in the code",
+        "Contract and data"
+      ],
+      "answer": 1,
+      "explain": "Version-controlled instructions, a written test set and a thin interface layer are mostly aimed at these."
+    },
+    {
+      "id": "p10-12",
+      "q": "Why can a database schema that rebuilds from migrations still be costly to move?",
+      "options": [
+        "Migrations cannot be run on another host",
+        "It may rely on conventions specific to the current provider, such as its identity functions and role names",
+        "Schemas cannot be exported"
+      ],
+      "answer": 1,
+      "explain": "Moving would mean replacing that identity layer, which is real work and not just a copy."
+    },
+    {
+      "id": "p10-13",
+      "q": "Why is an exit plan that has never been run only a hope?",
+      "options": [
+        "Plans are always out of date",
+        "Plans fail at details, such as an incomplete export or a forgotten dependency, that only a rehearsal finds",
+        "Vendors change their export formats weekly"
+      ],
+      "answer": 1,
+      "explain": "A rehearsal finds the surprises while they are cheap. Run by someone who did not write the plan, it also finds the gaps the author fills in from memory."
+    },
+    {
+      "id": "p10-14",
+      "q": "What makes a rehearsal more useful than reading through the plan?",
+      "options": [
+        "It is quicker to complete",
+        "A real slice, run in order by someone else with a stopwatch, reveals gaps and true durations",
+        "It requires fewer people"
+      ],
+      "answer": 1,
+      "explain": "Write down every surprise. Reaching the verification step on a slice gives you most of the information."
+    },
+    {
+      "id": "p10-15",
+      "q": "What is the relationship between a backup and an exit plan?",
+      "options": [
+        "They are unrelated",
+        "Both are claims proven only by doing them, and restoring a backup rehearses half of an exit",
+        "A backup replaces the need for an exit plan"
+      ],
+      "answer": 1,
+      "explain": "A backup you have never restored is a file you believe contains your data. Restoring to a scratch location is the cheapest rehearsal there is."
+    },
+    {
+      "id": "p10-16",
+      "q": "What does an abstraction layer around a vendor reduce the cost of?",
+      "options": [
+        "Retuning instructions for a new model",
+        "Changing the plumbing, since vendor-specific calls are confined to one place",
+        "Retraining the team"
+      ],
+      "answer": 1,
+      "explain": "It leaves the cost of changing behaviour untouched. A thick layer that pretends to cover both creates a false sense of safety."
+    },
+    {
+      "id": "p10-17",
+      "q": "A layer reports a uniform 'tokens used', but one vendor reports reasoning tokens separately. What happened?",
+      "options": [
+        "The vendor made an error",
+        "The abstraction leaked: the vendors did not mean quite the same thing, and spend could be undercounted",
+        "Tokens are not comparable between vendors"
+      ],
+      "answer": 1,
+      "explain": "A layer cannot present a uniform interface to something that is not uniform. Its job is to confine the differences."
+    },
+    {
+      "id": "p10-18",
+      "q": "Why is 'an abstraction with one working implementation' described as a guess?",
+      "options": [
+        "One implementation is always insufficient",
+        "Whether it works is proven only when a second vendor actually runs behind it",
+        "Abstractions need at least three implementations by definition"
+      ],
+      "answer": 1,
+      "explain": "Untested adapters are claims, not capabilities. One real call through a second vendor is the test."
+    },
+    {
+      "id": "p10-19",
+      "q": "Is an open-weight model the same as open source?",
+      "options": [
+        "Yes, open-weight models are always open source",
+        "No, the weights are downloadable but the licence may limit who can use them and how",
+        "Only for models from European labs"
+      ],
+      "answer": 1,
+      "explain": "Licences differ between families and versions. Read the one that applies to what you intend."
+    },
+    {
+      "id": "p10-20",
+      "q": "Which risk does running your own model remove?",
+      "options": [
+        "Hardware cost",
+        "A provider silently changing or retiring the model, or refusing your region",
+        "The need for evaluation"
+      ],
+      "answer": 1,
+      "explain": "You choose the version and it stays put. You also take on hardware, operations, updates, security, evaluation and the safeguards the provider used to supply."
+    },
+    {
+      "id": "p10-21",
+      "q": "What is the practical position on self-hosting for a small project with one maintainer?",
+      "options": [
+        "Self-host immediately to avoid vendor risk",
+        "Keep the code able to point at a model you host, as an option, without hosting one today",
+        "Avoid hosted models entirely"
+      ],
+      "answer": 1,
+      "explain": "The door is preserved at the cost of a configuration setting. It is an option rather than a plan, and the distinction matters."
+    },
+    {
+      "id": "p10-22",
+      "q": "Why is the clause on data when the relationship ends so important?",
+      "options": [
+        "It determines the price of leaving",
+        "It decides whether an exit plan can succeed: whether you can export, in what form, and for how long",
+        "It controls which country's law applies"
+      ],
+      "answer": 1,
+      "explain": "Also check suspension grounds: a suspended account cannot export anything."
+    },
+    {
+      "id": "p10-23",
+      "q": "What does a liability cap usually mean for a free service?",
+      "options": [
+        "The vendor pays for any loss in full",
+        "What you can recover is limited, often to what you paid, which may be very little",
+        "The cap is waived for free services"
+      ],
+      "answer": 1,
+      "explain": "Assume that a serious failure will cost you more than you can recover."
+    },
+    {
+      "id": "p10-24",
+      "q": "Why is an account registered to one person's email and phone a dependency?",
+      "options": [
+        "Personal email is less secure",
+        "If that person is unreachable or leaves, the account and its recovery route go with them",
+        "Vendors charge more for personal accounts"
+      ],
+      "answer": 1,
+      "explain": "Use a role-based contact address, have a second administrator, and know the recovery process before you need it."
+    },
+    {
+      "id": "p10-25",
+      "q": "Why date what you read in a vendor's terms?",
+      "options": [
+        "Dates are required by the vendor",
+        "Terms change, and a dated note lets you see later what moved and shows you did check",
+        "Older terms always apply to existing customers"
+      ],
+      "answer": 1,
+      "explain": "Record the vendor, plan, date, the answers to the key questions and what you do not know."
+    },
+    {
+      "id": "p10-26",
+      "q": "What is a correlated failure?",
+      "options": [
+        "A failure that occurs twice in a row",
+        "Failures of things you thought were independent that share a cause, such as the same cloud, account or person",
+        "A failure that appears in the logs of two systems"
+      ],
+      "answer": 1,
+      "explain": "Two vendors that share a cloud do not protect you from that cloud. Independence is harder to establish than it looks."
+    },
+    {
+      "id": "p10-27",
+      "q": "Why does a backup held by the same vendor as the data give limited protection?",
+      "options": [
+        "Same-vendor backups are always corrupted",
+        "It protects against a mistake but fails together with the vendor, so a copy elsewhere is needed",
+        "Vendors do not allow restoring their own backups"
+      ],
+      "answer": 1,
+      "explain": "A copy under a different account, ideally a different provider, is among the cheapest reductions available."
+    },
+    {
+      "id": "p10-28",
+      "q": "Why write exit triggers in advance?",
+      "options": [
+        "Regulators require them",
+        "Otherwise the decision is made in the middle of a failure with the least information and the most pressure",
+        "Triggers make leaving automatic"
+      ],
+      "answer": 1,
+      "explain": "The point is not that you will leave when one occurs, but that the question gets asked on a schedule you chose."
+    }
+  ]
+}

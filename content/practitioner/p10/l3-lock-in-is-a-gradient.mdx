@@ -1,0 +1,190 @@
+---
+title: "Lock-in is a gradient"
+description: "Lock-in is not on or off. Data, interfaces, behaviour, workflow, skills and contracts each cost a different amount to leave. Measure the cost of each."
+track: practitioner
+module: p10
+order: 3
+minutes: 9
+objectives:
+  - "Separate lock-in into its kinds and judge the cost of leaving each"
+  - "Find the kind of lock-in that actually binds in a given setup"
+concepts: ["lock-in", "switching cost", "data portability", "behavioural dependence"]
+flashcards:
+  - front: "Name the kinds of lock-in."
+    back: "Data (can you get it out), interface (code written to one API), behaviour (prompts tuned to one model), workflow (processes built around it), skills (what people know) and contract (terms and notice)."
+  - front: "Which kind is easiest to overlook?"
+    back: "Behavioural. Your instructions were tuned against one model's habits, so the same text on another model behaves differently, and nothing in the code shows that dependence."
+  - front: "How do you measure switching cost?"
+    back: "In person-days and in risk, estimated per kind. A figure you cannot produce is itself a finding, since it means you do not know what leaving would involve."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+"Are we locked in?" is the usual question, and it has the usual flaw: it expects yes or
+no. In practice every dependency sits somewhere on a gradient, and it is split into
+several kinds that behave differently.
+
+Naming the kinds is what turns a vague worry into something you can price.
+
+## Six kinds
+
+### Data
+
+Can you get your data out, in a form something else can use?
+
+This is the first thing to check, and often the easiest to fix. A vendor that offers a
+complete export in an open format has a low data lock-in. One that offers a partial export
+in a proprietary shape, or none, has a high one.
+
+### Interface
+
+Is your code written to one vendor's API?
+
+The more of your code that calls vendor-specific functions, the more of it changes on a
+move. A thin layer in one place is cheap to redirect; vendor calls scattered through the
+codebase are not.
+
+### Behaviour
+
+Were your instructions tuned against one model?
+
+P4·L7 made this point and it deserves repeating, because it is the least visible. The same
+instruction text on a different model gives different tone, different refusals, and
+different edge cases. Nothing in the code reveals the dependence. It shows up when you
+switch and the outputs change.
+
+### Workflow
+
+Have processes been built around the tool's way of working?
+
+People develop habits, templates and unwritten conventions around a tool. Moving it means
+changing those, which is slow and unmeasured.
+
+### Skills
+
+What do people know how to do?
+
+A team fluent in one platform has invested learning in it. That investment does not
+transfer, and it is a real cost even though it appears on no invoice.
+
+### Contract
+
+What do the terms say about leaving?
+
+Notice periods, minimum terms, data return, fees for exit. Often unread until needed. P10·L7
+returns to this.
+
+## Estimate each in person-days
+
+Make the abstract concrete. For a dependency, write a rough number for each kind:
+
+| Kind | Rough cost to leave |
+|---|---|
+| Data | how long to export and verify it |
+| Interface | how many files change, and how long to test |
+| Behaviour | how long to retune and re-run the test set |
+| Workflow | how long to change the habits |
+| Skills | how long to retrain |
+| Contract | notice, fees, overlap |
+
+Rough is fine. Two things happen when you do it. The biggest number is the real lock-in,
+which is often not the one you expected. And any cell you cannot fill in is a finding,
+because it means you do not know what leaving would involve.
+
+## Where it usually binds
+
+The pattern is common enough to state, with the caution that it varies.
+
+**Data** is usually cheaper to leave than people fear, if the vendor exports properly.
+
+**Interface** is usually cheaper than it looks, if the code is kept thin.
+
+**Behaviour, workflow and skills** are usually the expensive ones, and they are the ones
+nobody budgets for, because they do not live in the code.
+
+The consequence: the habits recommended earlier in this course, version-controlled
+instructions (P4·L5), a written test set (P4·L6) and a thin interface layer (L5), are
+mostly aimed at the expensive kinds. A test set is what lets you measure behavioural
+change when you move.
+
+## Lrnon's gradient, honestly
+
+Applying the table to the project gives a mixed picture, and it is worth reading as one.
+
+**Content** is very portable. It lives in a Git repository as plain text, the lessons are
+under an open licence and the code under another, so there is no content lock-in to speak
+of.
+
+**The database** is reproducible. Sixteen migrations in the repository rebuild the schema.
+But they use conventions specific to the database provider: its user-identity function, its
+auth tables and its role names, which the security policies rely on. Moving to another
+Postgres host would mean replacing that identity layer, which is a real piece of work, not
+just a copy.
+
+**The server code** runs on one platform's runtime, and reads its secrets and its
+key-value store through that platform's interface. The static pages would move easily; the
+few server routes would need adapting.
+
+**The model** is behind a thin adapter, covered in L5. The behavioural dependence is real:
+the instructions were tuned against one family of models, and the attack corpus showed how
+much a change in that model can matter.
+
+**People** is the heaviest: one maintainer holds the knowledge, the keys and the habit of
+how it all fits.
+
+Nothing here is a criticism. A small project takes managed services deliberately. The point
+is to know which kinds of lock-in were chosen and which were incurred without noticing.
+
+## Try it now (20 minutes)
+
+Pick one significant dependency. Fill in the table above with a rough figure for each kind.
+
+Circle the largest. Then ask whether anything in your current setup reduces it: a thin
+layer, an export, a test set, a written procedure. If the largest cost has nothing against
+it, that is where to spend effort first.
+
+<Quiz client:visible items={[
+  {
+    q: "Which kind of lock-in is the least visible in the code?",
+    options: [
+      "Data lock-in",
+      "Behavioural: instructions tuned against one model behave differently on another",
+      "Contract lock-in"
+    ],
+    answer: 1,
+    explain: "Nothing in the code reveals the dependence. It shows up when you switch and the outputs change, which is why a test set matters."
+  },
+  {
+    q: "Why estimate each kind of lock-in in person-days?",
+    options: [
+      "It satisfies auditors",
+      "The largest number is the real lock-in, and any cell you cannot fill in shows you do not know what leaving involves",
+      "Person-days are the only unit vendors accept"
+    ],
+    answer: 1,
+    explain: "The biggest number is often not the one you expected, and an empty cell is a finding."
+  },
+  {
+    q: "Which kinds of lock-in tend to be the expensive ones that nobody budgets for?",
+    options: [
+      "Data and interface",
+      "Behaviour, workflow and skills, since they do not live in the code",
+      "Contract and data"
+    ],
+    answer: 1,
+    explain: "Version-controlled instructions, a written test set and a thin interface layer are mostly aimed at these."
+  }
+]} />
+
+## Recap
+
+Lock-in is a gradient with six kinds: data, interface, behaviour, workflow, skills and
+contract. Estimate each in person-days, because the largest number is the real lock-in and
+a blank is a finding. Data and interface tend to be cheaper to leave than feared, while
+behaviour, workflow and skills are the expensive ones that nobody budgets for. The habits of
+version-controlled instructions, a written test set and a thin interface layer are aimed at
+exactly those. Lrnon's gradient is mixed: portable content, a reproducible but
+provider-flavoured database, and one person.

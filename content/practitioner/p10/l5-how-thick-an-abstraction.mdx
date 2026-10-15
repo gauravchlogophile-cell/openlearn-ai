@@ -1,0 +1,178 @@
+---
+title: "How thick an abstraction"
+description: "A thin layer between your code and a vendor makes switching cheaper, and a thick one hides differences that matter. Build it where switching is plausible."
+track: practitioner
+module: p10
+order: 5
+minutes: 9
+objectives:
+  - "Decide where an abstraction layer is worth building and how thin to keep it"
+  - "Recognise what a layer cannot hide"
+concepts: ["abstraction layer", "adapter", "lowest common denominator", "leaky abstraction"]
+flashcards:
+  - front: "What is an abstraction layer for?"
+    back: "To keep vendor-specific details in one place, so changing vendors means changing one file and not the whole codebase."
+  - front: "What does a layer fail to hide?"
+    back: "Real differences in behaviour: tone, refusals, limits, options the vendors treat differently. They leak through, and the layer's job is to confine them, not to pretend they do not exist."
+  - front: "When is an abstraction not worth building?"
+    back: "When you will never switch, or when the cost of the layer exceeds the cost of rewriting. An abstraction with one implementation is a guess about the future."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The standard engineering answer to vendor lock-in is to put a layer between your code and
+the vendor. It is a good answer, and it has a failure mode that is worth understanding
+before you build one.
+
+## What a layer does
+
+Without one, vendor-specific calls are scattered through your code. Each one is a place that
+changes on a move.
+
+With one, your code says *"ask the model this"*, and one module knows how each vendor is
+asked. The vendor-specific part is confined to a single place.
+
+The benefit is concrete: switching means changing that module, plus whatever the behaviour
+change demands, which L3 said is the expensive part.
+
+## Lrnon's example
+
+The assistant's provider seam is small enough to read in a sitting, and it is instructive.
+
+The route says, in effect, "answer this from these passages". A separate module knows how
+each of three request shapes is built: one vendor's messages endpoint, another's
+generate-content endpoint with the model named in the path, and the chat-completions shape
+that a large share of the market has adopted. The vendor is read from configuration and
+never guessed from the shape of a key, because guessing means a misconfiguration could post
+a secret to the wrong company.
+
+Because the third shape is widely copied, one setting for a different base address is
+enough to reach many other providers, including a model hosted on your own machine. The
+module's own header says this is deliberate, for a project whose learners may object to
+sending a child's question to a foreign API.
+
+That is a good small abstraction. It is thin, it confines the differences in one file, and
+it has a reason behind it.
+
+## What it cannot hide
+
+The honest part of the story is where the abstraction leaked.
+
+**Options differ.** The adapter sends a setting asking the model not to spend tokens
+reasoning. The newer model the project moved to did not accept it, and rejected the whole
+request. A layer cannot present a uniform interface to something that is not uniform. The
+fix was to retry without the option, which is the adapter handling a difference and not
+removing it.
+
+**Counting differs.** Providers report token usage in different fields. One reported
+reasoning tokens separately from the answer, and the adapter read only the answer, so
+spend was undercounted. The abstraction had a uniform "tokens used" and the vendors did not
+mean quite the same thing by it.
+
+**Errors differ.** Status codes and messages vary, and the useful detail is in vendor-
+specific wording.
+
+**Behaviour differs,** which no layer touches. The same instructions give different answers.
+
+So the layer reduces the cost of changing the *plumbing* and leaves the cost of changing the
+*behaviour*. Those are different costs, and a thick layer that pretends to cover both
+creates a false sense of safety.
+
+## The lowest common denominator problem
+
+The more vendors a layer unifies, the more it is limited to what they all offer.
+
+If one vendor has a feature the others lack, there are three choices: leave it out, expose
+it through the layer in a vendor-specific way, or let callers reach past the layer. The
+first loses capability. The second puts vendor-specific detail back into your code. The
+third defeats the point.
+
+The sensible approach is to keep the layer thin and to **let vendor-specific features live
+inside the adapter**, switched on by configuration, and not pushed up into your application.
+
+## Is it worth building?
+
+Three questions.
+
+**Is switching plausible?** A layer pays off only if you might use it. For a vendor you are
+very unlikely to leave, it is cost with no return.
+
+**Is it cheap to keep?** A thin adapter is. A framework of abstractions with its own
+concepts, versions and bugs is another dependency, and arguably a worse one than the one it
+was meant to hide.
+
+**Can you test the other side?** Here the project is candid. Only one of its three supported
+shapes has been run against a live provider. The other two are tested as strings and have
+never answered a real question. A second implementation that has not been exercised is a
+claim and not a capability.
+
+That last point is the useful rule: **an abstraction with one working implementation is a
+guess about the future.** The test of whether the layer works is a second vendor actually
+running behind it.
+
+## Own the tests
+
+The layer protects the plumbing. What protects the behaviour is your test set (P4·L6).
+
+If you do ever switch, the test set is what tells you whether the new vendor is acceptable.
+Keep it vendor-independent: cases phrased in terms of what you need, with the expected
+outcome recorded, and runnable against any adapter.
+
+That, together with a thin layer, is most of what portability means in practice.
+
+## Try it now (20 minutes)
+
+Find where your code calls a vendor. Count the places. If it is more than one or two, sketch
+the thin layer that would confine them.
+
+Then write down the vendor-specific differences you already know about, such as options,
+counting and error wording. Check that each lives inside the adapter and is not leaking into
+the callers.
+
+Finally, if you claim you could switch, plan the test of that claim: one real call through
+a second vendor.
+
+<Quiz client:visible items={[
+  {
+    q: "What does an abstraction layer around a vendor reduce the cost of?",
+    options: [
+      "Retuning instructions for a new model",
+      "Changing the plumbing, since vendor-specific calls are confined to one place",
+      "Retraining the team"
+    ],
+    answer: 1,
+    explain: "It leaves the cost of changing behaviour untouched. A thick layer that pretends to cover both creates a false sense of safety."
+  },
+  {
+    q: "A layer reports a uniform 'tokens used', but one vendor reports reasoning tokens separately. What happened?",
+    options: [
+      "The vendor made an error",
+      "The abstraction leaked: the vendors did not mean quite the same thing, and spend could be undercounted",
+      "Tokens are not comparable between vendors"
+    ],
+    answer: 1,
+    explain: "A layer cannot present a uniform interface to something that is not uniform. Its job is to confine the differences."
+  },
+  {
+    q: "Why is 'an abstraction with one working implementation' described as a guess?",
+    options: [
+      "One implementation is always insufficient",
+      "Whether it works is proven only when a second vendor actually runs behind it",
+      "Abstractions need at least three implementations by definition"
+    ],
+    answer: 1,
+    explain: "Untested adapters are claims, not capabilities. One real call through a second vendor is the test."
+  }
+]} />
+
+## Recap
+
+A thin layer between your code and a vendor confines the vendor-specific parts and makes
+changing the plumbing cheap. It cannot hide real differences in options, counting, errors and
+behaviour, which leak through. Keep it thin, let vendor-specific features live inside the
+adapter, and build one only where switching is plausible and the layer is cheap to keep. An
+abstraction with one working implementation is a guess; a second vendor running behind it is
+the test. Own a vendor-independent test set, since that is what protects behaviour.

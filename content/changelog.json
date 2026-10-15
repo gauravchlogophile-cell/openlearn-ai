@@ -4,6 +4,12 @@
     {
       "date": "2026-10-15",
       "kind": "New module",
+      "where": "Practitioner · P10",
+      "what": "Vendor Risk and Portability published — eight lessons on what happens over a long enough time when the companies a workflow depends on stop behaving as assumed. Drawing the dependency map in layers, including the people, and asking what happens if each is gone for a day, a week and for good; six ways a vendor relationship changes against you without the vendor leaving, and what a free tier does and does not promise; lock-in as a gradient of six kinds, each estimated in person-days; an exit plan and why only a rehearsal on a small slice makes it more than a hope; how thin an abstraction layer should be and what it cannot hide; open-weight models as an exit, with what they remove and what they add; the clauses in a vendor agreement that decide whether you can leave or recover, with a note that this is general information and not legal advice; and concentration of risk, exit triggers and an annual review. Lrnon is the worked example, including a plain list of what the project does not yet have, among them a rehearsed exit. Practitioner is now ten of its eleven modules."
+    },
+    {
+      "date": "2026-10-15",
+      "kind": "New module",
       "where": "Practitioner · P9",
       "what": "Rolling It Out to a Team published — eight lessons on handing a tool to other people, which is a different problem from building it and often a harder one. Why a working tool is not an adopted one, and finding the real problem by watching the work before proposing anything; piloting with a few willing people on one frequent, low-stakes, checkable task, with success and failure written down in advance; teaching judgement rather than buttons, since interface walk-throughs expire in weeks; a one-page acceptable-use note, and why a flat ban drives use out of sight; treating fears and objections on their merits, promising only what you control, and never monitoring individuals in secret; measuring against a baseline and counting the checking and rework, with a warning about self-reported savings; support, feedback and keeping a rollout current; and reading non-adoption as information rather than blaming the people who did not adopt. Lrnon is the worked example, including that its assistant’s review mechanism existed before anyone used it. Practitioner is now nine of its eleven modules."
     },

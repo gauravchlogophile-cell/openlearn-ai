@@ -1,0 +1,192 @@
+---
+title: "Concentration, and the day it goes wrong"
+description: "Putting everything with one vendor, or in one person's hands, makes one failure into every failure. Decide your exit triggers in advance and review them yearly."
+track: practitioner
+module: p10
+order: 8
+minutes: 9
+objectives:
+  - "Identify concentration of risk in a setup, in vendors and in people"
+  - "Write exit triggers in advance and review them on a schedule"
+concepts: ["concentration risk", "correlated failure", "exit triggers", "annual review"]
+flashcards:
+  - front: "What is concentration risk?"
+    back: "Depending heavily on one vendor, one account or one person, so that a single failure takes out everything at once. Convenience often creates it."
+  - front: "What is a correlated failure?"
+    back: "Two things you thought were independent fail together because they share a cause: the same cloud, the same account, the same person."
+  - front: "What is an exit trigger?"
+    back: "A condition, decided in advance and written down, such as a price rise, repeated outage or terms change, that starts the exit plan. Without one, the decision is made under pressure."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The last lesson in the module draws the others together into a question about shape: how
+much of your work rests on how few things?
+
+Concentration is attractive because it is convenient. One vendor for everything means one
+bill, one login and one way of working. It also means that what fails, fails all at once.
+
+## Where concentration hides
+
+**One vendor, many functions.** Hosting, database, sign-in and the build pipeline with the
+same company. A fault or a policy change affects all of it at the same moment, and so does
+a suspended account.
+
+**One cloud underneath.** Several vendors that look independent may all run on the same
+infrastructure provider. When that goes down, the apparently separate services go down
+together. This is a **correlated failure**: independence you thought you had was not there.
+
+**One account.** Everything registered to one login. Lose it and lose everything.
+
+**One person.** The keys, the knowledge and the habit of how it fits. P7·L8 made the point
+about monitoring; it holds here for the whole of the project.
+
+**One region or one provider's goodwill.** A feature that works only where a provider
+chooses to serve, as the location refusal showed.
+
+None of these is wrong by itself. Each is a trade of resilience for simplicity, and it
+should be a trade you made on purpose.
+
+## What reducing it costs
+
+Spreading risk is not free, and the cost is why concentration persists.
+
+**More vendors** means more accounts, more bills, more to keep current and more places for
+things to differ.
+
+**Redundancy** means paying for something you hope never to use.
+
+**Independence** is harder to establish than it looks. Two vendors that share a cloud do not
+protect you from that cloud.
+
+So the sensible approach is selective. Spread the risks that are catastrophic and cheap to
+spread. Accept the ones that are costly to spread and tolerable if they happen.
+
+## Cheap reductions
+
+Several are worth doing at almost any scale.
+
+> **Backups somewhere else.** A backup held by the same vendor as the data fails with it.
+> Keep a copy under a different account, ideally a different provider.
+>
+> **A second administrator** on every account that matters.
+>
+> **Credentials in a store a second person can reach,** with a written way to recover.
+>
+> **Your content in a form you hold,** which a repository of plain text gives you.
+>
+> **A written runbook** (P7·L8) so that a capable stranger could keep it running for a few
+> days.
+>
+> **A known fallback for the user-facing part:** a degrade path that is true.
+
+The backups point is worth checking against your own setup. For many small projects the
+answer to "where are the backups?" turns out to be "with the same vendor", which protects
+against a mistake and not against losing the vendor.
+
+## Exit triggers
+
+An exit plan (L4) says how to leave. A trigger says **when**.
+
+Without one, the decision happens under stress, in the middle of a failure, with the least
+information and the most pressure.
+
+Write the conditions in advance. Examples:
+
+> A price rise above a stated figure that we cannot absorb.
+> A change of terms that makes a promise to our users untrue.
+> Two serious outages within a quarter.
+> A retirement notice for something we depend on, with less than a set period.
+> A suspension of our account that is not reversed within a set time.
+> A security incident at the vendor affecting our data.
+
+Each should have a threshold specific enough to be unambiguous and an owner who decides.
+The point is not that you will leave when one occurs. It is that the *question* gets asked
+on a schedule you chose, and not only when you are already in trouble.
+
+## Review it every year
+
+Dependencies shift. A vendor you chose for good reasons changes, you grow, your data changes,
+a better option appears.
+
+Once a year, run the whole module in an hour:
+
+1. Redraw the dependency map (L1). What is new?
+2. Check the six ways (L2). Has any happened, or become likelier?
+3. Re-estimate the lock-in table (L3). Has the largest figure moved?
+4. Look at the exit plan (L4). Was it rehearsed? When was the last restore?
+5. Re-read the terms that matter and update the dated note (L7).
+6. Check the triggers (this lesson). Is any near?
+
+Put it in the calendar. A review that is not scheduled does not happen.
+
+## Lrnon's concentration, said plainly
+
+Tallied honestly, the picture has real concentration in several places.
+
+A small number of vendors carry the hosting, build, database, sign-in and model. Several
+are free-tier relationships. One person holds the accounts, the knowledge and the
+recovery. The content and the schema are held in a repository, which is a genuine strength,
+and the user-facing assistant degrades to something true, which is another.
+
+What the project does not yet have, as far as this record shows: a rehearsed exit, a second
+administrator on the vendor accounts, confirmation that backups sit apart from the data, a
+role-based recovery path in place of accounts held under one person's own identity, written
+exit triggers, and a dated note on any vendor's terms. Some of these may exist and simply
+not have been recorded, which is itself the gap.
+
+That is not unusual for a project of this size, and not a reason for alarm. It is a list
+with six items on it, each cheap to start, and the value of the exercise is that they are now
+written down.
+
+## Try it now (45 minutes)
+
+Run the annual review once, now, on one project. Work through the six steps and keep notes.
+
+Then write three exit triggers specific enough to be unambiguous, with an owner for each,
+and put the next review in the calendar a year from today.
+
+<Quiz client:visible items={[
+  {
+    q: "What is a correlated failure?",
+    options: [
+      "A failure that occurs twice in a row",
+      "Failures of things you thought were independent that share a cause, such as the same cloud, account or person",
+      "A failure that appears in the logs of two systems"
+    ],
+    answer: 1,
+    explain: "Two vendors that share a cloud do not protect you from that cloud. Independence is harder to establish than it looks."
+  },
+  {
+    q: "Why does a backup held by the same vendor as the data give limited protection?",
+    options: [
+      "Same-vendor backups are always corrupted",
+      "It protects against a mistake but fails together with the vendor, so a copy elsewhere is needed",
+      "Vendors do not allow restoring their own backups"
+    ],
+    answer: 1,
+    explain: "A copy under a different account, ideally a different provider, is among the cheapest reductions available."
+  },
+  {
+    q: "Why write exit triggers in advance?",
+    options: [
+      "Regulators require them",
+      "Otherwise the decision is made in the middle of a failure with the least information and the most pressure",
+      "Triggers make leaving automatic"
+    ],
+    answer: 1,
+    explain: "The point is not that you will leave when one occurs, but that the question gets asked on a schedule you chose."
+  }
+]} />
+
+## Recap
+
+Concentration is convenient and makes one failure into every failure. It hides in one
+vendor doing many jobs, one cloud under several vendors, one account, one person and one
+provider's goodwill. Reducing it costs effort, so spread the catastrophic and cheap risks:
+backups elsewhere, a second administrator, recoverable credentials, content you hold and a
+runbook. Write exit triggers in advance with owners, and run the whole module as an annual
+review. Lrnon's list of six missing pieces is short, cheap to start, and now written down.

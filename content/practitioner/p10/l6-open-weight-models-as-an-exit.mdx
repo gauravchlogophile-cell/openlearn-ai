@@ -1,0 +1,187 @@
+---
+title: "Open-weight models as an exit"
+description: "Models you can download and run yourself remove one kind of vendor risk and add others. What you gain, what you take on, and when it is a real option."
+track: practitioner
+module: p10
+order: 6
+minutes: 9
+objectives:
+  - "Describe what running an open-weight model removes and what it adds"
+  - "Judge honestly whether it is a real exit for a given project"
+concepts: ["open-weight", "self-hosting", "licence terms", "operational burden"]
+tools: ["llama", "mistral", "qwen", "deepseek"]
+flashcards:
+  - front: "What does open-weight mean?"
+    back: "The trained model files can be downloaded and run on your own hardware. It is not the same as open source: licences differ, and some restrict use. Read the one that applies."
+  - front: "What does running your own model remove?"
+    back: "Per-token provider terms, silent model changes, regional refusals and the data leaving your hands. You choose the version and it stays put until you change it."
+  - front: "What does it add?"
+    back: "Hardware and hosting cost, operations, updates, security, evaluation, and responsibility for the safeguards the provider used to supply. For a small team the burden is often the deciding factor."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+The most thorough answer to depending on a model provider is to depend on none: run a
+model you control. Explorer E2·L11 introduced the open-weight and regional assistants; this
+lesson asks what they mean as an exit.
+
+The short version is that it removes one set of risks, adds another, and is a genuine option
+for some projects and a distraction for most.
+
+## What the term means
+
+An **open-weight** model is one whose trained parameters, the weights, are published so
+that anyone can download and run it. The registry describes several. Meta's Llama family is
+downloadable and runnable on your own hardware. Mistral publishes both open-weight and
+hosted models, with data residency options for European users. Qwen is Alibaba's
+open-weight family, notable for coverage of several Asian languages that other models
+handle less well. DeepSeek publishes open-weight models with strong reasoning at markedly
+lower cost than the large hosted services, usable through its own API or self-hosted.
+
+Two cautions about the word.
+
+**Open-weight is not necessarily open source.** The weights may be downloadable under a
+licence that limits who may use them, for what, at what scale, or with which conditions
+attached. Licences differ between families and between versions. Read the one that applies
+to what you intend.
+
+**A model hosted by someone else is not self-hosted.** Many open-weight models are offered
+through third-party hosts. That is a different arrangement with its own terms, and P8·L4
+applies to it as to any provider.
+
+## What it removes
+
+Running the model yourself changes the picture in L2 considerably.
+
+**Terms that can change under you.** There is no provider to revise the price, retire the
+model or alter the data terms. The files you have are the files you have.
+
+**Silent model changes.** Nothing moves an alias. You choose the version and it stays put
+until you decide otherwise, which removes a whole class of failure from P7·L6.
+
+**Regional refusal.** No service to decide your users' location is unsupported.
+
+**Data leaving your hands.** Prompts need not go to anyone else. For a project handling
+sensitive questions, or one whose learners include children in places where sending a child's
+question abroad is a real objection, that is significant.
+
+**Per-token cost.** You pay for hardware and electricity rather than by the token, which can
+be far cheaper at high volume and far dearer at low volume.
+
+## What it adds
+
+The list of what you take on is longer, and it is where small teams stop.
+
+**Hardware.** Models of useful size need serious compute, usually specialised processors,
+bought or rented. Running a model capable enough to be worth using is not a laptop task for
+most workloads.
+
+**Operations.** You run a service: availability, scaling, restarts, monitoring, upgrades.
+Everything in P7 now applies to infrastructure you own.
+
+**Updates.** Models improve, and staying current means evaluating and moving versions
+yourself.
+
+**Security.** You are responsible for patching, access control and the model files.
+
+**Evaluation.** You decide whether the model is good enough, with your own test set. There is
+nobody to say it is.
+
+**Safeguards.** Hosted providers add filtering, abuse monitoring and refusal behaviour. Run
+it yourself and those are your responsibility, which matters when children are among the
+users.
+
+**Capability.** Open models vary and, depending on the task and the date, may lag the best
+hosted ones. Measure on your own cases and do not assume.
+
+**Licence and jurisdiction.** Some organisations and governments restrict the use of
+particular providers or models. Check the rules that apply to you.
+
+## Is it a real exit?
+
+Be honest about scale and staffing.
+
+**It is a real exit when** the volume is high enough to justify the cost, you already have
+people who run infrastructure, the data is sensitive enough that sending it out is the
+problem, or the regions you serve are poorly covered by hosted providers.
+
+**It is mostly a distraction when** you are small, have one maintainer, and the realistic
+alternative is another hosted provider with similar terms.
+
+For most small projects, the practical position is a **hybrid**: keep the code able to point
+at a model you host, as an option, without hosting one today. That preserves the choice at
+the price of a configuration setting.
+
+## Lrnon's position
+
+The assistant's adapter can reach any server that speaks the common chat-completions shape,
+by changing a base address, and its header names self-hosting as one reason. So the door is
+open in the code.
+
+Nobody has gone through it. No self-hosted model has been run behind the adapter, no
+evaluation has been done on one, and no one on the project operates inference hardware. With
+a single maintainer and a free-tier budget, running its own model is not a realistic near-term
+exit.
+
+That is a fair thing to say. It is an option that is preserved cheaply and not a plan, and
+the distinction matters.
+
+## Try it now (20 minutes)
+
+For a workflow of yours, answer six questions in writing.
+
+1. What volume do we run, and what would hosting cost at that volume?
+2. Who would operate it, and what happens when they are away?
+3. What is the licence of the model we would use, and does it permit our use?
+4. How would we evaluate it against our test set?
+5. What safeguards does the provider supply that we would now owe?
+6. Is the realistic alternative another hosted provider?
+
+If the answers make self-hosting unrealistic today, write down what would have to change,
+such as volume, a second operator or a data restriction. That is a trigger worth recording.
+
+<Quiz client:visible items={[
+  {
+    q: "Is an open-weight model the same as open source?",
+    options: [
+      "Yes, open-weight models are always open source",
+      "No, the weights are downloadable but the licence may limit who can use them and how",
+      "Only for models from European labs"
+    ],
+    answer: 1,
+    explain: "Licences differ between families and versions. Read the one that applies to what you intend."
+  },
+  {
+    q: "Which risk does running your own model remove?",
+    options: [
+      "Hardware cost",
+      "A provider silently changing or retiring the model, or refusing your region",
+      "The need for evaluation"
+    ],
+    answer: 1,
+    explain: "You choose the version and it stays put. You also take on hardware, operations, updates, security, evaluation and the safeguards the provider used to supply."
+  },
+  {
+    q: "What is the practical position for a small project with one maintainer?",
+    options: [
+      "Self-host immediately to avoid vendor risk",
+      "Keep the code able to point at a model you host, as an option, without hosting one today",
+      "Avoid hosted models entirely"
+    ],
+    answer: 1,
+    explain: "The door is preserved at the cost of a configuration setting. It is an option rather than a plan, and the distinction matters."
+  }
+]} />
+
+## Recap
+
+Open-weight models can be downloaded and run yourself, though licences vary and open-weight
+is not the same as open source. Running one removes per-token provider terms, silent model
+changes, regional refusals and data leaving your hands. It adds hardware, operations,
+updates, security, evaluation and the safeguards a provider used to supply, which is where
+small teams stop. It is a real exit at scale or with sensitive data and a distraction for a
+small team, for whom the sensible position is to preserve the option in code without
+hosting anything today.

@@ -1,0 +1,184 @@
+---
+title: "An exit you could take"
+description: "An exit plan that has never been run is a hope. Write the steps, rehearse them on a small slice, time it, and record what broke."
+track: practitioner
+module: p10
+order: 4
+minutes: 9
+objectives:
+  - "Write an exit plan with steps, owners and a time estimate"
+  - "Rehearse it on a small slice and use the result to correct the plan"
+concepts: ["exit plan", "rehearsal", "restore test", "migration"]
+flashcards:
+  - front: "Why is an unrehearsed exit plan only a hope?"
+    back: "Plans fail at the details: the export that omits a field, the restore that works only with a setting nobody wrote down. A rehearsal finds them while it is cheap."
+  - front: "What does a rehearsal need?"
+    back: "A small, real slice of the data and work; the steps run in order by someone who did not write them; a stopwatch; and a note of every point where it surprised you."
+  - front: "What is the relationship between backups and exits?"
+    back: "A backup you have never restored is not yet a backup. Both claims, 'we can restore' and 'we can leave', are proven only by doing it."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+L3 told you what leaving would cost. This lesson is about whether you could do it, which is
+a different claim and a much harder one to support.
+
+A sentence like *"we could move to another provider if we had to"* is very easy to say
+and almost never tested. When it is tested for the first time under pressure, because the
+vendor has gone, it fails in places nobody anticipated.
+
+## The plan on one page
+
+Write it before you need it, as a short sequence of steps.
+
+> **1. Trigger.** What would make us leave? (L8)
+>
+> **2. Choose** the destination. What are the candidates, and what did we check?
+>
+> **3. Export** everything that matters from the current place, in a form something else
+> can read.
+>
+> **4. Rebuild** in the new place from that export.
+>
+> **5. Verify.** How do we know it matches?
+>
+> **6. Switch.** Move the traffic, the addresses, the credentials.
+>
+> **7. Retire** the old place cleanly (P5·L8).
+
+For each step: who does it, what they need, and how long it would take.
+
+The steps are obvious. The value is in the detail under each: where the export actually is,
+what format it comes in, which credentials are needed, and who holds them.
+
+## Plans fail at details
+
+Walk through what typically goes wrong when a plan meets reality.
+
+**The export is incomplete.** It includes the main tables and omits the settings, the
+users' hashed identifiers, the attachments or the permissions. You discover it after the
+old system is gone.
+
+**The format does not import.** It exports one way and the destination expects another, and
+the conversion loses something quietly.
+
+**A dependency you forgot.** Something reads from the old place that nobody remembered:
+an integration, a scheduled job, a link in an email.
+
+**The credentials are with someone else.** The only person who can approve the export is
+away, or left.
+
+**It takes ten times longer than estimated.** The estimate was the optimistic path.
+
+None of these appears in a plan written from memory. All of them appear in a rehearsal.
+
+## Rehearse on a small slice
+
+A rehearsal is a controlled attempt at the real thing, on something small.
+
+**Choose a slice that is real.** A single table, one small project, a hundred records.
+Not invented data, which hides the awkward cases real data contains.
+
+**Have someone who did not write the plan run it,** following only the written steps. The
+author fills in gaps from memory without noticing.
+
+**Time every step.** The honest durations are what make the plan credible.
+
+**Write down every surprise,** however small: a missing field, an unexpected prompt, a
+credential nobody had. Each is a correction to the plan.
+
+**Verify the result against the original.** Counts match, a sample of records is
+identical, the important behaviours work.
+
+You do not need to complete the move. Reaching step five on a slice gives you most of the
+information.
+
+## Backups and exits are the same claim
+
+A backup you have never restored is not yet a backup. It is a file that you believe
+contains your data.
+
+The parallel with exits is exact. *"We have backups"* and *"we could leave"* are both
+statements whose truth is established only by doing the thing. Restoring a backup to a
+scratch location is the cheapest rehearsal there is, and it exercises half of an exit
+plan: the export and the rebuild.
+
+Do it on a schedule. Once a year is a minimum; after any significant change is better.
+
+## Keep it small enough to be done
+
+An exit plan so elaborate that no one will run it is no use.
+
+Aim for a document short enough that someone under stress will follow it, with a
+rehearsal short enough that you will repeat it. A half-day exercise each year that
+actually happens is worth more than a thorough one that is planned and never held.
+
+## Where Lrnon stands
+
+Stated plainly: on this project's record, no exit from any dependency has been rehearsed.
+
+There are strengths. The content is in a repository as plain text. The schema is rebuilt by
+migrations that run as a test suite. The model provider can be changed by configuration,
+though only one of the three supported shapes has been run against a live provider here.
+
+Those are the ingredients of an exit and not the exit. Nobody has timed a rebuild of the
+database elsewhere, restored a backup into a scratch project, or tried the model adapter
+against a second provider. The honest status is that the plan could be written quickly and
+has not been tested at all.
+
+## Try it now (half a day, once)
+
+Pick one dependency. Write the seven-step plan on a page, with an owner and a time estimate
+for each step.
+
+Then rehearse steps three to five on a small slice. Time it, note every surprise, and
+correct the plan.
+
+If you do nothing else this year, restore a backup into a scratch location and check that
+it matches.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is an exit plan that has never been run only a hope?",
+    options: [
+      "Plans are always out of date",
+      "Plans fail at details, such as an incomplete export or a forgotten dependency, that only a rehearsal finds",
+      "Vendors change their export formats weekly"
+    ],
+    answer: 1,
+    explain: "A rehearsal finds the surprises while they are cheap. Run by someone who did not write the plan, it also finds the gaps the author fills in from memory."
+  },
+  {
+    q: "What makes a rehearsal more useful than reading through the plan?",
+    options: [
+      "It is quicker to complete",
+      "A real slice, run in order by someone else with a stopwatch, reveals the gaps and the true durations",
+      "It requires fewer people"
+    ],
+    answer: 1,
+    explain: "Write down every surprise. Each is a correction to the plan, and reaching the verification step on a slice gives you most of the information."
+  },
+  {
+    q: "What is the relationship between a backup and an exit plan?",
+    options: [
+      "They are unrelated",
+      "Both are claims proven only by doing them, and restoring a backup rehearses half of an exit",
+      "A backup replaces the need for an exit plan"
+    ],
+    answer: 1,
+    explain: "A backup you have never restored is a file you believe contains your data. Restoring to a scratch location is the cheapest rehearsal there is."
+  }
+]} />
+
+## Recap
+
+An exit plan is a one-page sequence of trigger, destination, export, rebuild, verify, switch
+and retire, each with an owner and a time. Plans fail at details such as incomplete exports,
+unconvertible formats, forgotten dependencies and inaccessible credentials, which only a
+rehearsal finds. Rehearse on a small real slice, run by someone who did not write the plan,
+timed and annotated with every surprise. A backup you have never restored and an exit you
+have never rehearsed are the same kind of claim. Lrnon has the ingredients and has not
+tested any of it.

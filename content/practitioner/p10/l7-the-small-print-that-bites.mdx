@@ -1,0 +1,182 @@
+---
+title: "The small print that bites"
+description: "Notice periods, data return, suspension rights, liability caps and sub-processors. Read the terms that matter before you depend on them, and date what you read."
+track: practitioner
+module: p10
+order: 7
+minutes: 9
+objectives:
+  - "Know which terms of a vendor agreement decide whether you can leave or recover"
+  - "Record what you read and when, so a later change is visible"
+concepts: ["termination", "data return", "service levels", "liability cap", "suspension"]
+flashcards:
+  - front: "Which terms decide whether you can leave?"
+    back: "Termination and notice, what happens to your data afterwards and how you get it back, minimum terms and fees, and what the vendor may change without asking."
+  - front: "What does a liability cap usually mean?"
+    back: "That if the vendor's failure costs you a lot, what you can recover is limited, often to what you paid. For a free service that can be very little."
+  - front: "Why date what you read?"
+    back: "Terms change. A dated note of what they said and what plan you were on lets you see later what moved, and shows you did check when someone asks."
+lastVerified: "2026-10-15"
+contributors: ["core-team"]
+licence: "CC-BY-SA-4.0"
+---
+
+import Quiz from '../../../src/components/Quiz.tsx';
+
+Nobody reads terms of service for pleasure, and most agreements are written to be
+unreadable. That is exactly why the handful of clauses that decide whether you can recover
+from a problem are worth finding in advance.
+
+This is general information and not legal advice. For anything that matters commercially,
+have someone qualified read the actual agreement. The aim here is to know what to look for.
+
+## Eight clauses worth finding
+
+### 1. Termination, and by whom
+
+Can they end it? On what notice? For what reasons? An agreement that lets the vendor end
+the relationship immediately, for any reason, describes a very different risk from one with
+ninety days' notice and a stated cause.
+
+### 2. Notice of change
+
+How will you be told about changes to the terms, the price or the service, and how much
+notice do you get? "We may update these terms at any time" with notice only by posting on
+a page is the weak end.
+
+### 3. Your data when it ends
+
+What happens to your data if you leave or are removed: can you export it, in what form, for
+how long afterwards, and when is it deleted? This is where an exit plan (L4) succeeds or
+fails.
+
+### 4. Suspension
+
+On what grounds can they suspend your account, with or without warning, and is there an
+appeal? Automated systems make suspensions fast and reversals slow, and a suspended account
+cannot export anything.
+
+### 5. Service levels
+
+Is there any commitment on availability, and what is the remedy if it is missed? Often the
+remedy is a small credit against future fees, and often a free tier has no commitment at all.
+
+### 6. Liability
+
+Almost every agreement caps what the vendor owes you if they fail. The cap is commonly tied
+to what you paid, which for a free service can be nothing or very little. Know it, and
+assume that a serious failure will cost you more than you can recover.
+
+### 7. Sub-processors and where data goes
+
+Which other companies handle your data on the vendor's behalf, and in which countries? P8·L4
+covered why this matters for personal data, and the terms are where the list lives.
+
+### 8. What they may do with what you send
+
+The data-use terms, which P8·L4 went through for a model provider. Training, human review,
+retention and the difference between plans.
+
+## Free and paid read differently
+
+The same vendor can offer a free tier and a paid one under quite different terms.
+
+Free usually means weaker commitments across the board: no service level, easier
+suspension, and different data use. If you depend on something, check which set of terms
+you are actually under, and whether upgrading changes the answer to the questions above. It
+sometimes costs little relative to the risk it removes.
+
+## Keep a dated note
+
+For each vendor that matters, keep a one-page record.
+
+> **Vendor, product, and plan.**
+> **Date read, and the version or URL of the terms.**
+> **The answers to the eight questions,** in a line each.
+> **What you do not know.**
+
+Why dated? Terms change, and a later dispute or doubt becomes simple to settle when you can
+say *"on 15 October the terms said this, and we were on this plan."* It also shows you
+checked, which is worth something if anyone later asks.
+
+Set a reminder to re-read yearly and whenever the vendor announces changes.
+
+## Accounts and the single administrator
+
+One more practical risk lives in the small print's neighbourhood: who the account belongs to.
+
+A vendor account registered to one person's personal email, with that person's phone as the
+recovery route and their card on file, is a dependency on that person. If they are
+unreachable, leave, or lose access to the email, so does the account.
+
+**Have a second administrator** where the vendor allows it. **Use a role-based address**
+for the account and billing contact, not a person's. **Know the recovery process** before
+you need it, and what it requires: sometimes a document, sometimes a long wait.
+
+## Where Lrnon sits
+
+Applied to the project, honestly, and with the limits of what has been read.
+
+When checked on 4 September 2026, the database organisation was on the provider's free plan.
+That is a reasonable choice and means whatever service commitments exist are those of a free
+tier, which this lesson would describe as weak and which nobody on the project has read in
+detail. The model provider's quota behaved like a free tier too, and its terms for that tier
+are the ones P8·L4 quotes.
+
+The project has one person holding the accounts. That is the same risk as a single
+administrator, at the scale of the whole project, and the cheapest mitigations, a role-based
+contact address and written recovery steps, are worth doing before they are needed.
+
+None of the eight clauses has been recorded in a dated note for any of Lrnon's vendors. That
+is the first job this lesson produces.
+
+## Try it now (30 minutes)
+
+Choose the vendor whose loss would hurt most. Find its terms and answer the eight questions
+in a line each, noting where you could not find the answer.
+
+Write the date and the plan at the top. Then check who owns the account, who the recovery
+contact is, and whether a second administrator exists.
+
+<Quiz client:visible items={[
+  {
+    q: "Why is the clause on data when the relationship ends so important?",
+    options: [
+      "It determines the price of leaving",
+      "It decides whether an exit plan can succeed: whether you can export, in what form, and for how long",
+      "It controls which country's law applies"
+    ],
+    answer: 1,
+    explain: "Also check suspension grounds: a suspended account cannot export anything."
+  },
+  {
+    q: "What does a liability cap usually mean for a free service?",
+    options: [
+      "The vendor pays for any loss in full",
+      "What you can recover is limited, often to what you paid, which may be very little",
+      "The cap is waived for free services"
+    ],
+    answer: 1,
+    explain: "Assume that a serious failure will cost you more than you can recover."
+  },
+  {
+    q: "Why is an account registered to one person's email and phone a dependency?",
+    options: [
+      "Personal email is less secure",
+      "If that person is unreachable or leaves, the account and its recovery route go with them",
+      "Vendors charge more for personal accounts"
+    ],
+    answer: 1,
+    explain: "Use a role-based contact address, have a second administrator, and know the recovery process before you need it."
+  }
+]} />
+
+## Recap
+
+This is general information, not legal advice. Find eight clauses before depending on a
+vendor: termination, notice of change, your data when it ends, suspension, service levels,
+liability, sub-processors, and what they may do with what you send. Free and paid tiers
+usually read differently, and free means weaker commitments across the board. Keep a dated
+one-page note per vendor, re-read it yearly, and make sure the account has a second
+administrator, a role-based contact and a recovery path that does not run through one
+person.
