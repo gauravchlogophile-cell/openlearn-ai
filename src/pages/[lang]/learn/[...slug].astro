@@ -1,0 +1,59 @@
+---
+/** A translated lesson, at /<lang>/learn/<same slug as the English>.
+ *
+ *  A page exists here only for a translation that passes liveStatus(): marked reviewed,
+ *  by a named person, on a date, and made from the English as it stands now. A draft, or a
+ *  translation whose English has since changed, has no page at all: it is not hidden, it
+ *  is not built. That is the rule the owner set on 16 October 2026. */
+import Base from '../../../layouts/Base.astro';
+import LessonView from '../../../components/LessonView.astro';
+import meta from '../../../../content/modules.json';
+import enUi from '../../../i18n/ui/en.json';
+import { getCollection, getEntry, render } from 'astro:content';
+import { LOCALES } from '../../../i18n/locales.js';
+import { getState, liveVersionsOf } from '../../../i18n/live.js';
+
+export async function getStaticPaths() {
+  const state = getState();
+  const paths = [];
+  for (const tr of await getCollection('translations')) {
+    const lang = tr.data.lang;
+    const verdict = state.languages[lang]?.lessons.find((x: any) => x.id === tr.data.translationOf);
+    if (!verdict?.live) continue;                                  // draft, stale or orphaned: no page
+    const english = await getEntry('lessons', tr.data.translationOf);
+    if (!english) continue;
+    paths.push({ params: { lang, slug: english.id }, props: { tr, english } });
+  }
+  return paths;
+}
+
+const { tr, english } = Astro.props;
+const lang = tr.data.lang as string;
+const locale = LOCALES.find((l) => l.code === lang)!;
+const state = getState();
+const catalogue = state.languages[lang].ui.live ? (state.languages[lang].catalogue as Record<string, string>) : {};
+const t = (key: string) => catalogue[key] || (enUi as Record<string, string>)[key] || key;
+
+const { Content } = await render(tr);
+const all = (await getCollection('lessons'))
+  .filter((l) => l.data.module === english.data.module)
+  .sort((a, b) => a.data.order - b.data.order);
+const inLang = new Set(all.filter((l) => liveVersionsOf(l.id).includes(lang)).map((l) => l.id));
+const quizBanks = import.meta.glob('../../../../content/quizzes/*.json', { eager: true });
+const hasQuiz = Object.values(quizBanks).some((b: any) => b.default.module === english.data.module);
+const verdict = state.languages[lang].lessons.find((x: any) => x.id === english.id)!;
+
+const versions = liveVersionsOf(english.id).map((code) => {
+  const l = LOCALES.find((x) => x.code === code)!;
+  return { code, native: l.native, htmlLang: l.htmlLang, href: `/${code}/learn/${english.id}` };
+});
+const alternates = [{ code: 'en', native: 'English', htmlLang: 'en', href: `/learn/${english.id}` }, ...versions];
+---
+<Base title={tr.data.title + ' — Lrnon'} description={tr.data.description} lang={lang} ui={catalogue} alternates={alternates}>
+  <LessonView lesson={english} tr={tr} Content={Content} lang={lang} prefix={`/${lang}`} t={t} all={all} inLang={inLang}
+    alternates={alternates}
+    modMeta={meta.modules.find((m) => m.id === english.data.module)}
+    trackMeta={meta.tracks.find((x) => x.id === english.data.track)}
+    quizHref={hasQuiz ? '/quiz/' + english.data.module : undefined}
+    languageName={locale.native} reviewer={verdict.reviewedBy} reviewedOn={verdict.reviewedOn} />
+</Base>

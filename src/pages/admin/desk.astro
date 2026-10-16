@@ -1,0 +1,11 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import AdminGate from '../../components/AdminGate.tsx';
+import AdminDesk from '../../components/AdminDesk.tsx';
+---
+<Admin title="My desk — Lrnon admin" heading="My desk"
+  description="What your role covers, what it does not, and where to do the work.">
+  <AdminGate client:load allow="staff">
+    <AdminDesk client:load />
+  </AdminGate>
+</Admin>

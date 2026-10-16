@@ -1,0 +1,31 @@
+/* Type for the scripts Lrnon is translated into.
+ *
+ * No web fonts: each of these is already on the reader's device (Nirmala UI on Windows
+ * covers every Indic script here, the Apple and Android system fonts cover the rest),
+ * which keeps the page fast, offline-ready and inside the content-security policy
+ * (font-src 'self'). The stacks only choose; they download nothing.
+ *
+ * Indic and Arabic scripts carry marks above and below the line, so they need more
+ * height than Latin to stay readable. That is the one thing set here besides the family.
+ * The reader's own text-size and spacing settings still apply on top.
+ */
+:lang(hi), :lang(mr) { font-family: "Nirmala UI", "Noto Sans Devanagari", "Kohinoor Devanagari", "Devanagari Sangam MN", Mangal, var(--font-body); }
+:lang(bn) { font-family: "Nirmala UI", "Noto Sans Bengali", "Kohinoor Bangla", "Bangla Sangam MN", Vrinda, var(--font-body); }
+:lang(ta) { font-family: "Nirmala UI", "Noto Sans Tamil", "Tamil Sangam MN", Latha, var(--font-body); }
+:lang(te) { font-family: "Nirmala UI", "Noto Sans Telugu", "Kohinoor Telugu", "Telugu Sangam MN", Gautami, var(--font-body); }
+:lang(ar) { font-family: "Segoe UI", "Noto Sans Arabic", "Geeza Pro", Tahoma, var(--font-body); }
+:lang(zh) { font-family: "Microsoft YaHei", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", var(--font-body); }
+
+:lang(hi) .prose, :lang(mr) .prose, :lang(bn) .prose, :lang(ta) .prose, :lang(te) .prose,
+.prose:lang(hi), .prose:lang(mr), .prose:lang(bn), .prose:lang(ta), .prose:lang(te) { line-height: 1.85; }
+.prose:lang(ar) { line-height: 1.9; }
+.prose:lang(zh) { line-height: 1.8; }
+
+/* The dyslexia-friendly setting changes the Latin face; it has nothing for these scripts, so
+   it must not override them with a Latin-only font and fall back to something arbitrary. */
+:root[data-font="dyslexia"] :lang(hi), :root[data-font="dyslexia"] :lang(mr), :root[data-font="dyslexia"] :lang(bn),
+:root[data-font="dyslexia"] :lang(ta), :root[data-font="dyslexia"] :lang(te), :root[data-font="dyslexia"] :lang(ar),
+:root[data-font="dyslexia"] :lang(zh) { letter-spacing: 0; word-spacing: 0.08em; }
+
+/* Right-to-left pages: arrows that mean "back" and "forward" point the other way. */
+[dir="rtl"] .btn { text-align: center; }

@@ -23,6 +23,8 @@
 /* ---- the box: exactly the size of the button; everything else hangs off it ---- */
 .skyb {
   position: fixed; right: var(--sp-4); bottom: var(--sp-4); z-index: 40;
+  /* On an iPhone the home bar and the notch sit inside the viewport; keep clear. */
+  right: max(var(--sp-4), env(safe-area-inset-right)); bottom: max(var(--sp-4), env(safe-area-inset-bottom));
   width: max-content; max-width: calc(100vw - var(--sp-4));
 }
 .skyb.is-dragging { user-select: none; }
@@ -95,8 +97,8 @@
 /* ---- the panel ---- */
 .skyb-panel {
   position: absolute; width: min(404px, calc(100vw - var(--sp-8)));
-  max-height: min(78vh, 680px);
-  display: flex; flex-direction: column; overflow: hidden;
+  max-height: min(78vh, 680px); max-height: min(78dvh, 680px);
+  display: flex; flex-direction: column; overflow: hidden; box-sizing: border-box;
   background: var(--c-surface); color: var(--c-ink);
   border: 2px solid var(--c-sky-line); border-radius: 24px;
   box-shadow: 0 16px 40px rgba(0, 0, 0, 0.18);
@@ -115,7 +117,12 @@
   background: var(--c-surface); color: var(--c-ink); font: inherit; cursor: pointer;
 }
 .skyb-iconbtn:hover { border-color: var(--c-sky); }
-.skyb-body { padding: var(--sp-4); overflow-y: auto; display: grid; gap: var(--sp-4); align-content: start; }
+/* minmax(0, 1fr) matters: a bare grid column is "auto", which lets one long word or
+   wide row stretch the whole column past the panel, and the reader then has to
+   slide the panel sideways to read it. Everything wraps instead. */
+.skyb-body { padding: var(--sp-4); overflow-y: auto; overflow-x: hidden; display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--sp-4); align-content: start; min-height: 0; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+.skyb-body > *, .skyb-panel * { min-width: 0; overflow-wrap: anywhere; }
+.skyb-panel img, .skyb-panel video { max-width: 100%; }
 .skyb-link { background: none; border: 0; padding: 0; font: inherit; color: var(--c-primary); text-decoration: underline; cursor: pointer; }
 
 /* Sky's words: left-aligned, never justified, nothing in capitals or italics. */
@@ -189,7 +196,7 @@ a.skyb-row:hover, button.skyb-row:hover { border-color: var(--c-sky); transform:
 .skyb-row small { display: block; color: var(--c-ink-soft); font-size: var(--fs-100); }
 .skyb-row[aria-disabled="true"] { cursor: default; color: var(--c-ink-soft); border-style: dashed; }
 li.skyb-row { cursor: default; }
-.skyb-two { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
+.skyb-two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-2); }
 
 /* ---- the numbers strip, meters, facts ---- */
 .skyb-hud { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
@@ -197,7 +204,7 @@ li.skyb-row { cursor: default; }
 .skyb-chip--wide { gap: var(--sp-2); }
 .skyb-meter { display: inline-block; height: 10px; min-width: 60px; flex: 1; border-radius: 999px; background: var(--c-surface-2); border: 1px solid var(--c-border); overflow: hidden; }
 .skyb-meter > i { display: block; height: 100%; background: var(--c-sky); }
-.skyb-facts { display: grid; grid-template-columns: 1fr auto; gap: var(--sp-2) var(--sp-4); margin: 0; }
+.skyb-facts { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--sp-2) var(--sp-4); margin: 0; }
 .skyb-facts dt { color: var(--c-ink-soft); }
 .skyb-facts dd { margin: 0; font-weight: 700; text-align: end; }
 
@@ -226,7 +233,7 @@ li.skyb-row { cursor: default; }
 .skyb-tabs button { min-height: 40px; padding: 0 var(--sp-4); border-radius: 999px; border: 1px solid transparent; background: transparent; color: var(--c-ink-soft); font: inherit; cursor: pointer; }
 .skyb-tabs button.on { border-color: var(--c-border-strong); background: var(--c-surface-2); color: var(--c-ink); font-weight: 700; }
 .skyb-board { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-2); }
-.skyb-board li { display: grid; grid-template-columns: 34px 1fr auto; align-items: center; gap: var(--sp-3); padding: var(--sp-2) var(--sp-3); border: 1px solid var(--c-border); border-radius: 14px; }
+.skyb-board li { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: var(--sp-3); padding: var(--sp-2) var(--sp-3); border: 1px solid var(--c-border); border-radius: 14px; }
 .skyb-board li.me { border-color: var(--c-sky); background: var(--c-sky-tint); }
 .skyb-board li.pal { border-style: dashed; }
 .skyb-rank { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--c-surface-2); font-weight: 700; font-size: var(--fs-100); }
@@ -235,7 +242,7 @@ li.skyb-row { cursor: default; }
 
 /* ---- badges: the ones you have float on their own beat ---- */
 .skyb-badges { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--sp-2); }
-.skyb-badges li { display: grid; grid-template-columns: 44px 1fr; align-items: center; gap: var(--sp-3); padding: var(--sp-2) var(--sp-3); border: 1px dashed var(--c-border-strong); border-radius: 16px; color: var(--c-ink-soft); }
+.skyb-badges li { display: grid; grid-template-columns: 44px minmax(0, 1fr); align-items: center; gap: var(--sp-3); padding: var(--sp-2) var(--sp-3); border: 1px dashed var(--c-border-strong); border-radius: 16px; color: var(--c-ink-soft); }
 .skyb-badges li.have { border: 2px solid var(--c-sky); background: var(--c-sky-tint); color: var(--c-ink); animation: skyb-drift var(--d, 6s) ease-in-out var(--delay, 0s) infinite; }
 .skyb-badge-medal { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--c-surface-2); color: var(--c-ink-soft); }
 .skyb-badges li.have .skyb-badge-medal { background: var(--c-sky); color: var(--c-sky-ink); }
@@ -251,7 +258,7 @@ li.skyb-row { cursor: default; }
 .skyb-radio { display: flex; gap: var(--sp-3); align-items: flex-start; min-height: 44px; cursor: pointer; }
 .skyb-radio input { margin-top: 6px; width: 20px; height: 20px; accent-color: var(--c-sky); }
 .skyb-radio small { display: block; color: var(--c-ink-soft); font-size: var(--fs-100); }
-.skyb-corners { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-2); }
+.skyb-corners { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--sp-2); }
 
 .skyb-input { flex: 1; min-height: 44px; padding: var(--sp-2) var(--sp-3); font: inherit; border: 1px solid var(--c-border-strong); border-radius: 14px; background: var(--c-bg); color: var(--c-ink); }
 .skyb-foot { margin: 0; padding: 0 var(--sp-4) var(--sp-3); font-size: var(--fs-100); color: var(--c-ink-soft); }
@@ -259,7 +266,18 @@ li.skyb-row { cursor: default; }
 /* Phones and small tablets: the panel is a sheet from the bottom, wherever the
    button has been put, so it can never open off the edge of the screen. */
 @media (max-width: 820px) {
-  .skyb-panel { position: fixed; inset: auto 0 0 0; width: auto; max-height: 86vh; border-radius: 24px 24px 0 0; border-bottom-width: 0; }
+  /* The four selectors are the point. The desktop rules above place the panel with
+     ".skyb--r .skyb-panel { right: 0 }" and ".skyb--low .skyb-panel { bottom: 100% }",
+     which are MORE specific than a bare ".skyb-panel", so on a phone they won and
+     "bottom: 100%" of a fixed element is 100% of the screen: the sheet opened a
+     whole screen above the top edge and Sky seemed to vanish when tapped. Naming
+     the same classes here puts the sheet back at the bottom of the screen. */
+  .skyb .skyb-panel, .skyb--r .skyb-panel, .skyb--l .skyb-panel, .skyb--low .skyb-panel, .skyb--high .skyb-panel {
+    position: fixed; inset: auto 0 0 0; width: auto; max-width: none;
+    max-height: 86vh; max-height: 86dvh;
+    border-radius: 24px 24px 0 0; border-bottom-width: 0;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
   .skyb--open .skyb-fab, .skyb--open .skyb-nudge-wrap { display: none; }
 }
 

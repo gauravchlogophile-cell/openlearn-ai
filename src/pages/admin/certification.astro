@@ -34,7 +34,7 @@ const remaining = gates.filter((g) => !g.done).length;
 ---
 <Admin title="Certification — Lrnon admin" heading="Certification"
   description="Issuance queue, reviewer banding, and the revocation path. Issuing is automatic; revoking is not.">
-  <AdminGate client:load>
+  <AdminGate client:load allow={['reviewer']}>
 
     <div class="note note--aim">
       <strong>Certification is closed on every module.</strong>

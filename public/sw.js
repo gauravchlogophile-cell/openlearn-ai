@@ -15,7 +15,10 @@
    footer and landing page changed with the funding policy, and sky.css and the
    Sky colour tokens joined the shell. A returning visitor holding the v8 shell
    would see the old dock and the old "no ads" footer until it refreshed. */
-const SHELL_V = 'ol-shell-v10';
+/* v12 — the header gained a language picker and translatable words, Sky gained sound and voice, the phone sheet was fixed. *//* v11 — pages open faster: navigation preload starts the page request while this
+   worker is still waking, and Sky's small avatar replaces a 37 KB picture that was
+   fetched on every page. The fab, the shell and the headers all changed. */
+const SHELL_V = 'ol-shell-v12';
 const ASSETS = 'ol-assets-v1';
 const SHELL_URLS = ['/', '/home', '/roadmap', '/achievements', '/account', '/offline'];
 
@@ -29,7 +32,8 @@ self.addEventListener('activate', (e) => {
   e.waitUntil(
     caches.keys().then((keys) => Promise.all(
       keys.filter((k) => k.startsWith('ol-shell-') && k !== SHELL_V).map((k) => caches.delete(k))
-    )).then(() => self.clients.claim())
+    )).then(() => (self.registration.navigationPreload ? self.registration.navigationPreload.enable() : undefined))
+      .then(() => self.clients.claim())
   );
 });
 
@@ -53,7 +57,7 @@ self.addEventListener('fetch', (e) => {
 
   // Pages: network-first, any-cache fallback (shell or module packs), then /offline
   e.respondWith(
-    fetch(req).then((res) => {
+    Promise.resolve(e.preloadResponse).then((pre) => pre || fetch(req)).then((res) => {
       const copy = res.clone();
       caches.open(SHELL_V).then((c) => { if (SHELL_URLS.includes(url.pathname)) c.put(req, copy); });
       return res;

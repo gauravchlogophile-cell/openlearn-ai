@@ -22,6 +22,15 @@ export default defineConfig({
     filter: (page) => !page.includes('/offline') && !page.includes('/admin'),
   })],
 
-  build: { inlineStylesheets: 'auto' },
+  /* Styles go inside the page. The stylesheet was a second request that had to finish
+     before anything could be drawn, which on a slow connection is a whole round trip
+     of staring at a blank page; inlined, the first byte of the page is enough. The
+     cost is about five kilobytes compressed per page. */
+  build: { inlineStylesheets: 'always' },
+
+  /* Pages are fetched when a link is hovered or focused, so the click that follows
+     opens one already on its way. Hover and focus only: nothing is downloaded for a
+     link nobody reached for, which matters on a metered connection. */
+  prefetch: { prefetchAll: true, defaultStrategy: 'hover' },
   adapter: cloudflare()
 });

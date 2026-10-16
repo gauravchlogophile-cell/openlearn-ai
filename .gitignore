@@ -28,3 +28,6 @@ validate-report.txt
 # Generated at build time from the lessons (scripts/build-buddy-index.mjs)
 public/buddy-index.json
 public/buddy/
+
+# Built by scripts/build-i18n.mjs
+public/i18n/

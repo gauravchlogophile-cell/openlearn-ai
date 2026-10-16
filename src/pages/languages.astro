@@ -1,0 +1,67 @@
+---
+import Base from '../layouts/Base.astro';
+import { LOCALES } from '../i18n/locales.js';
+import { getState } from '../i18n/live.js';
+import { isOffered } from '../i18n/state.js';
+
+/* What exists today, read from the repository at build time: a language is "available"
+   only if a person has reviewed something in it. Nothing here is a promise. */
+const st = getState();
+const rows = LOCALES.map((l) => {
+  const e = st.languages[l.code];
+  const started = e.counts.draft + e.counts.reviewed + e.counts.stale > 0 || e.ui.status !== 'missing';
+  return { ...l, offered: isOffered(e), lessons: e.counts.reviewed, ui: e.ui.live, started };
+});
+const total = st.english.length;
+const cell = 'padding:var(--sp-2) var(--sp-3);border-top:1px solid var(--c-border);';
+const head = 'text-align:start;padding:var(--sp-2) var(--sp-3);border-bottom:1px solid var(--c-border);';
+---
+<Base title="Languages — Lrnon"
+  description="Which languages Lrnon is being translated into, what has been checked by a person, and how to help.">
+  <section class="container prose" style="padding-block:var(--sp-12);">
+    <h1 style="font-size:var(--fs-500);">Languages</h1>
+    <p>Lrnon is written in English today. Twelve languages are being added, and the rule for adding them is simple:
+    <strong>a translation is shown to learners only after a person who reads that language has read it, line by line, and put their name to it.</strong>
+    A machine can write a first draft. It is never published as it is.</p>
+    <p>That rule is here because lessons carry dated claims about tools that change, and a translation that quietly turns "usually" into
+    "always", or 40 into 14, would teach something false with Lrnon's name on it. When the English changes, a translation made from the older
+    English comes off the site until it has been checked again, so it cannot go out of date without anyone noticing.</p>
+
+    <h2>Where each language stands</h2>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;min-width:34rem;">
+        <thead><tr>
+          <th scope="col" style={head}>Language</th>
+          <th scope="col" style={head}>Checked and available</th>
+          <th scope="col" style={head}>Menus</th>
+          <th scope="col" style={head}>Status</th>
+        </tr></thead>
+        <tbody>
+          {rows.map((r) => (
+            <tr>
+              <th scope="row" style={cell + 'text-align:start;font-weight:400;'}>
+                <span lang={r.htmlLang}>{r.native}</span> <span style="color:var(--c-ink-soft);">({r.name})</span>
+              </th>
+              <td style={cell}>{r.lessons} of {total} lessons</td>
+              <td style={cell}>{r.ui ? 'Checked' : 'English'}</td>
+              <td style={cell}>
+                {r.offered ? 'Available now' : r.started ? 'A draft exists and is waiting for a reviewer' : 'Needs a reviewer to start'}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+
+    <h2>What a translation covers</h2>
+    <p>The lesson text, its objectives and its flashcards, and the menus and footer. Tool names, product names, commands and code stay exactly as they are in English,
+    and so do the dates and sources, because those are the facts a lesson rests on. Every translated lesson links back to its English original, and if the two
+    ever disagree, the English is right.</p>
+    <p>Not yet translated: Sky, the quiz bank at the end of each module, and some buttons. They stay in English until they have been checked in your language too.</p>
+
+    <h2>Help check a language</h2>
+    <p>If you read a language on this list well, and you understand the subject well enough to notice when a sentence says something slightly different from the English,
+    you can be the person who checks it. It is a few lessons at a time, with your name on the lessons you check, and you can stop whenever you need to.</p>
+    <p><a class="btn" href="/volunteer">See volunteer roles</a></p>
+  </section>
+</Base>

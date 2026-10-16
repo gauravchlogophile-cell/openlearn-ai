@@ -1,12 +1,15 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { isConfigured, supabase } from '../lib/supabase';
+import { isConfigured, supabase, signedInHint } from '../lib/supabase';
 import { skyAudience, leastPermissive } from '../lib/sky-audience.js';
 import { SKY_MODE, SKY_LIMITS } from '../lib/sky-config';
 import {
   load, goalMode, srsSnapshot, skyPrefs, setSkyPref, SKY_PREF_DEFAULTS, skyStore, patchSkyStore, type SkyPrefs,
 } from '../lib/progress-store';
 import { companionContext, companionSays, progressFacts, dailyBoost, STREAK_MILESTONES, breaksToneRule } from '../lib/sky-buddy.js';
-import { effectiveFx, cheerPlan, pickCheer, playChime, motionAllowed, FX_LIMITS } from '../lib/sky-fx.js';
+import { effectiveFx, cheerPlan, pickCheer, playChime, skyChirp, unlockAudio, motionAllowed, FX_LIMITS } from '../lib/sky-fx.js';
+import { speakAsSky, stopSky, SKY_SAMPLE } from '../lib/sky-voice.js';
+import { groupVoices, labelFor } from '../lib/voices.js';
+import { useVoices } from './useVoices';
 import { loadIndex, type BuddyIndex } from '../lib/sky-data';
 import { useDrag } from './sky/useDrag';
 import SkyStage, { type StageHandle } from './sky/SkyStage';
@@ -71,8 +74,12 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
   const slowTimer = useRef<number | undefined>(undefined);
   const snap = useRef<{ xp: number; level: number; badges: number; streak: number; lessons: number } | null>(null);
 
+  const voices = useVoices();
   const commitPos = useCallback((p: SkyPrefs['pos']) => { setSkyPref('pos', p); }, []);
-  const drag = useDrag(boxRef, prefs.pos, commitPos);
+  const drag = useDrag(boxRef, fabRef, prefs.pos, commitPos, !hidden);
+
+  /* ---- let sound start: the browser needs one touch first (see sky-fx.js) ---- */
+  useEffect(() => { unlockAudio(); }, []);
 
   /* ---- where we are, and what the reader has chosen ------------------ */
   useEffect(() => {
@@ -105,6 +112,11 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
     (async () => {
       if (SKY_MODE === 'everyone') { if (alive) setMayAsk(true); return; }
       if (SKY_MODE === 'off' || !isConfigured) return;
+      /* Most visitors are not signed in. Asking the database anything on every page
+         for them (the rollout log, three role checks) cost a second of network
+         for an answer that cannot be "yes": the staff and slice audiences both
+         need a person. So the cheap local check comes first. */
+      if (!signedInHint() && !skyAudience(SKY_MODE, { userId: null, isStaff: false }, SKY_LIMITS.slicePercent).allowed) return;
       try {
         const { data } = await supabase().auth.getUser();
         const id = data.user?.id ?? null;
@@ -154,9 +166,15 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
     setCheer({ id, text: pickCheer(kind, id) });
     setNudgeGone(false);
     if (plan.glow || plan.flashes) setFxRun({ id, glow: plan.glow, flashes: plan.flashes });
-    if (plan.chime) playChime(kind);
+    /* Sound: when Sky may speak, it says the line in its own voice, opened by its chirp;
+       when it may not (voice off, nothing to speak with, or a lesson is being read
+       aloud), the chime stands in. Never both at once, which would be a din. */
+    if (prefs.voice) {
+      void speakAsSky(pickCheer(kind, id), { voices, chosen: prefs.voiceName, id: String(kind), chirp: prefs.sound ? skyChirp : undefined })
+        .then((said) => { if (!said && prefs.sound) playChime(kind); });
+    } else if (plan.chime) playChime(kind);
     window.setTimeout(() => setFxRun((r) => (r && r.id === id ? null : r)), FX_LIMITS.flashMs * Math.max(1, plan.flashes) + 400);
-  }, [fx, prefs.sound]);
+  }, [fx, prefs.sound, prefs.voice, prefs.voiceName, voices]);
 
   useEffect(() => {
     const on = (e: Event) => doCheer(((e as CustomEvent).detail?.kind ?? 'star') as any);
@@ -195,15 +213,21 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
   function close() { setOpen(false); setView('home'); stopSpeaking(); setAsk({ k: 'idle' }); setQ(''); setBoost(null); fabRef.current?.focus(); }
   function dismissNudge() { setNudgeGone(true); setCheer(null); try { sessionStorage.setItem('skyb.nudge', 'gone'); } catch { /* fine */ } }
 
+  /** Read a message aloud in Sky's voice. Asked for, so it may replace what is playing. */
   function speak(text: string) {
-    if (!('speechSynthesis' in window)) return;
     if (speaking) { stopSpeaking(); return; }
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = document.documentElement.lang || 'en';
-    u.onend = () => setSpeaking(false); u.onerror = () => setSpeaking(false);
-    window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); setSpeaking(true);
+    setSpeaking(true);
+    void speakAsSky(text, { voices, chosen: prefs.voiceName, lang: document.documentElement.lang || 'en', force: true, chirp: prefs.sound ? skyChirp : undefined, onend: () => setSpeaking(false) })
+      .then((said) => { if (!said) setSpeaking(false); });
   }
-  function stopSpeaking() { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); setSpeaking(false); }
+  function stopSpeaking() { stopSky(); setSpeaking(false); }
+  const soundOn = prefs.sound || prefs.voice;
+  function toggleSound() {
+    const next = !soundOn;
+    setSkyPref('sound', next); setSkyPref('voice', next); setPrefs(skyPrefs());
+    if (next) { unlockAudio(); window.setTimeout(skyChirp, 60); } else stopSpeaking();
+  }
+  function hearSky() { stopSpeaking(); speak(SKY_SAMPLE); }
 
   async function sendQuestion(question: string) {
     const text = question.trim();
@@ -261,11 +285,15 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
         <div role="dialog" aria-label="Sky, your study buddy" aria-modal="false" className="skyb-panel">
           <div className="skyb-head">
             {view !== 'home' && <button type="button" className="skyb-iconbtn" onClick={back} aria-label="Back to Sky's menu">←</button>}
-            <span className="skyb-av" aria-hidden="true"><img src="/sky/sky-face.webp" alt="" width="48" height="48" /></span>
+            <span className="skyb-av" aria-hidden="true"><img src="/sky/sky-face-sm.webp" alt="" width="48" height="48" /></span>
             <div style={{ flex: 1, minWidth: 0 }}>
               <h2 ref={headRef} tabIndex={-1}>Sky</h2>
               <p>{title[view]}</p>
             </div>
+            <button type="button" className="skyb-iconbtn" onClick={toggleSound} aria-pressed={soundOn}
+              aria-label={soundOn ? 'Sky sound is on. Turn it off.' : 'Sky sound is off. Turn it on.'}>
+              <span aria-hidden="true">{soundOn ? '🔊' : '🔇'}</span>
+            </button>
             <button type="button" className="skyb-iconbtn" onClick={close} aria-label="Close Sky">✕</button>
           </div>
 
@@ -301,7 +329,7 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
 
                 {says && 'speechSynthesis' in window && (
                   <button type="button" className="skyb-row" onClick={() => speak(`${says.hello}. ${says.say}`)} aria-pressed={speaking}>
-                    <span>{speaking ? 'Stop reading aloud' : 'Read this aloud'}<small>Uses your device&apos;s own voice.</small></span>
+                    <span>{speaking ? 'Stop' : 'Hear Sky say this'}<small>In Sky&apos;s voice. You can choose it in Sky settings.</small></span>
                   </button>
                 )}
 
@@ -311,11 +339,11 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
                   <li>
                     {mayAsk ? (
                       <button type="button" className="skyb-row" onClick={() => setView('ask')}>
-                        <span>Ask a Homework Question<small>Answers come from Lrnon&apos;s own pages.</small></span><span aria-hidden="true">→</span>
+                        <span>Ask a Question<small>Answers come from Lrnon&apos;s own pages.</small></span><span aria-hidden="true">→</span>
                       </button>
                     ) : (
                       <div className="skyb-row" aria-disabled="true">
-                        <span>Ask a Homework Question<small>Not open to everyone yet. It is being checked by the Lrnon team first. For now, search the page or <a href="/feedback">ask a person</a>.</small></span>
+                        <span>Ask a Question<small>Not open to everyone yet. It is being checked by the Lrnon team first. For now, search the page or <a href="/feedback">ask a person</a>.</small></span>
                       </div>
                     )}
                   </li>
@@ -358,7 +386,8 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
                   ['numbers', 'Streaks and levels', 'Show day counts and levels. Off hides every number, and streak alerts with them.'],
                   ['streakAlerts', 'Streak alerts', 'Say when a streak is about to end or has ended.'],
                   ['timer', 'Quiz timer', 'A five-minute pace guide on the quick quiz. It never cuts you off.'],
-                  ['sound', 'Cheer sounds', 'A short soft chime when you finish something. Off unless you turn it on.'],
+                  ['sound', 'Sounds', 'A short soft chime and Sky\'s chirp when something good happens. On an iPhone the silent switch on the side also silences Sky.'],
+                  ['voice', 'Sky speaks', 'Sky says its cheers aloud, in its own voice. It never talks over a lesson being read aloud.'],
                   ['small', 'Small Sky', 'Show Sky as a small round button without its name.'],
                 ] as [keyof SkyPrefs, string, string][]).map(([key, label, hint]) => (
                   <div className="skyb-switch" key={key}>
@@ -382,6 +411,21 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
                     </label>
                   ))}
                   {reduce && <p style={{ margin: 0, color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>Your device or Lrnon is set to reduce motion, so Sky stays calm whatever you choose here.</p>}
+                </fieldset>
+
+                <fieldset className="skyb-fieldset">
+                  <legend>Sky&apos;s voice</legend>
+                  <label htmlFor="skyb-voice">Which voice Sky borrows from your device</label>
+                  {(() => { const g = groupVoices(voices); return (
+                    <select id="skyb-voice" className="skyb-input" value={prefs.voiceName} onChange={(e) => { setSkyPref('voiceName', e.currentTarget.value); setPrefs(skyPrefs()); }}>
+                      <option value="">Sky chooses (recommended)</option>
+                      {g.indian.length > 0 && <optgroup label="Indian voices">{g.indian.map((v) => <option key={v.voiceURI} value={v.name}>{labelFor(v)}</option>)}</optgroup>}
+                      {g.global.length > 0 && <optgroup label="Global voices">{g.global.map((v) => <option key={v.voiceURI} value={v.name}>{labelFor(v)}</option>)}</optgroup>}
+                    </select>); })()}
+                  <button type="button" className="skyb-row" onClick={hearSky} style={{ justifyContent: 'center' }}>{speaking ? 'Stop' : 'Hear Sky'}</button>
+                  <p style={{ margin: 0, color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>
+                    Sky tunes the voice a little brighter and opens with its chirp, so it sounds like Sky. A recorded voice for Sky is planned; until then it borrows one of yours.
+                  </p>
                 </fieldset>
 
                 <fieldset className="skyb-fieldset">
@@ -462,7 +506,7 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
         onClick={() => { if (drag.justDragged()) return; if (open) close(); else openPanel('home'); }}
         aria-expanded={open}
         aria-label={open ? 'Close Sky, your study buddy' : 'Open Sky, your study buddy. Drag, or press Shift and an arrow key, to move it.'}>
-        <span className="skyb-av"><img src="/sky/sky-face.webp" alt="" width="48" height="48" draggable={false} /></span>
+        <span className="skyb-av"><img src="/sky/sky-face-sm.webp" alt="" width="48" height="48" draggable={false} /></span>
         {!prefs.small && <span>Sky</span>}
       </button>
     </div>

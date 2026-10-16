@@ -30,7 +30,7 @@ export default function BadgeGrid({ moduleTotals }: { moduleTotals: Record<strin
   return (
     <>
       <div className="note note--ok" role="status" style={{ display: 'flex', gap: 'var(--sp-3)', alignItems: 'center', marginBottom: 'var(--sp-4)' }}>
-        <img src="/sky/sky-face.webp" alt="" width={44} height={44} style={{ borderRadius: '50%', background: 'var(--c-sky-tint)', border: '2px solid var(--c-sky-line)' }} />
+        <img src="/sky/sky-face-sm.webp" alt="" width={44} height={44} style={{ borderRadius: '50%', background: 'var(--c-sky-tint)', border: '2px solid var(--c-sky-line)' }} />
         <p style={{ margin: 0 }}>
           {got.size === 0
             ? 'Sky says: no badges yet. The first one is one lesson away.'

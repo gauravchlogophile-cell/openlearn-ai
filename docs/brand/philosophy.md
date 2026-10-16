@@ -115,8 +115,10 @@ streak) and for it still to serve learning. Held as rules, tested in
 - **Flash, glow, movement and sound are the learner's to set.** Three levels (calm,
   gentle, lively); calm is the default whenever the device asks for reduced motion;
   never more than two flashes, each over a second long and under half brightness;
-  one short quiet chime. Sky can be dragged anywhere and parked in a corner by
-  keyboard.
+  one short quiet chime and Sky's own chirp and voice, on by default since 17
+  October 2026 and one tap from off (a speaker button in Sky's header). Sky never
+  talks over a lesson being read aloud. Sky can be dragged anywhere, by mouse or
+  finger, and parked in a corner or moved by keyboard.
 - **Numbers can be switched off.** Anyone for whom a counter is pressure can hide
   streaks and levels from Sky.
 - **It never asks for money.** Support has one page, linked from the footer.

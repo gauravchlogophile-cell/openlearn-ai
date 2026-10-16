@@ -5,7 +5,7 @@ import AdminDecisions from '../../components/AdminDecisions.tsx';
 ---
 <Admin title="Decisions — Lrnon admin" heading="Decision queue"
   description="Everything that enters, stays, changes or leaves Lrnon, oldest first.">
-  <AdminGate client:load>
+  <AdminGate client:load allow={["sub_admin"]}>
     <AdminDecisions client:load />
   </AdminGate>
 </Admin>

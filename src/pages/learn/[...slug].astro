@@ -1,13 +1,11 @@
 ---
 import Base from '../../layouts/Base.astro';
-import CompleteButton from '../../components/CompleteButton.tsx';
-import ModuleSidebar from '../../components/ModuleSidebar.tsx';
-import LessonControls from '../../components/LessonControls.tsx';
-import ReadAloud from '../../components/ReadAloud.tsx';
-import LessonSources from '../../components/LessonSources.astro';
+import LessonView from '../../components/LessonView.astro';
 import meta from '../../../content/modules.json';
+import enUi from '../../i18n/ui/en.json';
 import { getCollection, render } from 'astro:content';
-import { createHash } from 'node:crypto';
+import { LOCALES } from '../../i18n/locales.js';
+import { liveVersionsOf } from '../../i18n/live.js';
 
 export async function getStaticPaths() {
   const lessons = await getCollection('lessons');
@@ -16,107 +14,24 @@ export async function getStaticPaths() {
 
 const { lesson } = Astro.props;
 const { Content } = await render(lesson);
-const hash = createHash('sha256').update(lesson.body ?? '').digest('hex').slice(0, 12);
 const all = (await getCollection('lessons'))
   .filter((l) => l.data.module === lesson.data.module)
   .sort((a, b) => a.data.order - b.data.order);
-const idx = all.findIndex((l) => l.id === lesson.id);
-const next = all[idx + 1];
-const prev = all[idx - 1];
 const quizBanks = import.meta.glob('../../../content/quizzes/*.json', { eager: true });
 const hasQuiz = Object.values(quizBanks).some((b: any) => b.default.module === lesson.data.module);
 const quizHref = hasQuiz ? '/quiz/' + lesson.data.module : undefined;
 const modMeta = meta.modules.find((m) => m.id === lesson.data.module);
 const trackMeta = meta.tracks.find((t) => t.id === lesson.data.track);
-const sidebarLessons = all.map((l) => ({ slug: l.id, title: l.data.title, order: l.data.order }));
+
+/* The other versions of this lesson: only translations a person has reviewed. */
+const alternates = liveVersionsOf(lesson.id).map((code) => {
+  const l = LOCALES.find((x) => x.code === code)!;
+  return { code, native: l.native, htmlLang: l.htmlLang, href: `/${code}/learn/${lesson.id}` };
+});
+const t = (key: string) => (enUi as Record<string, string>)[key] ?? key;
 ---
-<Base title={lesson.data.title + ' — Lrnon'} description={lesson.data.description}>
-  <div class="container lesson-shell" style="padding-block:var(--sp-8) var(--sp-12);">
-    {/* The module rail. Ordered first in the DOM would put a long list of
-        lessons between the header and the lesson for a screen reader, so it
-        comes after the article and is placed alongside with CSS instead. */}
-    <article>
-    <div style="display:flex;justify-content:space-between;align-items:center;gap:var(--sp-4);flex-wrap:wrap;margin:0 0 var(--sp-3);">
-      <nav aria-label="Breadcrumb" style="font-size:var(--fs-100);color:var(--c-ink-faint);">
-        <a href="/" translate="no" class="notranslate">Lrnon</a>
-        <span aria-hidden="true"> / </span>
-        <a href="/roadmap">{trackMeta?.title ?? lesson.data.track}</a>
-        <span aria-hidden="true"> · </span>
-        <span>{lesson.data.module.toUpperCase()} · {modMeta?.title ?? ''}</span>
-      </nav>
-      {/* Text size, theme and streak, per design turn 2 — wanted mid-lesson,
-          which is exactly when leaving for a settings page loses your place. */}
-      <LessonControls client:idle />
-    </div>
-
-    <p style="color:var(--c-ink-faint);font-size:var(--fs-100);margin:0;letter-spacing:0.06em;text-transform:uppercase;">
-      Lesson {lesson.data.order} of {all.length}
-      · {lesson.data.minutes} min read · last verified {lesson.data.lastVerified}
-    </p>
-    <h1 style="font-size:var(--fs-500);margin-block:var(--sp-2) var(--sp-6);">{lesson.data.title}</h1>
-
-    {/* Objectives use the indigo "aim" callout from the design system rather
-        than a bare surface panel, so the three callout roles stay consistent
-        across the site: aim = what you are about to do, try = do it now,
-        ok = you got it right. */}
-    <section class="note note--aim" aria-label="What you will learn" style="margin-block-end:var(--sp-8);">
-      <h2 style="font-size:var(--fs-200);margin:0 0 var(--sp-2);font-family:var(--font-body);">In this lesson you will:</h2>
-      <ul style="margin:0;padding:0;list-style:none;display:grid;gap:var(--sp-2);">
-        {lesson.data.objectives.map((o) => (
-          <li style="display:flex;gap:var(--sp-2);align-items:baseline;">
-            <span aria-hidden="true" style="color:var(--c-progress);">✓</span><span>{o}</span>
-          </li>
-        ))}
-      </ul>
-    </section>
-
-    <ReadAloud client:idle />
-
-    <div class="prose">
-      <Content />
-    </div>
-
-    <section class="card" aria-label="Flashcards added" style="margin-block:var(--sp-8);color:var(--c-ink-soft);">
-      <p style="margin:0;">🗂 {lesson.data.flashcards.length} flashcards from this lesson join your
-      <a href="/review">daily review</a>.</p>
-    </section>
-
-    {/* Backwards navigation used to be missing entirely: the only routes out of
-        a lesson were "All lessons" and the forward button, so a learner who
-        wanted to re-read the previous lesson had to go back to the module list
-        and find it. Previous/next are now symmetrical. */}
-    {/* Every tool this lesson names, with the vendor's own source and the date
-        it was checked. Rendered from frontmatter so a lesson cannot name a
-        product without sourcing it — see LessonSources for why that matters. */}
-    <LessonSources ids={lesson.data.tools ?? []} sources={lesson.data.sources ?? []} />
-
-    <nav aria-label="Lesson navigation" style="display:flex;justify-content:space-between;gap:var(--sp-4);align-items:center;flex-wrap:wrap;">
-      <span style="display:flex;gap:var(--sp-2);align-items:center;flex-wrap:wrap;">
-        {prev
-          ? <a class="btn btn--ghost" href={'/learn/' + prev.id}
-              rel="prev" title={prev.data.title}>← Previous lesson</a>
-          : <a class="btn btn--ghost" href="/roadmap">← All modules</a>}
-        <a class="btn btn--ghost" href="/home">Dashboard</a>
-      </span>
-      <CompleteButton client:load slug={lesson.id} hash={hash}
-        nextHref={next ? '/learn/' + next.id : null} quizHref={quizHref} />
-    </nav>
-
-    {prev || next ? (
-      <p style="margin-top:var(--sp-4);color:var(--c-ink-soft);font-size:var(--fs-100);">
-        {prev && <span>Previous: <a href={'/learn/' + prev.id}>{prev.data.title}</a></span>}
-        {prev && next && <span> · </span>}
-        {next && <span>Next: <a href={'/learn/' + next.id}>{next.data.title}</a></span>}
-      </p>
-    ) : null}
-    </article>
-
-    <aside class="lesson-rail">
-      <ModuleSidebar client:load
-        moduleId={lesson.data.module}
-        moduleTitle={modMeta?.title ?? ''}
-        lessons={sidebarLessons}
-        current={lesson.id} />
-    </aside>
-  </div>
+<Base title={lesson.data.title + ' — Lrnon'} description={lesson.data.description}
+  alternates={alternates.length ? [{ code: 'en', htmlLang: 'en', href: `/learn/${lesson.id}` }, ...alternates] : []}>
+  <LessonView lesson={lesson} Content={Content} lang="en" prefix="" t={t} all={all} inLang={new Set()}
+    alternates={alternates} modMeta={modMeta} trackMeta={trackMeta} quizHref={quizHref} />
 </Base>

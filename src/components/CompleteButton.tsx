@@ -18,9 +18,19 @@ import { XP_LESSON_COMPLETE } from '../lib/progress-core';
  *  "Skip for now" is untouched. A learner may always move on; they simply do
  *  not collect a tick for a lesson they did not answer.
  */
+/** The words on the button, so a translated lesson can carry its own. Missing keys fall back to English. */
+export type CompleteLabels = Partial<Record<'mark' | 'markContinue' | 'continue' | 'quiz' | 'finished' | 'skip' | 'xp' | 'locked', string>>;
+const EN: Required<CompleteLabels> = {
+  mark: 'Mark complete', markContinue: 'Mark complete & continue', continue: 'Continue to next lesson →',
+  quiz: 'Module complete — take the quiz 🏁', finished: 'Module complete 🎉 Back to dashboard', skip: 'Skip for now',
+  xp: '+{xp} XP — saved on this device. Sign in later to keep it everywhere.',
+  locked: "Answer the questions above first — right or wrong, both count. You can still skip ahead or go back; you just won't collect this lesson yet.",
+};
+
 export default function CompleteButton(
-  { slug, hash, nextHref, quizHref }: { slug: string; hash: string; nextHref: string | null; quizHref?: string }
+  { slug, hash, nextHref, quizHref, labels, homeHref = '/home' }: { slug: string; hash: string; nextHref: string | null; quizHref?: string; labels?: CompleteLabels; homeHref?: string }
 ) {
+  const L = { ...EN, ...(labels ?? {}) };
   const [done, setDone] = useState(false);
   const [attempted, setAttempted] = useState(true);   // assume true until read, so nothing flashes as locked
   const [justEarned, setJustEarned] = useState(false);
@@ -60,26 +70,26 @@ export default function CompleteButton(
     <div>
       {justEarned && (
         <p role="status" style={{ color: 'var(--c-reward)', fontWeight: 600 }}>
-          +{XP_LESSON_COMPLETE} XP — saved on this device. Sign in later to keep it everywhere.
+          {L.xp.replace('{xp}', String(XP_LESSON_COMPLETE))}
         </p>
       )}
 
       {!done ? (
         <button className="btn" onClick={onComplete} disabled={locked}
           style={locked ? { opacity: 0.55, cursor: 'not-allowed' } : undefined}>
-          Mark complete{nextHref ? ' & continue' : ''}
+          {nextHref ? L.markContinue : L.mark}
         </button>
       ) : nextHref ? (
-        <a className="btn" href={nextHref}>Continue to next lesson →</a>
+        <a className="btn" href={nextHref}>{L.continue}</a>
       ) : quizHref ? (
-        <a className="btn" href={quizHref}>Module complete — take the quiz 🏁</a>
+        <a className="btn" href={quizHref}>{L.quiz}</a>
       ) : (
-        <a className="btn" href="/home">Module complete 🎉 Back to dashboard</a>
+        <a className="btn" href={homeHref}>{L.finished}</a>
       )}
 
       {!done && nextHref && (
         <a className="btn btn--ghost" href={nextHref} style={{ marginInlineStart: 'var(--sp-3)' }}>
-          Skip for now
+          {L.skip}
         </a>
       )}
 
@@ -87,8 +97,7 @@ export default function CompleteButton(
           single most annoying thing an interface can do. */}
       {locked && (
         <p role="status" style={{ margin: 'var(--sp-3) 0 0', color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>
-          Answer the questions above first — right or wrong, both count. You can still skip
-          ahead or go back; you just won't collect this lesson yet.
+          {L.locked}
         </p>
       )}
     </div>

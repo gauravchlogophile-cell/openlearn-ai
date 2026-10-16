@@ -26,6 +26,11 @@ export const prerender = false;
 const done = () => new Response(null, { status: 204, headers: { 'cache-control': 'no-store' } });
 
 export const POST: APIRoute = async ({ request, locals }) => {
+  /* Answer first, count afterwards. The count is a database round trip and a cold
+     Worker start, which took over a second; nothing about the page depends on it,
+     so the response is sent at once and the write finishes behind it. */
+  const ctx = (locals as any)?.runtime?.ctx;
+  let work: Promise<unknown> = Promise.resolve();
   try {
     if (request.headers.get('dnt') === '1' || request.headers.get('sec-gpc') === '1') return done();
 
@@ -46,7 +51,8 @@ export const POST: APIRoute = async ({ request, locals }) => {
     const country = (request.headers.get('cf-ipcountry') ?? '').toUpperCase();
 
     const db = createClient(url, key, { auth: { persistSession: false } });
-    await db.rpc('record_hit', { p_path: path, p_device: device, p_country: country, p_via: via });
+    work = Promise.resolve(db.rpc('record_hit', { p_path: path, p_device: device, p_country: country, p_via: via })).catch(() => {});
   } catch { /* a counter must never break a page */ }
+  if (typeof ctx?.waitUntil === 'function') ctx.waitUntil(work); else await work;
   return done();
 };

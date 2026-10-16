@@ -234,6 +234,30 @@
       "kind": "Accessibility",
       "where": "Community",
       "what": "Each community section now shows its real state: planned, closed for now, or open. Administrators can open or close sections with one click. Anything where learners write, such as Ask Doubts and rooms, cannot be opened until the child-safety conditions hold, and the database refuses otherwise."
+    },
+    {
+      "date": "2026-10-16",
+      "kind": "Fixed",
+      "where": "Sky, the study buddy",
+      "what": "Sky now opens properly on an iPhone and on other phones. On a phone the panel is a sheet from the bottom of the screen, and a styling mistake had placed it a whole screen above the top edge, so Sky seemed to vanish when tapped. Dragging Sky now works by finger as well as by mouse. Sky’s panel no longer lets one long word or wide row push its content off to the side. \"Ask a Homework Question\" is now \"Ask a Question\"."
+    },
+    {
+      "date": "2026-10-16",
+      "kind": "Accessibility",
+      "where": "Sky’s sound and voice",
+      "what": "Sky’s sounds were silent because browsers only start sound after a touch, and Sky asked too late. They now work, and are on by default, quiet, with a speaker button in Sky’s header to turn them off in one tap. Sky also has a voice of its own: it borrows the brightest natural voice on your device, tunes it, and opens with its own chirp, or uses a recording once one exists. You can choose the voice and hear it in Sky settings. Sky never talks over a lesson being read aloud."
+    },
+    {
+      "date": "2026-10-16",
+      "kind": "Content updated",
+      "where": "Languages",
+      "what": "Translation has been built, under one rule: nothing machine-translated is shown to a learner until a person who reads the language has checked it and put their name to it. A translation made from English that has since changed comes off the site until it is checked again. A language picker appears in the header once any language has something checked. The Languages page says where each language stands. No language is live yet; a Hindi draft is waiting for a reader of Hindi."
+    },
+    {
+      "date": "2026-10-16",
+      "kind": "Fixed",
+      "where": "Admin console",
+      "what": "A volunteer given a role could not open anything: the console let in only owners and admins. Every role now has a desk that says what it covers, and opens the pages it is for. Admins can give and end the four volunteer roles (assessment reviewer, moderator, editor, language reviewer) from the user portal, with a stated purpose and an end date within a year, recorded with their name. Pages open faster: the page is no longer held up waiting for a stylesheet, Sky’s picture is a fraction of the size, and the visit counter no longer waits on the database."
     }
   ]
 }

@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import { isConfigured, supabase } from '../lib/supabase';
+import { mayOpen, ROLE_INFO } from '../lib/volunteer-roles.js';
 
 /** Gate for every /admin page.
  *
@@ -18,9 +19,19 @@ import { isConfigured, supabase } from '../lib/supabase';
  *  in devtools reveals nothing and grants nothing.
  */
 
-type Role = { owner: boolean; admin: boolean } | null;
+type Role = { owner: boolean; admin: boolean; held: string[] } | null;
 
-export default function AdminGate({ children }: { children: ReactNode }) {
+/**
+ *  allow   who may open this page, besides an owner or an admin (who may open all):
+ *            'admin'  (default) nobody else
+ *            'staff'  anyone holding any role, volunteers included
+ *            ['reviewer', ...]  holders of those roles
+ *
+ *  Until 16 October 2026 this let in only an owner or an admin. A volunteer given
+ *  a role was granted correctly and then shown "nothing here for you", which looked
+ *  exactly like the grant having failed. Each page now says who it is for.
+ */
+export default function AdminGate({ children, allow = 'admin' }: { children: ReactNode; allow?: 'admin' | 'staff' | string[] }) {
   const [state, setState] = useState<'checking' | 'anon' | 'denied' | 'ok'>('checking');
   const [role, setRole] = useState<Role>(null);
   const [signedInAs, setSignedInAs] = useState<string | null>(null);
@@ -32,12 +43,14 @@ export default function AdminGate({ children }: { children: ReactNode }) {
       if (!data.user) { setState('anon'); return; }
       setSignedInAs(data.user.email ?? null);
       // Ask the database, never the client, what this person is allowed to be.
-      const [{ data: owner }, { data: admin }] = await Promise.all([
+      const [{ data: owner }, { data: admin }, { data: mine }] = await Promise.all([
         supabase().rpc('is_owner'),
         supabase().rpc('has_role', { wanted: 'admin' }),
+        supabase().rpc('my_roles'),
       ]);
-      setRole({ owner: !!owner, admin: !!admin });
-      setState(owner || admin ? 'ok' : 'denied');
+      const held = ((mine as { role: string }[] | null) ?? []).map((r) => r.role);
+      setRole({ owner: !!owner, admin: !!admin, held });
+      setState(mayOpen(held, allow) ? 'ok' : 'denied');
     })().catch(() => setState('denied'));
   }, []);
 
@@ -59,6 +72,18 @@ export default function AdminGate({ children }: { children: ReactNode }) {
           the same as holding the role, so if you have more than one account,
           it is worth checking which one you are using.
         </p>
+      </div>
+    );
+  }
+
+  if (state === 'denied' && role && role.held.length > 0) {
+    return (
+      <div className="note note--aim">
+        <p style={{ marginTop: 0 }}><strong>This page is not part of your role.</strong></p>
+        <p style={{ color: 'var(--c-ink-soft)' }}>
+          Your role is active. Your desk shows what it covers and where to do it.
+        </p>
+        <a className="btn" href="/admin/desk">Open my desk</a>
       </div>
     );
   }
@@ -90,8 +115,8 @@ export default function AdminGate({ children }: { children: ReactNode }) {
   return (
     <>
       <p style={{ color: 'var(--c-ink-faint)', fontSize: 'var(--fs-100)' }}>
-        Signed in as <strong>{role?.owner ? 'Super Admin' : 'Admin'}</strong>
-        {!role?.owner && ' — deletions, role changes, funding and policy are reserved to an owner.'}
+        Signed in as <strong>{(role?.held ?? []).map((r) => (ROLE_INFO as any)[r]?.name ?? r).join(', ') || 'a volunteer'}</strong>
+        {role?.owner ? '' : role?.admin ? ' — deletions, role changes, funding and policy are reserved to an owner.' : ' — you see the parts of the console your role is for.'}
       </p>
       {children}
     </>

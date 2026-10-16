@@ -1,0 +1,11 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import AdminGate from '../../components/AdminGate.tsx';
+import AdminTranslations from '../../components/AdminTranslations.tsx';
+---
+<Admin title="Translations — Lrnon admin" heading="Translations"
+  description="Where each language stands and what is waiting for a person to read it.">
+  <AdminGate client:load allow={['translator', 'editor']}>
+    <AdminTranslations client:load />
+  </AdminGate>
+</Admin>

@@ -13,3 +13,15 @@ export function supabase(): SupabaseClient {
   if (!isConfigured) throw new Error('Supabase is not configured (local-only mode).');
   return (client ??= createClient(url!, anon!));
 }
+
+/** True when this browser holds a Supabase sign-in. A cheap local look, no network:
+ *  it lets a page skip questions that can only be answered for a signed-in person. */
+export function signedInHint(): boolean {
+  try {
+    for (let i = 0; i < localStorage.length; i++) {
+      const k = localStorage.key(i);
+      if (k && /^sb-.+-auth-token/.test(k)) return true;
+    }
+  } catch { /* storage blocked: treat as signed out */ }
+  return false;
+}

@@ -1,5 +1,9 @@
 # Languages: proposal for approval
 
+> **Decided 16 October 2026.** The Wave 1 list below is approved for building. The owner agreed with
+> the recommendation on the second decision: **no machine-drafted page goes live before a person has
+> reviewed it.** How that is built and enforced is in `translation-workflow.md`. Wave 2 stays a plan.
+
 Written 16 October 2026. **Nothing here is built yet.** The owner asked for the
 list of languages to be put forward for approval before any work starts; this is
 that list, with what each choice commits Lrnon to.

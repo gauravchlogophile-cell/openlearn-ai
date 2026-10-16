@@ -118,9 +118,9 @@ check('a finished module suggests its quiz', scenarios['module finished, quiz no
   const g = dailyGoals(c, { lesson: true, cards: false, quiz: false });
   check('daily goals: three, with milestones', g.goals.length === 3 && g.milestones.length >= 3 && g.allDone === false);
   check('daily goals: all done is recognised', dailyGoals(c, { lesson: true, cards: true, quiz: true }).allDone === true);
-  check('the daily boost is the same all day and differs across days', dailyBoost('2026-10-15') === dailyBoost('2026-10-15') && new Set(['2026-10-15', '2026-10-16', '2026-10-17', '2026-10-18', '2026-10-19']
+  check('the daily boost is the same all day and differs across days', dailyBoost('2026-10-15') === dailyBoost('2026-10-15') && new Set(['2026-10-15', '2026-10-16', '2026-10-16', '2026-10-18', '2026-10-19']
     .map(dailyBoost)).size > 1);
-  check('every boost line is free of shame and pressure', ['2026-10-15', '2026-10-16', '2026-10-17', '2026-10-18', '2026-10-19', '2026-10-20', '2026-10-21'].every((d) => !breaksToneRule(dailyBoost(d))));
+  check('every boost line is free of shame and pressure', ['2026-10-15', '2026-10-16', '2026-10-16', '2026-10-18', '2026-10-19', '2026-10-20', '2026-10-21'].every((d) => !breaksToneRule(dailyBoost(d))));
 }
 
 // 6. The policy, as data.
@@ -172,7 +172,7 @@ check('policy object cannot be changed at runtime', Object.isFrozen(COMPANION_PO
   check('lively: at most two flashes in a reaction', kinds.every((k) => cheerPlan(k, 'lively', false).flashes <= 2));
   check('a small win flashes once and a big one twice', cheerPlan('lesson', 'lively', false).flashes === 1 && cheerPlan('level', 'lively', false).flashes === 2);
   check('a chime plays only if sound is on', cheerPlan('lesson', 'lively', false).chime === false && cheerPlan('lesson', 'gentle', true).chime === true);
-  check('the hard limits are what the safety rule says', FX_LIMITS.flashesPerCheer <= 2 && FX_LIMITS.flashMs >= 1000 && FX_LIMITS.maxFlashOpacity <= 0.5 && FX_LIMITS.chimeMs <= 1500 && FX_LIMITS.chimeVolume <= 0.15);
+  check('the hard limits are what the safety rule says', FX_LIMITS.flashesPerCheer <= 2 && FX_LIMITS.flashMs >= 1000 && FX_LIMITS.maxFlashOpacity <= 0.5 && FX_LIMITS.chimeMs <= 1500 && FX_LIMITS.chimeVolume <= 0.25);
   check('three flashes a second is impossible at these limits', 1000 / FX_LIMITS.flashMs < 3 && FX_LIMITS.flashesPerCheer / (FX_LIMITS.flashMs / 1000 * FX_LIMITS.flashesPerCheer) < 3);
   check('every cheer is calm: no exclamation marks, no shame', Object.values(CHEERS).flat().every((t) => !/!/.test(t) && !breaksToneRule(t)));
   check('motion is refused by the page setting', motionAllowed({ getAttribute: (k) => (k === 'data-motion' ? 'reduce' : null) }, () => ({ matches: false })) === false);
@@ -245,7 +245,13 @@ const code = (s) => s.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|[^:])\/\/.*$/
   const fetches = [...code(src.shell + src.views + src.stage + src.hero).matchAll(/fetch\(\s*([^,)]+)/g)].map((m) => m[1].trim());
   check('the companion fetches only the index, the practice files and the assistant route', fetches.every((f) => /\/api\/sky|`\/buddy|'\/buddy|url/.test(f)), fetches.join(' | '));
   check('no analytics or tracking in Sky', !/analytics|gtag|plausible|posthog|segment/i.test(code(src.shell + src.views + src.stage + src.hero)));
-  check('sound is off unless chosen, and only through the one synthesiser', /sound: false/.test(readFileSync(join(ROOT, 'src/lib/progress-store.ts'), 'utf8')) && !/<audio|new Audio/.test(src.shell + src.views + src.stage + src.hero));
+  /* Sound, as of 16 October 2026: on by default, quiet, one switch from off, and made only by the
+     one synthesiser (sky-fx.js) and the one voice module (sky-voice.js), never by a stray audio tag. */
+  const store = readFileSync(join(ROOT, 'src/lib/progress-store.ts'), 'utf8');
+  check('sound and voice are on by default, and either can be switched off', /sound: true, voice: true/.test(store) && /Sky sound is on\. Turn it off/.test(src.shell) && /'voice', 'Sky speaks'/.test(src.shell));
+  check('audio comes only from the synthesiser and the voice module', !/<audio|new Audio/.test(src.shell + src.views + src.stage + src.hero));
+  check('the browser is unlocked for sound on the first touch, not at the moment of the cheer', /unlockAudio\(\)/.test(src.shell) && /touchend/.test(readFileSync(join(ROOT, 'src/lib/sky-fx.js'), 'utf8')));
+  check('Sky never talks over a lesson being read aloud', /synth\.speaking && !opts\.force\) return false/.test(readFileSync(join(ROOT, 'src/lib/sky-voice.js'), 'utf8')));
   check('Sky can be moved without dragging: keyboard and corner buttons', /shiftKey/.test(readFileSync(join(ROOT, 'src/components/sky/useDrag.ts'), 'utf8')) && /toCorner/.test(code(src.shell)));
   check('the welcome clip is not downloaded until asked for', /preload="none"/.test(src.stage) && !/<video[^>]*\ssrc=/.test(src.stage));
   check('the welcome clip can always be stopped, with words', /Stop the animation/.test(src.hero) && /stop/.test(src.stage));

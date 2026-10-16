@@ -1,10 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { VOLUNTEER_ROLES, ROLE_INFO } from '../lib/volunteer-roles.js';
 
 /** /admin/users — the user management portal.
  *
  *  Three views over the same people:
  *
+ *   VOLUNTEERS who holds a volunteer role, for what, until when; assign and end them.
  *   USERS      everyone with an account: handle, when they joined and last signed
  *              in, role, level, lessons, recent activity. Click one for the whole
  *              picture: sign-in history, progress, roles, and everything an admin
@@ -33,7 +35,11 @@ const ago = (s?: string | null) => {
 const field: React.CSSProperties = { minHeight: 44, padding: '0 var(--sp-3)', font: 'inherit', border: '1px solid var(--c-border-strong)', borderRadius: 'var(--r-s)', background: 'var(--c-surface)', color: 'var(--c-ink)' };
 
 export default function AdminUsers() {
-  const [tab, setTab] = useState<'users' | 'signins' | 'activity'>('users');
+  const [tab, setTab] = useState<'users' | 'volunteers' | 'signins' | 'activity'>('users');
+  const [vols, setVols] = useState<any[]>([]);
+  const [vRole, setVRole] = useState('translator');
+  const [vFn, setVFn] = useState('');
+  const [vDays, setVDays] = useState('90');
   const [users, setUsers] = useState<User[]>([]);
   const [q, setQ] = useState('');
   const [page, setPage] = useState(0);
@@ -56,6 +62,41 @@ export default function AdminUsers() {
 
   useEffect(() => { supabase().rpc('is_owner').then(({ data }) => setOwner(Boolean(data))); }, []);
   useEffect(() => { if (tab === 'users') loadUsers(); }, [tab, loadUsers]);
+  const loadVols = useCallback(async () => {
+    const { data, error } = await supabase().from('user_roles')
+      .select('user_id, role, function, expires_at, granted_at, profiles!user_roles_user_id_fkey(handle, display_name)')
+      .in('role', VOLUNTEER_ROLES).order('granted_at', { ascending: false });
+    if (error) setErr(error.message); else setVols(data ?? []);
+  }, []);
+  useEffect(() => { if (tab === 'volunteers') loadVols(); }, [tab, loadVols]);
+
+  /** Assign or end a volunteer role. These go straight to the database functions,
+   *  which re-check that the caller is an admin or an owner, so this page is not
+   *  the lock: it only asks. */
+  async function assign(userId: string) {
+    setBusy(true); setErr(''); setOk('');
+    const days = Math.max(1, Math.min(365, Number(vDays) || 90));
+    const { error } = await supabase().rpc('grant_volunteer_role', {
+      p_user: userId, p_role: vRole, p_function: vFn.trim(),
+      p_expires: new Date(Date.now() + days * 864e5).toISOString(),
+      p_reason: reason.trim() || 'Assigned from the user portal.',
+    });
+    setBusy(false);
+    if (error) { setErr(error.message.replace('grant_volunteer_role: ', '')); return; }
+    setOk('That role is now active. They will see it on their desk the next time they open the console.');
+    setVFn('');
+    await openUser(userId); if (tab === 'volunteers') await loadVols();
+  }
+  async function endRole(userId: string, role: string) {
+    setBusy(true); setErr(''); setOk('');
+    const { error } = await supabase().rpc('revoke_volunteer_role', { p_user: userId, p_role: role, p_reason: reason.trim() || 'Ended from the user portal.' });
+    setBusy(false);
+    if (error) { setErr(error.message.replace('revoke_volunteer_role: ', '')); return; }
+    setOk('That role has ended.');
+    if (open === userId) await openUser(userId);
+    await loadVols();
+  }
+
   useEffect(() => {
     if (tab === 'signins') supabase().from('login_events').select('at,provider,device,profiles(handle)').order('at', { ascending: false }).limit(100)
       .then(({ data, error }) => { if (error) setErr(error.message); else setSignins(data ?? []); });
@@ -96,7 +137,7 @@ export default function AdminUsers() {
   return (
     <div style={{ display: 'grid', gap: 'var(--sp-4)' }}>
       <div role="tablist" aria-label="User management" style={{ display: 'flex', gap: 'var(--sp-2)', flexWrap: 'wrap' }}>
-        {tabBtn('users', 'Users')}{tabBtn('signins', 'Sign-ins')}{tabBtn('activity', 'Activity log')}
+        {tabBtn('users', 'Users')}{tabBtn('volunteers', 'Volunteers')}{tabBtn('signins', 'Sign-ins')}{tabBtn('activity', 'Activity log')}
       </div>
       {err && <p className="note note--try" role="alert">{err}</p>}
       {ok && <p className="note note--ok" role="status">{ok}</p>}
@@ -155,6 +196,28 @@ export default function AdminUsers() {
               {(detail.signins ?? []).length === 0 ? <p style={{ color: 'var(--c-ink-soft)' }}>None recorded yet. Sign-ins are recorded from the day this was switched on.</p> : (
                 <ul>{detail.signins.map((s: any, i: number) => <li key={i}>{fmt(s.at)} · {s.provider ?? 'unknown'} · {s.device}</li>)}</ul>)}
 
+              <h3 style={{ fontSize: 'var(--fs-300)' }}>Volunteer role</h3>
+              {(detail.roles ?? []).filter((r: any) => VOLUNTEER_ROLES.includes(r.role)).length > 0 && (
+                <ul>{(detail.roles ?? []).filter((r: any) => VOLUNTEER_ROLES.includes(r.role)).map((r: any) => (
+                  <li key={r.role}>{(ROLE_INFO as any)[r.role]?.name ?? r.role} for {r.function ?? 'unspecified'}, until {fmt(r.expires_at)}{' '}
+                    <button type="button" className="btn btn--ghost" style={{ minHeight: 32, padding: '0 var(--sp-3)' }} disabled={busy} onClick={() => endRole(open!, r.role)}>End</button></li>))}</ul>
+              )}
+              <div className="card" style={{ display: 'grid', gap: 'var(--sp-2)' }}>
+                <strong>Give a volunteer role</strong>
+                <label htmlFor="vol-role">Role</label>
+                <select id="vol-role" value={vRole} onChange={(e) => setVRole(e.target.value)} style={field}>
+                  {VOLUNTEER_ROLES.map((r: string) => <option key={r} value={r}>{(ROLE_INFO as any)[r].name}: {(ROLE_INFO as any)[r].short}</option>)}
+                </select>
+                <label htmlFor="vol-fn">What will they do? (required)</label>
+                <input id="vol-fn" value={vFn} onChange={(e) => setVFn(e.target.value)} placeholder={(ROLE_INFO as any)[vRole].purposeHint} style={field} maxLength={120} />
+                <label htmlFor="vol-days">Ends after (days, up to 365)</label>
+                <input id="vol-days" value={vDays} onChange={(e) => setVDays(e.target.value.replace(/[^0-9]/g, ''))} inputMode="numeric" style={field} />
+                <p style={{ margin: 0, color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>
+                  They will see it on their desk at /admin/desk. It ends by itself on the date, and is recorded with your name.
+                </p>
+                <div><button type="button" className="btn" disabled={busy || vFn.trim().length < 3} onClick={() => assign(open!)}>Give this role</button></div>
+              </div>
+
               <h3 style={{ fontSize: 'var(--fs-300)' }}>What admins have done to this account</h3>
               {(detail.actions_about ?? []).length === 0 ? <p style={{ color: 'var(--c-ink-soft)' }}>Nothing.</p> : (
                 <ul>{detail.actions_about.map((a: any, i: number) => <li key={i}>{fmt(a.at)} · {a.action}{a.reason ? ` · “${a.reason}”` : ''}</li>)}</ul>)}
@@ -177,6 +240,31 @@ export default function AdminUsers() {
           </section>
         )}
       </>)}
+
+      {tab === 'volunteers' && (
+        <div style={{ overflowX: 'auto', display: 'grid', gap: 'var(--sp-3)' }}>
+          <p style={{ margin: 0, color: 'var(--c-ink-soft)' }}>
+            Everyone holding a volunteer role. To give someone a role, find them under Users and open their record.
+            They must have signed in to Lrnon once. Reviewer, moderator, editor and language reviewer can be given here;
+            admin and owner stay with an owner under People &amp; roles.
+          </p>
+          <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: '40rem' }}>
+            <thead><tr>{['Person', 'Role', 'For', 'Ends', ''].map((h) => <th key={h} scope="col" style={th}>{h}</th>)}</tr></thead>
+            <tbody>{vols.map((v, i) => {
+              const gone = v.expires_at && new Date(v.expires_at) < new Date();
+              return (
+                <tr key={i} style={{ opacity: gone ? 0.5 : 1 }}>
+                  <td style={td}><button type="button" className="btn btn--ghost" style={{ minHeight: 36, padding: '0 var(--sp-3)' }} onClick={() => { setTab('users'); openUser(v.user_id); }}><span translate="no">{v.profiles?.display_name ?? v.profiles?.handle ?? v.user_id.slice(0, 8)}</span></button></td>
+                  <td style={td}>{(ROLE_INFO as any)[v.role]?.name ?? v.role}</td>
+                  <td style={td}>{v.function ?? '—'}</td>
+                  <td style={td}>{v.expires_at ? fmt(v.expires_at) : 'no end date'}{gone ? ' · ended' : ''}</td>
+                  <td style={td}><button type="button" className="btn btn--ghost" disabled={busy} onClick={() => endRole(v.user_id, v.role)}>End role</button></td>
+                </tr>);
+            })}
+              {vols.length === 0 && <tr><td style={td} colSpan={5}>No volunteer roles yet.</td></tr>}</tbody>
+          </table>
+        </div>
+      )}
 
       {tab === 'signins' && (
         <div style={{ overflowX: 'auto' }}>

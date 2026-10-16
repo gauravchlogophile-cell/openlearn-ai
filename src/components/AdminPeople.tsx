@@ -152,9 +152,10 @@ export default function AdminPeople() {
                 <select value={role} onChange={(e) => setRole(e.target.value)} style={fieldStyle}>
                   <option value="admin">Admin — owns one surface</option>
                   <option value="sub_admin">Sub-admin — one task, time-boxed</option>
-                  <option value="reviewer">Reviewer — bands assessments</option>
-                  <option value="moderator">Moderator</option>
-                  <option value="editor">Editor</option>
+                  <option value="reviewer">Assessment reviewer — bands written answers</option>
+                  <option value="moderator">Moderator — reads posts before they show</option>
+                  <option value="editor">Editor — corrects lessons</option>
+                  <option value="translator">Language reviewer — reads and approves translations</option>
                 </select>
               </label>
 

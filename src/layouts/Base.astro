@@ -1,6 +1,7 @@
 ---
 import '../styles/tokens.css';
 import '../styles/sky.css';
+import '../styles/i18n.css';
 import AccessibilityPanel from '../components/AccessibilityPanel.tsx';
 import AccountMenu from '../components/AccountMenu.tsx';
 import PageSearch from '../components/PageSearch.tsx';
@@ -8,8 +9,29 @@ import { CONTACT_EMAIL, CONTACT_PHONE, FUNDING_MODE, GOOGLE_REVIEW_URL } from '.
 import SkyBuddy from '../components/SkyBuddy.tsx';
 import Telemetry from '../components/Telemetry.tsx';
 import { SKY_COPY } from '../lib/sky-config';
-interface Props { title: string; description: string; noindex?: boolean; }
-const { title, description, noindex = false } = Astro.props;
+import LanguagePicker from '../components/LanguagePicker.tsx';
+import ChromeLang from '../components/ChromeLang.tsx';
+import { localeFor } from '../i18n/locales.js';
+import { existsSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import enUi from '../i18n/ui/en.json';
+/* `lang` is the language the PAGE is written in. English pages are the default; a
+   translated lesson passes its own, with the catalogue `ui` it was reviewed with, and
+   `alternates` lists the other versions of the same page for search engines and for
+   the language picker. */
+interface Props { title: string; description: string; noindex?: boolean; lang?: string; ui?: Record<string, string>; alternates?: { code: string; htmlLang: string; href: string }[]; }
+const { title, description, noindex = false, lang = 'en', ui, alternates = [] } = Astro.props;
+const locale = localeFor(lang) ?? localeFor('en')!;
+const T = (key: string) => (ui && ui[key]) || (enUi as Record<string, string>)[key] || key;
+/* The languages a learner may pick right now: those whose translation has been reviewed by a
+   person (see src/i18n/locales.js). Written by scripts/build-i18n.mjs before every build; absent
+   or empty means English only, and then no picker is shown. */
+type Offered = { code: string; htmlLang: string; name: string; native: string; dir: 'ltr' | 'rtl'; ui: boolean; lessons: number };
+let offered: Offered[] = [];
+try {
+  const f = join(process.cwd(), 'public/i18n/live.json');       // the repository root, at build time
+  if (existsSync(f)) offered = JSON.parse(readFileSync(f, 'utf8')).languages ?? [];
+} catch { /* English only */ }
 /* The design's founder switch: when funding is hidden, the Support link is not
    rendered anywhere, not merely hidden with CSS. */
 const showSupport = FUNDING_MODE !== 'hidden';
@@ -26,7 +48,7 @@ const showSupport = FUNDING_MODE !== 'hidden';
    Showing the companion to everyone widens none of that. */
 ---
 <!doctype html>
-<html lang="en">
+<html lang={locale.htmlLang} dir={locale.dir}>
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -43,6 +65,7 @@ const showSupport = FUNDING_MODE !== 'hidden';
     <link rel="icon" href="/icons/lrnon-icon.svg" type="image/svg+xml" />
     <link rel="icon" href="/icons/icon-192.png" type="image/png" />
     <link rel="apple-touch-icon" href="/icons/icon-192.png" />
+    {alternates.map((a) => <link rel="alternate" hreflang={a.htmlLang} href={a.href} data-code={a.code} />)}
     {/* Reader preferences, applied BEFORE first paint. This has to be inline
         and synchronous: a React island or a deferred script would run after
         the browser has already painted the default theme, so every reload
@@ -76,7 +99,7 @@ const showSupport = FUNDING_MODE !== 'hidden';
     <script is:inline src="/register-sw.js"></script>
   </head>
   <body>
-    <a class="skip-link" href="#main">Skip to content</a>
+    <a class="skip-link" href="#main" data-i18n="skip">{T('skip')}</a>
     <header class="container" style="display:flex;justify-content:space-between;align-items:center;gap:var(--sp-4);padding-block:var(--sp-4);flex-wrap:wrap;">
       {/* translate="no" + .notranslate stop Google Translate rendering the
           brand as a phrase — a brand should never be machine-translated.
@@ -92,20 +115,21 @@ const showSupport = FUNDING_MODE !== 'hidden';
           phone. Links wrap onto a second line rather than collapsing into a
           hamburger, because a wrapped nav needs no JavaScript, no focus trap
           and no aria-expanded to get right. */}
-      <nav aria-label="Main" style="display:flex;gap:var(--sp-3) var(--sp-4);align-items:center;flex-wrap:wrap;">
-        <a href="/home">Home</a>
-        <a href="/roadmap">Learn</a>
-        <a href="/doubts">Doubts</a>
-        <a href="/community">Community</a>
-        <a href="/members">Members</a>
-        <a href="/whats-new">What's new</a>
+      <nav aria-label={T('nav.main')} data-i18n-aria="nav.main" style="display:flex;gap:var(--sp-3) var(--sp-4);align-items:center;flex-wrap:wrap;">
+        <a href="/home" data-i18n="nav.home">{T('nav.home')}</a>
+        <a href="/roadmap" data-i18n="nav.learn">{T('nav.learn')}</a>
+        <a href="/doubts" data-i18n="nav.doubts">{T('nav.doubts')}</a>
+        <a href="/community" data-i18n="nav.community">{T('nav.community')}</a>
+        <a href="/members" data-i18n="nav.members">{T('nav.members')}</a>
+        <a href="/whats-new" data-i18n="nav.whatsNew">{T('nav.whatsNew')}</a>
         {/* Moved up from the footer: asking people to spread the word and to tell
             us what is wrong are the two things a learner can do for Lrnon, and a
             footer link is where good intentions go to be missed. */}
-        <a href="/share">Spread the word</a>
-        <a href="/feedback">Feedback</a>
-        {GOOGLE_REVIEW_URL && <a href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer">Rate us on Google<span class="sr-only"> (opens in a new tab)</span></a>}
-        <a href="/community#more">More</a>
+        <a href="/share" data-i18n="nav.spread">{T('nav.spread')}</a>
+        <a href="/feedback" data-i18n="nav.feedback">{T('nav.feedback')}</a>
+        {GOOGLE_REVIEW_URL && <a href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer"><span data-i18n="nav.rate">{T('nav.rate')}</span><span class="sr-only"> (opens in a new tab)</span></a>}
+        <a href="/community#more" data-i18n="nav.more">{T('nav.more')}</a>
+        {offered.length > 0 && <LanguagePicker client:idle lang={lang} languages={offered} />}
         <PageSearch client:idle />
         {/* One button, everything inside — design turn 3. The moment someone
             needs bigger text is the moment they are struggling with THIS page,
@@ -131,58 +155,55 @@ const showSupport = FUNDING_MODE !== 'hidden';
               <img src="/icons/lrnon-mark.svg" width="22" height="22" alt="" />
               <span>Lrnon</span>
             </p>
-            <p style="margin:0;color:var(--c-ink-soft);max-width:30ch;">
-              Learn AI at no cost. Free for every learner, and funded in the open.
-            </p>
+            <p style="margin:0;color:var(--c-ink-soft);max-width:30ch;" data-i18n="footer.tagline">{T('footer.tagline')}</p>
           </div>
 
           <nav aria-label="Learn">
-            <h2 style="font-size:var(--fs-100);font-family:var(--font-body);text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-2);">Learn</h2>
+            <h2 style="font-size:var(--fs-100);font-family:var(--font-body);text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-2);" data-i18n="footer.learn">{T('footer.learn')}</h2>
             <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
-              <li><a href="/roadmap">Roadmap</a></li>
-              <li><a href="/review">Daily review</a></li>
-              <li><a href="/achievements">Badges</a></li>
+              <li><a href="/roadmap" data-i18n="footer.roadmap">{T('footer.roadmap')}</a></li>
+              <li><a href="/review" data-i18n="footer.review">{T('footer.review')}</a></li>
+              <li><a href="/achievements" data-i18n="footer.badges">{T('footer.badges')}</a></li>
               {/* Someone verifying a certificate arrives from a printout, not
                   from inside the site — but a link they can find beats asking
                   them to type a URL they half-remember. */}
-              <li><a href="/v">Verify a certificate</a></li>
-              <li><a href="/account">Your account</a></li>
+              <li><a href="/v" data-i18n="footer.verify">{T('footer.verify')}</a></li>
+              <li><a href="/account" data-i18n="footer.account">{T('footer.account')}</a></li>
             </ul>
           </nav>
 
           <nav aria-label="Project">
-            <h2 style="font-size:var(--fs-100);font-family:var(--font-body);text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-2);">Project</h2>
+            <h2 style="font-size:var(--fs-100);font-family:var(--font-body);text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-2);" data-i18n="footer.project">{T('footer.project')}</h2>
             <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
-              {showSupport && <li><a href="/support">Support Lrnon</a></li>}
-              <li><a href="/about">About Lrnon</a></li>
-              <li><a href="/whats-new">What's new</a></li>
-              <li><a href="/community">Community</a></li>
-              <li><a href="/volunteer">Volunteer</a></li>
-              <li><a href="/feedback">Feedback</a></li>
-              <li><a href="/share">Spread the word</a></li>
-              {GOOGLE_REVIEW_URL && <li><a href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer">Rate us on Google</a></li>}
+              {showSupport && <li><a href="/support" data-i18n="footer.support">{T('footer.support')}</a></li>}
+              <li><a href="/about" data-i18n="footer.about">{T('footer.about')}</a></li>
+              <li><a href="/whats-new" data-i18n="nav.whatsNew">{T('nav.whatsNew')}</a></li>
+              <li><a href="/community" data-i18n="nav.community">{T('nav.community')}</a></li>
+              <li><a href="/volunteer" data-i18n="footer.volunteer">{T('footer.volunteer')}</a></li>
+              <li><a href="/languages" data-i18n="footer.languages">{T('footer.languages')}</a></li>
+              <li><a href="/feedback" data-i18n="nav.feedback">{T('nav.feedback')}</a></li>
+              <li><a href="/share" data-i18n="nav.spread">{T('nav.spread')}</a></li>
+              {GOOGLE_REVIEW_URL && <li><a href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer" data-i18n="nav.rate">{T('nav.rate')}</a></li>}
             </ul>
           </nav>
 
           <div>
-            <h2 style="font-size:var(--fs-100);font-family:var(--font-body);text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-2);">Reach us</h2>
+            <h2 style="font-size:var(--fs-100);font-family:var(--font-body);text-transform:uppercase;letter-spacing:0.08em;color:var(--c-ink-faint);margin:0 0 var(--sp-2);" data-i18n="footer.reach">{T('footer.reach')}</h2>
             <ul style="list-style:none;padding:0;margin:0;display:grid;gap:var(--sp-2);">
               <li><a href={'mailto:' + CONTACT_EMAIL}>{CONTACT_EMAIL}</a></li>
               {CONTACT_PHONE && <li><a href={'tel:' + CONTACT_PHONE.replace(/\s/g, '')}>{CONTACT_PHONE}</a></li>}
             </ul>
-            <p style="margin:var(--sp-2) 0 0;color:var(--c-ink-soft);">
-              One person answers both. Expect a reply within two working days.
-            </p>
+            <p style="margin:var(--sp-2) 0 0;color:var(--c-ink-soft);" data-i18n="footer.reachNote">{T('footer.reachNote')}</p>
           </div>
         </div>
 
         <p style="margin:var(--sp-8) 0 0;padding-top:var(--sp-4);border-top:1px solid var(--c-border);color:var(--c-ink-soft);">
           © 2026 Lrnon · An independently built initiative, not yet a registered charity.
           Content CC BY-SA 4.0 · Code MIT. Free for learners, always: no paywalls, no dark patterns.
-          · <a href="/reading">Reading preferences</a>
-          · <a href="/safeguarding">Child safety</a>
-          · <a href="/privacy">Privacy</a>
-          · <a href="/terms">Terms</a>
+          · <a href="/reading" data-i18n="footer.reading">{T('footer.reading')}</a>
+          · <a href="/safeguarding" data-i18n="footer.safety">{T('footer.safety')}</a>
+          · <a href="/privacy" data-i18n="footer.privacy">{T('footer.privacy')}</a>
+          · <a href="/terms" data-i18n="footer.terms">{T('footer.terms')}</a>
         </p>
       </div>
     </footer>
@@ -190,6 +211,7 @@ const showSupport = FUNDING_MODE !== 'hidden';
     {/* Two quiet counters: an anonymous page count and, for signed-in people, a
         sign-in record. See Telemetry.tsx and /privacy. */}
     <Telemetry client:idle />
+    <ChromeLang client:idle lang={lang} languages={offered} />
 
     {/* Sky, the study buddy. Hidden by the island itself on /admin and on
         certification pages. */}

@@ -274,7 +274,9 @@ export function summary() {
  *   small         Sky as a small round button without its label.
  *   fx            Sky's reactions: calm, gentle (default) or lively. Reduced
  *                 motion, from the device or from Lrnon, always means calm.
- *   sound         a short chime with a reaction. Off by default.
+ *   sound         a short chime with a reaction. On by default since 16 October 2026.
+ *   voice         Sky says its cheers aloud, in Sky's own voice. On by default.
+ *   voiceName     which of the device's voices Sky borrows; empty means Sky picks.
  *   pos           where the person has put Sky. null means the default corner.
  *
  * Motion itself is NOT here: it follows the reader preference `motion` and the
@@ -282,11 +284,11 @@ export function summary() {
 export type SkyFx = 'calm' | 'gentle' | 'lively';
 export interface SkyPrefs {
   numbers: boolean; streakAlerts: boolean; nudges: boolean; timer: boolean; small: boolean;
-  fx: SkyFx; sound: boolean; pos: { x: number; y: number } | null;
+  fx: SkyFx; sound: boolean; voice: boolean; voiceName: string; pos: { x: number; y: number } | null;
 }
 export const SKY_PREF_DEFAULTS: SkyPrefs = {
   numbers: true, streakAlerts: true, nudges: true, timer: true, small: false,
-  fx: 'gentle', sound: false, pos: null,
+  fx: 'gentle', sound: true, voice: true, voiceName: '', pos: null,
 };
 
 export function skyPrefs(): SkyPrefs {
@@ -294,13 +296,14 @@ export function skyPrefs(): SkyPrefs {
   if (typeof localStorage === 'undefined') return { ...d };
   try {
     const saved = JSON.parse(localStorage.getItem(SETTINGS_KEY) ?? '{}').sky ?? {};
-    const bool = (k: 'numbers' | 'streakAlerts' | 'nudges' | 'timer' | 'small' | 'sound') =>
+    const bool = (k: 'numbers' | 'streakAlerts' | 'nudges' | 'timer' | 'small' | 'sound' | 'voice') =>
       (typeof saved[k] === 'boolean' ? saved[k] : d[k]) as boolean;
     const pos = saved.pos && Number.isFinite(saved.pos.x) && Number.isFinite(saved.pos.y)
       ? { x: Math.min(1, Math.max(0, saved.pos.x)), y: Math.min(1, Math.max(0, saved.pos.y)) } : null;
     return {
       numbers: bool('numbers'), streakAlerts: bool('streakAlerts'), nudges: bool('nudges'),
-      timer: bool('timer'), small: bool('small'), sound: bool('sound'),
+      timer: bool('timer'), small: bool('small'), sound: bool('sound'), voice: bool('voice'),
+      voiceName: typeof saved.voiceName === 'string' ? saved.voiceName.slice(0, 120) : '',
       fx: saved.fx === 'calm' || saved.fx === 'gentle' || saved.fx === 'lively' ? saved.fx : d.fx,
       pos,
     };

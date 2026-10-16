@@ -43,6 +43,15 @@ const headers = `/*
 
 /icons/*
   Cache-Control: public, max-age=604800
+
+/sky/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
+/buddy/*
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+
+/buddy-index.json
+  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
 `;
 writeFileSync(join(DIST, '_headers'), headers);
 console.log(`_headers written: script-src 'self' + ${hashes.size} inline hash(es).`);
