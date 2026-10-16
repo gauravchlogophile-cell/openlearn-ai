@@ -15,6 +15,9 @@
  *      href: 'https://example.com/',     https, no tracking parameters
  *      image: '/ads/books.webp',         optional, kept on this site
  *      imageAlt: 'A stack of paperbacks', required with an image
+ *      relatesTo: [],                    ids of any registry card the advertiser or text
+ *                                        names, so it is labelled as an advertiser
+ *                                        beside that tool (required when it does)
  *      startsOn: '2026-11-01', endsOn: '2026-11-30',
  *      paidAmount: 5000, paidCurrency: 'INR',
  *      approvedBy: 'name of the person who read it', approvedOn: '2026-10-28',

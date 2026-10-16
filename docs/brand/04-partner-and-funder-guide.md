@@ -81,8 +81,9 @@ Lrnon was paid for by its founder alone and promised no advertising and no
 sponsorship; it is now open to donations (from anyone, learners included, never
 required and unlocking nothing), to grants, and to advertising under rules a test
 enforces: three browsing pages only, never in a lesson, quiz, review, assessment or
-Sky, no tracking, no advertising network, and no advertisement for an AI product or
-any vendor the lessons cover. No advertisement is shown or approved. Lrnon is not a
+Sky, no tracking and no advertising network. An advertiser may be a company whose product
+a lesson names, and if so it is labelled as an advertiser beside that description for as long
+as it runs and 90 days after. Every advertiser is on a public register. No advertisement is shown or approved. Lrnon is not a
 registered charity, so how gifts and any advertising income are received and taxed
 is an open question for an accountant, and one a funder should raise with us.
 
@@ -121,11 +122,13 @@ memory.
 ## What we will not do for funding
 
 Accept money conditional on covering, ranking or recommending a product; show
-an advertisement for an AI product or on a learning page; track or profile a
+an advertisement on a learning page or hide that an advertiser is also described by us; track or profile a
 learner for money; paywall any part of the curriculum; or add engagement
 mechanics designed to increase time on site rather than learning. That last one is
-checked, not promised: Sky, the study buddy, awards nothing, has no timers or
-leaderboard and never mentions losing a streak, and a test fails if that changes.
+checked, not promised: points and streaks come only from learning, Sky never asks for
+money, timers never cut a learner off, and a test fails if that changes. Sky does have
+cheers, an opt-in leaderboard (with practice pals labelled as made up) and a gentle
+at-risk-streak message, each of which a learner can switch off.
 
 These are stated up front because they are more useful to a funder before a
 conversation than after one.

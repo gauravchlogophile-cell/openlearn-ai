@@ -10,6 +10,16 @@
 export const XP_LESSON_COMPLETE = 10;
 export const XP_MODULE_QUIZ = 30;
 export const XP_REVIEW_SESSION = 5;
+export const XP_QUICK_QUIZ = 5;
+export const XP_BONUS_STAR = 2;
+export const BONUS_STARS_PER_DAY = 3;
+
+/** The reasons that count as LEARNING for a streak. A bonus star is a reward for
+ *  noticing something on the page, not for learning anything, so tapping one
+ *  adds to XP but never keeps a streak alive. Without this a streak could be
+ *  held for ever by tapping three stars a day. */
+export const LEARNING_REASONS = new Set(['lesson_complete', 'module_quiz_pass', 'review_session', 'quick_quiz']);
+const learningEvents = (state) => state.events.filter((e) => LEARNING_REASONS.has(e.reason));
 
 /** @returns {ProgressState} */
 export function emptyState() {
@@ -93,7 +103,7 @@ function prevIsoWeek(weekId) {
 /** Daily streak = consecutive activity days ending today or yesterday.
  * @param {ProgressState} state @param {Date} now */
 export function streak(state, now) {
-  const days = new Set(state.events.map((e) => activityDate(new Date(e.at))));
+  const days = new Set(learningEvents(state).map((e) => activityDate(new Date(e.at))));
   if (days.size === 0) return 0;
   const dayMs = 86400000;
   let cursor = activityDate(now);
@@ -111,10 +121,45 @@ export function streak(state, now) {
   return count;
 }
 
+/** Has any LEARNING happened on the current activity day? (A bonus star does not
+ *  count: see LEARNING_REASONS.)
+ * @param {ProgressState} state @param {Date} now */
+export function activeToday(state, now) {
+  const today = activityDate(now);
+  return learningEvents(state).some((e) => activityDate(new Date(e.at)) === today);
+}
+
+/** How long until the current activity day ends, in milliseconds. The day turns
+ *  over at 4am local (the same cutoff as activityDate), so someone studying at
+ *  1am is still on yesterday's day.
+ * @param {Date} now */
+export function msUntilDayEnds(now) {
+  const end = new Date(now);
+  end.setHours(4, 0, 0, 0);
+  if (now.getHours() >= 4) end.setDate(end.getDate() + 1);
+  return end.getTime() - now.getTime();
+}
+
+/** The length of the run that has just ended, for a streak that is now zero, and
+ *  0 if there is a live streak or no history. This is what lets Sky say "your
+ *  7-day streak ended" with a real number rather than guessing.
+ * @param {ProgressState} state @param {Date} now */
+export function lastRunLength(state, now) {
+  if (streak(state, now) > 0) return 0;
+  const days = [...new Set(learningEvents(state).map((e) => activityDate(new Date(e.at))))].sort();
+  if (days.length === 0) return 0;
+  let n = 1;
+  for (let i = days.length - 1; i > 0; i--) {
+    const gap = (Date.parse(days[i] + 'T12:00:00Z') - Date.parse(days[i - 1] + 'T12:00:00Z')) / 86400000;
+    if (Math.round(gap) === 1) n++; else break;
+  }
+  return n;
+}
+
 /** Weekly streak = consecutive ISO weeks with activity, ending this week or
  *  last week (goal_mode='weekly', Phase 3 §7.4). @param {ProgressState} state @param {Date} now */
 export function weeklyStreak(state, now) {
-  const weeks = new Set(state.events.map((e) => isoWeek(new Date(e.at))));
+  const weeks = new Set(learningEvents(state).map((e) => isoWeek(new Date(e.at))));
   if (weeks.size === 0) return 0;
   let cursor = isoWeek(now);
   if (!weeks.has(cursor)) {
@@ -189,6 +234,49 @@ export function recordReviewSession(state, eventId, now) {
     events: [...state.events, {
       id: eventId, kind: 'xp', amount: XP_REVIEW_SESSION,
       reason: 'review_session', ref: day, at: now.toISOString(),
+    }],
+  };
+}
+
+/** The Sky quick quiz: five questions drawn from a module's bank. One XP award
+ *  per activity day, however many quizzes are taken, so it can be done for
+ *  practice as often as someone likes without being a way to farm points.
+ * @param {ProgressState} state @param {string} eventId @param {Date} now
+ * @returns {ProgressState} */
+export function recordQuickQuiz(state, eventId, now) {
+  const day = activityDate(now);
+  if (state.events.some((e) => e.reason === 'quick_quiz' && e.ref === day)) return state;
+  if (state.events.some((e) => e.id === eventId)) return state;
+  return {
+    ...state,
+    events: [...state.events, {
+      id: eventId, kind: 'xp', amount: XP_QUICK_QUIZ,
+      reason: 'quick_quiz', ref: day, at: now.toISOString(),
+    }],
+  };
+}
+
+/** How many bonus stars have been collected on this activity day.
+ * @param {ProgressState} state @param {Date} now */
+export function bonusStarsToday(state, now) {
+  const day = activityDate(now);
+  return state.events.filter((e) => e.reason === 'bonus_star' && e.ref.startsWith(day + '#')).length;
+}
+
+/** A bonus star: two points, at most three a day, and not learning (see
+ *  LEARNING_REASONS). The cap is both here and on the server, which refuses a
+ *  repeat of the same (reason, ref) inside a day.
+ * @param {ProgressState} state @param {string} eventId @param {Date} now
+ * @returns {ProgressState} */
+export function recordBonusStar(state, eventId, now) {
+  if (state.events.some((e) => e.id === eventId)) return state;
+  const taken = bonusStarsToday(state, now);
+  if (taken >= BONUS_STARS_PER_DAY) return state;
+  return {
+    ...state,
+    events: [...state.events, {
+      id: eventId, kind: 'xp', amount: XP_BONUS_STAR,
+      reason: 'bonus_star', ref: `${activityDate(now)}#${taken + 1}`, at: now.toISOString(),
     }],
   };
 }

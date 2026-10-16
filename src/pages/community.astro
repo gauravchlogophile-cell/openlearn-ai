@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import { CONTACT_EMAIL } from '../lib/site-config';
+import SectionStatus from '../components/SectionStatus.tsx';
 
 /* The design's rule for this page: nobody should ever click into an empty room.
    So status here reflects what is actually built, not what is drawn. Learners
@@ -11,17 +12,17 @@ const notify = (what: string) =>
   `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('Tell me when ' + what + ' opens')}`;
 
 const spaces = [
-  { name: 'Learners', status: 'Planned',
+  { name: 'Learners', status: 'Planned', keys: ['doubts','rooms','members'],
     blurb: 'Topic rooms, a members list, and Ask Doubts — where most of Lrnon is meant to happen. Public rooms only, no private messages, and every unverified answer visibly flagged.' },
-  { name: 'Partners', status: 'Planned',
+  { name: 'Partners', status: 'Planned', keys: ['partners'],
     blurb: 'Schools, nonprofits and employers who want to use Lrnon with a group.' },
-  { name: 'Beta testers', status: 'Planned',
+  { name: 'Beta testers', status: 'Planned', keys: ['beta'],
     blurb: 'Try features before release and tell us what breaks. Will be capped at a small group.' },
-  { name: 'Blog', status: 'Planned',
+  { name: 'Blog', status: 'Planned', keys: ['blog'],
     blurb: 'What we are building and why, including the decisions that turned out wrong.' },
-  { name: 'The Lrnon Podcast', status: 'Planned',
+  { name: 'The Lrnon Podcast', status: 'Planned', keys: ['podcast'],
     blurb: 'Conversations with people using AI in ordinary jobs. Audio first, transcript always.' },
-  { name: 'Tech blog', status: 'Planned',
+  { name: 'Tech blog', status: 'Planned', keys: ['techblog'],
     blurb: 'How the site is built — the stack, the accessibility work, the mistakes.' },
 ];
 
@@ -49,8 +50,9 @@ const liveCount = more.filter((m) => m.live).length;
   <section class="container" style="padding-block:var(--sp-12) var(--sp-8);">
     <h1 style="font-size:var(--fs-600);margin:0 0 var(--sp-4);">Community</h1>
     <p class="prose" style="color:var(--c-ink-soft);">
-      None of these is open yet. They are named here so you know what is planned, and
-      marked so you are never clicking into an empty room.
+      Each of these shows its real state: planned (nothing built yet), closed for now, or open.
+      Almost all are planned today. They are named here so you know what is coming, and marked so
+      you are never clicking into an empty room.
     </p>
   </section>
 
@@ -59,9 +61,7 @@ const liveCount = more.filter((m) => m.live).length;
       {spaces.map((s) => (
         <article class="card">
           <p style="margin:0 0 var(--sp-2);">
-            <span style="font-size:var(--fs-100);letter-spacing:0.08em;text-transform:uppercase;color:var(--c-ink-faint);border:1px solid var(--c-border-strong);border-radius:999px;padding:2px 10px;">
-              {s.status}
-            </span>
+            <SectionStatus client:idle keys={s.keys} fallback={s.status} />
           </p>
           <h2 style="font-size:var(--fs-300);margin:0 0 var(--sp-2);">{s.name}</h2>
           <p style="color:var(--c-ink-soft);margin:0 0 var(--sp-4);">{s.blurb}</p>

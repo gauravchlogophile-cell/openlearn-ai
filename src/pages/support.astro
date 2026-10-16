@@ -112,6 +112,42 @@ const talk = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('About a gift
         </ol>
       </section>
 
+      <section id="advertisers" class="container" style="padding-block:var(--sp-8);">
+        <h2 style="font-size:var(--fs-400);">Advertisers and promoters</h2>
+        <p class="prose" style="color:var(--c-ink-soft);">
+          The public register. Anyone who has paid to be shown on Lrnon is listed here, in the
+          open, with what they paid and who approved it. A company that is also described in a
+          lesson is labelled as an advertiser beside that description.
+        </p>
+        {ADS.length === 0 ? (
+          <p class="prose" style="color:var(--c-ink-soft);">Nobody yet. When someone is, this table is the first place it appears.</p>
+        ) : (
+          <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;margin-top:var(--sp-4);">
+              <thead>
+                <tr>
+                  {['Advertiser', 'What was shown', 'Dates', 'Paid', 'Tools it is labelled beside', 'Approved by'].map((h) => (
+                    <th scope="col" style="text-align:left;padding:var(--sp-3);border-bottom:1px solid var(--c-border);color:var(--c-ink-soft);font-size:var(--fs-100);font-family:var(--font-body);">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {ADS.map((a) => (
+                  <tr>
+                    <td style="padding:var(--sp-3);border-top:1px solid var(--c-border);">{a.advertiser}</td>
+                    <td style="padding:var(--sp-3);border-top:1px solid var(--c-border);">{a.text}</td>
+                    <td style="padding:var(--sp-3);border-top:1px solid var(--c-border);">{a.startsOn} to {a.endsOn}</td>
+                    <td style="padding:var(--sp-3);border-top:1px solid var(--c-border);">{a.paidAmount} {a.paidCurrency}</td>
+                    <td style="padding:var(--sp-3);border-top:1px solid var(--c-border);">{(a.relatesTo ?? []).join(', ') || 'none'}</td>
+                    <td style="padding:var(--sp-3);border-top:1px solid var(--c-border);">{a.approvedBy}, {a.approvedOn}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </section>
+
       <section class="container" style="padding-block:var(--sp-8);">
         <h2 style="font-size:var(--fs-400);">Where things stand today</h2>
         <div style="display:grid;gap:var(--sp-4);grid-template-columns:repeat(auto-fit,minmax(200px,1fr));">

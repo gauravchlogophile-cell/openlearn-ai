@@ -23,6 +23,8 @@ Never make a claim we cannot point at a mechanism for.
 | Claim | Mechanism that backs it |
 |---|---|
 | "Nobody pays to be in a lesson" | No vendor agreements exist. Advertising, if ever shown, is held to the rules in `funding-policy.js`, which `test-funding.mjs` checks. Stated on `/`, `/about`, `/support`. |
+| "Engagement is for learning" | XP and streaks come only from learning events (`LEARNING_REASONS` in `progress-core.js`); opening Sky earns a cheer, never points; timers are a pace guide and never cut anyone off; reactions have three levels and "calm" for anyone who needs it (`test-sky-buddy.mjs`, `test-sky-contrast.mjs`). |
+| "One anonymous page count" | No cookie, id, IP or browser string; Do Not Track honoured (`/api/hit`, `/privacy`). Replaces the earlier "no analytics" wording on 16 October 2026. |
 | "Free for every learner, always" | Nothing is behind money; giving unlocks nothing; Sky never asks for money (`test-sky-buddy.mjs`). |
 | "Sourced and dated" | `LessonSources.astro` renders vendor link + `lastVerified` on every lesson naming a tool |
 | "We keep it current" | CUR-7 fails the build at 120 days; `check-sources.mjs` watches vendor docs |
@@ -56,8 +58,15 @@ unless they misrepresent us.
 Since 15 October 2026 this is allowed, narrowly. Check the rules on `/support`
 (printed from `src/lib/funding-policy.js`) before replying.
 
-- **An AI product, model or assistant, or any vendor a lesson names:** no, and
-  say why. What we teach cannot be for sale. This is checked against the registry.
+- **An AI product, model or assistant, or a vendor a lesson names:** yes, with the
+  conflict shown to learners. Since 16 October 2026 the rule is disclosure, not a
+  ban: the advertiser is labelled as one on its own tool card and in every lesson
+  that names it, for as long as the advertisement runs and 90 days after, and its
+  advertisement never appears on a page about it. List the card in `relatesTo` in
+  `ads.js`; `npm test` refuses the entry otherwise. Never agree to change what a
+  lesson, card or comparison says as part of the deal.
+- **Promoters and advertisers appear in the open:** every one is listed on the
+  advertiser register on `/support`, with what they paid for and the dates.
 - **A banned category** (gambling, credit, crypto, weight-loss claims, essay
   services and the rest): no.
 - **Anything else:** possible. It goes in `src/lib/ads.js`, in a commit, with who
@@ -135,12 +144,15 @@ deputy exist. **No brand consideration ever delays a safeguarding response.**
 - Accept payment, equity, credits or perks for coverage.
 - Ask a learner for money inside a lesson, a quiz, a review or Sky, or give a donor
   anything for giving: no feature, no priority, no badge, no ranking.
-- Show an advertisement for an AI product, or on a learning page, or one that
-  tracks anyone.
+- Show an advertisement on a learning page, hide that an advertiser is also a
+  tool we describe, or show one that tracks anyone.
 - Rank tools by anything but stated, checkable criteria.
 - Publish a capability claim without a date.
 - Say "AI-powered" about ourselves as a selling point.
-- Use urgency, streak guilt, or dark patterns to drive engagement.
+- Use dark patterns to drive engagement, or reward time on site. Sky may say a
+  streak is at risk, kindly and once, and may show a leaderboard, a pace timer and
+  cheers; none of it is ever paid for, shown to someone who has switched it off, or
+  allowed to take a lesson away.
 - Claim a credential, accreditation or partnership we do not hold.
 - Machine-translate the curriculum and call it multilingual (E10·L8).
 - Quietly amend a claim that turned out to be wrong.

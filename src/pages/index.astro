@@ -2,6 +2,7 @@
 import Base from '../layouts/Base.astro';
 import TryOneQuestion from '../components/TryOneQuestion.tsx';
 import AdSlot from '../components/AdSlot.astro';
+import SkyHero from '../components/SkyHero.tsx';
 import { getCollection } from 'astro:content';
 import meta from '../../content/modules.json';
 import { BADGES } from '../lib/progress-core.js';
@@ -75,18 +76,10 @@ const tracks = meta.tracks.map((t) => {
    </div>
 
    {/* Sky, up front. The same character that sits at the bottom right of every
-       page, so a visitor meets them before they need them. It is a picture, not
-       an animation: the only movement is a slow float that the device's
-       reduce-motion setting (or Lrnon's own switch) removes. data-decorative
-       lets the data-saver setting skip the download; the alt text stays for
-       anyone who does load it. */}
-   <figure data-decorative style="margin:0;justify-self:center;text-align:center;max-width:320px;">
-    <img class="skyb-float" src="/sky/sky.webp" width="320" height="351" loading="eager" fetchpriority="high"
-      alt="Sky, a friendly green owl-shaped robot with big round eyes, waving." style="max-width:100%;height:auto;" />
-    <figcaption style="margin-top:var(--sp-2);color:var(--c-ink-soft);font-size:var(--fs-100);">
-      Meet <strong>Sky</strong>, your study buddy. Find Sky at the bottom right of any page.
-    </figcaption>
-   </figure>
+       page, large, so a visitor meets them before they need them. When the page
+       opens Sky plays its welcome clip (once a browser session, and only if the
+       device and Lrnon allow motion), with a button that stops it. */}
+   <SkyHero client:load />
   </section>
 
   <section class="container" style="padding-block:0 var(--sp-8);max-width:760px;">

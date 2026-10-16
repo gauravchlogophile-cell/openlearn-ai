@@ -58,9 +58,12 @@ three are now enforced in code rather than promised:
    priority, no badge. Donors are not ranked. Nothing asks a learner for money
    inside a lesson, a quiz, a review or Sky (`test-sky-buddy.mjs`).
 2. **Nobody can buy their way into the curriculum.** No paid placement, ranking or
-   inclusion. An advertisement may not be for an AI product or for any vendor the
-   lessons or registry name, which is checked against the registry
-   (`src/lib/funding-policy.js`, `test-funding.mjs`).
+   inclusion. From 16 October 2026 anyone may advertise, an AI company included,
+   and promoters and advertisers are listed in the open on `/support`. What is never
+   allowed is hiding a conflict from the learner it could affect: an advertiser that
+   a lesson or tool card also describes is labelled as one beside that description
+   for the run of the advertisement and 90 days after, and its advertisement never
+   appears on a page about it (`src/lib/funding-policy.js`, `test-funding.mjs`).
 3. **Learners are not tracked or profiled for money.** No advertising-network
    scripts, no cookies, no identifiers, no personalising. The content-security
    policy allows scripts only from this site, and a test fails if that changes.
@@ -91,19 +94,29 @@ document.
 
 Lrnon has streaks, levels, badges and a mascot, Sky, who is on every page. The
 founder's instruction, recorded 15 October 2026, is that these exist to help
-people learn and not to keep them on the site. Held as rules, each one tested in
+people learn and not to keep them on the site. On 16 October the founder asked for
+Sky to be more alive (cheers, glow, sound, a leaderboard, timers, talk about a
+streak) and for it still to serve learning. Held as rules, tested in
 `scripts/test-sky-buddy.mjs`:
 
-- **Progress is earned by learning, never by opening anything.** XP, streaks and
-  badges come from finishing a lesson, passing a quiz or doing a review. Sky
-  displays them and never awards them, so there is nothing to farm.
-- **Sky suggests one next step and says how long it takes.** It does not invent
-  urgency, and it never talks about losing, missing or breaking anything. A gap is
-  not a failure; the weekly view already says so.
-- **No comparison between learners.** No leaderboard, because ranking learners
-  exposes them to each other and is not a reason to learn.
-- **No timers, no countdowns, no sound, no flashing.** Movement is one slow float,
-  removed by the device's reduce-motion setting and by Lrnon's own switch.
+- **Progress is earned by learning, never by opening anything.** XP and streaks
+  come from finishing a lesson, passing a quiz or doing a review. Opening Sky earns
+  a cheer and a bit of motivation, not points, so there is nothing to farm. The
+  bonus-star catch is capped per day and says so.
+- **Sky may talk about a streak, kindly.** It can say a streak is at risk and how
+  long it takes to keep it, once, and never in shame. A gap is not a failure, and
+  a missed day never takes anything away.
+- **The leaderboard is opt-in and honest.** It shows a generated handle, a level
+  and a streak, never a name or email. Practice pals fill it with a fresh set each
+  day, each labelled "Practice pal", and they are never counted as learners.
+- **Timers are a pace guide.** A quick quiz shows a countdown and never cuts anyone
+  off (WCAG 2.2.1). Sky shows the time left in the day to keep a streak and nothing
+  is lost at midnight.
+- **Flash, glow, movement and sound are the learner's to set.** Three levels (calm,
+  gentle, lively); calm is the default whenever the device asks for reduced motion;
+  never more than two flashes, each over a second long and under half brightness;
+  one short quiet chime. Sky can be dragged anywhere and parked in a corner by
+  keyboard.
 - **Numbers can be switched off.** Anyone for whom a counter is pressure can hide
   streaks and levels from Sky.
 - **It never asks for money.** Support has one page, linked from the footer.

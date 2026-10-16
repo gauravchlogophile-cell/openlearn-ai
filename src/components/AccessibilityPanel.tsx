@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import { useViewportClamp } from '../lib/use-viewport-clamp';
+import { useVoices } from './useVoices';
+import { groupVoices, labelFor, sampleFor, defaultVoice, RATES } from '../lib/voices.js';
 import {
   readerPrefs, setReaderPref, defaultReaderPrefs, applyReaderPrefs,
-  readAloudEnabled, setReadAloud,
+  readAloudEnabled, setReadAloud, speechPrefs, setSpeechPref,
   type ReaderPrefs, type ReaderPrefName,
 } from '../lib/progress-store';
 
@@ -52,6 +54,9 @@ export default function AccessibilityPanel() {
   const [open, setOpen] = useState(false);
   const [prefs, setPrefs] = useState<ReaderPrefs | null>(null);
   const [aloud, setAloud] = useState(false);
+  const [speech, setSpeech] = useState(speechPrefs());
+  const voices = useVoices();
+  const { indian, global: globalVoices } = groupVoices(voices as any);
   const panelRef = useRef<HTMLDivElement>(null);
   /* Right-aligned to the trigger, which puts it off-screen once the nav wraps
      and the trigger is no longer near the right edge. Measured at -213px on a
@@ -60,7 +65,7 @@ export default function AccessibilityPanel() {
   const btnRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
-    const read = () => { setPrefs(readerPrefs()); setAloud(readAloudEnabled()); };
+    const read = () => { setPrefs(readerPrefs()); setAloud(readAloudEnabled()); setSpeech(speechPrefs()); };
     read();
     window.addEventListener('ol:progress', read);
     return () => window.removeEventListener('ol:progress', read);
@@ -174,6 +179,66 @@ export default function AccessibilityPanel() {
                 Uses your device’s own voice — nothing is downloaded or sent anywhere.
                 A player appears on each lesson. Questions are not read out.
               </p>
+
+              {aloud && (
+                <div style={{ display: 'grid', gap: 'var(--sp-2)', marginTop: 'var(--sp-3)' }}>
+                  <label htmlFor="a11y-voice" style={{ fontWeight: 600, fontSize: 'var(--fs-100)' }}>Voice</label>
+                  {voices.length === 0 ? (
+                    <p style={{ margin: 0, color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>
+                      This device has not listed any voices yet, or has none. Natural voices are in your
+                      device's settings under accessibility or speech.
+                    </p>
+                  ) : (
+                    <select id="a11y-voice" value={speech.voiceURI ?? ''}
+                      onChange={(e) => { setSpeechPref('voiceURI', e.target.value || null); setSpeech(speechPrefs()); }}
+                      style={{ minHeight: 44, padding: '0 var(--sp-2)', font: 'inherit', borderRadius: 'var(--r-s)', border: '1px solid var(--c-border-strong)', background: 'var(--c-surface)', color: 'var(--c-ink)' }}>
+                      <option value="">Best voice for this page (automatic)</option>
+                      {indian.length > 0 && (
+                        <optgroup label="Indian voices">
+                          {indian.map((v: any) => <option key={v.voiceURI} value={v.voiceURI}>{labelFor(v)}</option>)}
+                        </optgroup>
+                      )}
+                      {globalVoices.length > 0 && (
+                        <optgroup label="Global voices">
+                          {globalVoices.map((v: any) => <option key={v.voiceURI} value={v.voiceURI}>{labelFor(v)}</option>)}
+                        </optgroup>
+                      )}
+                    </select>
+                  )}
+
+                  <span style={{ fontWeight: 600, fontSize: 'var(--fs-100)' }} id="a11y-rate-l">Speed</span>
+                  <div role="group" aria-labelledby="a11y-rate-l" style={{ display: 'flex', flexWrap: 'wrap', gap: 'var(--sp-1)' }}>
+                    {RATES.map((r: number) => (
+                      <button key={r} type="button" aria-pressed={speech.rate === r}
+                        onClick={() => { setSpeechPref('rate', r); setSpeech(speechPrefs()); }}
+                        style={{ minHeight: 40, padding: '0 var(--sp-3)', font: 'inherit', cursor: 'pointer', borderRadius: 'var(--r-s)',
+                          border: '1px solid ' + (speech.rate === r ? 'var(--c-primary)' : 'var(--c-border-strong)'),
+                          background: speech.rate === r ? 'var(--c-primary-soft)' : 'transparent', color: 'var(--c-ink)', fontWeight: speech.rate === r ? 600 : 400 }}>
+                        {r === 1 ? 'Normal' : r + '×'}
+                      </button>
+                    ))}
+                  </div>
+
+                  <button type="button" className="btn btn--ghost" disabled={voices.length === 0}
+                    onClick={() => {
+                      const synth = window.speechSynthesis; synth.cancel();
+                      const v = (speech.voiceURI ? voices.find((x) => x.voiceURI === speech.voiceURI) : null) ?? defaultVoice(voices as any, document.documentElement.lang || 'en');
+                      const u = new SpeechSynthesisUtterance(sampleFor(v));
+                      if (v) { u.voice = v as SpeechSynthesisVoice; u.lang = v.lang; }
+                      u.rate = speech.rate; synth.speak(u);
+                    }}>Hear a sample</button>
+
+                  <p style={{ margin: 0, color: 'var(--c-ink-faint)', fontSize: 'var(--fs-100)' }}>
+                    These are the voices already on your device, Indian and global, with the more natural ones listed first.
+                    Recorded human narration will play instead, when a lesson has it.
+                  </p>
+                  <label style={{ display: 'flex', gap: 'var(--sp-2)', alignItems: 'center', minHeight: 44 }}>
+                    <input type="checkbox" checked={speech.recorded} style={{ width: 20, height: 20 }}
+                      onChange={(e) => { setSpeechPref('recorded', e.target.checked); setSpeech(speechPrefs()); }} />
+                    <span>Prefer recorded narration when there is one</span>
+                  </label>
+                </div>
+              )}
             </fieldset>
           </div>
 

@@ -1,0 +1,11 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import AdminGate from '../../components/AdminGate.tsx';
+import AdminSections from '../../components/AdminSections.tsx';
+---
+<Admin title="Section switches — Lrnon admin" heading="Section switches"
+  description="Open or close each community section in one click.">
+  <AdminGate client:load>
+    <AdminSections client:load />
+  </AdminGate>
+</Admin>

@@ -9,6 +9,10 @@ import { useState } from 'react';
  */
 export default function ShareTools({ siteUrl, param }: { siteUrl: string; param: string }) {
   const link = `${siteUrl}/?${param}=share`;
+  /* Each one-tap target carries its own marker (?from=x, ?from=whatsapp …), so
+     the arrivals count can say which channel people came through. It is still one
+     word, still no per-person id, still no cookie. */
+  const via = (channel: string) => `${siteUrl}/?${param}=${channel}`;
   const [copied, setCopied] = useState(false);
 
   async function copy() {
@@ -25,11 +29,15 @@ export default function ShareTools({ siteUrl, param }: { siteUrl: string; param:
 
   const msg = 'I have been learning AI on Lrnon — it is free, open source, and nobody has to pay to use it.';
   const targets = [
-    { name: 'WhatsApp', href: `https://wa.me/?text=${encodeURIComponent(msg + ' ' + link)}` },
-    { name: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(link)}` },
-    { name: 'Telegram', href: `https://t.me/share/url?url=${encodeURIComponent(link)}&text=${encodeURIComponent(msg)}` },
-    { name: 'Reddit', href: `https://reddit.com/submit?url=${encodeURIComponent(link)}&title=${encodeURIComponent('Lrnon — free, open-source AI curriculum')}` },
-    { name: 'Email', href: `mailto:?subject=${encodeURIComponent('Free AI course')}&body=${encodeURIComponent(msg + '\n\n' + link)}` },
+    { name: 'WhatsApp', href: `https://wa.me/?text=${encodeURIComponent(msg + ' ' + via('whatsapp'))}` },
+    /* X, which was Twitter. The intent URL still lives on twitter.com and both
+       domains answer it; x.com/intent/post is the newer spelling but twitter.com
+       also works in the apps people actually tap it from. */
+    { name: 'X (Twitter)', href: `https://twitter.com/intent/tweet?text=${encodeURIComponent(msg)}&url=${encodeURIComponent(via('x'))}` },
+    { name: 'LinkedIn', href: `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(via('linkedin'))}` },
+    { name: 'Telegram', href: `https://t.me/share/url?url=${encodeURIComponent(via('telegram'))}&text=${encodeURIComponent(msg)}` },
+    { name: 'Reddit', href: `https://reddit.com/submit?url=${encodeURIComponent(via('reddit'))}&title=${encodeURIComponent('Lrnon — free, open-source AI curriculum')}` },
+    { name: 'Email', href: `mailto:?subject=${encodeURIComponent('Free AI course')}&body=${encodeURIComponent(msg + '\n\n' + via('email'))}` },
   ];
 
   return (

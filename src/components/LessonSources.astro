@@ -1,4 +1,6 @@
 ---
+import { ADS } from '../lib/ads.js';
+import { advertisersFor } from '../lib/funding-policy.js';
 /** Sources block: every tool a lesson names, with where the claim came from
  *  and when it was last checked.
  *
@@ -37,6 +39,7 @@ const cards = ids
 /* CUR-7's threshold, shown to the reader rather than only enforced in CI. A
    learner deciding whether to rely on a description should know it is four
    months old. */
+const today = new Date().toISOString().slice(0, 10);
 const STALE_DAYS = 120;
 const age = (d: string) => Math.floor((Date.now() - new Date(d).getTime()) / 86400000);
 ---
@@ -49,7 +52,7 @@ const age = (d: string) => Math.floor((Date.now() - new Date(d).getTime()) / 864
     </h2>
 
     <p style="color:var(--c-ink-soft);font-size:var(--fs-100);margin:0 0 var(--sp-3);">
-      No vendor pays to be described here, and Lrnon favours none. Each description below is
+      No vendor pays to be described here, and Lrnon favours none. If one advertises with Lrnon, it says so beside its description. Each description below is
       drawn from the vendor's own published material or from openly reported use,
       on the date shown. Follow the link for the current position — it is the
       authority, not us.
@@ -65,6 +68,11 @@ const age = (d: string) => Math.floor((Date.now() - new Date(d).getTime()) / 864
             <strong>{c.name}</strong>
             <span style="color:var(--c-ink-soft);">{c.vendor}</span>
             <a href={c.docsUrl} rel="noopener">Official source ↗</a>
+            {advertisersFor(c.id, ADS, today).length > 0 && (
+              <span style="border:1px solid var(--c-border-strong);border-radius:999px;padding:0 var(--sp-2);">
+                advertises on Lrnon · <a href="/support#advertising">disclosure</a>
+              </span>
+            )}
             <span style={'color:' + (stale ? 'var(--c-alert)' : 'var(--c-ink-faint)') + ';'}>
               {stale
                 ? `⚠ checked ${c.lastVerified} — ${days} days ago, may have changed`

@@ -5,13 +5,27 @@ import Base from '../layouts/Base.astro';
   description="What we collect: nothing, unless you choose to sign in. Sign-in adds your email and learning progress, protected by row-level security, never sold.">
   <section class="container prose" style="padding-block:var(--sp-12);">
     <h1 style="font-size:var(--fs-500);">Privacy</h1>
-    <p style="color:var(--c-ink-soft);">Version 0.3 · public preview · last updated 2026-08-24</p>
+    <p style="color:var(--c-ink-soft);">Version 0.3 · public preview · last updated 2026-10-16</p>
 
     <h2>The short version</h2>
     <p><strong>Using this site without an account collects no personal data at
-    all.</strong> No cookies, no analytics, no trackers, no third-party
-    scripts. Signing in (optional, for cross-device sync) adds your email
-    address and your learning progress to our database — nothing more.</p>
+    all.</strong> No cookies, no trackers, no third-party scripts. We do keep
+    one anonymous count of pages opened, described below, which cannot say who
+    read what. Signing in (optional, for cross-device sync) adds your email
+    address, your learning progress and a short record of when you signed in to
+    our database — nothing more.</p>
+
+    <h2>What we count, and what we cannot see</h2>
+    <p>When a page opens, the site sends one small note to our own server: the
+    page's address, whether you are on a phone, tablet or computer, the country
+    the request came from (supplied by our host, not looked up by us), and, if
+    you arrived through a Lrnon share link, which channel it was. That is added
+    to a daily total. <strong>No cookie, no identifier, no IP address and no
+    browser string is stored</strong>, so the totals cannot be traced back to a
+    person and cannot say how many different people there were. It is not sent at
+    all if your browser sends Do Not Track or Global Privacy Control, and not from
+    the admin area. We use the totals to see which lessons are read and where
+    people arrive from.</p>
 
     <h2>Where your progress lives</h2>
     <p>By default, your lessons, XP, streaks, badges, and flashcard schedule
@@ -28,6 +42,14 @@ import Base from '../layouts/Base.astro';
     you choose to set one), and your learning progress (lessons completed,
     XP/coin events, streak data). Your existing local progress merges in
     automatically the first time you sign in; nothing is lost or overwritten.</p>
+    <p>Each time you sign in we also record the time, which provider you used and
+    whether the device was a phone, tablet or computer. No address and no browser
+    string. Administrators with the right role can see this, with your display
+    name, in the user portal, so they can help you if something goes wrong; they
+    cannot see your email unless they are an owner. These records are deleted
+    after 24 months, and when you delete your account.</p>
+    <p>Everything an administrator does to an account (a suspension, a role) is
+    written to a log that no one can edit, with their name and the reason.</p>
     <p>We don't store passwords — sign-in works entirely through your chosen
     provider (Google/GitHub) or a one-time emailed link, so there's no
     password of ours to leak. Your data is protected by database-level
@@ -43,8 +65,13 @@ import Base from '../layouts/Base.astro';
     labelled line of text or an image kept on this site, with a plain link: no
     tracking, no cookies and no personalising, for anyone. This page will say so
     before it starts.</p>
+    <p>The leaderboard is opt-in. If you join it, other learners see a generated
+    handle (never your name or email), your level and your streak, and nothing
+    else; you can leave at any time. The practice pals that fill the board with
+    you are made-up, each marked "Practice pal", and are never counted as learners.
+    They hold no data about anyone.</p>
     <p>Sky the study buddy reads the progress already stored in your browser and
-    sends nothing anywhere. The part of Sky that answers written questions is
+    sends nothing about you anywhere; the leaderboard it shows is read from our server and tells it nothing about you. The part of Sky that answers written questions is
     open only to the Lrnon team for now. When it is used, the question is sent
     to an outside AI provider to write the answer. That provider's terms differ
     by plan: on a free plan its published terms allow it to use what is sent to
@@ -103,8 +130,7 @@ import Base from '../layouts/Base.astro';
     <h2>Your rights over your data</h2>
     <p>If you have an account you can, at any time:</p>
     <ul>
-      <li><strong>See it</strong> — everything we hold is your email, display
-      name and learning progress. There is no hidden profile.</li>
+      <li><strong>See it</strong> — everything we hold is your email, display name, learning progress and sign-in record. There is no hidden profile.</li>
       <li><strong>Delete it</strong> — deleting your account removes your
       profile, progress, XP ledger and any roles, immediately and completely.</li>
       <li><strong>Withdraw consent</strong> — signing out and deleting your

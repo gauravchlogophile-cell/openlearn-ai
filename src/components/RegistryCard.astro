@@ -1,6 +1,8 @@
 ---
 /** Renders a tool's registry card inside lessons. Lessons never hard-code
  *  tool facts (CUR-3); they embed this. Staleness banner is automatic (CUR-7). */
+import { ADS } from '../lib/ads.js';
+import { advertisersFor } from '../lib/funding-policy.js';
 interface Props { id: string; }
 const { id } = Astro.props;
 
@@ -9,6 +11,10 @@ const card: any = Object.values(files)
   .map((m: any) => m.default)
   .find((c: any) => c?.id === id);
 if (!card) throw new Error(`RegistryCard: unknown tool id "${id}"`);
+
+/* Conflict of interest, disclosed where it could matter: if this vendor advertises
+   on Lrnon (or did in the last 90 days) the learner is told, right here. */
+const advertisers = advertisersFor(card.id, ADS, new Date().toISOString().slice(0, 10));
 
 const ageDays = Math.floor((Date.now() - new Date(card.lastVerified).getTime()) / 86400000);
 const stale = ageDays > 120;
@@ -23,6 +29,12 @@ const caps: [string, string][] = [
     <p style="color:var(--c-alert);font-weight:600;margin-top:0;">
       ⚠ This tool card was last verified {ageDays} days ago and may be outdated.
       Check the official docs below — or help us update it.
+    </p>
+  )}
+  {advertisers.length > 0 && (
+    <p class="note note--try" style="margin-top:0;padding:var(--sp-3) var(--sp-4);font-size:var(--fs-100);">
+      <strong>Advertiser disclosure.</strong> {advertisers[0].advertiser} advertises on Lrnon. It has no say in this description.
+      <a href="/support#advertising">How advertising works</a>
     </p>
   )}
   <p style="margin-top:0;"><strong>{card.name ?? id}</strong>

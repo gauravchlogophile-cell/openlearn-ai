@@ -16,6 +16,7 @@ import { fileURLToPath } from 'node:url';
 import { join, relative, sep } from 'node:path';
 import {
   AD_RULES, GIVING_TERMS, AD_ALLOWED_PATHS, AD_ALLOWED_CATEGORIES, adSlotAllowed, validateAd,
+  cardsNamedBy, advertisersFor,
 } from '../src/lib/funding-policy.js';
 import { ADS } from '../src/lib/ads.js';
 
@@ -76,19 +77,38 @@ const USES_ADSLOT = /imports+AdSlot|<AdSlot/;
 }
 
 /* ---- the rules about who may advertise -------------------------------------- */
-const vendors = ['ChatGPT', 'OpenAI', 'Claude', 'Anthropic', 'Gemini', 'Google', 'Microsoft Copilot', 'Perplexity', 'Midjourney'];
+const cards = [
+  { id: 'chatgpt', name: 'ChatGPT', vendor: 'OpenAI' },
+  { id: 'claude', name: 'Claude', vendor: 'Anthropic' },
+  { id: 'gemini', name: 'Gemini', vendor: 'Google' },
+];
 const good = {
   id: 'books-2026-11', advertiser: 'Hill Road Books', category: 'books-and-stationery',
   text: 'Second-hand paperbacks, posted free within India.', href: 'https://hillroadbooks.example/',
   startsOn: '2026-11-01', endsOn: '2026-11-30', paidAmount: 5000, paidCurrency: 'INR',
   approvedBy: 'A. Reviewer', approvedOn: '2026-10-28',
 };
-check('a plain, paid, approved advertisement passes', validateAd(good, { vendors }).length === 0, JSON.stringify(validateAd(good, { vendors })));
-const bad = (patch, why) => check(`refused: ${why}`, validateAd({ ...good, ...patch }, { vendors }).length > 0);
-bad({ advertiser: 'OpenAI' }, 'an AI vendor as advertiser');
-bad({ text: 'Try ChatGPT free for a month.' }, 'a named AI product in the text');
-bad({ text: 'The AI study assistant students love.' }, 'AI wording');
-bad({ text: 'Our new generative tutor.' }, 'generative wording');
+check('a plain, paid, approved advertisement passes', validateAd(good, { cards }).length === 0, JSON.stringify(validateAd(good, { cards })));
+const bad = (patch, why) => check(`refused: ${why}`, validateAd({ ...good, ...patch }, { cards }).length > 0);
+
+/* Conflict of interest. Anyone may advertise, an AI vendor included. What is
+   refused is a conflict that is not declared, because declaring it is what puts
+   the "advertiser" label beside that vendor's description. */
+const ai = { ...good, id: 'ai-1', advertiser: 'OpenAI', category: 'ai-products-and-services', text: 'Try ChatGPT free for a month.', href: 'https://openai.example/' };
+bad({ ...ai }, 'an advertiser that Lrnon describes, without declaring it in relatesTo');
+check('an AI vendor MAY advertise once it declares the conflict', validateAd({ ...ai, relatesTo: ['chatgpt'] }, { cards }).length === 0, validateAd({ ...ai, relatesTo: ['chatgpt'] }, { cards }).join('; '));
+check('an AI company Lrnon has no card for may advertise', validateAd({ ...good, id: 'ai-2', advertiser: 'Some AI Startup', category: 'ai-products-and-services', text: 'A new AI study tool.' }, { cards }).length === 0);
+bad({ advertiser: 'OpenAI', relatesTo: ['chatgpt', 'not-a-card'] }, 'a relatesTo entry that is not a registry card');
+check('naming a vendor in the text counts too', cardsNamedBy({ advertiser: 'Hill Road Books', text: 'Pairs well with Claude.' }, cards).includes('claude'));
+check('a word that merely contains a vendor name does not', cardsNamedBy({ advertiser: 'Cloudy Skies', text: 'Claudette is our cat.' }, cards).length === 0);
+{
+  const run = { ...ai, relatesTo: ['chatgpt'], startsOn: '2026-11-01', endsOn: '2026-11-30' };
+  check('the advertiser is disclosed while the advertisement runs', advertisersFor('chatgpt', [run], '2026-11-15').length === 1);
+  check('and for 90 days after it ends', advertisersFor('chatgpt', [run], '2027-02-20').length === 1);
+  check('and then not', advertisersFor('chatgpt', [run], '2027-03-05').length === 0);
+  check('and not before it starts', advertisersFor('chatgpt', [run], '2026-10-20').length === 0);
+  check('only the tool it relates to is labelled', advertisersFor('claude', [run], '2026-11-15').length === 0);
+}
 bad({ category: 'gambling' }, 'a banned category');
 bad({ category: 'loans-and-credit' }, 'a category not on the allow-list');
 bad({ href: 'http://hillroadbooks.example/' }, 'a non-https link');
@@ -101,16 +121,15 @@ bad({ paidAmount: 0 }, 'no payment recorded');
 bad({ endsOn: '2026-10-01' }, 'an end date before the start');
 bad({ text: 'x'.repeat(161) }, 'text over 160 characters');
 check('an image kept on this site with alt text passes',
-  validateAd({ ...good, image: '/ads/hill-road.webp', imageAlt: 'A stack of paperbacks' }, { vendors }).length === 0);
+  validateAd({ ...good, image: '/ads/hill-road.webp', imageAlt: 'A stack of paperbacks' }, { cards }).length === 0);
 check('the allow-list of categories is short', AD_ALLOWED_CATEGORIES.length <= 8);
 
 /* ---- what is in ads.js right now must itself obey the rules ------------------ */
 {
   const cards = readdirSync(join(ROOT, 'registry')).filter((f) => /^[a-z].*\.json$/.test(f))
     .map((f) => JSON.parse(read('registry/' + f)));
-  const real = [...new Set(cards.flatMap((c) => [c.name, c.vendor]).filter(Boolean))];
   for (const ad of ADS) {
-    const p = validateAd(ad, { vendors: real });
+    const p = validateAd(ad, { cards });
     check(`ads.js entry "${ad.id}" breaks no rule`, p.length === 0, p.join('; '));
   }
   check('ids in ads.js are unique', new Set(ADS.map((a) => a.id)).size === ADS.length);
@@ -121,11 +140,13 @@ check('the allow-list of categories is short', AD_ALLOWED_CATEGORIES.length <= 8
   const support = read('src/pages/support.astro');
   check('the support page prints the advertising rules from the policy list', /AD_RULES/.test(support) && /id="advertising"/.test(support));
   check('the support page prints the giving terms from the policy list', /GIVING_TERMS/.test(support));
-  check('there is a rule for every surface that matters', ['learning-surfaces', 'no-tracking', 'no-ai-vendors', 'categories', 'labelled', 'separate', 'calm', 'all-ages', 'published']
+  check('there is a rule for every surface that matters', ['learning-surfaces', 'conflict-of-interest', 'public-register', 'separate', 'no-tracking', 'categories', 'labelled', 'calm', 'all-ages']
     .every((id) => AD_RULES.some((r) => r.id === id)));
   check('giving terms say it unlocks nothing', GIVING_TERMS.some((t) => /unlocks nothing/i.test(t)));
   check('giving terms protect under-18s', GIVING_TERMS.some((t) => /under 18/i.test(t)));
   check('giving terms refuse money with strings attached', GIVING_TERMS.some((t) => /conditional/i.test(t)));
+  check('the support page lists advertisers and promoters in the open', /id="advertisers"/.test(support) && /ADS\.map/.test(support));
+  check('tool cards and lesson source lists disclose advertisers', /advertisersFor/.test(read('src/components/RegistryCard.astro')) && /advertisersFor/.test(read('src/components/LessonSources.astro')));
   check('the footer links to how Lrnon is funded', /href="\/support"/.test(read('src/layouts/Base.astro')));
 }
 

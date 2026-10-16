@@ -83,7 +83,7 @@
       "probe": "skyCompanionEverywhere",
       "expect": true,
       "saidIn": ["02", "03", "04"],
-      "guideText": "\"Sky, a friendly study buddy, is on every page.\" It is the companion only: it answers nothing, awards nothing and sends nothing.",
+      "guideText": "\"Sky, a friendly study buddy, is on every page.\" It is the companion only: it answers nothing, sends nothing about the learner and earns points only from learning, never from opening it.",
       "onDrift": "Base.astro no longer renders the Sky companion on every page, or renders it conditionally. Guides 02, 03 and 04 say it is on every page; either restore it or take the claim down."
     },
     {

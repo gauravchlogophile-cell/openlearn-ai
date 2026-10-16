@@ -1,0 +1,11 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import AdminGate from '../../components/AdminGate.tsx';
+import AdminUsers from '../../components/AdminUsers.tsx';
+---
+<Admin title="Users — Lrnon admin" heading="Users"
+  description="The user management portal: who is here, how they are doing, and what has been done.">
+  <AdminGate client:load>
+    <AdminUsers client:load />
+  </AdminGate>
+</Admin>

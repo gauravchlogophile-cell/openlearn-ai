@@ -117,6 +117,33 @@ assert.equal(streak(rs, new Date('2026-07-08T12:00:00')), 2, 'review sessions fe
 const rbadges = earnedBadges(rs, new Date('2026-07-08T12:00:00'), {});
 assert.ok(rbadges.includes('reviewer'));
 assert.ok(!rbadges.includes('memory-keeper'));
+// quick quiz XP: once per activity day, and it IS learning (feeds the streak)
+{
+  const { recordQuickQuiz, recordBonusStar, bonusStarsToday, XP_QUICK_QUIZ, XP_BONUS_STAR, BONUS_STARS_PER_DAY, LEARNING_REASONS } =
+    await import('../src/lib/progress-core.js');
+  let q = emptyState();
+  q = recordQuickQuiz(q, 'q-1', new Date('2026-07-07T09:00:00'));
+  q = recordQuickQuiz(q, 'q-2', new Date('2026-07-07T21:00:00'));
+  assert.equal(totalXp(q), XP_QUICK_QUIZ, 'one quick-quiz award per day, however many are taken');
+  q = recordQuickQuiz(q, 'q-3', new Date('2026-07-08T09:00:00'));
+  assert.equal(totalXp(q), XP_QUICK_QUIZ * 2, 'the next day awards again');
+  assert.equal(streak(q, new Date('2026-07-08T12:00:00')), 2, 'a quick quiz feeds the streak');
+
+  // bonus stars: capped, and NOT learning
+  let b = emptyState();
+  for (let i = 0; i < 6; i++) b = recordBonusStar(b, `b-${i}`, new Date('2026-07-07T10:00:00'));
+  assert.equal(bonusStarsToday(b, new Date('2026-07-07T12:00:00')), BONUS_STARS_PER_DAY, 'at most three bonus stars a day');
+  assert.equal(totalXp(b), XP_BONUS_STAR * BONUS_STARS_PER_DAY, 'and each is worth two points');
+  assert.equal(streak(b, new Date('2026-07-07T12:00:00')), 0, 'tapping stars never starts or keeps a streak');
+  assert.equal(weeklyStreak(b, new Date('2026-07-07T12:00:00')), 0, 'nor a weekly streak');
+  b = recordBonusStar(b, 'b-0', new Date('2026-07-08T10:00:00'));
+  assert.equal(totalXp(b), XP_BONUS_STAR * BONUS_STARS_PER_DAY, 'a replayed event id is a no-op');
+  b = recordBonusStar(b, 'b-new', new Date('2026-07-08T10:00:00'));
+  assert.equal(bonusStarsToday(b, new Date('2026-07-08T12:00:00')), 1, 'the cap resets the next day');
+  const mix = completeLesson(b, 'explorer/e1/l1-x', 'h', 'c-1', new Date('2026-07-08T11:00:00'));
+  assert.equal(streak(mix, new Date('2026-07-08T12:00:00')), 1, 'a lesson on a star day does start one');
+  assert.ok(!LEARNING_REASONS.has('bonus_star') && LEARNING_REASONS.has('quick_quiz'), 'the learning list is what the policy says');
+}
 console.log('SM-2 + review: all assertions passed ✓');
 
 // --- option shuffling (guards against answer-position bias) ---

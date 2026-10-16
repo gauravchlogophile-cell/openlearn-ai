@@ -105,6 +105,18 @@ export const AD_MODE: AdMode = 'off';
  *  arrived, in the currency it arrived in, so this only affects presentation. */
 export const CURRENCY = { code: 'INR', name: 'Indian rupee', symbol: '₹' };
 
+/* ------------------------------------------------------------- reviews */
+
+/** Where "Rate us on Google" sends people: the direct review link from the Google
+ *  Business Profile for Lrnon (Business Profile > "Get more reviews" > copy link;
+ *  it looks like https://g.page/r/XXXXXXXX/review).
+ *
+ *  Empty on purpose until there is a real one. A review link guessed from the
+ *  name would send people to somebody else's listing or to a search page, and an
+ *  invitation to review that lands in the wrong place is worse than none. While
+ *  this is empty the "Rate us on Google" links are not rendered at all. */
+export const GOOGLE_REVIEW_URL: string = '';
+
 /* ------------------------------------------------------------ share tracking */
 
 /** Appended to shared links. The design is explicit that this carries no

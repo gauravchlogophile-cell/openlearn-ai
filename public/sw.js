@@ -15,7 +15,7 @@
    footer and landing page changed with the funding policy, and sky.css and the
    Sky colour tokens joined the shell. A returning visitor holding the v8 shell
    would see the old dock and the old "no ads" footer until it refreshed. */
-const SHELL_V = 'ol-shell-v9';
+const SHELL_V = 'ol-shell-v10';
 const ASSETS = 'ol-assets-v1';
 const SHELL_URLS = ['/', '/home', '/roadmap', '/achievements', '/account', '/offline'];
 

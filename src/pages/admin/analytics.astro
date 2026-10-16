@@ -1,0 +1,11 @@
+---
+import Admin from '../../layouts/Admin.astro';
+import AdminGate from '../../components/AdminGate.tsx';
+import AdminAnalytics from '../../components/AdminAnalytics.tsx';
+---
+<Admin title="Analytics — Lrnon admin" heading="Analytics"
+  description="What is being read and learned, in counts. No reader can be identified.">
+  <AdminGate client:load>
+    <AdminAnalytics client:load />
+  </AdminGate>
+</Admin>

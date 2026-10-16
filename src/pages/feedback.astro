@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import FeedbackForm from '../components/FeedbackForm.tsx';
-import { CONTACT_EMAIL, CONTACT_PHONE } from '../lib/site-config';
+import { CONTACT_EMAIL, CONTACT_PHONE, GOOGLE_REVIEW_URL } from '../lib/site-config';
 ---
 <Base title="Feedback & complaints — Lrnon"
   description="Report a broken page, a wrong answer, or something confusing. Every message is read by a person, and accessibility problems are treated as bugs rather than requests.">
@@ -40,6 +40,16 @@ import { CONTACT_EMAIL, CONTACT_PHONE } from '../lib/site-config';
       </p>
     </div>
   </section>
+
+  {GOOGLE_REVIEW_URL && (
+    <section class="container" style="padding-block:var(--sp-8);max-width:900px;">
+      <div class="card">
+        <h2 style="font-size:var(--fs-300);margin-top:0;">Happy with Lrnon? Say so in public</h2>
+        <p style="color:var(--c-ink-soft);">A review on Google helps other people find it. This form is for what is wrong; a review is for what is right.</p>
+        <p style="margin-bottom:0;"><a class="btn btn--ghost" href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer">Rate us on Google<span class="sr-only"> (opens in a new tab)</span></a></p>
+      </div>
+    </section>
+  )}
 
   <section class="container" style="padding-block:var(--sp-8);max-width:900px;">
     <h2 style="font-size:var(--fs-400);">What happens next</h2>

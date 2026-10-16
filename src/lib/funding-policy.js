@@ -11,9 +11,17 @@
  *  What did not change is the thing the earlier promise was protecting: a
  *  learner never pays, nothing is behind money, and nobody can buy their way
  *  into a lesson. "Free forever" is about the learner's side of the table.
- *  The advertising rules exist because the easy way to lose that is to let the
- *  money slowly start to decide what is taught, who sees what, or what is
- *  tracked.
+ *
+ *  On 16 October 2026 the advertising rules were changed again, at the owner's
+ *  instruction. They used to ban advertisements for AI products and for any
+ *  vendor the lessons name. They now allow anyone to advertise, including those
+ *  companies, and replace the ban with a conflict-of-interest rule: a conflict
+ *  is not hidden from the learner it could affect. That is how a newspaper or a
+ *  journal handles it, and it suits a project that names real products: an
+ *  advertiser that is also described in a lesson is labelled as an advertiser
+ *  next to that description, for as long as it advertises and for 90 days after,
+ *  its advertisement can never sit on a page that is about it, and every
+ *  advertiser and promoter is listed in the open.
  *
  *  Each rule here is written so a test can check it (scripts/test-funding.mjs),
  *  and the support page prints them from this list, so the page and the rules
@@ -28,12 +36,20 @@ export const AD_RULES = [
     text: 'No advertisement appears inside a lesson, a quiz, the daily review, an assessment or certificate, the accessibility panel, Sky, the community rooms, Ask Doubts, or any account, privacy, child-safety or support page. Advertising is limited to a few browsing pages.',
   },
   {
-    id: 'no-tracking',
-    text: 'No tracking and no personalised or behavioural targeting, for anyone. No advertising-network scripts, cookies or identifiers. An advertisement is a labelled line of text, or an image kept on this site, with a plain link.',
+    id: 'conflict-of-interest',
+    text: 'Anyone may advertise, including a company whose product Lrnon teaches about. What is never allowed is hiding the conflict from the learner it could affect. An advertiser that Lrnon also describes is named as an advertiser beside that description, on its tool card and in every lesson that names it, while the advertisement runs and for 90 days after. Its advertisement never appears on a page about it.',
   },
   {
-    id: 'no-ai-vendors',
-    text: 'No advertisement for an AI product, model, assistant or its maker, and none for any vendor named in a lesson or tool card, so that what Lrnon teaches cannot be bought.',
+    id: 'public-register',
+    text: 'Every advertiser and promoter is listed in the open, on the support page and in the repository: who they are, what they paid, the dates, the pages involved, and who approved it. Nothing is paid for in private.',
+  },
+  {
+    id: 'separate',
+    text: 'Payment buys nothing in the curriculum. An advertiser cannot see, ask for or pay for any change to a lesson, a tool card, a comparison or what Sky says, and a request to do so is declined and recorded.',
+  },
+  {
+    id: 'no-tracking',
+    text: 'No tracking and no personalised or behavioural targeting, for anyone. No advertising-network scripts, cookies or identifiers. An advertisement is a labelled line of text, or an image kept on this site, with a plain link.',
   },
   {
     id: 'categories',
@@ -44,20 +60,12 @@ export const AD_RULES = [
     text: 'Every advertisement is labelled "Advertisement" and names who paid for it.',
   },
   {
-    id: 'separate',
-    text: 'Advertising never touches the curriculum. An advertiser cannot see, ask for or pay for any change to a lesson, a tool card or a comparison.',
-  },
-  {
     id: 'calm',
     text: 'No advertisement moves, flashes, plays sound or starts anything by itself, and each one respects the reader\'s text size, contrast, font and motion settings like the rest of the page.',
   },
   {
     id: 'all-ages',
     text: 'Lrnon is open to every age and cannot tell who is reading, so anything shown must be suitable for any age.',
-  },
-  {
-    id: 'published',
-    text: 'Every advertisement, who paid, how much, the dates and who approved it is published in the public ledger and in the repository. Anyone can see what was shown and why.',
   },
 ];
 
@@ -73,7 +81,8 @@ export const GIVING_TERMS = [
 /** Pages where an advertisement may appear, if advertising is on at all.
  *  Fails closed: anything not listed is refused, including pages that do not
  *  exist yet, so adding a lesson route or a new tool cannot accidentally gain
- *  an ad slot. */
+ *  an ad slot. None of these is about a product, which is what makes the
+ *  "never on a page about the advertiser" rule true by construction. */
 export const AD_ALLOWED_PATHS = [/^\/$/, /^\/roadmap\/?$/, /^\/whats-new\/?$/];
 
 export function adSlotAllowed(path) {
@@ -90,18 +99,39 @@ export const AD_ALLOWED_CATEGORIES = [
   'libraries-and-nonprofits',
   'general-software',
   'training-and-courses',
+  'ai-products-and-services',
 ];
+
+/** How long a vendor stays labelled as an advertiser after its advertisement
+ *  ends. A conflict does not stop the day the invoice does. */
+export const DISCLOSURE_TAIL_DAYS = 90;
 
 const TRACKING_PARAMS = /[?&](utm_[a-z]+|gclid|fbclid|msclkid|igshid|mc_eid|_hsenc|yclid)=/i;
 const AD_NETWORK_HOSTS = /(doubleclick|googlesyndication|googleadservices|adservice|taboola|outbrain|criteo|adsterra|propellerads|media\.net|amazon-adsystem|adnxs)\./i;
-const AI_WORDS = /\b(AI|A\.I\.|artificial intelligence|machine learning|LLM|GPT|chatbot|copilot|assistant|generative)\b/i;
+
+const esc = (v) => v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+
+/** Which registry cards an advertisement is about: any card whose name or
+ *  vendor appears in the advertiser's name or the advertisement's text.
+ *  @param {{advertiser:string,text:string}} ad
+ *  @param {{id:string,name?:string,vendor?:string}[]} cards */
+export function cardsNamedBy(ad, cards) {
+  const words = `${ad.advertiser} ${ad.text}`;
+  return (cards ?? []).filter((c) => [c.name, c.vendor].filter(Boolean)
+    .some((v) => new RegExp(`\\b${esc(v)}\\b`, 'i').test(words))).map((c) => c.id);
+}
 
 /** Problems with a proposed advertisement, as plain sentences. Empty means it
  *  meets every rule that can be checked mechanically. The rest (is it suitable
  *  for every age, is it honest) is a person's judgement, recorded in
  *  approvedBy.
+ *
+ *  The conflict-of-interest rule is checked here by making the disclosure
+ *  impossible to forget: if the advertiser or the text names a vendor or product
+ *  Lrnon has a card for, the entry must list that card in relatesTo, because
+ *  relatesTo is what puts the "advertiser" label on the card and in the lessons.
  *  @param {object} ad
- *  @param {{ vendors: string[] }} ctx  names of every vendor and product the lessons name */
+ *  @param {{ cards: {id:string,name?:string,vendor?:string}[] }} ctx */
 export function validateAd(ad, ctx) {
   const problems = [];
   const need = (k) => { if (!ad?.[k]) problems.push(`missing ${k}`); };
@@ -117,12 +147,26 @@ export function validateAd(ad, ctx) {
   if (ad.image && !ad.imageAlt) problems.push('an image needs alt text');
   if (new Date(ad.endsOn) <= new Date(ad.startsOn)) problems.push('endsOn must be after startsOn');
 
-  const words = `${ad.advertiser} ${ad.text}`;
-  if (AI_WORDS.test(words)) problems.push('mentions AI, an assistant or similar: no AI advertising (rule: no-ai-vendors)');
-  for (const v of ctx?.vendors ?? []) {
-    if (v && new RegExp(`\\b${v.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\b`, 'i').test(words)) {
-      problems.push(`names "${v}", a vendor or product the lessons cover (rule: no-ai-vendors)`);
+  const named = cardsNamedBy(ad, ctx?.cards);
+  const declared = ad.relatesTo ?? [];
+  for (const id of named) {
+    if (!declared.includes(id)) {
+      problems.push(`names "${id}", a tool Lrnon describes: list it in relatesTo so it is labelled as an advertiser beside its description (rule: conflict-of-interest)`);
     }
   }
+  for (const id of declared) {
+    if (!(ctx?.cards ?? []).some((c) => c.id === id)) problems.push(`relatesTo lists "${id}", which is not a registry card`);
+  }
   return problems;
+}
+
+/** Advertisers to disclose beside a tool: those whose advertisement lists this
+ *  card, while it runs and for DISCLOSURE_TAIL_DAYS after it ends.
+ *  @param {string} cardId @param {object[]} ads @param {string} today  YYYY-MM-DD */
+export function advertisersFor(cardId, ads, today) {
+  const t = new Date(today + 'T00:00:00Z').getTime();
+  return (ads ?? []).filter((a) => (a.relatesTo ?? []).includes(cardId)
+    && new Date(a.startsOn + 'T00:00:00Z').getTime() <= t
+    && t <= new Date(a.endsOn + 'T00:00:00Z').getTime() + DISCLOSURE_TAIL_DAYS * 86400000)
+    .map((a) => ({ advertiser: a.advertiser, endsOn: a.endsOn, id: a.id }));
 }

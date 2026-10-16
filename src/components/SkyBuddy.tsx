@@ -1,104 +1,99 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { isConfigured, supabase } from '../lib/supabase';
 import { skyAudience, leastPermissive } from '../lib/sky-audience.js';
 import { SKY_MODE, SKY_LIMITS } from '../lib/sky-config';
 import {
-  load, goalMode, srsSnapshot, skyPrefs, setSkyPref, SKY_PREF_DEFAULTS, type SkyPrefs,
+  load, goalMode, srsSnapshot, skyPrefs, setSkyPref, SKY_PREF_DEFAULTS, skyStore, patchSkyStore, type SkyPrefs,
 } from '../lib/progress-store';
-import { companionContext, companionSays, progressFacts, breaksToneRule } from '../lib/sky-buddy.js';
+import { companionContext, companionSays, progressFacts, dailyBoost, STREAK_MILESTONES, breaksToneRule } from '../lib/sky-buddy.js';
+import { effectiveFx, cheerPlan, pickCheer, playChime, motionAllowed, FX_LIMITS } from '../lib/sky-fx.js';
+import { loadIndex, type BuddyIndex } from '../lib/sky-data';
+import { useDrag } from './sky/useDrag';
+import SkyStage, { type StageHandle } from './sky/SkyStage';
+import { Hud, QuizView, CardsView, ExploreView, DailiesView, BoardView, BadgesView, type Cheer } from './sky/SkyViews';
 
 /** Sky — the study buddy, on every page.
  *
  *  Two things share this button and they are deliberately different in kind.
  *
  *    The COMPANION is for everyone and costs nothing. It greets, suggests one
- *    next step with how long it takes, and shows progress. It reads what is
- *    already in this browser and sends nothing anywhere.
+ *    next step with how long it takes, runs a quick quiz and a card review, shows
+ *    the daily goals, the badges and the board, and cheers when you finish
+ *    something. It reads what is already in this browser. Apart from the opt-in
+ *    board it sends nothing anywhere.
  *
- *    The ASSISTANT answers questions from Lrnon's pages. It sends the question
- *    to an outside provider, costs money, and is only offered to the audience
- *    its rollout stage allows. Everyone else sees the row for it, with the
- *    honest reason it is closed, instead of a button that would answer 503.
+ *    The ASSISTANT answers questions from Lrnon's pages. It sends the question to
+ *    an outside provider, costs money, and is only offered to the audience its
+ *    rollout stage allows. Everyone else sees the row for it, with the honest
+ *    reason it is closed, instead of a button that would answer 503.
  *
- *  This component never awards anything. XP, streaks and badges come from
- *  finishing lessons, passing quizzes and reviewing cards, elsewhere. Opening
- *  Sky earns nothing, so there is nothing here to farm. scripts/test-sky-buddy.mjs
- *  holds that line.
+ *  Opening Sky earns nothing. Points come from learning, in progress-core; the
+ *  views here call the same functions the lesson and review pages call, for the
+ *  same few events, with the same once-a-day limits. scripts/test-sky-buddy.mjs
+ *  holds the lines.
  */
 
 type Source = { label: string; href: string };
 type Ask =
-  | { k: 'idle' }
-  | { k: 'working' }
-  | { k: 'slow' }
+  | { k: 'idle' } | { k: 'working' } | { k: 'slow' }
   | { k: 'answer'; text: string; sources: Source[] }
   | { k: 'out_of_scope'; title: string; message: string; handoff: Source[] }
   | { k: 'unavailable'; message: string; diagnostic?: Record<string, string> };
 
-type View = 'home' | 'ask' | 'you' | 'settings';
-
+type View = 'home' | 'ask' | 'you' | 'quiz' | 'cards' | 'explore' | 'dailies' | 'board' | 'badges' | 'settings';
 interface Props { intro: string; disclaimer: string; suggestions: string[]; }
 
-/* Where Sky stays out of the way: the admin console has its own tools, and a
-   companion has no business next to an assessment being sat for credit. */
 const HIDDEN_ON = [/^\/admin(\/|$)/, /^\/certification(\/|$)/];
-
-/** Whether the optional wave clip may play right now. Every condition is a
- *  reason someone might not want it, so they all have to be absent:
- *    · their device or Lrnon is set to reduce motion
- *    · data-saver is on (the clip is 260 KB and is not downloaded until asked)
- *    · the browser cannot show a transparent video (Safari and iOS browsers) */
-function mayPlayClip(): boolean {
-  const root = document.documentElement;
-  if (root.getAttribute('data-motion') === 'reduce') return false;
-  if (root.getAttribute('data-saver') === 'on') return false;
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return false;
-  const ua = navigator.userAgent;
-  if (/iPhone|iPad|iPod|CriOS|FxiOS/.test(ua)) return false;
-  if (/Safari/.test(ua) && !/Chrome|Chromium|Edg|Firefox|Android/.test(ua)) return false;
-  return true;
-}
 
 export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
   const [open, setOpen] = useState(false);
   const [view, setView] = useState<View>('home');
   const [hidden, setHidden] = useState(false);
   const [prefs, setPrefs] = useState<SkyPrefs>({ ...SKY_PREF_DEFAULTS });
-  const [index, setIndex] = useState<any>(null);
-  const [tick, setTick] = useState(0);                      // bumps when progress changes
+  const [index, setIndex] = useState<BuddyIndex | null>(null);
+  const [tick, setTick] = useState(0);
   const [nudgeGone, setNudgeGone] = useState(false);
   const [speaking, setSpeaking] = useState(false);
-  const [playing, setPlaying] = useState(false);
   const [mayAsk, setMayAsk] = useState(false);
-
+  const [reduce, setReduce] = useState(true);       // assume calm until the page says otherwise
+  const [cheer, setCheer] = useState<{ id: number; text: string } | null>(null);
+  const [fxRun, setFxRun] = useState<{ id: number; glow: boolean; flashes: number } | null>(null);
+  const [boost, setBoost] = useState<string | null>(null);
   const [q, setQ] = useState('');
   const [ask, setAsk] = useState<Ask>({ k: 'idle' });
+  const [playing, setPlaying] = useState(false);
 
+  const boxRef = useRef<HTMLDivElement>(null);
   const fabRef = useRef<HTMLButtonElement>(null);
   const headRef = useRef<HTMLHeadingElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const clipRef = useRef<HTMLVideoElement>(null);
+  const stage = useRef<StageHandle>(null);
   const slowTimer = useRef<number | undefined>(undefined);
+  const snap = useRef<{ xp: number; level: number; badges: number; streak: number; lessons: number } | null>(null);
+
+  const commitPos = useCallback((p: SkyPrefs['pos']) => { setSkyPref('pos', p); }, []);
+  const drag = useDrag(boxRef, prefs.pos, commitPos);
 
   /* ---- where we are, and what the reader has chosen ------------------ */
   useEffect(() => {
     setHidden(HIDDEN_ON.some((re) => re.test(location.pathname)));
     setPrefs(skyPrefs());
     try { setNudgeGone(sessionStorage.getItem('skyb.nudge') === 'gone'); } catch { /* private mode */ }
-    const again = () => { setPrefs(skyPrefs()); setTick((t) => t + 1); };
+    const calc = () => setReduce(!motionAllowed(document.documentElement, matchMedia));
+    calc();
+    const mq = matchMedia('(prefers-reduced-motion: reduce)');
+    mq.addEventListener?.('change', calc);
+    const again = () => { setPrefs(skyPrefs()); setTick((t) => t + 1); calc(); };
     window.addEventListener('ol:progress', again);
-    return () => window.removeEventListener('ol:progress', again);
+    return () => { window.removeEventListener('ol:progress', again); mq.removeEventListener?.('change', calc); };
   }, []);
+
+  const fx = effectiveFx(prefs.fx, { reduceMotion: reduce });
 
   /* ---- the lesson index: small, fetched once the page is idle ---------- */
   useEffect(() => {
     let alive = true;
-    const go = async () => {
-      try {
-        const r = await fetch('/buddy-index.json');
-        if (r.ok && alive) setIndex(await r.json());
-      } catch { /* offline or not built: Sky still greets, it just has less to say */ }
-    };
+    const go = async () => { try { const i = await loadIndex(); if (alive) setIndex(i); } catch { /* offline: Sky still greets */ } };
     const w = window as any;
     const h = w.requestIdleCallback ? w.requestIdleCallback(go, { timeout: 4000 }) : setTimeout(go, 1500);
     return () => { alive = false; w.cancelIdleCallback ? w.cancelIdleCallback(h) : clearTimeout(h); };
@@ -122,13 +117,8 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
           ]);
           isStaff = Boolean(o) || Boolean(a) || Boolean(s);
         }
-        /* The route decides on the STRICTER of the deployed ceiling and the
-           rollout row, so this must too. sky_rollout_log is admin-only by RLS:
-           the read works for staff and returns nothing for a learner, which is
-           the safe direction — a learner is only ever admitted by 'everyone'. */
         let recorded: string | null = null;
-        const { data: row } = await supabase()
-          .from('sky_rollout_log').select('mode').order('at', { ascending: false }).limit(1);
+        const { data: row } = await supabase().from('sky_rollout_log').select('mode').order('at', { ascending: false }).limit(1);
         if (Array.isArray(row) && row[0]?.mode) recorded = row[0].mode as string;
         const live = leastPermissive(SKY_MODE, recorded);
         const v = skyAudience(live, { userId: id, isStaff }, SKY_LIMITS.slicePercent);
@@ -145,72 +135,82 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
     const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close(); };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [open, view]);
+  }, [open, view]);                                              // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ---- what Sky says: derived from real progress, never invented ------- */
   const ctx = index ? companionContext(index, load(), srsSnapshot(), new Date(), goalMode()) : null;
   void tick;
-  const says = ctx ? companionSays(ctx, { numbers: prefs.numbers }) : null;
+  const says = ctx ? companionSays(ctx, { numbers: prefs.numbers, streakAlerts: prefs.streakAlerts }) : null;
   if (import.meta.env.DEV && says) {
     const bad = breaksToneRule([says.hello, says.say, says.why, says.step?.label].join(' '));
     if (bad) console.error(`Sky said something that breaks the tone rule ("${bad}"):`, says);
   }
   const facts = ctx ? progressFacts(ctx) : null;
 
+  /* ---- cheers: glow, a brief flash, a chime, and a line of words ------ */
+  const doCheer: Cheer = useCallback((kind) => {
+    const plan = cheerPlan(kind, fx, prefs.sound);
+    const id = Date.now();
+    setCheer({ id, text: pickCheer(kind, id) });
+    setNudgeGone(false);
+    if (plan.glow || plan.flashes) setFxRun({ id, glow: plan.glow, flashes: plan.flashes });
+    if (plan.chime) playChime(kind);
+    window.setTimeout(() => setFxRun((r) => (r && r.id === id ? null : r)), FX_LIMITS.flashMs * Math.max(1, plan.flashes) + 400);
+  }, [fx, prefs.sound]);
+
+  useEffect(() => {
+    const on = (e: Event) => doCheer(((e as CustomEvent).detail?.kind ?? 'star') as any);
+    window.addEventListener('sky:cheer', on);
+    return () => window.removeEventListener('sky:cheer', on);
+  }, [doCheer]);
+
+  /* Cheer when something real happened: a lesson finished, a level reached, a
+     badge earned, a streak milestone. A big jump at once (a sync from another
+     device) is not an event to cheer, so it is skipped. */
+  useEffect(() => {
+    if (!ctx) return;
+    const now = { xp: ctx.xp, level: ctx.level, badges: ctx.badgesEarned, streak: ctx.streakDays, lessons: ctx.lessonsDone };
+    const was = snap.current;
+    snap.current = now;
+    if (!was) return;
+    if (now.lessons - was.lessons > 1 || now.xp - was.xp > 120) return;
+    if (now.level > was.level) doCheer('level');
+    else if (now.badges > was.badges) doCheer('badge');
+    else if (now.streak > was.streak && STREAK_MILESTONES.includes(now.streak)) doCheer('streak');
+    else if (now.lessons > was.lessons) doCheer('lesson');
+  }, [ctx?.xp, ctx?.level, ctx?.badgesEarned, ctx?.streakDays, ctx?.lessonsDone]);   // eslint-disable-line react-hooks/exhaustive-deps
+
   if (hidden) return null;
 
   /* ---- actions ----------------------------------------------------- */
-  function close() {
-    setOpen(false);
-    setView('home');
-    stopSpeaking();
-    setAsk({ k: 'idle' });
-    setQ('');
-    fabRef.current?.focus();
+  function openPanel(v: View = 'home') {
+    setView(v); setOpen(true);
+    const day = new Date().toISOString().slice(0, 10);
+    if (skyStore().boost !== day) {            // the daily boost: once a day, earns nothing
+      patchSkyStore({ boost: day });
+      setBoost(dailyBoost(day));
+      doCheer('open' as any);
+    }
   }
-
-  function dismissNudge() {
-    setNudgeGone(true);
-    try { sessionStorage.setItem('skyb.nudge', 'gone'); } catch { /* fine */ }
-  }
+  function close() { setOpen(false); setView('home'); stopSpeaking(); setAsk({ k: 'idle' }); setQ(''); setBoost(null); fabRef.current?.focus(); }
+  function dismissNudge() { setNudgeGone(true); setCheer(null); try { sessionStorage.setItem('skyb.nudge', 'gone'); } catch { /* fine */ } }
 
   function speak(text: string) {
     if (!('speechSynthesis' in window)) return;
     if (speaking) { stopSpeaking(); return; }
     const u = new SpeechSynthesisUtterance(text);
     u.lang = document.documentElement.lang || 'en';
-    u.onend = () => setSpeaking(false);
-    u.onerror = () => setSpeaking(false);
-    window.speechSynthesis.cancel();
-    window.speechSynthesis.speak(u);
-    setSpeaking(true);
+    u.onend = () => setSpeaking(false); u.onerror = () => setSpeaking(false);
+    window.speechSynthesis.cancel(); window.speechSynthesis.speak(u); setSpeaking(true);
   }
-  function stopSpeaking() {
-    if ('speechSynthesis' in window) window.speechSynthesis.cancel();
-    setSpeaking(false);
-  }
-
-  function wave() {
-    const v = clipRef.current;
-    if (!v || playing || !mayPlayClip()) return;
-    if (!v.getAttribute('src')) v.setAttribute('src', '/sky/sky-wave.webm');     // downloaded only now
-    setPlaying(true);
-    const done = () => { setPlaying(false); v.removeEventListener('ended', done); };
-    v.addEventListener('ended', done);
-    v.currentTime = 0;
-    v.play().catch(done);
-  }
+  function stopSpeaking() { if ('speechSynthesis' in window) window.speechSynthesis.cancel(); setSpeaking(false); }
 
   async function sendQuestion(question: string) {
     const text = question.trim();
     if (!text) return;
-    setQ('');
-    setAsk({ k: 'working' });
+    setQ(''); setAsk({ k: 'working' });
     slowTimer.current = window.setTimeout(() => setAsk((s) => (s.k === 'working' ? { k: 'slow' } : s)), 6000);
     try {
-      /* The access token identifies the asker so the route can apply the
-         rollout stage. It is NOT trusted here: the route hands it to PostgREST,
-         which verifies the signature before any role check runs. */
       const headers: Record<string, string> = { 'content-type': 'application/json' };
       if (isConfigured) {
         try {
@@ -222,62 +222,66 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
       const res = await fetch('/api/sky', { method: 'POST', headers, body: JSON.stringify({ q: text, page: location.pathname }) });
       const data = await res.json();
       window.clearTimeout(slowTimer.current);
-      if (data.verdict === 'out_of_scope') {
-        setAsk({ k: 'out_of_scope', title: data.title, message: data.message, handoff: data.handoff ?? [] });
-      } else if (res.ok && data.answer) {
-        setAsk({ k: 'answer', text: data.answer, sources: data.sources ?? [] });
-      } else {
-        setAsk({ k: 'unavailable', message: data.message ?? 'Sky is unavailable right now.', diagnostic: data.diagnostic });
-      }
+      if (data.verdict === 'out_of_scope') setAsk({ k: 'out_of_scope', title: data.title, message: data.message, handoff: data.handoff ?? [] });
+      else if (res.ok && data.answer) setAsk({ k: 'answer', text: data.answer, sources: data.sources ?? [] });
+      else setAsk({ k: 'unavailable', message: data.message ?? 'Sky is unavailable right now.', diagnostic: data.diagnostic });
     } catch {
       window.clearTimeout(slowTimer.current);
       setAsk({ k: 'unavailable', message: 'Sky could not be reached. Your connection may be offline.' });
     }
   }
 
-  const showNudge = !open && prefs.nudges && !nudgeGone && says && says.step && ctx;
-  const sub: Record<View, string> = {
-    home: 'Your study buddy', ask: 'Ask a question', you: 'Your progress', settings: 'How Sky behaves',
+  /* ---- layout: which side the panel opens towards ---------------------- */
+  const right = (drag.pos?.x ?? 1) > 0.5;
+  const low = (drag.pos?.y ?? 1) > 0.4;
+  const showNudge = !open && (cheer || (prefs.nudges && !nudgeGone && says && says.step && ctx));
+  const title: Record<View, string> = {
+    home: 'Your study buddy', ask: 'Ask a question', you: 'Your progress', quiz: '5-minute quiz', cards: 'Study cards',
+    explore: 'Explore a new topic', dailies: 'Dailies and milestones', board: 'Streak and board', badges: 'Your badges', settings: 'How Sky behaves',
   };
+  const back = () => setView('home');
+  const row = (label: string, hint: string, v: View) => (
+    <li><button type="button" className="skyb-row" onClick={() => setView(v)}><span>{label}<small>{hint}</small></span><span aria-hidden="true">→</span></button></li>
+  );
 
   return (
-    <div className={'skyb' + (open ? ' skyb--open' : '')}>
-      {showNudge && says && (
-        <div className="skyb-nudge-wrap" style={{ position: 'relative' }}>
-          <button type="button" className="skyb-nudge" onClick={() => setOpen(true)}>
-            <strong>{says.step!.label}</strong>
-            {says.why && <span style={{ display: 'block', color: 'var(--c-ink-soft)' }}>{says.why}</span>}
+    <div ref={boxRef} className={['skyb', open ? 'skyb--open' : '', right ? 'skyb--r' : 'skyb--l', low ? 'skyb--low' : 'skyb--high', drag.dragging ? 'is-dragging' : ''].join(' ')}
+      style={drag.style()} data-fx={fx}>
+
+      {showNudge && (
+        <div className="skyb-nudge-wrap">
+          <button type="button" className="skyb-nudge" onClick={() => openPanel('home')}>
+            {cheer ? <strong>{cheer.text}</strong> : (<><strong>{says!.step!.label}</strong>{says!.why && <span style={{ display: 'block', color: 'var(--c-ink-soft)' }}>{says!.why}</span>}</>)}
           </button>
-          <button type="button" className="skyb-x" onClick={dismissNudge} aria-label="Dismiss this suggestion">✕</button>
+          <button type="button" className="skyb-x" onClick={dismissNudge} aria-label="Dismiss this message">✕</button>
         </div>
       )}
 
       {open && (
         <div role="dialog" aria-label="Sky, your study buddy" aria-modal="false" className="skyb-panel">
           <div className="skyb-head">
-            {view !== 'home' && (
-              <button type="button" className="skyb-iconbtn" onClick={() => setView('home')} aria-label="Back to Sky's menu">←</button>
-            )}
+            {view !== 'home' && <button type="button" className="skyb-iconbtn" onClick={back} aria-label="Back to Sky's menu">←</button>}
             <span className="skyb-av" aria-hidden="true"><img src="/sky/sky-face.webp" alt="" width="48" height="48" /></span>
             <div style={{ flex: 1, minWidth: 0 }}>
               <h2 ref={headRef} tabIndex={-1}>Sky</h2>
-              <p>{sub[view]}</p>
+              <p>{title[view]}</p>
             </div>
             <button type="button" className="skyb-iconbtn" onClick={close} aria-label="Close Sky">✕</button>
           </div>
 
           <div className="skyb-body" aria-live="polite">
+            {ctx && view !== 'settings' && view !== 'ask' && <Hud ctx={ctx} prefs={prefs} />}
+
             {/* ------------------------------------------------ home */}
             {view === 'home' && (
               <>
+                {boost && <p className="skyb-say" style={{ margin: 0 }}><strong>Today&apos;s boost</strong>{boost}</p>}
                 <div className={'skyb-hero' + (playing ? ' is-playing' : '')}>
-                  <button type="button" onClick={wave} aria-label="Make Sky wave hello"
-                    title="Tap Sky to wave">
-                    <img src="/sky/sky.webp" alt="Sky, a friendly green owl-shaped robot with big round eyes, waving."
-                      width="112" height="112" className="skyb-float" />
-                    <video ref={clipRef} muted playsInline preload="none" aria-hidden="true" />
+                  <button type="button" onClick={() => (playing ? stage.current?.stop() : stage.current?.play())}
+                    aria-label={playing ? 'Stop Sky\'s animation' : 'Play Sky\'s welcome animation'} className="skyb-herobtn">
+                    <SkyStage ref={stage} onPlaying={setPlaying} width={112} height={123} label="Sky, a friendly green owl-shaped robot, waving." floating={false} />
                   </button>
-                  <p className="skyb-say" style={{ flex: "1 1 200px" }}>
+                  <p className="skyb-say" style={{ flex: '1 1 200px', margin: 0 }}>
                     {says ? (<><strong>{says.hello}</strong>{says.say}</>) : (<>{intro.split('.')[0]}.</>)}
                   </p>
                 </div>
@@ -289,148 +293,149 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
                   </div>
                 )}
 
+                <div className="skyb-chips" role="group" aria-label="Quick choices">
+                  <button type="button" className="skyb-choice" onClick={() => setView('quiz')}>Quiz Me! <span aria-hidden="true">📝</span></button>
+                  <button type="button" className="skyb-choice" onClick={() => setView('cards')}>Study Cards <span aria-hidden="true">🃏</span></button>
+                  <button type="button" className="skyb-choice" onClick={() => setView('explore')}>Explore New Topic <span aria-hidden="true">🚀</span></button>
+                </div>
+
                 {says && 'speechSynthesis' in window && (
                   <button type="button" className="skyb-row" onClick={() => speak(`${says.hello}. ${says.say}`)} aria-pressed={speaking}>
-                    <span>{speaking ? 'Stop reading aloud' : 'Read this aloud'}<small>Uses your device's own voice.</small></span>
+                    <span>{speaking ? 'Stop reading aloud' : 'Read this aloud'}<small>Uses your device&apos;s own voice.</small></span>
                   </button>
                 )}
 
                 <ul className="skyb-list">
-                  {ctx && ctx.due > 0 && (
-                    <li><a className="skyb-row" href="/review"><span>Review cards<small>{ctx.due} ready</small></span><span aria-hidden="true">→</span></a></li>
-                  )}
-                  {ctx?.quizModule && (
-                    <li><a className="skyb-row" href={`/quiz/${ctx.quizModule}`}><span>Quiz me<small>{ctx.quizModuleTitle}. No stakes, retry freely.</small></span><span aria-hidden="true">→</span></a></li>
-                  )}
+                  {row('Start 5-Minute Quiz', 'Five questions, with a pace guide you can turn off', 'quiz')}
+                  {row('Streak Status & Leaderboard', ctx && prefs.numbers ? `${ctx.streakDays}-day streak · Level ${ctx.level}` : 'Your streak and the optional board', 'board')}
                   <li>
                     {mayAsk ? (
                       <button type="button" className="skyb-row" onClick={() => setView('ask')}>
-                        <span>Ask Sky a question<small>Answers come from Lrnon's own pages.</small></span><span aria-hidden="true">→</span>
+                        <span>Ask a Homework Question<small>Answers come from Lrnon&apos;s own pages.</small></span><span aria-hidden="true">→</span>
                       </button>
                     ) : (
                       <div className="skyb-row" aria-disabled="true">
-                        <span>Ask Sky a question<small>Not open to everyone yet. It is being checked by the Lrnon team first. For now, search the page or <a href="/feedback">ask a person</a>.</small></span>
+                        <span>Ask a Homework Question<small>Not open to everyone yet. It is being checked by the Lrnon team first. For now, search the page or <a href="/feedback">ask a person</a>.</small></span>
                       </div>
                     )}
                   </li>
-                  <li><button type="button" className="skyb-row" onClick={() => setView('you')}><span>My progress<small>Lessons, streak, level, badges</small></span><span aria-hidden="true">→</span></button></li>
-                  <li><button type="button" className="skyb-row" onClick={() => setView('settings')}><span>Sky settings<small>Nudges, numbers, size</small></span><span aria-hidden="true">→</span></button></li>
+                  {row('Dailies & Milestones', 'Today\'s goals and the next milestones', 'dailies')}
+                  {row('My badges', ctx ? `${ctx.badgesEarned} of ${ctx.badgesTotal} earned` : 'Floating, when earned', 'badges')}
+                  {row('My progress', 'Lessons, streak, level', 'you')}
+                  {row('Sky settings', 'Reactions, sound, timer, moving Sky', 'settings')}
                 </ul>
               </>
             )}
 
+            {view === 'quiz' && (index && ctx ? <QuizView index={index} ctx={ctx} prefs={prefs} onCheer={doCheer} onBack={back} /> : <p role="status">Loading…</p>)}
+            {view === 'cards' && (index ? <CardsView index={index} onCheer={doCheer} onBack={back} /> : <p role="status">Loading…</p>)}
+            {view === 'explore' && (index ? <ExploreView index={index} /> : <p role="status">Loading…</p>)}
+            {view === 'dailies' && (ctx ? <DailiesView ctx={ctx} onBack={back} /> : <p role="status">Loading…</p>)}
+            {view === 'board' && (ctx ? <BoardView prefs={prefs} ctx={ctx} /> : <p role="status">Loading…</p>)}
+            {view === 'badges' && (ctx ? <BadgesView ctx={ctx} onCheer={doCheer} /> : <p role="status">Loading…</p>)}
+
             {/* ------------------------------------------------ progress */}
-            {view === 'you' && (
+            {view === 'you' && (facts ? (
               <>
-                {facts ? (
-                  <>
-                    <dl className="skyb-facts">
-                      {facts.rows
-                        .filter((r) => prefs.numbers || r.k === 'Lessons finished' || r.k === 'Badges')
-                        .map((r) => (<div key={r.k} style={{ display: 'contents' }}><dt>{r.k}</dt><dd>{r.v}</dd></div>))}
-                    </dl>
-                    {prefs.numbers && (
-                      <div>
-                        <div className="skyb-meter" role="progressbar" aria-label="Progress towards the next level"
-                          aria-valuemin={0} aria-valuemax={100} aria-valuenow={facts.levelPercent}><i style={{ width: facts.levelPercent + '%' }} /></div>
-                      </div>
-                    )}
-                    {facts.nextBadge && (
-                      <p className="skyb-say"><strong>Next badge: {facts.nextBadge.name}</strong>{facts.nextBadge.desc}</p>
-                    )}
-                    <p style={{ margin: 0, color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>{facts.note}</p>
-                    <ul className="skyb-list">
-                      <li><a className="skyb-row" href="/home"><span>Your dashboard</span><span aria-hidden="true">→</span></a></li>
-                      <li><a className="skyb-row" href="/achievements"><span>All badges</span><span aria-hidden="true">→</span></a></li>
-                    </ul>
-                  </>
-                ) : <p>Loading…</p>}
+                <dl className="skyb-facts">
+                  {facts.rows.filter((r: any) => prefs.numbers || r.k === 'Lessons finished' || r.k === 'Badges')
+                    .map((r: any) => (<div key={r.k} style={{ display: 'contents' }}><dt>{r.k}</dt><dd>{r.v}</dd></div>))}
+                </dl>
+                {facts.nextBadge && <p className="skyb-say" style={{ margin: 0 }}><strong>Next badge: {facts.nextBadge.name}</strong>{facts.nextBadge.desc}</p>}
+                <p style={{ margin: 0, color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>{facts.note}</p>
+                <ul className="skyb-list">
+                  <li><a className="skyb-row" href="/home"><span>Your dashboard</span><span aria-hidden="true">→</span></a></li>
+                  <li><a className="skyb-row" href="/achievements"><span>All badges</span><span aria-hidden="true">→</span></a></li>
+                </ul>
               </>
-            )}
+            ) : <p role="status">Loading…</p>)}
 
             {/* ------------------------------------------------ settings */}
             {view === 'settings' && (
               <>
                 {([
                   ['nudges', 'Suggestions', 'Sky offers a next step when a page opens. Off means Sky waits until you open it.'],
-                  ['numbers', 'Streaks and levels', 'Show day counts and levels. Turn this off if counters feel like pressure.'],
+                  ['numbers', 'Streaks and levels', 'Show day counts and levels. Off hides every number, and streak alerts with them.'],
+                  ['streakAlerts', 'Streak alerts', 'Say when a streak is about to end or has ended.'],
+                  ['timer', 'Quiz timer', 'A five-minute pace guide on the quick quiz. It never cuts you off.'],
+                  ['sound', 'Cheer sounds', 'A short soft chime when you finish something. Off unless you turn it on.'],
                   ['small', 'Small Sky', 'Show Sky as a small round button without its name.'],
                 ] as [keyof SkyPrefs, string, string][]).map(([key, label, hint]) => (
                   <div className="skyb-switch" key={key}>
                     <p>{label}<small>{hint}</small></p>
-                    <button type="button" className="skyb-toggle" aria-pressed={prefs[key]}
+                    <button type="button" className="skyb-toggle" aria-pressed={prefs[key] as boolean}
                       aria-label={`${label}: ${prefs[key] ? 'on' : 'off'}`}
-                      onClick={() => { setSkyPref(key, !prefs[key]); setPrefs(skyPrefs()); }}>{prefs[key] ? 'On' : 'Off'}</button>
+                      onClick={() => { setSkyPref(key as any, !prefs[key] as any); setPrefs(skyPrefs()); }}>{prefs[key] ? 'On' : 'Off'}</button>
                   </div>
                 ))}
+
+                <fieldset className="skyb-fieldset">
+                  <legend>Sky&apos;s reactions</legend>
+                  {([
+                    ['calm', 'Calm', 'Nothing moves or lights up.'],
+                    ['gentle', 'Gentle', 'A soft glow for a moment when you finish something. No flashing.'],
+                    ['lively', 'Lively', 'The glow, plus one or two brief, soft flashes of Sky\'s button. Please do not choose this if flashing lights bother you.'],
+                  ] as [SkyPrefs['fx'], string, string][]).map(([v, label, hint]) => (
+                    <label key={v} className="skyb-radio">
+                      <input type="radio" name="skyfx" checked={prefs.fx === v} onChange={() => { setSkyPref('fx', v); setPrefs(skyPrefs()); }} />
+                      <span><strong>{label}</strong><small>{hint}</small></span>
+                    </label>
+                  ))}
+                  {reduce && <p style={{ margin: 0, color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>Your device or Lrnon is set to reduce motion, so Sky stays calm whatever you choose here.</p>}
+                </fieldset>
+
+                <fieldset className="skyb-fieldset">
+                  <legend>Move Sky</legend>
+                  <p style={{ margin: 0, color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>Drag Sky&apos;s button anywhere, or press Shift and an arrow key while it has focus, or pick a corner.</p>
+                  <div className="skyb-corners">
+                    <button type="button" className="skyb-row" onClick={() => drag.toCorner('tl')}>Top left</button>
+                    <button type="button" className="skyb-row" onClick={() => drag.toCorner('tr')}>Top right</button>
+                    <button type="button" className="skyb-row" onClick={() => drag.toCorner('bl')}>Bottom left</button>
+                    <button type="button" className="skyb-row" onClick={() => drag.toCorner('br')}>Bottom right</button>
+                  </div>
+                  <button type="button" className="skyb-row" onClick={drag.reset} style={{ justifyContent: 'center' }}>Put Sky back</button>
+                </fieldset>
+
                 <p style={{ margin: 0, color: 'var(--c-ink-soft)', fontSize: 'var(--fs-100)' }}>
-                  Movement follows your device and the Accessibility button at the top of every page.
-                  Sky never flashes, glows or plays sound.
+                  Movement also follows your device and the Accessibility button at the top of every page. Sky never asks for money.
                 </p>
-                <ul className="skyb-list">
-                  <li><a className="skyb-row" href="/reading"><span>Reading and accessibility settings</span><span aria-hidden="true">→</span></a></li>
-                </ul>
+                <ul className="skyb-list"><li><a className="skyb-row" href="/reading"><span>Reading and accessibility settings</span><span aria-hidden="true">→</span></a></li></ul>
               </>
             )}
 
             {/* ------------------------------------------------ ask */}
             {view === 'ask' && (
               <>
-                {ask.k === 'idle' && (
-                  <>
-                    <p className="skyb-say">{intro}</p>
-                    <p style={{ margin: 0, fontSize: 'var(--fs-100)', color: 'var(--c-ink-soft)' }}>Try one</p>
-                    <ul className="skyb-list">
-                      {suggestions.map((s) => (
-                        <li key={s}><button type="button" className="skyb-row" onClick={() => sendQuestion(s)}>{s}</button></li>
-                      ))}
-                    </ul>
-                  </>
-                )}
-                {(ask.k === 'working' || ask.k === 'slow') && (
-                  <p style={{ margin: 0, color: 'var(--c-ink-soft)' }}>
-                    {ask.k === 'working' ? 'Reading Lrnon…' : 'Taking longer than usual. Still working. You can keep reading.'}
-                  </p>
-                )}
-                {ask.k === 'answer' && (
-                  <>
-                    <p className="skyb-say" style={{ whiteSpace: 'pre-wrap' }}>{ask.text}</p>
-                    {ask.sources.length > 0 && (
-                      <>
-                        <p style={{ margin: 0, fontSize: 'var(--fs-100)', color: 'var(--c-ink-soft)' }}>Read from</p>
-                        <ul style={{ margin: 0, paddingInlineStart: 'var(--sp-6)' }}>
-                          {ask.sources.map((s) => <li key={s.href}><a href={s.href}>{s.label}</a></li>)}
-                        </ul>
-                      </>
-                    )}
-                  </>
-                )}
+                {ask.k === 'idle' && (<>
+                  <p className="skyb-say" style={{ margin: 0 }}>{intro}</p>
+                  <p style={{ margin: 0, fontSize: 'var(--fs-100)', color: 'var(--c-ink-soft)' }}>Try one</p>
+                  <ul className="skyb-list">{suggestions.map((s) => (<li key={s}><button type="button" className="skyb-row" onClick={() => sendQuestion(s)}>{s}</button></li>))}</ul>
+                </>)}
+                {(ask.k === 'working' || ask.k === 'slow') && <p style={{ margin: 0, color: 'var(--c-ink-soft)' }}>{ask.k === 'working' ? 'Reading Lrnon…' : 'Taking longer than usual. Still working. You can keep reading.'}</p>}
+                {ask.k === 'answer' && (<>
+                  <p className="skyb-say" style={{ whiteSpace: 'pre-wrap', margin: 0 }}>{ask.text}</p>
+                  {ask.sources.length > 0 && (<>
+                    <p style={{ margin: 0, fontSize: 'var(--fs-100)', color: 'var(--c-ink-soft)' }}>Read from</p>
+                    <ul style={{ margin: 0, paddingInlineStart: 'var(--sp-6)' }}>{ask.sources.map((s) => <li key={s.href}><a href={s.href}>{s.label}</a></li>)}</ul>
+                  </>)}
+                </>)}
                 {ask.k === 'out_of_scope' && (
                   <div className="note note--try">
                     <p style={{ marginTop: 0, fontWeight: 700 }}>{ask.title}</p>
                     <p style={{ color: 'var(--c-ink-soft)' }}>{ask.message}</p>
-                    <div style={{ display: 'grid', gap: 'var(--sp-2)' }}>
-                      {ask.handoff.map((h) => <a key={h.href} className="skyb-row" href={h.href}>{h.label}</a>)}
-                    </div>
-                    <p style={{ fontSize: 'var(--fs-100)', color: 'var(--c-ink-soft)', marginBottom: 0 }}>
-                      Handing off copies only this question, not the rest of your chat.
-                    </p>
+                    <div style={{ display: 'grid', gap: 'var(--sp-2)' }}>{ask.handoff.map((h) => <a key={h.href} className="skyb-row" href={h.href}>{h.label}</a>)}</div>
+                    <p style={{ fontSize: 'var(--fs-100)', color: 'var(--c-ink-soft)', marginBottom: 0 }}>Handing off copies only this question, not the rest of your chat.</p>
                   </div>
                 )}
                 {ask.k === 'unavailable' && (
                   <div className="note note--aim">
                     <p style={{ marginTop: 0 }}>{ask.message}</p>
-                    <div style={{ display: 'grid', gap: 'var(--sp-2)' }}>
-                      <a className="skyb-row" href="/roadmap">Browse the roadmap</a>
-                      <a className="skyb-row" href="/feedback">Ask a person</a>
-                    </div>
+                    <div style={{ display: 'grid', gap: 'var(--sp-2)' }}><a className="skyb-row" href="/roadmap">Browse the roadmap</a><a className="skyb-row" href="/feedback">Ask a person</a></div>
                     {ask.diagnostic && (
                       <details style={{ marginTop: 'var(--sp-3)' }}>
                         <summary style={{ cursor: 'pointer', fontSize: 'var(--fs-100)', color: 'var(--c-ink-soft)' }}>Technical detail</summary>
                         <dl style={{ margin: 'var(--sp-2) 0 0', fontSize: 'var(--fs-100)', fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace', color: 'var(--c-ink-soft)', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: '2px var(--sp-3)' }}>
-                          {Object.entries(ask.diagnostic).map(([k, v]) => (
-                            <div key={k} style={{ display: 'contents' }}><dt style={{ color: 'var(--c-ink-soft)' }}>{k}</dt><dd style={{ margin: 0, wordBreak: 'break-word' }}>{String(v)}</dd></div>
-                          ))}
+                          {Object.entries(ask.diagnostic).map(([k, v]) => (<div key={k} style={{ display: 'contents' }}><dt>{k}</dt><dd style={{ margin: 0, wordBreak: 'break-word' }}>{String(v)}</dd></div>))}
                         </dl>
                       </details>
                     )}
@@ -440,25 +445,24 @@ export default function SkyBuddy({ intro, disclaimer, suggestions }: Props) {
             )}
           </div>
 
-          {view === 'ask' && (
-            <>
-              <form onSubmit={(e) => { e.preventDefault(); sendQuestion(q); }}
-                style={{ display: 'flex', gap: 'var(--sp-2)', padding: 'var(--sp-3) var(--sp-4)', borderTop: '1px solid var(--c-border)' }}>
-                <label htmlFor="skyb-q" className="sr-only">Ask about this page</label>
-                <input id="skyb-q" ref={inputRef} className="skyb-input" value={q} maxLength={500}
-                  onChange={(e) => setQ(e.currentTarget.value)} placeholder="Ask about this page…" />
-                <button type="submit" className="skyb-iconbtn" disabled={!q.trim()} aria-label="Send question">↑</button>
-              </form>
-              <p className="skyb-foot">{disclaimer}</p>
-            </>
-          )}
+          {view === 'ask' && (<>
+            <form onSubmit={(e) => { e.preventDefault(); sendQuestion(q); }} style={{ display: 'flex', gap: 'var(--sp-2)', padding: 'var(--sp-3) var(--sp-4)', borderTop: '1px solid var(--c-border)' }}>
+              <label htmlFor="skyb-q" className="sr-only">Ask about this page</label>
+              <input id="skyb-q" ref={inputRef} className="skyb-input" value={q} maxLength={500} onChange={(e) => setQ(e.currentTarget.value)} placeholder="Ask about this page…" />
+              <button type="submit" className="skyb-iconbtn" disabled={!q.trim()} aria-label="Send question">↑</button>
+            </form>
+            <p className="skyb-foot">{disclaimer}</p>
+          </>)}
         </div>
       )}
 
-      <button ref={fabRef} type="button" className={'skyb-fab' + (prefs.small ? ' skyb-fab--small' : '')}
-        onClick={() => (open ? close() : setOpen(true))}
-        aria-expanded={open} aria-label={open ? 'Close Sky, your study buddy' : 'Open Sky, your study buddy'}>
-        <span className="skyb-av"><img src="/sky/sky-face.webp" alt="" width="48" height="48" /></span>
+      <button ref={fabRef} type="button"
+        className={'skyb-fab' + (prefs.small ? ' skyb-fab--small' : '') + (fxRun?.glow ? ' is-glowing' : '') + (fxRun && fxRun.flashes > 0 ? ' is-flashing' : '')}
+        {...drag.handlers}
+        onClick={() => { if (drag.justDragged()) return; if (open) close(); else openPanel('home'); }}
+        aria-expanded={open}
+        aria-label={open ? 'Close Sky, your study buddy' : 'Open Sky, your study buddy. Drag, or press Shift and an arrow key, to move it.'}>
+        <span className="skyb-av"><img src="/sky/sky-face.webp" alt="" width="48" height="48" draggable={false} /></span>
         {!prefs.small && <span>Sky</span>}
       </button>
     </div>

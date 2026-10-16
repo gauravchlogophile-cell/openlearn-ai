@@ -1,7 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ShareTools from '../components/ShareTools.tsx';
-import { CONTACT_EMAIL, SHARE_PARAM } from '../lib/site-config';
+import { CONTACT_EMAIL, SHARE_PARAM, GOOGLE_REVIEW_URL } from '../lib/site-config';
 
 const siteUrl = (import.meta.env.PUBLIC_SITE_URL ?? 'https://lrnon.org').replace(/\/$/, '');
 
@@ -51,6 +51,21 @@ const thanksMailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent('A no
       </p>
     </div>
   </section>
+
+  {GOOGLE_REVIEW_URL && (
+    <section class="container" style="padding-block:var(--sp-8);max-width:900px;">
+      <div class="note note--aim">
+        <h2 style="font-size:var(--fs-400);margin-top:0;">Rate Lrnon on Google</h2>
+        <p style="color:var(--c-ink-soft);">
+          An honest review, good or bad, helps the next person decide whether to start. It is
+          written on Google, under your own Google account, and Lrnon cannot see or edit it.
+        </p>
+        <p style="margin-bottom:0;">
+          <a class="btn" href={GOOGLE_REVIEW_URL} target="_blank" rel="noopener noreferrer">Rate us on Google<span class="sr-only"> (opens in a new tab)</span></a>
+        </p>
+      </div>
+    </section>
+  )}
 
   <section class="container" style="padding-block:var(--sp-8);max-width:900px;">
     <h2 style="font-size:var(--fs-400);">Other ways to help it grow</h2>

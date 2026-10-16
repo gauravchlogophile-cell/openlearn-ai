@@ -61,4 +61,34 @@ const index = {
   lessons,
 };
 writeFileSync(join(ROOT, 'public/buddy-index.json'), JSON.stringify(index));
+
+/* The two things Sky's in-panel practice needs, split by module so the browser
+   fetches only the module it is about to use (a few kilobytes), never all of it:
+     public/buddy/quiz-<module>.json   questions for the five-question quick quiz
+     public/buddy/cards-<module>.json  flashcards for the in-panel review
+   Both are copies of content that is already public; nothing about a learner. */
+import { mkdirSync } from 'node:fs';
+mkdirSync(join(ROOT, 'public/buddy'), { recursive: true });
+let nq = 0, nc = 0;
+for (const m of quizzes) {
+  const bank = JSON.parse(readFileSync(join(ROOT, 'content/quizzes', m + '.json'), 'utf8'));
+  const items = (bank.items ?? []).map((i) => ({ id: i.id, q: i.q, o: i.options, a: i.answer, why: i.explain }));
+  writeFileSync(join(ROOT, 'public/buddy', 'quiz-' + m + '.json'), JSON.stringify({ module: m, title: bank.title, items }));
+  nq += items.length;
+}
+for (const mod of live.keys()) {
+  const cards = [];
+  for (const file of walk(join(ROOT, 'content'), '.mdx')) {
+    const src = readFileSync(file, 'utf8').replace(/\r\n/g, '\n');
+    const fm = src.match(/^---\n([\s\S]*?)\n---/)?.[1] ?? '';
+    if (fm.match(/^module:\s*"?(.*?)"?\s*$/m)?.[1] !== mod) continue;
+    const slug = relative(join(ROOT, 'content'), file).split(sep).join('/').replace(/\.mdx$/, '');
+    const title = fm.match(/^title:\s*"?(.*?)"?\s*$/m)?.[1];
+    const fcs = [...fm.matchAll(/^\s+- front:\s*"(.*)"\s*\n\s+back:\s*"(.*)"\s*$/gm)];
+    fcs.forEach((c, i) => cards.push({ k: slug + '#' + i, f: c[1].replace(/\\"/g, '"'), b: c[2].replace(/\\"/g, '"'), t: title, s: slug }));
+  }
+  writeFileSync(join(ROOT, 'public/buddy', 'cards-' + mod + '.json'), JSON.stringify({ module: mod, cards }));
+  nc += cards.length;
+}
+console.log(`buddy practice data: ${nq} quiz questions, ${nc} cards`);
 console.log(`buddy index: ${lessons.length} lessons, ${quizzes.length} quizzes, ${(JSON.stringify(index).length / 1024).toFixed(1)} KB`);

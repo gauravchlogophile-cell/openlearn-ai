@@ -74,9 +74,10 @@ no technical background, works on a phone, and does not require an account.
 
   Do not confuse it with the study buddy. Since 15 October 2026 Sky is also the
   friendly character on every page, for everyone: it greets, suggests one next
-  step with how long it takes, and shows the learner's own progress. It answers
-  nothing, costs nothing, sends nothing anywhere, awards nothing and asks for
-  nothing. Describe the two separately, and never let the visible character imply
+  step with how long it takes, shows the learner's own progress, cheers, can
+  show an opt-in leaderboard and a pace timer, and can say kindly that a streak is at
+  risk. It answers nothing, costs nothing, sends nothing about the learner and asks
+  for nothing. Points come only from learning. Describe the two separately, and never let the visible character imply
   that the assistant is open to learners. It is not. It is at this
   stage for one reason: gates 1 and 3 — 200 reviewed questions and a
   wrong-answer rate under 2% — cannot be measured without it answering, and
@@ -157,16 +158,19 @@ the weekly freshness issue — the answer is the mechanism, not a promise.
 
 **"You said no ads, and now you are open to ads."** True, and it was published
 the day it changed. The answer is what the promise was protecting and how each part
-is still held: learners never pay; nobody can buy a place in a lesson (no AI
-vendors may advertise, checked against the registry); nobody is tracked for money
+is still held: learners never pay; nobody can buy a place in a lesson (an AI
+a vendor may advertise, but is named as an advertiser beside what Lrnon says about it); nobody is tracked for money
 (no network scripts, enforced by the content policy); and nothing interrupts
 learning (a few browsing pages only, failing closed). Do not say the old promise
 was unrealistic. It was kept for as long as it was Lrnon's to keep.
 
-**"A cartoon robot is a way to get children hooked."** Fair to ask. Sky awards
-nothing, so there is nothing to chase; it never talks about losing a streak; it
-has no leaderboard, timer, sound or flashing; and numbers can be hidden. Each of
-those is a test, not a statement.
+**"A cartoon owl is a way to get children hooked."** Fair to ask. Points and
+streaks come only from learning, so opening Sky earns a cheer and nothing a person
+could farm. Where Sky does talk about a streak, it is kind and once, and it never
+takes a lesson away. The leaderboard is opt-in and its practice pals are labelled
+as made up. Timers are a pace guide that never cut anyone off. Flashes, glow and
+sound are off for anyone on reduced motion, can be set to calm in one tap, and are
+capped below the WCAG flash threshold. Each of those is a test, not a statement.
 
 ## Claims that require a lawyer before use
 

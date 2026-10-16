@@ -26,9 +26,12 @@ const CONDITIONS: { met: boolean; label: string }[] = [
   { met: true,  label: 'Published retention rules, enforced by a purge rather than a promise' },
 ];
 
-export default function RoomsGate({ title, blurb, children }:
-  { title: string; blurb: string; children?: ReactNode }) {
+export default function RoomsGate({ title, blurb, section, children }:
+  { title: string; blurb: string; section?: string; children?: ReactNode }) {
   const [open, setOpen] = useState<boolean | null>(null);
+  /* An admin's one-click switch (see /admin/sections). It can only ever make this
+     stricter: the database still has to say rooms are open as well. */
+  const [switchedOff, setSwitchedOff] = useState(false);
 
   useEffect(() => {
     if (!isConfigured) { setOpen(false); return; }
@@ -41,19 +44,37 @@ export default function RoomsGate({ title, blurb, children }:
     (async () => {
       try {
         const { data } = await supabase().rpc('rooms_open');
-        if (alive) setOpen(data === true);
+        let off = false;
+        if (section && data === true) {
+          const { data: st } = await supabase().rpc('section_states');
+          const mine = (st as { key: string; state: string }[] | null)?.find((x) => x.key === section);
+          off = mine?.state !== 'open';
+        }
+        if (alive) { setSwitchedOff(off); setOpen(data === true && !off); }
       } catch {
         if (alive) setOpen(false);
       }
     })();
     return () => { alive = false; };
-  }, []);
+  }, [section]);
 
   if (open === null) {
     return <p role="status" style={{ color: 'var(--c-ink-soft)' }}>Checking…</p>;
   }
 
   if (open) return <>{children}</>;
+
+  if (switchedOff) {
+    return (
+      <div className="note note--aim">
+        <p style={{ marginTop: 0 }}><strong>{title} is closed for now.</strong></p>
+        <p style={{ color: 'var(--c-ink-soft)', marginBottom: 0 }}>
+          A moderator has paused it. Nothing you wrote has been lost, and it will say here when it is back.
+          If something needs a person right away, <a href="/safeguarding">the child safety page</a> says who to tell.
+        </p>
+      </div>
+    );
+  }
 
   const met = CONDITIONS.filter((c) => c.met).length;
 

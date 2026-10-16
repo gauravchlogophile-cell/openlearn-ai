@@ -204,6 +204,36 @@
       "kind": "Lesson corrected",
       "where": "Meet Your AI Assistants · L3",
       "what": "Claude's tool card claimed no voice support. Voice mode has shipped on every plan, so the capability grid was showing learners a wrong fact."
+    },
+    {
+      "date": "2026-10-16",
+      "kind": "Content updated",
+      "where": "Funding · Support, Privacy and the guides",
+      "what": "The rule about advertisers who are also tools we teach has changed from a ban to disclosure. Yesterday an advertisement could not be for an AI product or any vendor a lesson names. From today anyone may advertise, and what is never allowed is hiding the conflict from the learner it could affect. An advertiser that a lesson or tool card also describes is named as an advertiser beside that description, on the card and in every lesson that mentions it, while the advertisement runs and for 90 days after, and its advertisement never appears on a page about it. Every advertiser and promoter is listed on a public register on the Support page. Learners still never pay and nothing is behind money. No advertisement is shown or approved."
+    },
+    {
+      "date": "2026-10-16",
+      "kind": "Accessibility",
+      "where": "Sky, the study buddy",
+      "what": "Sky is now livelier, and every part of it is yours to turn down. It can glow, flash and play one short quiet chime when you do something, cheer when you open it, say kindly when a streak is at risk, show a pace timer for a quick quiz, and show an opt-in leaderboard and a daily bonus star. You can drag it anywhere on the page, or move it by keyboard, and reset it. There are three levels of reaction (calm, gentle, lively), calm is chosen automatically when your device asks for reduced motion, flashes are capped well below the safe limit, and nothing ever cuts a timer short. Points and streaks still come only from learning, never from opening Sky. The leaderboard shows a generated handle, never a name; the practice pals that fill it are made up, change each day, are each labelled \"Practice pal\" and are never counted as learners. The welcome clip on the home page now plays in Safari and on iPhones as well. Badges you earn float and celebrate when you open them."
+    },
+    {
+      "date": "2026-10-16",
+      "kind": "Accessibility",
+      "where": "Read aloud · Accessibility panel",
+      "what": "When read-aloud is on, you can now choose the voice, grouped as Indian and Global, with a play-a-sample button and a speed control. These are the voices your own device has, ranked so the most natural one comes first; nothing is sent anywhere. Recorded narration by people is supported but none has been recorded yet, and the page says so rather than implying otherwise."
+    },
+    {
+      "date": "2026-10-16",
+      "kind": "Content updated",
+      "where": "Navigation · Share · Feedback · Privacy",
+      "what": "Spread the word and Feedback are now in the top menu, and Share has a button for X (Twitter) alongside WhatsApp, Telegram, LinkedIn, Reddit and email. A Rate us on Google button appears on the Feedback page once Lrnon has a Google review link. The Privacy page now describes the one anonymous page count the site keeps (no cookie, identifier, IP address or browser string; not sent if your browser sends Do Not Track), and the sign-in record kept for people with accounts."
+    },
+    {
+      "date": "2026-10-16",
+      "kind": "Accessibility",
+      "where": "Community",
+      "what": "Each community section now shows its real state: planned, closed for now, or open. Administrators can open or close sections with one click. Anything where learners write, such as Ask Doubts and rooms, cannot be opened until the child-safety conditions hold, and the database refuses otherwise."
     }
   ]
 }

@@ -16,15 +16,14 @@ import { AD_MODE } from '../lib/site-config';
 import { ADS } from '../lib/ads.js';
 import { adSlotAllowed, validateAd } from '../lib/funding-policy.js';
 
-/* Every vendor and product the lessons cover, from the registry, so an advertiser
-   cannot be one of them (rule: no-ai-vendors). */
+/* The registry, so an advertisement that names a tool Lrnon describes is only
+   shown if it declares the conflict (rule: conflict-of-interest). */
 const cards = Object.values(import.meta.glob('../../registry/[a-z]*.json', { eager: true })).map((m: any) => m.default);
-const vendors = [...new Set(cards.flatMap((c: any) => [c.name, c.vendor]).filter(Boolean))] as string[];
 
 const today = new Date().toISOString().slice(0, 10);
 const allowed = AD_MODE === 'on' && adSlotAllowed(Astro.url.pathname);
 const ad = allowed
-  ? ADS.find((a) => a.startsOn <= today && today <= a.endsOn && validateAd(a, { vendors }).length === 0)
+  ? ADS.find((a) => a.startsOn <= today && today <= a.endsOn && validateAd(a, { cards }).length === 0)
   : undefined;
 ---
 {ad && (
